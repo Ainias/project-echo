@@ -1,0 +1,101 @@
+
+@import "foundationSettings";
+
+$themes: (
+        black:(
+                class: black,
+                themeColor: #383838,
+                lightThemeColor: #353535,
+                linkColor: #000,
+                spinnerColor: #000,
+                navBarTextColor: #fbfbfb,
+                textColor: #000,
+                textColor2: #555555,
+                lightLinkColor: #fff,
+                linkBorderBottom: 1px solid #000000,
+                linkHoverColor: #4e4e4e,
+                lightLinkHoverColor: #cacaca,
+                background: #fff,
+
+                background-gradient: linear-gradient(#3b3b3b, #191919),
+                highlight: #D56B52,
+                colorOne: #bcbbbb,
+                colorTwo: #3B3B3B,
+                colorThree: #FFF
+        ),
+        red:(
+                class: red,
+                themeColor: #ff0000,
+                lightThemeColor: #870015,
+                linkColor: #ff3d00,
+                spinnerColor: #b71c1a,
+                navBarTextColor: #fff,
+                textColor: #000,
+                textColor2: #555555,
+                lightLinkColor: #ff3d00,
+                linkBorderBottom: none,
+                linkHoverColor: #ff3d00,
+                lightLinkHoverColor: #ff3d00,
+                background: #fff
+        ),
+        blue:(
+                class: blue,
+                themeColor: #2c58ae,
+                lightThemeColor: #1a3062,
+                linkColor: #546cfe,
+                spinnerColor: #673AB7,
+                navBarTextColor: #fff,
+                textColor: #000,
+                textColor2: #555555,
+                lightLinkColor: #546cfe,
+                linkBorderBottom: none,
+                linkHoverColor: #546cfe,
+                lightLinkHoverColor: #546cfe,
+                background: #fff
+        ),
+        green:(
+                class: green,
+                themeColor: #008000,
+                lightThemeColor: #003613,
+                linkColor: #009829,
+                spinnerColor: #008000,
+                navBarTextColor: #fff,
+                textColor: #000,
+                textColor2: #555555,
+                lightLinkColor: #009829,
+                linkBorderBottom: none,
+                linkHoverColor: #009829,
+                lightLinkHoverColor: #009829,
+                background: #fff
+        ),
+        pink:(
+                class: pink,
+                themeColor: #ff69b4,
+                lightThemeColor: #70374a,
+                linkColor: #fe64af,
+                spinnerColor: #ff69b4,
+                navBarTextColor: #fff,
+                textColor: #000,
+                textColor2: #555555,
+                lightLinkColor: #fe64af,
+                linkBorderBottom: none,
+                linkHoverColor: #fe64af,
+                lightLinkHoverColor: #fe64af,
+                background: #fff
+        ),
+        dark: (
+                class: dark,
+                themeColor: #373737,
+                lightThemeColor: #4b4b4b,
+                linkColor: #fff,
+                spinnerColor: #ffffff,
+                navBarTextColor: #fff,
+                textColor: #ffffff,
+                textColor2: #9b9b9b,
+                lightLinkColor: #ffffff,
+                linkBorderBottom: 1px solid #ffffff,
+                linkHoverColor: #ffffff,
+                lightLinkHoverColor: #ffffff,
+                background: #000000
+        )
+);

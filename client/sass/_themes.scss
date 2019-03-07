@@ -1,0 +1,127 @@
+@import "settings";
+
+* {
+  //transition: background-color .25s ease-out, color .25s ease-out;
+  transition: .25s ease-out, color .25s ease-out;
+}
+
+@mixin defineTheme($theme) {
+  background: map-get($theme, background);
+  color: map-get($theme, textColor);
+
+  //#cookie-compliance {
+  //  background-color: map-get($theme, lightThemeColor);
+  //  color: map-get($theme, navBarTextColor);
+  //  a.link {
+  //    color: map-get($theme, lightLinkColor);
+  //    border-bottom-color: map-get($theme, lightLinkColor);
+  //    &:hover {
+  //      color: map-get($theme, lightLinkHoverColor);
+  //      border-bottom-color: map-get($theme, lightLinkHoverColor);
+  //    }
+  //  }
+  //}
+  a.link {
+    text-decoration: none;
+    color: map-get($theme, linkColor);
+    border-bottom: map-get($theme, linkBorderBottom);
+    &:hover {
+      color: map-get($theme, linkHoverColor);
+      border-bottom-color: map-get($theme, linkHoverColor);
+    }
+  }
+  .loader #spinner {
+    stroke: map-get($theme, spinnerColor);
+  }
+
+  nav.top-bar {
+    color: map-get($theme, navBarTextColor);
+    background: map-get($theme, themeColor);
+    .top-bar-title a.hidden-link{
+      color: map-get($theme, navBarTextColor);
+    }
+  }
+  .top-bar {
+    ul {
+      background: map-get($theme, themeColor) !important;
+      a {
+        color: map-get($theme, navBarTextColor);
+      }
+    }
+  }
+  button.button, a.button {
+    background-color: map-get($theme, themeColor);
+    &.disabled, &.disabled:hover, &.disabled:focus, &:hover {
+      background-color: map-get($theme, themeColor);
+    }
+  }
+  .switch {
+    input {
+      &:checked + .slider {
+        background-color: map-get($theme, themeColor);
+      }
+      &:focus + .slider {
+        box-shadow: 0 0 1px map-get($theme, themeColor);
+      }
+    }
+  }
+  label {
+    color: #{map-get($theme, textColor)};
+  }
+  .background .modal {
+    background-color: #{map-get($theme, background)};
+  }
+
+  svg {
+    .fill-color, &.fill-color{
+      fill: currentColor;
+    }
+    .fill-background, &.fill-background{
+      fill: #{map-get($theme, background)};
+    }
+  }
+
+  //Forms
+  label {
+    [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, input[type=text], input:not([type]) {
+      border-bottom: solid #{map-get($theme, textColor)};
+      background: #{map-get($theme, background)};
+      color:#{map-get($theme, textColor)};
+
+      &:focus {
+        border-bottom: solid #{map-get($theme, textColor)};
+      }
+      &:focus, &.notEmpty:not(:focus) {
+        ~ span {
+          color: #{map-get($theme, textColor)};
+        }
+      }
+      ~ span {
+        color: #{adjust_color( map-get($theme, textColor), $alpha: -0.35)};
+      }
+    }
+    textarea {
+      box-shadow: 0 0 3px 2px hsla(0, 0%, 53%, .31) !important;
+    }
+  }
+  input.notEmpty:invalid {
+    background-color: #{adjust_color( map-get($theme, themeColor), $alpha: -0.35)};
+  }
+
+  .footer{
+    border-top: solid 2.5px map-get($theme, colorOne);
+  }
+
+}
+
+body {
+  @each $theme, $values in $themes {
+    @if (map-get($values, class) == "") {
+      @include defineTheme($values)
+    } @else {
+      &.#{map-get($values, class)} {
+        @include defineTheme($values)
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  padding-top: 11px;
+  padding-bottom: 12px;
+  display: flex;
+
+  .icon {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+
+    &.home {
+      background-image: url("../img/icons/home.png");
+      &.selected {
+        background-image: url("../img/icons/home-selected.png");
+      }
+    }
+    &.calendar{
+      background-image: url("../img/icons/calendar.png");
+      &.selected {
+        background-image: url("../img/icons/calendar-selected.png");
+      }
+    }
+    &.search{
+      background-image: url("../img/icons/search.png");
+      &.selected {
+        background-image: url("../img/icons/search-selected.png");
+      }
+    }
+    &.favorites{
+      background-image: url("../img/icons/favorites.png");
+      &.selected {
+        background-image: url("../img/icons/favorites-selected.png");
+      }
+    }
+  }
+
+  .spacer {
+    flex: 65;
+
+    &.small {
+      flex: 43;
+    }
+  }
+}

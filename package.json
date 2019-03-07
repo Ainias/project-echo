@@ -1,0 +1,59 @@
+{
+  "name": "project-echo",
+  "displayName": "Echo",
+  "version": "0.1.0",
+  "description": "Ein christlicher Terminkalender für Gemeinden rund un Köln",
+  "scripts": {
+    "server": "node $NODE_DEBUG_OPTION --experimental-modules server/index.mjs",
+    "cordova browser start": "cordova run browser",
+    "cordova browser prepare": "cordova prepare browser"
+  },
+  "author": "Project Echo Team",
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "body-parser": "^1.18.3",
+    "cordova-android": "^7.1.2",
+    "cordova-browser": "^5.0.4",
+    "cordova-plugin-nano-sqlite": "^1.5.0",
+    "cordova-plugin-nativestorage": "^2.3.2",
+    "cordova-plugin-webpack": "0.0.2",
+    "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-sites": "file:../cordova-sites",
+    "cordova-sites-easy-sync": "file:../cordova-sites-easy-sync",
+    "cordova-sqlite-storage": "^2.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "foundation-sites": "^6.5.3",
+    "mysql2": "^1.6.5",
+    "sequelize": "^4.42.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.3.1",
+    "autoprefixer": "^9.4.7",
+    "babel-loader": "^8.0.4",
+    "babel-preset-env": "^1.7.0",
+    "clean-webpack-plugin": "^1.0.1",
+    "css-loader": "^1.0.1",
+    "extract-loader": "^3.1.0",
+    "file-loader": "^2.0.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.10.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-webpack": {},
+      "cordova-plugin-nano-sqlite": {},
+      "cordova-plugin-nativestorage": {},
+      "cordova-plugin-whitelist": {}
+    },
+    "platforms": [
+      "android",
+      "browser"
+    ]
+  }
+}
