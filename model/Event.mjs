@@ -85,6 +85,7 @@ export class Event extends EasySyncBaseModel {
             {key: "placesJson", type: EasySync.TYPES.STRING},
             {key: "organiser", type: EasySync.TYPES.STRING},
             {key: "description", type: EasySync.TYPES.STRING},
+
         ]);
         return definition;
     }

@@ -1,16 +1,27 @@
-
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
 import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction, Menu} from "cordova-sites";
 import {EasySyncClientDb, SyncJob} from "cordova-sites-easy-sync/client";
-import {EasySync} from "cordova-sites-easy-sync/model";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
-import {Event} from "../../model/Event";
+// import {Event} from "../../model/Event";
 import {Church} from "../../model/Church";
+import {Region} from "../../model/Region";
+
+// import "sql.js/js/sql-optimized.js";
+
+
 import {ShowChurchSite} from "./Sites/ShowChurchSite";
+import {BaseDatabase, BaseModel} from "cordova-sites-database";
+import * as typeorm from "typeorm";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
+
+BaseModel._databaseClass = EasySyncClientDb;
+EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
+BaseDatabase.typeorm = typeorm;
 
 App.addInitialization(async () => {
+
     Translator.init({
         translations: {
             "de": translationGerman,
@@ -26,13 +37,12 @@ App.addInitialization(async () => {
 
     //Creating Menu
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", WelcomeSite));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", [ShowChurchSite, {"id":7}]));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", [ShowChurchSite, {"id": 1}]));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", WelcomeSite));
     NavbarFragment.defaultActions.push(new MenuAction("language", async () => {
-        if (Translator.getInstance().getCurrentLanguage() === "en"){
+        if (Translator.getInstance().getCurrentLanguage() === "en") {
             await Translator.getInstance().setLanguage("de");
-        }
-        else {
+        } else {
             await Translator.getInstance().setLanguage("en");
         }
     }, MenuAction.SHOW_FOR_LARGE));
@@ -41,11 +51,10 @@ App.addInitialization(async () => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", WelcomeSite, MenuAction.SHOW_NEVER));
 
     //Todo an richtige stelle auslagern
-    await new SyncJob().sync([Church, Event])
+    await new SyncJob().sync([Church, Region]);
 });
 
-EasySyncClientDb._easySync = EasySync;
 DataManager._basePath = "http://127.0.0.1:3000/api/v1/";
 
 let app = new App();
-app.start(WelcomeSite);
+app.start(WelcomeSite).catch(e => console.error(e));

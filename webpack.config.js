@@ -7,6 +7,12 @@ let mode = "development";
 
 let moduleExports = {
 
+    node: {
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
+    },
+
     //Development oder production, wird oben durch Variable angegeben (damit später per IF überprüft)
     mode: mode,
 

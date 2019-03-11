@@ -18,7 +18,11 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         }
 
         this._church = await Church.selectOne({"id": parseInt(constructParameters["id"])});
-        console.log(this._church);
+
+        if (Helper.isNull(this._church)) {
+            new Toast("no church found").show();
+            this.finish();
+        }
 
         return res;
     }
