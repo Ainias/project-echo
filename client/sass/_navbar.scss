@@ -1,85 +1,88 @@
 @import "../../node_modules/foundation-sites/scss/foundation";
+@import "settings";
 
-nav.top-bar.title-bar {
-  padding: 0.3rem 0.6rem 0;
-}
+//nav.top-bar.title-bar {
+//  padding: 0.3rem 0.6rem 0;
+//}
 
-#logo {
-  max-width: 2rem;
-  transition: none;
-}
+//#logo {
+//  max-width: 2rem;
+//  transition: none;
+//}
 
-.menu, .dropdown.menu {
-  a {
-    padding: 0.2rem 0.5rem;
-  }
-}
+//.menu, .dropdown.menu {
+//  a {
+//    padding: 0.2rem 0.5rem;
+//  }
+//}
 
 .top-bar {
-  white-space: nowrap;
-  padding-right: 0;
+  //white-space: nowrap;
+  //> span{
+  //  display: flex;
+  //}
 
   #responsive-menu-toggle {
     z-index: 10000;
-    padding-right: 0.5rem;
+    //padding-right: 0.5rem;
   }
 }
 
-#navbar-close-listener {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: transparent;
-  z-index: 8999;
-}
+//#navbar-close-listener {
+//  position: fixed;
+//  top: 0;
+//  left: 0;
+//  right: 0;
+//  bottom: 0;
+//  background: transparent;
+//  z-index: 8999;
+//}
 
 .navbar-menu {
-  width: auto;
-  z-index: 9000;
+  //width: auto;
+  //z-index: 9000;
 
-  a {
-    img + span {
-      display: none;
-    }
-  }
+  //a {
+  //  img + span {
+  //    display: none;
+  //  }
+  //}
 
-  li {
-    position: relative;
-    z-index: 9000;
+  //li {
+  //position: relative;
+  //z-index: 9000;
 
-    &.is-dropdown-submenu-parent {
-      z-index: 9001;
-    }
+  //&.is-dropdown-submenu-parent {
+  //  z-index: 9001;
+  //}
 
-    &.hidden {
-      display: none;
-    }
+  //&.hidden {
+  //  display: none;
+  //}
 
-    @include breakpoint(small down) {
-      &.smedium {
-        display: none;
-      }
-    }
-    @include breakpoint(smedium down) {
-      li {
-        display: table-cell;
-      }
-      &.medium {
-        display: none;
-      }
-    }
-    @include breakpoint(medium down) {
-      &.large {
-        display: none;
-      }
-    }
-
-    &.never {
-      display: none;
-    }
-  }
+  //@include breakpoint(small down) {
+  //  &.smedium {
+  //    display: none;
+  //  }
+  //}
+  //@include breakpoint(smedium down) {
+  //  li {
+  //    display: table-cell;
+  //  }
+  //  &.medium {
+  //    display: none;
+  //  }
+  //}
+  //@include breakpoint(medium down) {
+  //  &.large {
+  //    display: none;
+  //  }
+  //}
+  //
+  //&.never {
+  //  display: none;
+  //}
+  //}
 
   &.hidden-menu {
     display: inline-block;
@@ -87,7 +90,7 @@ nav.top-bar.title-bar {
     z-index: 9000;
     //border: 1px solid rgb(202, 202, 202);
     padding: 2rem 0.2rem 0.2rem;
-    //transform: translateX(-100%);
+    transform: none;
     right: 0;
     text-align: left;
     bottom: 0;
@@ -201,39 +204,49 @@ nav.top-bar.title-bar {
     }
   }
 
-
   .menu, &.menu {
     li {
       z-index: 100;
+
+      a {
+        @each $breakpoint, $value in $margins {
+          @include breakpoint($breakpoint) {
+            padding-left: 2*$value;
+          }
+        }
+      }
+
       @include breakpoint(smedium down) {
         a {
           width: 100%;
-          //text-align: left;
+          //padding-left: 0.68rem;
         }
       }
-
-      @include breakpoint(smedium down) {
-        a {
-          padding-left: 0.68rem;
-        }
-      }
-      @include breakpoint(small down) {
-        a {
-          padding-left: 0.236rem;
-        }
-      }
+      //@include breakpoint(small down) {
+      //  a {
+      //    padding-left: 0.236rem;
+      //  }
+      //}
 
       &:not(.is-dropdown-submenu-parent) {
-        @include breakpoint(smedium down) {
-          a {
-            padding-right: 0.68rem;
+        a {
+          @each $breakpoint, $value in $margins {
+            @include breakpoint($breakpoint) {
+              padding-right: 2*$value;
+            }
           }
         }
-        @include breakpoint(small down) {
-          a {
-            padding-right: 0.236rem;
-          }
-        }
+
+        //@include breakpoint(smedium down) {
+        //  a {
+        //    padding-right: 0.68rem;
+        //  }
+        //}
+        //@include breakpoint(small down) {
+        //  a {
+        //    padding-right: 0.236rem;
+        //  }
+        //}
       }
 
       &.img a {
@@ -266,30 +279,30 @@ nav.top-bar.title-bar {
   }
 }
 
-.dropdown.menu .accordion-menu .is-accordion-submenu-parent:not(.has-submenu-toggle),
-#navbar-menu-hidden .accordion-menu .is-accordion-submenu-parent:not(.has-submenu-toggle) > {
-  a {
-    margin-right: 0.5rem;
+//.dropdown.menu .accordion-menu .is-accordion-submenu-parent:not(.has-submenu-toggle),
+//#navbar-menu-hidden .accordion-menu .is-accordion-submenu-parent:not(.has-submenu-toggle) > {
+//  a {
+//    margin-right: 0.5rem;
+//
+//    &::after {
+//      right: 0.1rem;
+//    }
+//  }
+//
+//  ul a {
+//    width: 100%;
+//  }
+//}
+//
+//.menu.is-accordion-submenu {
+//  margin-left: 0.7rem;
+//}
 
-    &::after {
-      right: 0.1rem;
-    }
-  }
-
-  ul a {
-    width: 100%;
-  }
-}
-
-.menu.is-accordion-submenu {
-  margin-left: 0.7rem;
-}
-
-.menu {
-  transform-origin: top;
-  transition: 0.25s;
-  //overflow-y:hidden;
-}
+//.menu {
+//  transform-origin: top;
+//  transition: 0.25s;
+//  //overflow-y:hidden;
+//}
 
 .absolute-menu-site #navbar-fragment {
   position: absolute;
@@ -299,22 +312,48 @@ nav.top-bar.title-bar {
   > * {
     position: relative;
   }
+
   .top-bar {
+    color: white !important;
     background-color: initial;
+
+    .menu-icon::after, .menu-icon:hover::after {
+      background: white;
+      box-shadow: 0 7px 0 white, 0 14px 0 white;
+    }
+
     #navbar-menu-visible {
       background-color: initial !important;
+    }
+
+    .navbar-menu.hidden-menu{
+      border-color: #3b3b3b;
+    };
+
+    ul {
+      background-color: #3b3b3b !important;
+
+      a {
+        color: white;
+      }
+
     }
   }
 }
 
-
-.dropdown.menu > li.is-accordion-submenu-parent {
-  //> a:after {
-  //  border-color: #ffffff transparent transparent;
-  //}
-
-  > ul.is-dropdown-submenu {
-    left: auto;
-    right: 0;
+.top-bar {
+  @each $breakpoint, $value in $margins {
+    @include breakpoint($breakpoint) {
+      padding-left: $value;
+      padding-right: $value;
+    }
   }
 }
+
+//
+//.dropdown.menu > li.is-accordion-submenu-parent {
+//  > ul.is-dropdown-submenu {
+//    left: auto;
+//    right: 0;
+//  }
+//}

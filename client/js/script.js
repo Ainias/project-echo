@@ -1,6 +1,6 @@
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
-import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction, Menu} from "cordova-sites";
+import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
 import {EasySyncClientDb, SyncJob} from "cordova-sites-easy-sync/client";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
@@ -8,17 +8,18 @@ import {WelcomeSite} from "./Sites/WelcomeSite";
 import {Church} from "../../model/Church";
 import {Region} from "../../model/Region";
 
-// import "sql.js/js/sql-optimized.js";
-
-
-import {ShowChurchSite} from "./Sites/ShowChurchSite";
 import {BaseDatabase, BaseModel} from "cordova-sites-database";
 import * as typeorm from "typeorm";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
+import {ListChurchesSite} from "./Sites/ListChurchesSite";
 
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 BaseDatabase.typeorm = typeorm;
+
+
+window["baseDB"] = BaseDatabase;
+console.log("BaseDatabase", BaseDatabase);
 
 App.addInitialization(async () => {
 
@@ -37,7 +38,7 @@ App.addInitialization(async () => {
 
     //Creating Menu
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", WelcomeSite));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", [ShowChurchSite, {"id": 1}]));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", WelcomeSite));
     NavbarFragment.defaultActions.push(new MenuAction("language", async () => {
         if (Translator.getInstance().getCurrentLanguage() === "en") {
@@ -51,10 +52,10 @@ App.addInitialization(async () => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", WelcomeSite, MenuAction.SHOW_NEVER));
 
     //Todo an richtige stelle auslagern
-    await new SyncJob().sync([Church, Region]);
+    await new SyncJob().sync([Church, Region]).catch(e => console.error(e));
 });
 
-DataManager._basePath = "http://127.0.0.1:3000/api/v1/";
+DataManager._basePath = "http://192.168.0.51:3000/api/v1/";
 
 let app = new App();
 app.start(WelcomeSite).catch(e => console.error(e));

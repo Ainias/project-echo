@@ -5,6 +5,9 @@
 //Importiere zuerst foundation vor anderen Imports, damit foundation-settings überschrieben werden
 @include foundation-everything;
 
+//From framework
+@import "../../node_modules/cordova-sites/cordova-sites";
+
 //Anderes nach Settings, damit Settings bereits angewendet werden
 @import "navbar";
 @import "footer";
@@ -13,6 +16,7 @@
 @import "dialog";
 @import "swipeFragment";
 @import "themes";
+@import "listChurchSite";
 
 
 @keyframes rotate {
@@ -38,10 +42,6 @@
     stroke-dashoffset: -65.973;
     transform: rotate(90deg);
   }
-}
-
-* {
-  //transition: 0.25s;
 }
 
 html, body {
@@ -174,16 +174,51 @@ a.hidden-link {
   color: inherit;
 }
 
-img.full-width {
-  width: 100vw;
-  max-width: 100vw;
-
-  margin-left: -0.625rem;
-
-  @include breakpoint(medium) {
-    margin-left: -0.9375rem;
+#main-content-container {
+  #main-content{
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
+
+//Echo-specific
+* {
+  //transition: 0.25s;
+  font-family: Montserrat, Regular, Arial, sans-serif;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+a.link {
+  text-decoration: none;
+
+  &::before {
+    padding-right: 0.2rem;
+    vertical-align: top;
+    content: url("../img/icons/arrowOrange.png");
+  }
+}
+
+.place:not(:empty) {
+  &::before {
+    vertical-align: top;
+    content: url("../img/icons/place.png");
+  }
+}
+
+@each $breakpoint, $value in $margins {
+  .full-width {
+    @include breakpoint($breakpoint) {
+      margin-left: -2*$value;
+      margin-right: -2*$value;
+      width: calc(100% + #{4*$value});
+      max-width: calc(100% + #{4*$value});
+    }
+  }
+}
+
 
 //Nur hier, damit PHPStorm die Klasse in der Autovervollständigung hat
 .translation {

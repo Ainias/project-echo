@@ -1,25 +1,25 @@
-
 @import "foundationSettings";
 
 $themes: (
         black:(
                 class: black,
-                themeColor: #383838,
+                //themeColor: #383838,
+                themeColor: #ffffff,
                 lightThemeColor: #353535,
                 linkColor: #000,
                 spinnerColor: #000,
-                navBarTextColor: #fbfbfb,
+                navBarTextColor: #000,
                 textColor: #000,
                 textColor2: #555555,
                 lightLinkColor: #fff,
-                linkBorderBottom: 1px solid #000000,
+                linkBorderBottom: none,
                 linkHoverColor: #4e4e4e,
                 lightLinkHoverColor: #cacaca,
                 background: #fff,
-
                 background-gradient: linear-gradient(#3b3b3b, #191919),
                 highlight: #D56B52,
-                colorOne: #bcbbbb,
+                textColorOne: #bcbbbb,
+                colorOne: #F3F1F1,
                 colorTwo: #3B3B3B,
                 colorThree: #FFF
         ),
@@ -99,3 +99,22 @@ $themes: (
                 background: #000000
         )
 );
+
+$breakpoints: (
+        small: 0,
+        smedium: 400px,
+        medium: 640px,
+        large: 1024px,
+        xlarge: 1200px,
+        xxlarge: 1440px,
+);
+
+$margins: (
+        small: 0.625rem,
+        //smedium: 0.625rem,
+        medium: 0.9375rem,
+        //large: 0.9375rem,
+        //xlarge: 0.9375rem,
+        //xxlarge: 0.9375rem,
+)
+

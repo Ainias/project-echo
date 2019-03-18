@@ -9,24 +9,12 @@
   background: map-get($theme, background);
   color: map-get($theme, textColor);
 
-  //#cookie-compliance {
-  //  background-color: map-get($theme, lightThemeColor);
-  //  color: map-get($theme, navBarTextColor);
-  //  a.link {
-  //    color: map-get($theme, lightLinkColor);
-  //    border-bottom-color: map-get($theme, lightLinkColor);
-  //    &:hover {
-  //      color: map-get($theme, lightLinkHoverColor);
-  //      border-bottom-color: map-get($theme, lightLinkHoverColor);
-  //    }
-  //  }
-  //}
   a.link {
     text-decoration: none;
-    color: map-get($theme, linkColor);
+    color: map-get($theme, highlight);
     border-bottom: map-get($theme, linkBorderBottom);
     &:hover {
-      color: map-get($theme, linkHoverColor);
+      color: map-get($theme, highlight);
       border-bottom-color: map-get($theme, linkHoverColor);
     }
   }
@@ -48,6 +36,12 @@
         color: map-get($theme, navBarTextColor);
       }
     }
+
+    .menu-icon::after, .menu-icon:hover::after{
+      background: map-get($theme, navBarTextColor);
+      box-shadow: 0 7px 0 map-get($theme, navBarTextColor), 0 14px 0 map-get($theme, navBarTextColor);
+    }
+
   }
   button.button, a.button {
     background-color: map-get($theme, themeColor);
@@ -109,7 +103,16 @@
   }
 
   .footer{
-    border-top: solid 2.5px map-get($theme, colorOne);
+    border-top: solid 2.5px map-get($theme, textColorOne);
+  }
+
+  #church-info-container{
+    .church-info{
+      border-top: 1px solid map-get($theme, colorOne);
+    }
+  }
+  .place{
+    color: map-get($theme, textColorOne);
   }
 
 }
