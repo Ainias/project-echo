@@ -10,4 +10,12 @@ export class MenuFooterSite extends MenuSite {
         this._footerFragment = new FooterFragment(this);
         this.addFragment("#footer-fragment", this._footerFragment);
     }
+
+    async onStart(pauseArguments) {
+        await super.onStart(pauseArguments);
+        if (window.StatusBar) {
+            StatusBar.overlaysWebView(true);
+            StatusBar.backgroundColorByHexString('#33000000');
+        }
+    }
 }

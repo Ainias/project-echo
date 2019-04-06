@@ -1,206 +1,33 @@
 @import "../../node_modules/foundation-sites/scss/foundation";
 @import "settings";
 
-//nav.top-bar.title-bar {
-//  padding: 0.3rem 0.6rem 0;
-//}
+#navbar-fragment {
+  .grid-container {
+    @include breakpoint(medium down) {
+      padding-top: 1rem;
+    }
+  }
 
-//#logo {
-//  max-width: 2rem;
-//  transition: none;
-//}
-
-//.menu, .dropdown.menu {
-//  a {
-//    padding: 0.2rem 0.5rem;
-//  }
-//}
-
-.top-bar {
-  //white-space: nowrap;
-  //> span{
-  //  display: flex;
-  //}
-
-  #responsive-menu-toggle {
-    z-index: 10000;
-    //padding-right: 0.5rem;
+  .top-bar {
+    #responsive-menu-toggle {
+      z-index: 10000;
+    }
   }
 }
 
-//#navbar-close-listener {
-//  position: fixed;
-//  top: 0;
-//  left: 0;
-//  right: 0;
-//  bottom: 0;
-//  background: transparent;
-//  z-index: 8999;
-//}
-
 .navbar-menu {
-  //width: auto;
-  //z-index: 9000;
-
-  //a {
-  //  img + span {
-  //    display: none;
-  //  }
-  //}
-
-  //li {
-  //position: relative;
-  //z-index: 9000;
-
-  //&.is-dropdown-submenu-parent {
-  //  z-index: 9001;
-  //}
-
-  //&.hidden {
-  //  display: none;
-  //}
-
-  //@include breakpoint(small down) {
-  //  &.smedium {
-  //    display: none;
-  //  }
-  //}
-  //@include breakpoint(smedium down) {
-  //  li {
-  //    display: table-cell;
-  //  }
-  //  &.medium {
-  //    display: none;
-  //  }
-  //}
-  //@include breakpoint(medium down) {
-  //  &.large {
-  //    display: none;
-  //  }
-  //}
-  //
-  //&.never {
-  //  display: none;
-  //}
-  //}
 
   &.hidden-menu {
-    display: inline-block;
-    position: fixed;
-    z-index: 9000;
-    //border: 1px solid rgb(202, 202, 202);
-    padding: 2rem 0.2rem 0.2rem;
-    transform: none;
-    right: 0;
-    text-align: left;
+    top: 1.6rem;
+    @include breakpoint(medium down) {
+      top: 2.6rem
+    }
     bottom: 0;
-    top: 0.7rem;
     border-top-left-radius: 15px;
 
     > li {
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
-    }
-
-    li {
-      &.hidden {
-        display: none;
-      }
-
-      &.is-dropdown-submenu-parent {
-        z-index: 9001;
-
-        ul.is-dropdown-submenu {
-          top: auto;
-          //margin-right: 0;
-          //margin-left: 1rem;
-          > li, > .close-listener {
-            z-index: 9001;
-          }
-        }
-
-        > a:after {
-          display: block;
-          width: 0;
-          height: 0;
-          border: 6px inset;
-          content: "";
-          border-bottom-width: 0;
-          border-top-style: solid;
-          border-color: #ffffff transparent transparent;
-          right: 5px;
-          left: auto;
-          margin-top: -3px;
-        }
-      }
-
-      a {
-        white-space: nowrap;
-
-        img {
-          display: none;
-
-          + span {
-            display: inherit;
-          }
-        }
-      }
-
-      @include breakpoint(medium) {
-        &.medium {
-          display: none;
-        }
-      }
-      @include breakpoint(smedium) {
-        &.smedium {
-          display: none;
-        }
-      }
-      @include breakpoint(large) {
-        &.large {
-          display: none;
-        }
-      }
-
-      @include breakpoint(small down) {
-        &.smedium {
-          display: block;
-
-          &.hidden {
-            display: none;
-          }
-        }
-      }
-      @include breakpoint(smedium down) {
-        &.medium {
-          display: block;
-
-          &.hidden {
-            display: none;
-          }
-        }
-      }
-      @include breakpoint(medium down) {
-        &.large {
-          display: block;
-
-          &.hidden {
-            display: none;
-          }
-        }
-      }
-
-      &.never {
-        display: block;
-
-        &.hidden {
-          display: none;
-        }
-      }
-
-      &.always {
-        display: none;
-      }
     }
   }
 
@@ -279,30 +106,6 @@
   }
 }
 
-//.dropdown.menu .accordion-menu .is-accordion-submenu-parent:not(.has-submenu-toggle),
-//#navbar-menu-hidden .accordion-menu .is-accordion-submenu-parent:not(.has-submenu-toggle) > {
-//  a {
-//    margin-right: 0.5rem;
-//
-//    &::after {
-//      right: 0.1rem;
-//    }
-//  }
-//
-//  ul a {
-//    width: 100%;
-//  }
-//}
-//
-//.menu.is-accordion-submenu {
-//  margin-left: 0.7rem;
-//}
-
-//.menu {
-//  transform-origin: top;
-//  transition: 0.25s;
-//  //overflow-y:hidden;
-//}
 
 .absolute-menu-site #navbar-fragment {
   position: absolute;
@@ -314,7 +117,7 @@
   }
 
   .top-bar {
-    color: white !important;
+    color: inherit !important;
     background-color: initial;
 
     .menu-icon::after, .menu-icon:hover::after {
@@ -326,34 +129,18 @@
       background-color: initial !important;
     }
 
-    .navbar-menu.hidden-menu{
+    .navbar-menu.hidden-menu {
       border-color: #3b3b3b;
-    };
+    }
+  ;
 
     ul {
       background-color: #3b3b3b !important;
 
       a {
-        color: white;
+        color: inherit;
       }
 
     }
   }
 }
-
-.top-bar {
-  @each $breakpoint, $value in $margins {
-    @include breakpoint($breakpoint) {
-      padding-left: $value;
-      padding-right: $value;
-    }
-  }
-}
-
-//
-//.dropdown.menu > li.is-accordion-submenu-parent {
-//  > ul.is-dropdown-submenu {
-//    left: auto;
-//    right: 0;
-//  }
-//}

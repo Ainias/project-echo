@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
 const path = require("path");
 
 let mode = "development";
@@ -17,7 +18,10 @@ let moduleExports = {
     mode: mode,
 
     //Beinhaltet den JS-Startpunkt und SCSS-Startpunkt
-    entry: [__dirname + "/client/js/script.js", __dirname + "/client/sass/index.scss"],
+    entry: [
+        __dirname + "/client/js/script.js",
+        __dirname + "/client/sass/index.scss"
+    ],
 
     //Gibt Ausgabename und Ort für JS-File an
     output: {
@@ -33,6 +37,10 @@ let moduleExports = {
         new HtmlWebpackPlugin({
             template: '!!html-loader!client/index.html'
         }),
+
+        new webpack.NormalModuleReplacementPlugin(/typeorm$/, function (result) {
+            result.request = result.request.replace(/typeorm/, "typeorm/browser");
+        })
     ],
 
     module: {
@@ -116,7 +124,7 @@ if (mode === "production") {
     //Transpilieren zu ES5
     moduleExports["module"]["rules"].push({
         test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules\/(?!(cordova-sites))/,
         use: {
             loader: 'babel-loader',
             options: {

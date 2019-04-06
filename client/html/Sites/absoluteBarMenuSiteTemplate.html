@@ -1,9 +1,15 @@
-<div class="height-100 absolute-menu-site">
-    <span id="navbar-fragment" class=""></span>
-    <div class="height-100 flex-container flex-dir-column">
-        <div class="grow overflow-auto">
-            <span data-view="../../../node_modules/cordova-sites/dist/assets/src/html/siteTemplates/container.html"></span>
+<div class="height-100 flex-container flex-dir-column">
+    <div class="grid-x grid-padding-x grid-padding-y grow grid-container" id="main-content-container">
+        <span id="navbar-fragment"></span>
+        <div class="cell small-12 max-height-100" id="main-content">
+            <!--site-_content wird ersetzt, daher keine wirklichen attribute-->
+            <span id="site-content">
+        </span>
         </div>
-        <span id="footer-fragment"></span>
     </div>
+    <!--<span id="navbar-fragment" class=""></span>-->
+    <!--<div class="grow overflow-auto">-->
+        <!--<span data-view="../../../node_modules/cordova-sites/dist/assets/src/html/siteTemplates/container.html"></span>-->
+    <!--</div>-->
+    <span id="footer-fragment"></span>
 </div>

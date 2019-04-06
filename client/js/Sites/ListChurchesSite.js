@@ -1,15 +1,16 @@
-import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
-import {Church} from "../../../model/Church";
-
 import view from "../../html/Sites/listChurchesSite.html"
-import {App, Helper, MenuSite, Translator} from "cordova-sites";
-import {ShowChurchSite} from "./ShowChurchSite";
+import {App, Helper, Translator} from "cordova-sites";
 import {Region} from "../../../model/Region";
 import {MenuFooterSite} from "./MenuFooterSite";
+import {ChurchListFragment} from "../Fragments/ChurchListFragment";
+import {WelcomeSite} from "./WelcomeSite";
 
 export class ListChurchesSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
+        this._alphabeticListFragment = new ChurchListFragment(this);
+        this.addFragment("#church-list", this._alphabeticListFragment);
+        this._footerFragment.setSelected(".icon.home");
     }
 
     async onConstruct(constructParameters) {
@@ -35,57 +36,23 @@ export class ListChurchesSite extends MenuFooterSite {
             }
         });
 
-        console.log(regions);
-
         let currentLang = Translator.getInstance().getCurrentLanguage();
         let fallbackLanguage = Translator.getInstance().getFallbackLanguage();
 
-        /** @type{Church[]}*/
-        this._churches = Object.values(churches).sort((a, b) => {
-            a = a.names;
-            b = b.names;
+        let namedChurches = {};
+        Object.values(churches).forEach(church => {
 
-            let aName = Helper.nonNull(a[currentLang], a[fallbackLanguage], a[Object.keys(a)[0]], "");
-            let bName = Helper.nonNull(b[currentLang], b[fallbackLanguage], b[Object.keys(a)[0]], "");
-
-            return aName.localeCompare(bName);
+            let name = Helper.nonNull(church.names[currentLang], church.names[fallbackLanguage], church.names[Object.keys(church.names)[0]], "");
+            namedChurches[name + "-"+church.id] = church;
         });
 
-        // console.log(this._churches);
-        // console.log(await Church.findById(12));
+        this._alphabeticListFragment.setElements(namedChurches);
 
         return res;
     }
 
-    async onViewLoaded() {
-        let res = super.onViewLoaded();
-        this._churchContainer = this.findBy("#church-info-container");
-        this._churchTemplate = this.findBy("#church-info-template");
-
-        this._churchTemplate.removeAttribute("id");
-        this._churchTemplate.remove();
-
-        this._updateChurches();
-        return res;
-    }
-
-    _updateChurches() {
-        Helper.removeAllChildren(this._churchContainer);
-
-        let translator = Translator.getInstance();
-        this._churches.forEach(church => {
-            translator.addDynamicTranslations(church.getDynamicTranslations());
-            let churchElem = this._churchTemplate.cloneNode(true);
-            churchElem.querySelector(".name").appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
-            if (church.places.length > 0) {
-                churchElem.querySelector(".place").appendChild((church.places.length === 1) ?
-                    document.createTextNode(church.places[0]) : Translator.makePersistentTranslation("Multiple locations"));
-            }
-            churchElem.addEventListener("click", () => {
-                this.startSite(ShowChurchSite, {"id": church.id});
-            });
-            this._churchContainer.appendChild(churchElem);
-        });
+    goBack() {
+        this.finishAndStartSite(WelcomeSite);
     }
 }
 

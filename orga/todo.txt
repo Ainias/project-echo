@@ -1,3 +1,5 @@
 - Ordentliches Titelbild
 - Entfernung messen und angeben
 - Schriftart
+- Gemeindeübersicht rechts ganz an den rand ohne scrollbalken
+- automatisierte Tests

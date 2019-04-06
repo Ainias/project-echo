@@ -5,30 +5,26 @@ import express from 'express';
 import {routes} from './routes';
 
 //Import Models
-// import "../model/Region";
+import "../model/Region";
 // import "../model/Event";
-// import "../model/Church";
+import "../model/Church";
 // import "../model/EventRegion";
 // import {Region} from "../model/Region";
-import {Church} from "../model/Church";
-import {BaseDatabase, BaseModel} from "cordova-sites-database";
-import {Region} from "../model/Region";
-import typeorm from "typeorm";
-// import "../model/ChurchRegion";
+// import {Church} from "../model/Church";
+import {BaseModel} from "cordova-sites-database";
+// import {Region} from "../model/Region";
 
 
 const port = process.env.PORT || 3000;
 
 BaseModel._databaseClass = EasySyncServerDb;
-BaseDatabase.typeorm = typeorm;
-EasySyncServerDb.typeorm = typeorm;
 EasySyncServerDb.CONNECTION_PARAMETERS = {
     "type": "mysql",
     "host": "localhost",
     "username": "root",
     "password": "123456",
     "database": "silas_echo",
-    "synchronize": true,
+    "synchronize": false,
     "logging": true
 };
 
@@ -69,7 +65,8 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
 
 const app = express();
 
-app.use(express.json());
+//Todo guten wert finden?
+app.use(express.json({limit: "50mb"}));
 
 //Allow Origin setzen bevor rest passiert
 app.use(function (req, res, next) {

@@ -1,5 +1,8 @@
 @import "foundationSettings";
 
+$navBackgroundWhite: #3B3B3B;
+$navBackgroundDefault: $navBackgroundWhite;
+
 $themes: (
         black:(
                 class: black,
@@ -8,7 +11,7 @@ $themes: (
                 lightThemeColor: #353535,
                 linkColor: #000,
                 spinnerColor: #000,
-                navBarTextColor: #000,
+                navBarTextColor: inherit,
                 textColor: #000,
                 textColor2: #555555,
                 lightLinkColor: #fff,

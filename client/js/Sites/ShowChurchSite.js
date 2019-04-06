@@ -1,12 +1,13 @@
-import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
-
 import view from "../../html/Sites/showChurchSite.html"
-import {Helper, Toast, Translator} from "cordova-sites";
+import {App, ColorIndicator, Helper, MenuSite, Toast, Translator} from "cordova-sites";
 import {Church} from "../../../model/Church";
+import {MenuFooterSite} from "./MenuFooterSite";
+import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 
 export class ShowChurchSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {
         super(siteManager, view);
+        // this._footerFragment.setSelected(".icon.home");
     }
 
     async onConstruct(constructParameters) {
@@ -17,7 +18,8 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
             this.finish();
         }
 
-        this._church = await Church.selectOne({"id": parseInt(constructParameters["id"])});
+        /** @var {Church} */
+        this._church = await Church.findById(parseInt(constructParameters["id"]));
 
         if (Helper.isNull(this._church)) {
             new Toast("no church found").show();
@@ -31,48 +33,39 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         let res = super.onViewLoaded();
 
         //Image
-        let images = this._church.getImages();
+        let images = this._church.images;
         if (images.length > 0) {
-            let titleImg = this.findBy("#title-image");
-            titleImg.src = images[0];
+            this._navbarFragment.setBackgroundImage(images[0]);
+        }
+        else {
+            //white square 1x1
+            // this._navbarFragment.setBackgroundImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4wMYFQcQxhIhFAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC");
         }
 
-        //Translations
-        let churchId = this._church.getId();
-
-        let translations = {};
-        let names = this._church.getNames();
-        Object.keys(names).forEach(language => {
-            translations[language] = Helper.nonNull(translations[language], {});
-            translations[language]["church-name-"+churchId] = names[language];
-        });
-
-        let descriptions = this._church.getDescriptions();
-        Object.keys(descriptions).forEach(language => {
-            translations[language] = Helper.nonNull(translations[language], {});
-            translations[language]["church-description-"+churchId] = descriptions[language];
-        });
 
         let translator = Translator.getInstance();
-        translator.addDynamicTranslations(translations);
+        translator.addDynamicTranslations(this._church.getDynamicTranslations());
 
         //name
-        this.findBy("#name").appendChild(translator.makePersistentTranslation("church-name-"+churchId));
+        this.findBy("#name").appendChild(translator.makePersistentTranslation(this._church.getNameTranslation()));
 
         //description
-        this.findBy("#description").appendChild(translator.makePersistentTranslation("church-description-"+churchId));
+        this.findBy("#description").appendChild(translator.makePersistentTranslation(this._church.getDescriptionTranslation()));
 
         //link
         let link = this.findBy("#website");
 
-        let href =this._church.getWebsite();
-        if (!href.startsWith("http") && !href.startsWith("//"))
-        {
-            href = "//"+href;
+        let href = this._church.website;
+        if (!href.startsWith("http") && !href.startsWith("//")) {
+            href = "//" + href;
         }
         link.href = href;
-        link.appendChild(document.createTextNode(this._church.getWebsite()));
+        link.appendChild(document.createTextNode(this._church.website));
 
         return res;
     }
 }
+
+App.addInitialization((app) => {
+    app.addDeepLink("church", ShowChurchSite);
+});

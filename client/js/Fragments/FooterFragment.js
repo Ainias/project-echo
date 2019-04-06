@@ -1,6 +1,7 @@
 import {AbstractFragment, Helper} from "cordova-sites";
 
 import viewFooter from '../../html/Fragments/footerFragment.html';
+import {WelcomeSite} from "../Sites/WelcomeSite";
 
 
 export class FooterFragment extends AbstractFragment {
@@ -11,6 +12,11 @@ export class FooterFragment extends AbstractFragment {
 
     async onViewLoaded() {
         let res = super.onViewLoaded();
+
+        this.findBy(".icon.home").addEventListener("click", () => {
+            this.getSite().startSite(WelcomeSite);
+        });
+
         this.findBy(".icon", true).forEach(icon => {
             icon.addEventListener("click", (e) => {
                 this.setSelected(e.target);
@@ -28,6 +34,10 @@ export class FooterFragment extends AbstractFragment {
         if (typeof selectorOrElement === "string") {
             selectorOrElement = this.findBy(selectorOrElement);
         }
-        selectorOrElement.classList.add("selected");
+        if (selectorOrElement) {
+            selectorOrElement.classList.add("selected");
+        }
     }
 }
+
+// FooterFragment._selected = "home";

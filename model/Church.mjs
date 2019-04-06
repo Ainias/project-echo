@@ -14,11 +14,11 @@ export class Church extends EasySyncBaseModel {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["names"] = {type: BaseDatabase.TYPES.JSON};
-        columns["descriptions"] = {type: BaseDatabase.TYPES.JSON};
-        columns["places"] = {type: BaseDatabase.TYPES.JSON};
-        columns["images"] = {type: BaseDatabase.TYPES.JSON};
-        columns["website"] = {type: BaseDatabase.TYPES.STRING};
+        columns["names"] = BaseDatabase.TYPES.JSON;
+        columns["descriptions"] = BaseDatabase.TYPES.JSON;
+        columns["places"] = BaseDatabase.TYPES.JSON;
+        columns["images"] = BaseDatabase.TYPES.JSON;
+        columns["website"] = BaseDatabase.TYPES.STRING;
         return columns;
     }
 

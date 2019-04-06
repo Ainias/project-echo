@@ -23,15 +23,15 @@
   }
 
   nav.top-bar {
-    color: map-get($theme, navBarTextColor);
-    background: map-get($theme, themeColor);
+    //color: map-get($theme, navBarTextColor);
+    //background: map-get($theme, themeColor);
     .top-bar-title a.hidden-link{
-      color: map-get($theme, navBarTextColor);
+      //color: map-get($theme, navBarTextColor);
     }
   }
   .top-bar {
     ul {
-      background: map-get($theme, themeColor) !important;
+      //background: map-get($theme, themeColor) !important;
       a {
         color: map-get($theme, navBarTextColor);
       }
@@ -111,10 +111,9 @@
       border-top: 1px solid map-get($theme, colorOne);
     }
   }
-  .place{
+  .place, .alphabet-scroll-to{
     color: map-get($theme, textColorOne);
   }
-
 }
 
 body {

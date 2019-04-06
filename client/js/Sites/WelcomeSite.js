@@ -1,18 +1,14 @@
 
 import view from "../../html/Sites/welcomeSite.html";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
+import componentImg from "../../img/component.png"
 
 export class WelcomeSite extends AbsoluteBarMenuSite{
 
     constructor(siteManager) {
         super(siteManager, view);
-    }
-
-    async onViewLoaded() {
-
-       // console.log("Data ",await DataManager.send("sync", {"model":"test"}));
-
-
-        return super.onViewLoaded();
+        this._navbarFragment.setCanGoBack(false);
+        this._footerFragment.setSelected(".icon.home");
+        this._navbarFragment.setBackgroundImage(componentImg);
     }
 }

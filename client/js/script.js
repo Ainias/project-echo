@@ -9,20 +9,17 @@ import {Church} from "../../model/Church";
 import {Region} from "../../model/Region";
 
 import {BaseDatabase, BaseModel} from "cordova-sites-database";
-import * as typeorm from "typeorm";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
 
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
-BaseDatabase.typeorm = typeorm;
-
-
-window["baseDB"] = BaseDatabase;
-console.log("BaseDatabase", BaseDatabase);
 
 App.addInitialization(async () => {
-
+    if (window.StatusBar) {
+        StatusBar.overlaysWebView(true);
+        StatusBar.backgroundColorByHexString('#33000000');
+    }
     Translator.init({
         translations: {
             "de": translationGerman,
@@ -56,6 +53,11 @@ App.addInitialization(async () => {
 });
 
 DataManager._basePath = "http://192.168.0.51:3000/api/v1/";
+Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
+    "logging": false
+});
 
 let app = new App();
 app.start(WelcomeSite).catch(e => console.error(e));
+// }
+// });

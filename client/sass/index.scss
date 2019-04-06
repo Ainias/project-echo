@@ -1,6 +1,6 @@
 @import "../../node_modules/foundation-sites/scss/foundation";
 //Settings nach foundation für mixins in settings
-@import "foundationSettings";
+@import "settings";
 
 //Importiere zuerst foundation vor anderen Imports, damit foundation-settings überschrieben werden
 @include foundation-everything;
@@ -175,6 +175,8 @@ a.hidden-link {
 }
 
 #main-content-container {
+  overflow: auto;
+  width: 100%;
   #main-content{
     padding-top: 0;
     padding-bottom: 0;
@@ -183,7 +185,6 @@ a.hidden-link {
 
 //Echo-specific
 * {
-  //transition: 0.25s;
   font-family: Montserrat, Regular, Arial, sans-serif;
 }
 
