@@ -39,7 +39,7 @@ async function generateDb() {
     sqlStrings.forEach((sql) => {
         if (sql.trim() !== "") {
             mysqlPromise = mysqlPromise.then(() => new Promise(r => {
-                mysqlConn.query(sql + ";", function (err, result) {
+                mysqlConn.query(sql + ";", undefined, function (err, result) {
                     if (!err) {
                         r(result);
                     } else {

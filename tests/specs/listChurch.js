@@ -11,6 +11,9 @@ describe("first test suite", () => {
     beforeAll(async () => {
         await EnvController.setup();
 
+        console.log("baseURL", baseUrl, browser.config);
+        console.log(await browser.getUrl(), browser.getUrl());
+
         if (browser.config.baseUrl.trim() !== "") {
             baseUrl = browser.config.baseUrl;
         } else {
