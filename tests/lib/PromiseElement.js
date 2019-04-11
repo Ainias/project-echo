@@ -5,11 +5,16 @@ class PromiseElement {
     }
 
     async getPromise(){
-        return this._internalPromise;
+        return await this._internalPromise;
     }
 
     async isDisplayed(){
-        return (await this.getPromise()).isDisplayed();
+        let elem = await this.getPromise();
+        return elem.isDisplayed();
+    }
+
+    async click(){
+        return (await this.getPromise()).click();
     }
 }
 module.exports = PromiseElement;

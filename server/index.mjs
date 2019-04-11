@@ -1,19 +1,12 @@
 import {EasySyncServerDb} from "cordova-sites-easy-sync/server";
 
 import express from 'express';
-// import bodyParser from 'body-parser';
 import {routes} from './routes';
 
 //Import Models
 import "../model/Region";
-// import "../model/Event";
 import "../model/Church";
-// import "../model/EventRegion";
-// import {Region} from "../model/Region";
-// import {Church} from "../model/Church";
 import {BaseModel} from "cordova-sites-database";
-// import {Region} from "../model/Region";
-
 
 const port = process.env.PORT || 3000;
 
@@ -23,45 +16,10 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
     "host": "localhost",
     "username": "root",
     "password": "123456",
-    "database": "silas_echo",
+    "database": (process.argv.length >= 3 ? process.argv[2] : "silas_echo"),
     "synchronize": false,
     "logging": true
 };
-
-// let db =EasySyncServerDb.getInstance();
-// db._syncPromise.then(async () => {
-//     let RegionModel = db._models["region"].sequelizeModelDefinition;
-//     let ChurchModel = db._models["church"].sequelizeModelDefinition;
-//
-//     let region = await RegionModel.findByPk(2);
-//     let church = await ChurchModel.create({
-//         "descriptions":"des",
-//         "names":"name",
-//         "images":"images",
-//         "deleted":false,
-//         "places":"places",
-//         "website":"www.citychurch.koeln",
-//         "version":1
-//     });
-//     region.setChurch([church]);
-//     await region.save();
-//     // this._models[model.constructor.getModelName()].sequelizeModelDefinition.findById(model.getId())
-// });
-
-
-// Region.select({"id": 2}, null, null, null, true).then(async regions => {
-//         // console.log(regions[0].getChurchs());
-//         let church = new Church();
-//         church.setDescriptions({"de":"Testkirche"});
-//         church.setNames({"de":"Testkirche"});
-//         church.setWebsite("www.citychurch.koeln");
-//         await church.save();
-//         console.log("done 1");
-//         regions[0].getChurchs().push(church);
-//         await regions[0].save();
-//         console.log("done 2");
-//     }
-// ).catch(e => console.error(e));
 
 const app = express();
 
