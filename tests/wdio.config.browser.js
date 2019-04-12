@@ -1,3 +1,5 @@
+const Service = require("./setup");
+
 exports.config = {
 
     // Where the files we are testing can be found.
@@ -42,7 +44,8 @@ exports.config = {
     // separately on the command line.
     services: [
         // 'appium'
-        'selenium-standalone'
+        'selenium-standalone',
+        // [Service.service,{}]
     ],
 
     capabilities: [{
@@ -50,6 +53,11 @@ exports.config = {
         baseUrl: "http://127.0.0.1:8000",
         maxInstances: 1,
     }],
-
+    onPrepare: async function(){
+        await Service.setup();
+    },
+    onComplete: async function(){
+        await Service.tearDown();
+    }
 
 };
