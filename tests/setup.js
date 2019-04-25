@@ -7,7 +7,7 @@ let mysqlConn = mysql.createConnection({
     "user": "root",
     "password": "123456",
     "database": "silas_test_echo",
-    "multipleStatements":true
+    "multipleStatements": true
 });
 
 let process = null;
@@ -39,17 +39,17 @@ async function generateDb() {
     let mysqlPromise = Promise.resolve();
     // sqlStrings.forEach((sql) => {
     //     if (sql.trim() !== "") {
-            mysqlPromise = mysqlPromise.then(() => new Promise(r => {
-                mysqlConn.query(sqlStrings + ";", function (err, result) {
-                    if (!err) {
-                        r(result);
-                    } else {
-                        console.error(err);
-                        throw err;
-                    }
-                });
-            }));
-        // }
+    mysqlPromise = mysqlPromise.then(() => new Promise(r => {
+        mysqlConn.query(sqlStrings + ";", function (err, result) {
+            if (!err) {
+                r(result);
+            } else {
+                console.error(err);
+                throw err;
+            }
+        });
+    }));
+    // }
     // });
     await mysqlPromise;
     console.log("mysqlPromise resolved!");
@@ -57,12 +57,13 @@ async function generateDb() {
 }
 
 class InitService {
-    async onPrepare(config, capabilities){
+    async onPrepare(config, capabilities) {
         console.log("onPrepare", config, capabilities, new Date());
         await setup();
-        console.log("onPrepare2",new Date());
+        console.log("onPrepare2", new Date());
     }
-    async onComplete(exitCode, config, capabilities){
+
+    async onComplete(exitCode, config, capabilities) {
         console.log("onComplete", exitCode, config, capabilities, new Date());
         await tearDown();
         console.log("onComplete2", new Date());
@@ -71,3 +72,29 @@ class InitService {
 
 
 module.exports = {setup: setup, tearDown: tearDown, service: InitService};
+
+
+// <script>
+
+// var linksToSlides = [{
+//     href: "https://silas.link",
+//     name: "Silas.link"
+// }];
+//
+// jQuery(function ($) {
+//
+//     var header = $('.header-slider');
+//     for (var i = 0; i < linksToSlides.length; i++) {
+//         if (header.length <= i) {
+//             break;
+//         }
+//         // $('.slide-item:nth-of-type(' + (i + 1) + ')').click(() => {
+//         //     window.location.href = linksToSlides[i];
+//         // });
+//         $('.slide-item:nth-of-type(' + (i + 1) + ') .slide-inner a').attr("href", linksToSlides[i].href);
+//         $('.slide-item:nth-of-type(' + (i + 1) + ') .slide-inner a').text(linksToSlides[i].name);
+//     }
+//     // $('.slide-item:nth-of-type(2) .slide-inner').wrap('<a href="http://mysite.com/page2"></a>');
+//     // $('.slide-item:nth-of-type(3) .slide-inner').wrap('<a href="http://mysite.com/page3"></a>');
+// });
+// </script>

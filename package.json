@@ -32,6 +32,7 @@
     "cordova-sites-easy-sync": "git+https://github.com/Ainias/cordova-sites-easy-sync.git",
     "cordova-sqlite-storage": "^3.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "foundation-sites": "^6.5.3",
     "localforage": "^1.7.3",

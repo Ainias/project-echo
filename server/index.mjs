@@ -46,11 +46,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.post("/test", function (req, res) {
-    console.log("app-level", req.body);
-    return res.json({});
-});
-
 app.use('/api', routes);
 
 app.use(express.static("public"));

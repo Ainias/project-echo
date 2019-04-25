@@ -1,7 +1,18 @@
+let PromiseElementList = null;
+
 class PromiseElement {
 
     constructor(promiseResolvingToElement) {
         this._internalPromise = promiseResolvingToElement;
+    }
+
+
+    $(selector){
+        return new PromiseElement(this.getPromise().then(elem => elem.$(selector)));
+    }
+
+    $$(selector){
+        return new PromiseElementList(this.getPromise().then(elem => elem.$$(selector)));
     }
 
     async getPromise(){
@@ -13,8 +24,24 @@ class PromiseElement {
         return elem.isDisplayed();
     }
 
+    async isDisplayedInViewport(){
+        return (await this.getPromise()).isDisplayedInViewport();
+    }
+
     async click(){
         return (await this.getPromise()).click();
     }
+
+    async getText(){
+        return (await this.getPromise()).getText();
+    }
+
+    pause(miliseconds){
+        return new PromiseElement(this.getPromise().then(async res => {
+            await browser.pause(miliseconds);
+            return res;
+        }));
+    }
 }
 module.exports = PromiseElement;
+PromiseElementList = require("./PromiseElementList");
