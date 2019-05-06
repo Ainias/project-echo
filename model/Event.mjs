@@ -1,95 +1,84 @@
-import {EasySync, EasySyncBaseModel} from "cordova-sites-easy-sync/model";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
+import {BaseDatabase} from "cordova-sites-database";
+import {Church} from "./Church";
 
 export class Event extends EasySyncBaseModel {
     constructor() {
         super();
-        this._name = null;
-        this._startTime = null;
-        this._endTime = null;
-        this._places = [];
-        this._type = null;
-        this._organiser = null;
-        this._description = null;
+        this.names = null;
+        this.descriptions = null;
+        this.startTime = null;
+        this.endTime = null;
+        this.type = null;
+        this.organisers = null;
+        this.places = [];
     }
 
-    setName(name){
-        this._name = name;
+    getNameTranslation() {
+        return "event-name-" + this.id;
     }
 
-    getName(){
-        return this._name;
+    getDescriptionTranslation() {
+        return "event-description-" + this.id;
     }
 
-    setPlacesJson(places){
-        this._places = JSON.parse(places);
+    getDynamicTranslations() {
+        let translations = {};
+        Object.keys(this.names).forEach(language => {
+            translations[language] = translations[language] || {};
+            translations[language][this.getNameTranslation()] = this.names[language];
+        });
+
+        Object.keys(this.descriptions).forEach(language => {
+            translations[language] = translations[language] || {};
+            translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
+        });
+        return translations;
     }
 
-    getPlacesJson(){
-        return JSON.stringify(this._places);
+    static getColumnDefinitions() {
+        let columns = super.getColumnDefinitions();
+        columns["names"] = BaseDatabase.TYPES.JSON;
+        columns["descriptions"] = BaseDatabase.TYPES.JSON;
+        columns["places"] = BaseDatabase.TYPES.JSON;
+        columns["images"] = BaseDatabase.TYPES.JSON;
+        columns["startTime"] = BaseDatabase.TYPES.DATE;
+        columns["endTime"] = BaseDatabase.TYPES.DATE;
+        return columns;
     }
 
-    getPlaces(){
-        return this._places;
+    static getRelationDefinitions() {
+        let relations = EasySyncBaseModel.getRelationDefinitions();
+        relations["organisers"] = {
+            target: Church.getSchemaName(),
+            type: "many-to-many",
+            joinTable: {
+                name: "churchEvent"
+            },
+            // cascade: true
+        };
+        // relations["events"] = {
+        //     target: Church.getSchemaName(),
+        //     type: "many-to-many",
+        //     joinTable: {
+        //         name: "eventRegion"
+        //     },
+        //     cascade: true
+        // };
+        return relations;
     }
 
-    setPlaces(places){
-        this._places = places;
-    }
-
-    getStartTime() {
-        return this._startTime;
-    }
-
-    setStartTime(startTime) {
-        this._startTime = startTime;
-    }
-
-    getEndTime() {
-        return this._endTime;
-    }
-
-    setEndTime(endTime) {
-        this._endTime = endTime;
-    }
-
-    setType(type) {
-        this._type = type;
-    }
-
-    getType() {
-        return this._type;
-    }
-
-    getOrganiser() {
-        return this._organiser;
-    }
-
-    setOrganiser(organiser) {
-        this._organiser = organiser;
-    }
-
-    getDescription() {
-        return this._description;
-    }
-
-    setDescription(description) {
-        this._description = description;
-    }
-
-    static getTableDefinition(){
-        let definition = EasySyncBaseModel.getTableDefinition();
-        definition["columns"].push(...[
-            {key: "name", type: EasySync.TYPES.STRING},
-            {key: "startTime", type: EasySync.TYPES.DATE},
-            {key: "endTime", type: EasySync.TYPES.DATE},
-            {key: "placesJson", type: EasySync.TYPES.STRING},
-            {key: "organiser", type: EasySync.TYPES.STRING},
-            {key: "description", type: EasySync.TYPES.STRING},
-
-        ]);
-        return definition;
-    }
+    // static getTableDefinition() {
+    //     let definition = EasySyncBaseModel.getTableDefinition();
+    //     definition["columns"].push(...[
+    //         {key: "name", type: BaseDatabase.TYPES.STRING},
+    //         {key: "startTime", type: BaseDatabase.TYPES.DATE},
+    //         {key: "endTime", type: BaseDatabase.TYPES.DATE},
+    //         {key: "places", type: BaseDatabase.TYPES.SIMPLE_JSON},
+    //         {key: "organiser", type: BaseDatabase.TYPES.STRING},
+    //         {key: "description", type: BaseDatabase.TYPES.STRING},
+    //     ]);
+    //     return definition;
+    // }
 }
-
-Event.modelName = "event";
-EasySync.addModel(Event);
+BaseDatabase.addModel(Event);

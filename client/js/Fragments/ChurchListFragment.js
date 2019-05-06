@@ -26,7 +26,7 @@ export class ChurchListFragment extends AlphabeticListFragment {
         let churchElem = this._template.cloneNode(true);
         churchElem.querySelector(".name").appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
         if (church.places.length > 0) {
-            churchElem.querySelector(".place").appendChild((church.places.length === 1) ?
+            churchElem.querySelector(".place .place-name").appendChild((church.places.length === 1) ?
                 document.createTextNode(church.places[0]) : Translator.makePersistentTranslation("Multiple locations"));
         }
         churchElem.addEventListener("click", () => {

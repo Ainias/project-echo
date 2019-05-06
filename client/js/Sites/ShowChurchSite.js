@@ -7,7 +7,7 @@ import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 export class ShowChurchSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {
         super(siteManager, view);
-        // this._footerFragment.setSelected(".icon.home");
+        this._footerFragment.setSelected(".icon.home");
     }
 
     async onConstruct(constructParameters) {
@@ -26,31 +26,26 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
             this.finish();
         }
 
+        //Image
+        let images = this._church.images;
+        if (images.length > 0) {
+            this._navbarFragment.setBackgroundImage(images[0]);
+        }
+
         return res;
     }
 
     async onViewLoaded() {
         let res = super.onViewLoaded();
 
-        //Image
-        let images = this._church.images;
-        if (images.length > 0) {
-            this._navbarFragment.setBackgroundImage(images[0]);
-        }
-        else {
-            //white square 1x1
-            // this._navbarFragment.setBackgroundImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4wMYFQcQxhIhFAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC");
-        }
-
-
         let translator = Translator.getInstance();
         translator.addDynamicTranslations(this._church.getDynamicTranslations());
 
         //name
-        this.findBy("#name").appendChild(translator.makePersistentTranslation(this._church.getNameTranslation()));
+        this.findBy("#name").appendChild(translator.makePersistentTranslation(this._church.getNameTranslation(), true));
 
         //description
-        this.findBy("#description").appendChild(translator.makePersistentTranslation(this._church.getDescriptionTranslation()));
+        this.findBy("#description").appendChild(translator.makePersistentTranslation(this._church.getDescriptionTranslation(), true));
 
         //link
         let link = this.findBy("#website");
@@ -61,6 +56,17 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         }
         link.href = href;
         link.appendChild(document.createTextNode(this._church.website));
+
+        //places
+        let placesContainer = this.findBy("#places-container");
+        let placeTemplate = placesContainer.querySelector(".place");
+        placeTemplate.remove();
+
+        this._church.places.forEach(place => {
+            let placeElement = placeTemplate.cloneNode(true);
+            placeElement.querySelector(".place-name").innerText = place;
+            placesContainer.appendChild(placeElement);
+        });
 
         return res;
     }

@@ -1,7 +1,10 @@
 @import "foundationSettings";
 
-$navBackgroundWhite: #3B3B3B;
+//$navBackgroundWhite: #3B3B3B;
+$navBackgroundWhite: linear-gradient(to bottom, #3B3B3B, #191919);
 $navBackgroundDefault: $navBackgroundWhite;
+
+$highlightColor: #D56B52;
 
 $themes: (
         black:(

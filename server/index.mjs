@@ -6,6 +6,7 @@ import {routes} from './routes';
 //Import Models
 import "../model/Region";
 import "../model/Church";
+import "../model/Event";
 import {BaseModel} from "cordova-sites-database";
 
 const port = process.env.PORT || 3000;

@@ -17,6 +17,8 @@
 @import "swipeFragment";
 @import "themes";
 @import "listChurchSite";
+@import "calendar";
+@import "showChrchSite";
 
 
 @keyframes rotate {
@@ -177,19 +179,28 @@ a.hidden-link {
 #main-content-container {
   overflow: auto;
   width: 100%;
-  #main-content{
+
+  #main-content {
     padding-top: 0;
     padding-bottom: 0;
   }
 }
 
 //Echo-specific
-* {
-  font-family: Montserrat, Regular, Arial, sans-serif;
+body, html {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+p {
+  line-height: 1.25;
 }
 
 h1 {
   text-transform: uppercase;
+  font-weight: bold;
+  //font-size: 22px;
 }
 
 a.link {
@@ -202,10 +213,13 @@ a.link {
   }
 }
 
-.place:not(:empty) {
-  &::before {
-    vertical-align: top;
-    content: url("../img/icons/place.png");
+.place {
+  .place-img {
+    img {
+      vertical-align: top;
+      padding-top: 0.1rem;
+      padding-right: 0.1rem;
+    }
   }
 }
 

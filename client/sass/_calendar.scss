@@ -1,0 +1,111 @@
+#calendar {
+  background: $navBackgroundWhite;
+  padding-top: 5rem;
+
+  stroke: $navColorWhite;
+
+  @each $breakpoint, $value in $margins {
+    @include breakpoint($breakpoint) {
+      padding-left: 2*$value;
+      padding-right: 2*$value;
+    }
+  }
+
+
+  #button-left, #button-right, .day.has-event {
+    cursor: pointer;
+  }
+
+  #month-navigation {
+    margin-bottom: 2rem;
+
+    #button-left, #button-right {
+      text-align: center;
+      width: 14.28571%;
+      display: inline-block;
+
+      svg {
+        height: 100%;
+        width: 0.5rem;
+        vertical-align: bottom;
+      }
+    }
+
+    #month-name {
+      width: 71.4286%;
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 1.2rem;
+    }
+  }
+
+  .day-header {
+    text-transform: uppercase;
+    color: #9d9e9c;
+    text-align: center;
+    margin-bottom: 1.3rem;
+  }
+
+  .day, #month-name {
+    color: $navColorWhite;
+    text-align: center;
+  }
+
+  .day {
+    position: relative;
+
+    &::before {
+      content: "";
+      display: block;
+      padding-top: 100%;
+    }
+
+    .day-number-container {
+      $padding: 10%;
+      position: absolute;
+      top: $padding;
+      bottom: $padding;
+      left: $padding;
+      right: $padding;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      border-radius: 100%;
+
+      .day-number {
+        margin: auto;
+      }
+    }
+
+    &.today .day-number-container {
+      background: $highlightColor;
+    }
+
+    &.has-event .day-number-container {
+      border: 1px solid #fff;
+    }
+  }
+
+  #event-overview-container {
+    //height: 20%;
+    background-color: white;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    //padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    .event-overview {
+      padding-top: 1rem;
+      padding-bottom: 0.5rem;
+
+      .time, .name {
+        font-size: 1.33em;
+        display: block;
+      }
+      &:not(first-child){
+        border-top: 1px solid #bcbbbb;
+      }
+    }
+  }
+}

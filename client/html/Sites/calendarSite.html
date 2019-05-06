@@ -1,0 +1,38 @@
+<article id="calendar" class="width-100 height-100 full-width flex-container flex-dir-column">
+    <section class="" id="month-navigation">
+        <span id="button-left" class=""><img data-view="../../img/icons/arrowLeft.svg" alt="prev"></span><span
+            id="month-name" class=""></span><span id="button-right" class=""><img
+            data-view="../../img/icons/arrowRight.svg" alt="next"></span>
+    </section>
+    <section>
+        <div class="grid-x small-up-7">
+            <span class="cell translation day-header">mo</span>
+            <span class="cell translation day-header">di</span>
+            <span class="cell translation day-header">mi</span>
+            <span class="cell translation day-header">do</span>
+            <span class="cell translation day-header">fr</span>
+            <span class="cell translation day-header">sa</span>
+            <span class="cell translation day-header">so</span>
+        </div>
+        <div id="day-container" class="grid-x small-up-7">
+            <span class="day cell" id="day-template">
+                <span class="day-number-container"><span class="day-number"></span></span>
+            </span>
+        </div>
+    </section>
+    <section id="event-overview-container" class="grow full-width">
+        <div id="event-overview-template" class="event-overview grid-x">
+            <span class="columns small-3">
+                <span class="time"></span>
+                <span class="translation faded-text">uhr</span>
+                </span>
+            <span class="columns small-7">
+                <span class="name"></span>
+                <span data-view="../place.html"></span>
+            </span>
+            <span class="columns small-2 star">
+                <img src="../../img/icons/favorites-small.png">
+            </span>
+        </div>
+    </section>
+</article>

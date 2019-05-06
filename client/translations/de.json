@@ -6,11 +6,30 @@
   "contact": "Kontakt",
   "privacy policy": "Datenschutz",
   "imprint": "Impressum",
-
   "churchoverview": "Gemeindeübersicht",
   "Here you can find all churches and organizations in Cologne that share their events through ECHO.": "Hier findest du alle Gemeinden und Organisationen in Köln, die ihre Veranstaltungen über ECHO teilen.",
   "Find out more": "Mehr erfahren",
   "multiple locations": "mehrere Standorte",
+  "document-title": "ECHO",
+  "mo": "mo",
+  "di": "di",
+  "mi": "mi",
+  "do": "do",
+  "fr": "fr",
+  "sa": "sa",
+  "so": "so",
+  "January": "Januar",
+  "February": "Februar",
+  "March": "März",
+  "April": "April",
+  "May": "Mai",
+  "June": "Juni",
+  "July": "Juli",
+  "August": "August",
+  "September": "September",
+  "October": "Oktober",
+  "November": "November",
+  "December": "Dezember",
 
-  "document-title": "ECHO"
+  "uhr": "Uhr"
 }

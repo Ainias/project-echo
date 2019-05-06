@@ -1,6 +1,7 @@
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {BaseDatabase} from "cordova-sites-database";
 import {Church} from "./Church";
+import {Event} from "./Event";
 
 export class Region extends EasySyncBaseModel {
 
@@ -8,6 +9,7 @@ export class Region extends EasySyncBaseModel {
         super();
         this.name = null;
         this.churches = null;
+        this.events= null;
     }
 
     getName() {
@@ -40,7 +42,15 @@ export class Region extends EasySyncBaseModel {
             joinTable: {
                 name: "churchRegion"
             },
-            cascade: true
+            // cascade: true
+        };
+        relations["events"] = {
+            target: Event.getSchemaName(),
+            type: "many-to-many",
+            joinTable: {
+                name: "eventRegion"
+            },
+            // cascade: true
         };
         return relations;
     }

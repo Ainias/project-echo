@@ -41,7 +41,6 @@ export class ListChurchesSite extends MenuFooterSite {
 
         let namedChurches = {};
         Object.values(churches).forEach(church => {
-
             let name = Helper.nonNull(church.names[currentLang], church.names[fallbackLanguage], church.names[Object.keys(church.names)[0]], "");
             namedChurches[name + "-"+church.id] = church;
         });

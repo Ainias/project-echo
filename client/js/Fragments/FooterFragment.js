@@ -2,6 +2,7 @@ import {AbstractFragment, Helper} from "cordova-sites";
 
 import viewFooter from '../../html/Fragments/footerFragment.html';
 import {WelcomeSite} from "../Sites/WelcomeSite";
+import {CalendarSite} from "../Sites/CalendarSite";
 
 
 export class FooterFragment extends AbstractFragment {
@@ -16,6 +17,11 @@ export class FooterFragment extends AbstractFragment {
         this.findBy(".icon.home").addEventListener("click", () => {
             this.getSite().startSite(WelcomeSite);
         });
+
+        this.findBy(".icon.calendar").addEventListener("click", () => {
+            this.getSite().startSite(CalendarSite);
+        });
+
 
         this.findBy(".icon", true).forEach(icon => {
             icon.addEventListener("click", (e) => {

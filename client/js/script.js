@@ -4,7 +4,8 @@ import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuA
 import {EasySyncClientDb, SyncJob} from "cordova-sites-easy-sync/client";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
-// import {Event} from "../../model/Event";
+
+import {Event} from "../../model/Event";
 import {Church} from "../../model/Church";
 import {Region} from "../../model/Region";
 
@@ -49,12 +50,29 @@ App.addInitialization(async () => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", WelcomeSite, MenuAction.SHOW_NEVER));
 
     //Todo an richtige stelle auslagern
-    await new SyncJob().sync([Church, Region]).catch(e => console.error(e));
+    await new SyncJob().sync([Church, Event, Region]).catch(e => console.error(e));
+
+    // let church = new Church();
+    // church.places = "[]";
+    // church.names = "{}";
+    // church.descriptions = "{}";
+    // church.images = "[]";
+    // church.website = "";
+    // church.id = 100;
+    //
+    // let region = new Region();
+    // region.name = "";
+    // region.id = 200;
+    // // await region.save(true);
+    // // await church.save(true);
+    // region.churches = [church];
+    // await region.save(true);
 });
 
-DataManager._basePath = "http://192.168.0.51:3000/api/v1/";
+DataManager._basePath = "http://localhost:3000/api/v1/";
+// DataManager._basePath = "http://192.168.0.51:3000/api/v1/";
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
-    "logging": false
+    "logging":  ["error"]
 });
 
 let app = new App();

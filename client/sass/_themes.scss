@@ -111,7 +111,7 @@
       border-top: 1px solid map-get($theme, colorOne);
     }
   }
-  .place, .alphabet-scroll-to{
+  .place, .alphabet-scroll-to, .faded-text{
     color: map-get($theme, textColorOne);
   }
 }
