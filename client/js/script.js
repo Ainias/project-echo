@@ -16,6 +16,8 @@ import {ListChurchesSite} from "./Sites/ListChurchesSite";
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 
+console.log("before initialisation", new Date());
+
 App.addInitialization(async () => {
     if (window.StatusBar) {
         StatusBar.overlaysWebView(true);
@@ -76,6 +78,8 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
 });
 
 let app = new App();
-app.start(WelcomeSite).catch(e => console.error(e));
+app.start(WelcomeSite).catch(e => console.error(e)).then(() => {
+    console.log("initialisation done!", new Date())
+});
 // }
 // });

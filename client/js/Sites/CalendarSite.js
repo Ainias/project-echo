@@ -124,7 +124,6 @@ export class CalendarSite extends FooterSite {
             if (eventDays[i]) {
                 day.classList.add("has-event");
                 day.addEventListener("click", () => {
-                    console.log("events:", eventDays[i]);
                     this.showEventOverviews(eventDays[i]);
                 });
             }
@@ -149,7 +148,7 @@ export class CalendarSite extends FooterSite {
             }
 
             eventElement.addEventListener("click", () => {
-                this.startSite(EventSite, {id: event.id});
+                this.startSite(EventSite, {"id": event.id});
             });
 
             this._eventOverviewContainer.appendChild(eventElement);

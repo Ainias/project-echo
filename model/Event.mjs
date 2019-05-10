@@ -10,6 +10,7 @@ export class Event extends EasySyncBaseModel {
         this.startTime = null;
         this.endTime = null;
         this.type = null;
+        this.images = [];
         this.organisers = null;
         this.places = [];
     }
