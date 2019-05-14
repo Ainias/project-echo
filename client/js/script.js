@@ -71,10 +71,12 @@ App.addInitialization(async () => {
     // await region.save(true);
 });
 
-DataManager._basePath = "http://localhost:3000/api/v1/";
+// DataManager._basePath = "http://localhost:3000/api/v1/";
+DataManager._basePath = __HOST_ADDRESS__;
 // DataManager._basePath = "http://192.168.0.51:3000/api/v1/";
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
-    "logging":  ["error"]
+    // "logging":  ["error"]
+    "logging":  true
 });
 
 let app = new App();

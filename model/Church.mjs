@@ -46,4 +46,5 @@ export class Church extends EasySyncBaseModel {
 
 }
 
+Church.SCHEMA_NAME = "Church";
 BaseDatabase.addModel(Church);

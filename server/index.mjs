@@ -1,3 +1,4 @@
+import "dotenv/config";
 import {EasySyncServerDb} from "cordova-sites-easy-sync/server";
 
 import express from 'express';

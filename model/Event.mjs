@@ -51,7 +51,7 @@ export class Event extends EasySyncBaseModel {
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
         relations["organisers"] = {
-            target: Church.getSchemaName(),
+            target: Church,
             type: "many-to-many",
             joinTable: {
                 name: "churchEvent"
@@ -82,4 +82,6 @@ export class Event extends EasySyncBaseModel {
     //     return definition;
     // }
 }
+
+Event.SCHEMA_NAME = "Event";
 BaseDatabase.addModel(Event);

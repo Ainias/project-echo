@@ -1,119 +1,147 @@
+require("dotenv").config();
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const path = require("path");
 
-let mode = "development";
+const os = require('os');
+const ifaces = os.networkInterfaces();
+
+let mode = (process.env.MODE || "development");
+
 // let mode = "production";
+
+function getIp() {
+    let ip = null;
+    Object.keys(ifaces).some(function (ifname) {
+        return ifaces[ifname].some(function (iface) {
+            if ('IPv4' !== iface.family || iface.internal !== false) {
+                // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+                return false;
+            }
+
+            ip = iface.address;
+            return true;
+        });
+    });
+    return ip;
+}
 
 let moduleExports = {
 
-    node: {
-        fs: 'empty',
-        net: 'empty',
-        tls: 'empty'
-    },
+        node: {
+            fs: 'empty',
+            net: 'empty',
+            tls: 'empty'
+        },
 
-    //Development oder production, wird oben durch Variable angegeben (damit später per IF überprüft)
-    mode: mode,
+        //Development oder production, wird oben durch Variable angegeben (damit später per IF überprüft)
+        mode: mode,
 
-    //Beinhaltet den JS-Startpunkt und SCSS-Startpunkt
-    entry: [
-        __dirname + "/client/js/script.js",
-        __dirname + "/client/sass/index.scss"
-    ],
+        //Beinhaltet den JS-Startpunkt und SCSS-Startpunkt
+        entry: [
+            __dirname + "/client/js/script.js",
+            __dirname + "/client/sass/index.scss"
+        ],
+        devtool: 'inline-source-map',
 
-    //Gibt Ausgabename und Ort für JS-File an
-    output: {
-        path: path.resolve(__dirname, 'www'),
-        filename: 'bundle.js'
-    },
+        //Gibt Ausgabename und Ort für JS-File an
+        output: {
+            path: path.resolve(__dirname, 'www'),
+            filename: 'bundle.js'
+        },
 
-    plugins: [
-        //Delete www before every Build (to only have nessesary files)
-        new CleanWebpackPlugin(["www/*"], {exclude: [".gitkeep"]}),
+        plugins: [
+            //Delete www before every Build (to only have nessesary files)
+            new CleanWebpackPlugin(["www/*"], {exclude: [".gitkeep"]}),
 
-        //Erstellt (kopiert) die Index.html
-        new HtmlWebpackPlugin({
-            template: '!!html-loader!client/index.html'
-        }),
+            //Erstellt (kopiert) die Index.html
+            new HtmlWebpackPlugin({
+                template: '!!html-loader!client/index.html'
+            }),
 
-        new webpack.NormalModuleReplacementPlugin(/typeorm$/, function (result) {
-            result.request = result.request.replace(/typeorm/, "typeorm/browser");
-        })
-    ],
+            new webpack.NormalModuleReplacementPlugin(/typeorm$/, function (result) {
+                result.request = result.request.replace(/typeorm/, "typeorm/browser");
+            }),
 
-    module: {
+            new webpack.DefinePlugin({
+                __HOST_ADDRESS__: "'http://" + getIp() + ":" + (process.env.PORT || "3000") + "/api/v1/'"
+            })
+        ],
 
-        //Regeln: Wenn Regex zutrifft => führe Loader (in UMGEKEHRTER) Reihenfolge aus
-        rules: [
-            {
-                //Kopiert HTML-Dateien in www. Nur die Dateien, welche im JS angefragt werden
-                test: /html[\\\/].*\.html$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[ext]',
-                            outputPath: 'html'
+        module: {
+
+            //Regeln: Wenn Regex zutrifft => führe Loader (in UMGEKEHRTER) Reihenfolge aus
+            rules: [
+                {
+                    //Kopiert HTML-Dateien in www. Nur die Dateien, welche im JS angefragt werden
+                    test: /html[\\\/].*\.html$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name: '[name].[ext]',
+                                outputPath: 'html'
+                            }
+                        },
+                        {
+                            loader: 'extract-loader'
+                        },
+                        {
+                            loader: 'html-loader',
+                            options: {
+                                //Sorgt dafür, dass Child-Views funktionieren
+                                attrs: [
+                                    ":data-view",
+                                    "img:src",
+                                ]
+                            }
                         }
-                    },
-                    {
-                        loader: 'extract-loader'
-                    },
-                    {
-                        loader: 'html-loader',
-                        options: {
-                            //Sorgt dafür, dass Child-Views funktionieren
-                            attrs: [
-                                ":data-view",
-                                "img:src",
-                            ]
+                    ],
+                },
+                {
+                    //Kopiert nur benutzte Bilder (benutzt durch JS (import), html oder css/sass)
+                    test: /img[\\\/]/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name: '[name].[ext]',
+                                outputPath: 'img',
+                                publicPath: 'img'
+                                // useRelativePath: true
+                            }
+                        },
+                    ],
+                },
+                {
+                    //Compiliert SASS zu CSS und speichert es in Datei
+                    test: /\.scss$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name: '[name].css',
+                                outputPath: ''
+                            }
+                        },
+                        {
+                            loader: 'extract-loader'
+                        },
+                        {
+                            loader: 'css-loader'
+                        },
+                        {
+                            //Compiliert zu CSS
+                            loader: 'sass-loader'
                         }
-                    }
-                ],
-            },
-            {
-                //Kopiert nur benutzte Bilder (benutzt durch JS (import), html oder css/sass)
-                test: /img[\\\/]/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[ext]',
-                            outputPath: 'img',
-                            publicPath: 'img'
-                            // useRelativePath: true
-                        }
-                    },
-                ],
-            },
-            {
-                //Compiliert SASS zu CSS und speichert es in Datei
-                test: /\.scss$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].css',
-                            outputPath: ''
-                        }
-                    },
-                    {
-                        loader: 'extract-loader'
-                    },
-                    {
-                        loader: 'css-loader'
-                    },
-                    {
-                        //Compiliert zu CSS
-                        loader: 'sass-loader'
-                    }
-                ]
-            }
-        ]
+                    ]
+                }
+            ]
+        }
     }
-};
+;
 
 //Auslagerung von zeitintensiven Sachen in production only, damit Debugging schneller geht
 if (mode === "production") {
