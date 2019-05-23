@@ -1,3 +1,6 @@
+// import "../../node_modules/sql.js/js/sql-optimized.js"
+// import "../../node_modules/localforage/dist/localforage.js"
+
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
 import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
@@ -75,8 +78,8 @@ App.addInitialization(async () => {
 DataManager._basePath = __HOST_ADDRESS__;
 // DataManager._basePath = "http://192.168.0.51:3000/api/v1/";
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
-    // "logging":  ["error"]
-    "logging":  true
+    "logging":  ["error"]
+    // "logging":  true
 });
 
 let app = new App();

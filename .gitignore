@@ -13,6 +13,7 @@ node_modules/*
 www/index.js
 js/**/*.js
 js/**/*.js.map
+.env
 
 #idea-ide
 /.idea/*

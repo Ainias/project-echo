@@ -6,6 +6,7 @@ import {FooterSite} from "./FooterSite";
 import {LessThan} from "typeorm";
 import {MoreThanOrEqual} from "typeorm";
 import {EventSite} from "./EventSite";
+import {Scaler} from "../Scaler";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -41,8 +42,6 @@ export class CalendarSite extends FooterSite {
             this.drawMonth(this._date);
         });
 
-        this.drawMonth(this._date);
-
         return super.onViewLoaded();
     }
 
@@ -62,6 +61,12 @@ export class CalendarSite extends FooterSite {
             startTime: LessThan(Helper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
             endTime: MoreThanOrEqual(Helper.strftime("%Y-%m-%d %H:%M:%S", firstDay))
         });
+    }
+
+
+    async onStart(pauseArguments) {
+        await this.drawMonth(this._date);
+        await super.onStart(pauseArguments);
     }
 
     /**
@@ -124,12 +129,36 @@ export class CalendarSite extends FooterSite {
             if (eventDays[i]) {
                 day.classList.add("has-event");
                 day.addEventListener("click", () => {
+                    let oldActiceDay = this.findBy(".day.active");
+                    if (oldActiceDay) {
+                        oldActiceDay.classList.remove("active");
+                    }
+                    day.classList.add("active");
                     this.showEventOverviews(eventDays[i]);
+                });
+            } else {
+                day.addEventListener("click", () => {
+                    let oldActiceDay = this.findBy(".day.active");
+                    if (oldActiceDay) {
+                        oldActiceDay.classList.remove("active");
+                    }
+                    day.classList.add("active");
+                    this.showEventOverviews([]);
                 });
             }
 
             this._dayContainer.appendChild(day);
         }
+
+        for (let i = offset + numberDays; i < 37; i++) {
+            let day = this._dayTemplate.cloneNode(true);
+            day.classList.add("nextMonth");
+            this._dayContainer.appendChild(day);
+        }
+
+        let scaler = new Scaler();
+        let maxWidth = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
+        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxWidth * 0.65);
     }
 
     showEventOverviews(events) {
@@ -153,6 +182,9 @@ export class CalendarSite extends FooterSite {
 
             this._eventOverviewContainer.appendChild(eventElement);
         });
+        if (events.length === 0) {
+            this._eventOverviewContainer.appendChild(Translator.makePersistentTranslation("no events"));
+        }
     }
 }
 

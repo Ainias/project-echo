@@ -1,32 +1,67 @@
-import {Helper} from "cordova-sites";
+import {Helper, PromiseHelper} from "cordova-sites";
 
 export class Scaler {
-    async scaleHeightFromWidth(element){
-        await this.scale(element)
+    async scaleHeightThroughWidth(element, targetHeight) {
+        element.style.transition = "none";
+        await this.scale(targetHeight, async () => {
+                return element.getBoundingClientRect().height;
+                // return window.getComputedStyle(element, null).getPropertyValue("height").replace("px", "");
+            },
+            async () => {
+                return element.getBoundingClientRect().width;
+                // return window.getComputedStyle(element, null).getPropertyValue("width").replace("px", "");
+            },
+            width => {
+                console.log("newWidth", (Math.fround(width*1000+0.00001)/1000));
+                element.style.width = (Math.fround(width*1000+0.00001)/1000) + "px";
+            }, null, element
+        )
     }
 
-    async scale(targetValue, getTargetValueFn, getScaleValueFn, setScaleValueFn, delta, addListenerElement) {
+    async scale(targetValueFunc, getTargetValueFn, getScaleValueFn, setScaleValueFn, delta, addListenerElement) {
 
-        delta = Helper.nonNull(delta, 0.0001);
+        delta = Helper.nonNull(delta, 0.01);
 
-        let currentValue = await getTargetValueFn();
-        let currentDelta = Math.abs(targetValue-currentValue);
-        while(currentDelta > delta){
+        let targetValue = 0;
+        if (typeof targetValueFunc === "function"){
+            targetValue = await targetValueFunc();
+        }
+        else {
+            targetValue = targetValueFunc;
+        }
+        targetValue = parseFloat(targetValue);
+
+        let breakCount = 0;
+
+        let previousValues = [];
+        let currentValue = parseFloat(await getTargetValueFn());
+        let currentDelta = Math.abs(targetValue - currentValue);
+        while (currentDelta > delta) {
             let previousValue = currentValue;
-            let scaleValue = await getScaleValueFn();
-            await setScaleValueFn(scaleValue*targetValue/currentValue);
+            previousValues.push(previousValue);
 
-            currentValue = await getTargetValueFn();
-            if (currentValue === previousValue){
+            let scaleValue = parseFloat(await getScaleValueFn());
+            console.log("T", scaleValue, "-", targetValue, " - ", currentValue, " - ", scaleValue * targetValue / currentValue);
+            await setScaleValueFn(scaleValue * targetValue / currentValue);
+
+            currentValue = parseFloat(await getTargetValueFn());
+            console.log("diffs", Math.abs(previousValue - currentValue), " - ", Math.abs(targetValue - currentValue), " - ", delta);
+            if (Math.abs(previousValue - currentValue) < delta/2 || previousValues.indexOf(currentValue) !== -1) {
+                console.log("change too small or value already having, break");
                 break;
             }
 
-            currentDelta = Math.abs(targetValue-currentValue);
+            currentDelta = Math.abs(targetValue - currentValue);
+            breakCount++;
+            if (breakCount >= 25){
+                console.log("breaking after ", breakCount, " iterations");
+                break;
+            }
         }
 
         if (addListenerElement) {
             addListenerElement.addEventListener("resize", async () => {
-                await this.scale(targetValue, getTargetValueFn, getScaleValueFn, setScaleValueFn, delta);
+                await this.scale(targetValueFunc, getTargetValueFn, getScaleValueFn, setScaleValueFn, delta);
             });
         }
     }

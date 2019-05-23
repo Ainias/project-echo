@@ -37,7 +37,7 @@ export class Region extends EasySyncBaseModel {
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
         relations["churches"] = {
-            target: Church,
+            target: Church.getSchemaName(),
             type: "many-to-many",
             joinTable: {
                 name: "churchRegion"
@@ -45,7 +45,7 @@ export class Region extends EasySyncBaseModel {
             // cascade: true
         };
         relations["events"] = {
-            target: Event,
+            target: Event.getSchemaName(),
             type: "many-to-many",
             joinTable: {
                 name: "eventRegion"

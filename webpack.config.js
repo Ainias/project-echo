@@ -2,8 +2,10 @@ require("dotenv").config();
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const webpack = require('webpack');
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin")
 
 const os = require('os');
 const ifaces = os.networkInterfaces();
@@ -41,10 +43,30 @@ let moduleExports = {
 
         //Beinhaltet den JS-Startpunkt und SCSS-Startpunkt
         entry: [
+            // __dirname + "/node_modules/localforage/dist/localforage.js",
+            // __dirname + "/node_modules/sql.js/js/sql-optimized.js",
             __dirname + "/client/js/script.js",
             __dirname + "/client/sass/index.scss"
         ],
-        devtool: 'inline-source-map',
+
+        optimization: {
+            // minimize: false
+            minimizer: [
+                new TerserPlugin({
+                    cache: true,
+                    parallel: true,
+                    sourceMap: true, // Must be set to true if using source-maps in production
+                    terserOptions: {
+                        mangle: {
+                            reserved: [
+                                "Church", "Event", "Region"
+                            ]
+                        }
+                    }
+                })
+            ]
+        },
+        // devtool: 'inline-source-map',
 
         //Gibt Ausgabename und Ort für JS-File an
         output: {
@@ -55,6 +77,17 @@ let moduleExports = {
         plugins: [
             //Delete www before every Build (to only have nessesary files)
             new CleanWebpackPlugin(["www/*"], {exclude: [".gitkeep"]}),
+
+            new CopyWebpackPlugin([
+                {
+                    from: path.resolve("./node_modules/sql.js/js/sql-optimized.js"),
+                    to: "scripts/"
+                },
+                {
+                    from: path.resolve("./node_modules/localforage/dist/localforage.js"),
+                    to: "scripts/"
+                }
+            ]),
 
             //Erstellt (kopiert) die Index.html
             new HtmlWebpackPlugin({

@@ -1,6 +1,8 @@
 import "dotenv/config";
 import {EasySyncServerDb} from "cordova-sites-easy-sync/server";
 
+import path from "path";
+
 import express from 'express';
 import {routes} from './routes';
 
@@ -50,7 +52,8 @@ app.use(function (req, res, next) {
 
 app.use('/api', routes);
 
-app.use(express.static("public"));
+
+app.use(express.static(path.resolve("./public")));
 
 //Handle errors
 app.use(function (err, req, res, next) {
@@ -75,7 +78,7 @@ EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
     // regions[0].getChurchs().push(church);
     // await regions[0].save();
     // console.log("done 2");
-
+    //
     // console.log(await region.save());
     app.listen(port, () => {
         console.log('Server started on Port: ' + port);
