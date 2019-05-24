@@ -182,8 +182,12 @@ export class CalendarSite extends FooterSite {
 
             this._eventOverviewContainer.appendChild(eventElement);
         });
+
         if (events.length === 0) {
-            this._eventOverviewContainer.appendChild(Translator.makePersistentTranslation("no events"));
+            let elem = document.createElement("div");
+            elem.classList.add("no-events");
+            elem.appendChild(Translator.makePersistentTranslation("no events"));
+            this._eventOverviewContainer.appendChild(elem);
         }
     }
 }

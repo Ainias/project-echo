@@ -19,7 +19,6 @@ export class Scaler {
     }
 
     async scale(targetValueFunc, getTargetValueFn, getScaleValueFn, setScaleValueFn, delta, addListenerElement) {
-
         delta = Helper.nonNull(delta, 0.01);
 
         let targetValue = 0;

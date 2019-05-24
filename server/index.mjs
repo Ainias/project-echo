@@ -17,12 +17,12 @@ const port = process.env.PORT || 3000;
 BaseModel._databaseClass = EasySyncServerDb;
 EasySyncServerDb.CONNECTION_PARAMETERS = {
     "type": "mysql",
-    "host": "localhost",
-    "username": "root",
-    "password": "123456",
-    "database": (process.argv.length >= 3 ? process.argv[2] : "silas_echo"),
-    "synchronize": false,
-    "logging": true
+    "host": process.env.MYSQL_HOST || "localhost",
+    "username": process.env.MYSQL_USER || "root",
+    "password": process.env.MYSQL_PASSWORD || "",
+    "database": process.env.MYSQL_DATABASE || "echo",
+    "synchronize": process.env.SYNC_DATABASE || false,
+    "logging": ["error", "warn"]
 };
 
 const app = express();
@@ -52,8 +52,7 @@ app.use(function (req, res, next) {
 
 app.use('/api', routes);
 
-
-app.use(express.static(path.resolve("./public")));
+app.use(express.static(path.resolve(path.dirname(process.argv[1]), "public")));
 
 //Handle errors
 app.use(function (err, req, res, next) {
@@ -67,19 +66,6 @@ app.use(function (err, req, res, next) {
 });
 
 EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
-    // let church = new Church();
-    // church.descriptions = {"de": "Testkirche"};
-    // church.names = {"de": "Testkirche"};
-    // church.website = "www.citychurch.koeln";
-    // await church.save();
-    //
-    // let region = await Region.findById(2);
-    // region.churches = [church];
-    // regions[0].getChurchs().push(church);
-    // await regions[0].save();
-    // console.log("done 2");
-    //
-    // console.log(await region.save());
     app.listen(port, () => {
         console.log('Server started on Port: ' + port);
     });
