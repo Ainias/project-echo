@@ -2,15 +2,11 @@ const mysql = require("mysql");
 const childProcess = require("child_process");
 const fs = require("fs");
 
-const mUser = "root";
-const mPasswd = "123456";
-const mDatabase = "silas_test_echo";
-
 let mysqlConn = mysql.createConnection({
     host: "localhost",
-    "user": mUser,
-    "password": mPasswd,
-    "database": mDatabase,
+    "user": "root",
+    "password": "123456",
+    "database": "silas_test_echo",
     "multipleStatements": true
 });
 
@@ -29,12 +25,7 @@ async function tearDown() {
 
 async function startTestServer() {
     process = childProcess.fork("./server/index.mjs", ["silas_test_echo"], {
-        execArgv: ["--experimental-modules"],
-        env: {
-            MYSQL_DATABASE: mDatabase,
-            MYSQL_USER: mUser,
-            MYSQL_PASSWORD: mPasswd
-        }
+        execArgv: ["--experimental-modules"]
     });
 }
 
