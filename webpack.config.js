@@ -99,7 +99,7 @@ let moduleExports = {
             }),
 
             new webpack.DefinePlugin({
-                __HOST_ADDRESS__: "'http://" + getIp() + ":" + (process.env.PORT || "3000") + "/api/v1/'"
+                __HOST_ADDRESS__: "'" + (process.env.HOST || ("http://"+getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000") + "/api/v1/'"
             })
         ],
 

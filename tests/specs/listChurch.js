@@ -4,7 +4,7 @@ const $ = find.one;
 
 // const EnvController = require("../setup");
 
-describe("first test suite", () => {
+describe("listChurches", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;
@@ -30,10 +30,7 @@ describe("first test suite", () => {
         await find.one("[data-translation='churches']").click();
     });
 
-    it("first test", async function () {
-        // let element = $("#main-content");
-        // expect(await element.isDisplayed()).toEqual(true);
-        // expect(await $(".alphabet-class"))
+    it("church check", async function () {
         let elem = $(".alphabet-section.K .church-info");
         expect(await elem.isDisplayed()).toBeTruthy();
         expect(await elem.$(".name .translation").getText()).toEqual("Köln City Church");

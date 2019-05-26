@@ -1,0 +1,12 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Echo",
+  "short_name": "Echo",
+  "version": "link.silas.echo",
+  "description": "Ein christlicher Terminkalender für Gemeinden rund un Köln.",
+  "author": "Project Echo Team",
+  "icons": [],
+  "orientation": "portrait",
+  "start_url": "index.html"
+}
