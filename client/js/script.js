@@ -11,6 +11,7 @@ import {WelcomeSite} from "./Sites/WelcomeSite";
 import {Event} from "../../model/Event";
 import {Church} from "../../model/Church";
 import {Region} from "../../model/Region";
+import "./Model/Favourite"
 
 import {BaseDatabase, BaseModel} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";

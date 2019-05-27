@@ -5,7 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const webpack = require('webpack');
 const path = require("path");
-const TerserPlugin = require("terser-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin");
 
 const os = require('os');
 const ifaces = os.networkInterfaces();
@@ -99,7 +99,7 @@ let moduleExports = {
             }),
 
             new webpack.DefinePlugin({
-                __HOST_ADDRESS__: "'http://" + getIp() + ":" + (process.env.PORT || "3000") + "/api/v1/'"
+                __HOST_ADDRESS__: "'" + (process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000") + "/api/v1/'"
             })
         ],
 

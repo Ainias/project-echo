@@ -39,10 +39,10 @@
     "mysql": "^2.16.0",
     "reflect-metadata": "^0.1.13",
     "sql.js": "^0.5.0",
-    "terser-webpack-plugin": "^1.2.4",
     "typeorm": "^0.2.15"
   },
   "devDependencies": {
+    "terser-webpack-plugin": "^1.2.4",
     "@babel/core": "^7.3.3",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.3.1",
@@ -70,6 +70,7 @@
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
     "selenium-standalone": "^6.16.0",
+    "uglifyjs-webpack-plugin": "^2.1.2",
     "wd": "^1.11.1",
     "webdriverio": "^5.7.9",
     "yiewd": "^0.6.0"

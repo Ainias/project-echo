@@ -7,6 +7,7 @@ import {LessThan} from "typeorm";
 import {MoreThanOrEqual} from "typeorm";
 import {EventSite} from "./EventSite";
 import {Scaler} from "../Scaler";
+import {Favourite} from "../Model/Favourite";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -19,6 +20,21 @@ export class CalendarSite extends FooterSite {
         super(siteManager, view);
         this._date = new Date();
         this._footerFragment.setSelected(".icon.calendar");
+        this._favourites = {};
+    }
+
+    async onConstruct(constructParameters) {
+        let res = super.onConstruct(constructParameters);
+
+        if (Helper.isSet(constructParameters, "date")) {
+            this._date = new Date(constructParameters["date"]);
+        }
+
+        let favourites = await Favourite.find();
+        favourites.forEach(fav => {
+            this._favourites[fav.eventId] = true;
+        });
+        return res;
     }
 
     async onViewLoaded() {
@@ -76,6 +92,8 @@ export class CalendarSite extends FooterSite {
     async drawMonth(date) {
         const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+        let actualDayOfMonth = date.getDate();
+
         let events = await this.loadEventsForMonth(date);
 
         date = new Date(Helper.nonNull(date, new Date()));
@@ -126,6 +144,7 @@ export class CalendarSite extends FooterSite {
             if (isCurrentMonth && now.getDate() === i + 1) {
                 day.classList.add("today");
             }
+
             if (eventDays[i]) {
                 day.classList.add("has-event");
                 day.addEventListener("click", () => {
@@ -135,6 +154,10 @@ export class CalendarSite extends FooterSite {
                     }
                     day.classList.add("active");
                     this.showEventOverviews(eventDays[i]);
+
+                    let newDate = new Date(date);
+                    newDate.setDate(i+1);
+                    this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
                 });
             } else {
                 day.addEventListener("click", () => {
@@ -144,7 +167,20 @@ export class CalendarSite extends FooterSite {
                     }
                     day.classList.add("active");
                     this.showEventOverviews([]);
+
+                    let newDate = new Date(date);
+                    newDate.setDate(i+1);
+                    this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
                 });
+            }
+
+            if (i+1 === actualDayOfMonth) {
+                day.classList.add("active");
+                if (eventDays[i]) {
+                    this.showEventOverviews(eventDays[i]);
+                } else {
+                    this.showEventOverviews([]);
+                }
             }
 
             this._dayContainer.appendChild(day);
@@ -156,9 +192,13 @@ export class CalendarSite extends FooterSite {
             this._dayContainer.appendChild(day);
         }
 
+        date.setDate(actualDayOfMonth);
+
         let scaler = new Scaler();
         let maxWidth = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
         await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxWidth * 0.65);
+
+        this.setParameter("date", Helper.strftime("%Y-%m-%d", date))
     }
 
     showEventOverviews(events) {
@@ -178,6 +218,27 @@ export class CalendarSite extends FooterSite {
 
             eventElement.addEventListener("click", () => {
                 this.startSite(EventSite, {"id": event.id});
+            });
+
+            let favElem = eventElement.querySelector(".favourite");
+
+            if (this._favourites[event.id]) {
+                favElem.classList.add("is-favourite");
+            }
+
+            favElem.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                // e.preventDefault();
+
+                let isFavourite = await Favourite.toggle(event.id);
+                console.log("is Favourite", isFavourite);
+                if (isFavourite) {
+                    favElem.classList.add("is-favourite");
+                    this._favourites[event.id] = true;
+                } else {
+                    favElem.classList.remove("is-favourite");
+                    this._favourites[event.id] = false;
+                }
             });
 
             this._eventOverviewContainer.appendChild(eventElement);

@@ -11,3 +11,15 @@
     justify-content: center;
   }
 }
+
+.favourite {
+  cursor: pointer;
+  background-image: url("../img/icons/favorites-small.png");
+  background-repeat: no-repeat;
+  display: inline-block;
+  width: 24px;
+
+  &.is-favourite {
+    background-image: url("../img/icons/favorites-small-selected.png");
+  }
+}

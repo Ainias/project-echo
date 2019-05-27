@@ -3,6 +3,7 @@ import {App, Helper, Toast, Translator} from "cordova-sites";
 import {Event} from "../../../model/Event";
 
 import view from "../../html/Sites/eventSite.html";
+import {Favourite} from "../Model/Favourite";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -25,6 +26,8 @@ export class EventSite extends FooterSite {
             this.finish();
             return;
         }
+        this._isFavourtite = (await Favourite.findOne({eventId: this._event.id}) !== null);
+
         return res;
     }
 
@@ -68,6 +71,24 @@ export class EventSite extends FooterSite {
             let placeElement = placeTemplate.cloneNode(true);
             placeElement.querySelector(".place-name").innerText = place;
             placesContainer.appendChild(placeElement);
+        });
+
+        //favourite
+        let favElem = this.findBy("#favourite .favourite");
+        if (this._isFavourtite) {
+            favElem.classList.add("is-favourite");
+        }
+
+        favElem.addEventListener("click", async (e) => {
+            e.stopPropagation();
+
+            let isFavourite = await Favourite.toggle(this._event.id);
+            if (isFavourite) {
+                favElem.classList.add("is-favourite");
+            } else {
+                favElem.classList.remove("is-favourite");
+            }
+            this._isFavourtite = isFavourite;
         });
 
         return res;
