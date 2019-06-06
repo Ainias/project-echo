@@ -34,10 +34,12 @@ export class Favourite extends BaseModel
     static async toggle(eventId){
         let fav = await this.findOne({"eventId": eventId});
         if (fav instanceof Favourite){
+            console.log("is favourite, trying to delete");
             await fav.delete();
             return false;
         }
         else {
+            console.log("is not favourite... yet!");
             fav = new Favourite();
             fav.eventId = eventId;
             await fav.save();

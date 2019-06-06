@@ -36,6 +36,10 @@ class PromiseElement {
         return (await this.getPromise()).getText();
     }
 
+    async getAttribute(attr){
+        return (await this.getPromise()).getAttribute(attr);
+    }
+
     pause(miliseconds){
         return new PromiseElement(this.getPromise().then(async res => {
             await browser.pause(miliseconds);

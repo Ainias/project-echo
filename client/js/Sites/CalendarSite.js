@@ -8,6 +8,7 @@ import {MoreThanOrEqual} from "typeorm";
 import {EventSite} from "./EventSite";
 import {Scaler} from "../Scaler";
 import {Favourite} from "../Model/Favourite";
+import {DragHelper} from "../Helper/DragHelper";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -56,6 +57,26 @@ export class CalendarSite extends FooterSite {
         this.findBy("#button-right").addEventListener("click", () => {
             this._date.setMonth(this._date.getMonth() + 1);
             this.drawMonth(this._date);
+        });
+
+        await DragHelper.makeDragToShow(this._eventOverviewContainer, (from) => {
+            let maxTop = parseFloat(this._eventOverviewContainer.dataset["originalTop"]);
+            if (from === maxTop) {
+                if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.75) {
+                    this._eventOverviewContainer.style.top = "0";
+                    this._eventOverviewContainer.classList.add("is-open");
+                } else {
+                    this._eventOverviewContainer.style.top = maxTop + "px";
+                }
+            }
+            else {
+                if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.25) {
+                    this._eventOverviewContainer.style.top = "0";
+                } else {
+                    this._eventOverviewContainer.classList.remove("is-open");
+                    this._eventOverviewContainer.style.top = maxTop + "px";
+                }
+            }
         });
 
         return super.onViewLoaded();
@@ -156,7 +177,7 @@ export class CalendarSite extends FooterSite {
                     this.showEventOverviews(eventDays[i]);
 
                     let newDate = new Date(date);
-                    newDate.setDate(i+1);
+                    newDate.setDate(i + 1);
                     this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
                 });
             } else {
@@ -169,12 +190,12 @@ export class CalendarSite extends FooterSite {
                     this.showEventOverviews([]);
 
                     let newDate = new Date(date);
-                    newDate.setDate(i+1);
+                    newDate.setDate(i + 1);
                     this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
                 });
             }
 
-            if (i+1 === actualDayOfMonth) {
+            if (i + 1 === actualDayOfMonth) {
                 day.classList.add("active");
                 if (eventDays[i]) {
                     this.showEventOverviews(eventDays[i]);
@@ -195,8 +216,11 @@ export class CalendarSite extends FooterSite {
         date.setDate(actualDayOfMonth);
 
         let scaler = new Scaler();
-        let maxWidth = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
-        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxWidth * 0.65);
+        let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
+        this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
+
+        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.70);
+
 
         this.setParameter("date", Helper.strftime("%Y-%m-%d", date))
     }
@@ -217,7 +241,9 @@ export class CalendarSite extends FooterSite {
             }
 
             eventElement.addEventListener("click", () => {
-                this.startSite(EventSite, {"id": event.id});
+                if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
+                    this.startSite(EventSite, {"id": event.id});
+                }
             });
 
             let favElem = eventElement.querySelector(".favourite");
@@ -227,17 +253,18 @@ export class CalendarSite extends FooterSite {
             }
 
             favElem.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                // e.preventDefault();
+                if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
+                    e.stopPropagation();
 
-                let isFavourite = await Favourite.toggle(event.id);
-                console.log("is Favourite", isFavourite);
-                if (isFavourite) {
-                    favElem.classList.add("is-favourite");
-                    this._favourites[event.id] = true;
-                } else {
-                    favElem.classList.remove("is-favourite");
-                    this._favourites[event.id] = false;
+                    let isFavourite = await Favourite.toggle(event.id);
+                    console.log("is Favourite", isFavourite);
+                    if (isFavourite) {
+                        favElem.classList.add("is-favourite");
+                        this._favourites[event.id] = true;
+                    } else {
+                        favElem.classList.remove("is-favourite");
+                        this._favourites[event.id] = false;
+                    }
                 }
             });
 

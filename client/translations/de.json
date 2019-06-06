@@ -13,5 +13,6 @@
   "document-title": "ECHO",
 
   "uhr": "Uhr",
-  "no events": "Keine Events vorhanden"
+  "no events": "Keine Events vorhanden",
+  "document-title-empty": "ECHO"
 }

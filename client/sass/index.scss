@@ -20,6 +20,7 @@
 @import "calendar";
 @import "showChrchSite";
 @import "event";
+@import "dragHelper";
 
 
 @keyframes rotate {
@@ -53,6 +54,7 @@ html, body {
   height: 100%;
   font-size: 18px;
   letter-spacing: 1px;
+  overscroll-behavior: none;
 }
 
 
