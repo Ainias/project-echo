@@ -3,7 +3,7 @@ import {App, Helper, Toast, Translator} from "cordova-sites";
 import {Event} from "../../../model/Event";
 
 import view from "../../html/Sites/eventSite.html";
-import {Favourite} from "../Model/Favourite";
+import {Favorite} from "../Model/Favorite";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -26,7 +26,7 @@ export class EventSite extends FooterSite {
             this.finish();
             return;
         }
-        this._isFavourtite = (await Favourite.findOne({eventId: this._event.id}) !== null);
+        this._isFavortite = (await Favorite.findOne({eventId: this._event.id}) !== null);
 
         return res;
     }
@@ -73,22 +73,22 @@ export class EventSite extends FooterSite {
             placesContainer.appendChild(placeElement);
         });
 
-        //favourite
-        let favElem = this.findBy("#favourite .favourite");
-        if (this._isFavourtite) {
-            favElem.classList.add("is-favourite");
+        //favorite
+        let favElem = this.findBy("#favorite .favorite");
+        if (this._isFavortite) {
+            favElem.classList.add("is-favorite");
         }
 
         favElem.addEventListener("click", async (e) => {
             e.stopPropagation();
 
-            let isFavourite = await Favourite.toggle(this._event.id);
-            if (isFavourite) {
-                favElem.classList.add("is-favourite");
+            let isFavorite = await Favorite.toggle(this._event.id);
+            if (isFavorite) {
+                favElem.classList.add("is-favorite");
             } else {
-                favElem.classList.remove("is-favourite");
+                favElem.classList.remove("is-favorite");
             }
-            this._isFavourtite = isFavourite;
+            this._isFavortite = isFavorite;
         });
 
         return res;

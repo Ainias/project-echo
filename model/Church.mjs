@@ -14,10 +14,10 @@ export class Church extends EasySyncBaseModel {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["names"] = BaseDatabase.TYPES.JSON;
-        columns["descriptions"] = BaseDatabase.TYPES.JSON;
-        columns["places"] = BaseDatabase.TYPES.JSON;
-        columns["images"] = BaseDatabase.TYPES.JSON;
+        columns["names"] = BaseDatabase.TYPES.MY_JSON;
+        columns["descriptions"] = BaseDatabase.TYPES.MY_JSON;
+        columns["places"] = BaseDatabase.TYPES.MY_JSON;
+        columns["images"] = BaseDatabase.TYPES.MY_JSON;
         columns["website"] = BaseDatabase.TYPES.STRING;
         return columns;
     }
@@ -43,7 +43,6 @@ export class Church extends EasySyncBaseModel {
         });
         return translations;
     }
-
 }
 
 Church.SCHEMA_NAME = "Church";

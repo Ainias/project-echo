@@ -11,11 +11,12 @@ import {WelcomeSite} from "./Sites/WelcomeSite";
 import {Event} from "../../model/Event";
 import {Church} from "../../model/Church";
 import {Region} from "../../model/Region";
-import "./Model/Favourite"
+import "./Model/Favorite"
 
 import {BaseDatabase, BaseModel} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
+import {AddEventSite} from "./Sites/AddEventSite";
 
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
@@ -54,6 +55,9 @@ App.addInitialization(async () => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", WelcomeSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", WelcomeSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", WelcomeSite, MenuAction.SHOW_NEVER));
+
+    //TODO userManagement hinzufügen
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("add event", AddEventSite, MenuAction.SHOW_FOR_MEDIUM));
 
     //Todo an richtige stelle auslagern
     await new SyncJob().sync([Church, Event, Region]).catch(e => console.error(e));

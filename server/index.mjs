@@ -21,7 +21,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
     "username": process.env.MYSQL_USER || "root",
     "password": process.env.MYSQL_PASSWORD || "",
     "database": process.env.MYSQL_DATABASE || "echo",
-    "synchronize": process.env.SYNC_DATABASE || false,
+    "synchronize": process.env.SYNC_DATABASE || true,
     "logging": ["error", "warn"]
 };
 

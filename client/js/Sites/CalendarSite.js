@@ -7,7 +7,7 @@ import {LessThan} from "typeorm";
 import {MoreThanOrEqual} from "typeorm";
 import {EventSite} from "./EventSite";
 import {Scaler} from "../Scaler";
-import {Favourite} from "../Model/Favourite";
+import {Favorite} from "../Model/Favorite";
 import {DragHelper} from "../Helper/DragHelper";
 
 // let typeorm = _typeorm;
@@ -31,7 +31,7 @@ export class CalendarSite extends FooterSite {
             this._date = new Date(constructParameters["date"]);
         }
 
-        let favourites = await Favourite.find();
+        let favourites = await Favorite.find();
         favourites.forEach(fav => {
             this._favourites[fav.eventId] = true;
         });
@@ -246,23 +246,23 @@ export class CalendarSite extends FooterSite {
                 }
             });
 
-            let favElem = eventElement.querySelector(".favourite");
+            let favElem = eventElement.querySelector(".favorite");
 
             if (this._favourites[event.id]) {
-                favElem.classList.add("is-favourite");
+                favElem.classList.add("is-favorite");
             }
 
             favElem.addEventListener("click", async (e) => {
                 if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
                     e.stopPropagation();
 
-                    let isFavourite = await Favourite.toggle(event.id);
-                    console.log("is Favourite", isFavourite);
+                    let isFavourite = await Favorite.toggle(event.id);
+                    console.log("is Favorite", isFavourite);
                     if (isFavourite) {
-                        favElem.classList.add("is-favourite");
+                        favElem.classList.add("is-favorite");
                         this._favourites[event.id] = true;
                     } else {
-                        favElem.classList.remove("is-favourite");
+                        favElem.classList.remove("is-favorite");
                         this._favourites[event.id] = false;
                     }
                 }

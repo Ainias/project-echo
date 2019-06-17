@@ -4,7 +4,7 @@
     margin-bottom: 0;
   }
 
-  #favourite {
+  #favorite {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
@@ -12,14 +12,14 @@
   }
 }
 
-.favourite {
+.favorite {
   cursor: pointer;
   background-image: url("../img/icons/favorites-small.png");
   background-repeat: no-repeat;
   display: inline-block;
   width: 24px;
 
-  &.is-favourite {
+  &.is-favorite {
     background-image: url("../img/icons/favorites-small-selected.png");
   }
 }
