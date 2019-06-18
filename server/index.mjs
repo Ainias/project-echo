@@ -23,6 +23,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
     "database": process.env.MYSQL_DATABASE || "echo",
     "synchronize": process.env.SYNC_DATABASE || true,
     "logging": ["error", "warn"]
+    // "logging": true
 };
 
 const app = express();

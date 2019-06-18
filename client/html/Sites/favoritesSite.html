@@ -3,14 +3,15 @@
         <h1 class="translation">Merkliste</h1>
     </section>
     <section id="favorite-container-future">
-        <div id="favorite-template">
-            <div class="day-line flex-container">
+        <div id="favorite-template" class="event-overview-container">
+            <span class="day-line">
                 <span class="day"></span>
-                <span class="line grow"></span>
-            </div>
+            </span>
             <span data-view="../event-overview.html"></span>
         </div>
     </section>
-    <section id="favorite-container-past" class="hidden">
+    <section id="past-section" class="hidden">
+        <h2 class="translation">vergangene Veranstaltungen</h2>
+        <div class="event-overview-container" id = "favorite-container-past"></div>
     </section>
 </article>

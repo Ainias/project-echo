@@ -1,4 +1,7 @@
+@import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+
 @import "../../node_modules/foundation-sites/scss/foundation";
+
 //Settings nach foundation für mixins in settings
 @import "settings";
 
@@ -21,6 +24,7 @@
 @import "showChrchSite";
 @import "event";
 @import "dragHelper";
+@import "favorites";
 
 
 @keyframes rotate {

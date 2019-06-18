@@ -1,5 +1,7 @@
 <article>
     <section>
+        <br/>
+        <br/>
         <form id = "add-event-form">
             <div class="grid-x">
                 <label class="columns small-12 smedium-6">
@@ -23,11 +25,11 @@
             </div>
             <div class="grid-x">
                 <label class="columns small-12 smedium-6">
-                    <input type="text" name='start' required>
+                    <input type="text" name='start' class="date-time" required>
                     <span class="translation">start</span>
                 </label>
                 <label class="columns small-12 smedium-6">
-                    <input type="text" name='end' required>
+                    <input type="text" name='end' class="date-time" required>
                     <span class="translation">end</span>
                 </label>
             </div>
@@ -44,6 +46,12 @@
                 <label class="columns small-6 smedium-4 large-3 organizer-template">
                     <input type="checkbox" class="organizer-checkbox">
                     <span class="church-name"></span>
+                </label>
+            </div>
+            <div class="grid-x">
+                <label class="columns small-12">
+                    <textarea name="places" required></textarea>
+                    <span class="translation">places (one per line)</span>
                 </label>
             </div>
             <div class="grid-x">

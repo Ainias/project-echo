@@ -1,0 +1,54 @@
+#favorites-heading{
+  padding-top: 5rem;
+  padding-bottom: 1rem;
+}
+
+.event-overview-container {
+  .event-overview {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+
+    .time, .name {
+      font-size: 1.33em;
+      display: block;
+    }
+
+    &:not(:first-of-type) {
+      border-top: 1px solid #bcbbbb;
+    }
+  }
+
+  .no-events {
+    text-align: center;
+    font-size: 1.5rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .day-line{
+    border-bottom: 1px solid #bcbbbb;
+    line-height: 0.1em;
+    margin: 10px 0 0;
+    display: block;
+    .day  {
+      background: white;
+      padding-right: 10px;
+      color: $highlightColor
+    }
+  }
+}
+
+#past-section{
+  color: #bcbbbb;
+  .day {
+    color: #bcbbbb;
+  }
+  h2{
+    font-size: 1.33rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+}

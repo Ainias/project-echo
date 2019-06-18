@@ -23,6 +23,7 @@ export class FavoritesSite extends FooterSite {
         this._favoriteContainerPast = this.findBy("#favorite-container-past");
         this._favoriteTemplate = this.findBy("#favorite-template");
         this._eventOverviewTemplate = this.findBy("#event-overview-template");
+        this._pastSection = this.findBy("#past-section");
 
         this._favoriteTemplate.removeAttribute("id");
         this._eventOverviewTemplate.removeAttribute("id");
@@ -111,17 +112,16 @@ export class FavoritesSite extends FooterSite {
                     favElem.classList.add("is-favorite");
 
                     favElem.addEventListener("click", async (e) => {
-                        if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
-                            e.stopPropagation();
+                        e.stopPropagation();
+                        e.preventDefault();
 
-                            let isFavourite = await Favorite.toggle(fav.event.id);
-                            if (isFavourite) {
-                                favElem.classList.add("is-favorite");
-                                this._favorites.push(fav);
-                            } else {
-                                favElem.classList.remove("is-favorite");
-                                delete this._favorites.indexOf(fav);
-                            }
+                        let isFavourite = await Favorite.toggle(fav.event.id);
+                        if (isFavourite) {
+                            favElem.classList.add("is-favorite");
+                            this._favorites.push(fav);
+                        } else {
+                            favElem.classList.remove("is-favorite");
+                            delete this._favorites.indexOf(fav);
                         }
                     });
 
@@ -131,12 +131,17 @@ export class FavoritesSite extends FooterSite {
 
             if (dayParts[0] < today) {
                 this._favoriteContainerPast.appendChild(dayContainer);
-                this._favoriteContainerPast.classList.remove("hidden");
-            }
-            else {
+                this._pastSection.classList.remove("hidden");
+            } else {
                 this._favoriteContainer.appendChild(dayContainer);
             }
-        })
+        });
+        if (Object.keys(sortedFavorites).length === 0){
+            let elem = document.createElement("div");
+            elem.classList.add("no-events");
+            elem.appendChild(Translator.makePersistentTranslation("no events"));
+            this._favoriteContainer.appendChild(elem);
+        }
     }
 }
 

@@ -50,7 +50,9 @@ export class Region extends EasySyncBaseModel {
             joinTable: {
                 name: "eventRegion"
             },
+            // inverseSide: "regions"
             // cascade: true
+            sync: false,
         };
         return relations;
     }

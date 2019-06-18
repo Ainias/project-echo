@@ -66,6 +66,8 @@ export class Event extends EasySyncBaseModel {
             joinTable: {
                 name: "eventRegion"
             },
+            // inverseSide: "events",
+            sync: true
         };
         return relations;
     }

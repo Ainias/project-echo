@@ -46,7 +46,7 @@ let moduleExports = {
             // __dirname + "/node_modules/localforage/dist/localforage.js",
             // __dirname + "/node_modules/sql.js/js/sql-optimized.js",
             __dirname + "/client/js/script.js",
-            __dirname + "/client/sass/index.scss"
+            __dirname + "/client/sass/index.scss",
         ],
 
         optimization: {
