@@ -72,7 +72,8 @@ App.addInitialization(async (app) => {
 DataManager._basePath = __HOST_ADDRESS__;
 
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
-    "logging":  ["error"]
+    // "synchronize": false,
+    "logging":  ["error"],
     // "logging":  true
 });
 

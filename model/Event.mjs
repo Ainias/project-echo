@@ -48,7 +48,10 @@ export class Event extends AccessEasySyncModel {
         columns["images"] = BaseDatabase.TYPES.MY_JSON;
         columns["startTime"] = BaseDatabase.TYPES.DATE;
         columns["endTime"] = BaseDatabase.TYPES.DATE;
-        columns["type"] = BaseDatabase.TYPES.STRING;
+        columns["type"] = {
+            type: BaseDatabase.TYPES.STRING,
+            default: Event.TYPES.GOTTESDIENST
+        };
         return columns;
     }
 
@@ -79,6 +82,6 @@ Event.SCHEMA_NAME = "Event";
 BaseDatabase.addModel(Event);
 
 Event.TYPES = {
-    GOTTESDIENST : "gottesdienst",
+    GOTTESDIENST: "gottesdienst",
     KONZERT: "konzert"
 };
