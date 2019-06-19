@@ -5,14 +5,17 @@ import path from "path";
 
 import express from 'express';
 import {routes} from './routes';
+import {UserManager} from "cordova-sites-user-management/server";
 
 //Import Models
 import "../model/Region";
 import "../model/Church";
 import "../model/Event";
 import {BaseModel} from "cordova-sites-database";
+import {setupDB} from "./setupDB";
 
 const port = process.env.PORT || 3000;
+process.env.JWT_SECRET = process.env.JWT_SECRET || "bjlsdgjw4tuiopmk24fl450wcui3fz,ogf";
 
 BaseModel._databaseClass = EasySyncServerDb;
 EasySyncServerDb.CONNECTION_PARAMETERS = {
@@ -25,6 +28,13 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
     "logging": ["error", "warn"]
     // "logging": true
 };
+
+UserManager.PEPPER = process.env.PEPPER || "mySecretPepper";
+
+UserManager.REGISTRATION_IS_ACTIVATED = false;
+UserManager.LOGIN_NEED_TO_BE_ACTIVATED = false;
+
+UserManager.REGISTRATION_DEFAULT_ROLE_IDS = [4];
 
 const app = express();
 
@@ -41,7 +51,7 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
     // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
@@ -67,6 +77,7 @@ app.use(function (err, req, res, next) {
 });
 
 EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
+    await setupDB();
     app.listen(port, () => {
         console.log('Server started on Port: ' + port);
     });

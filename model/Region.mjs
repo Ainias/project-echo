@@ -2,8 +2,9 @@ import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {BaseDatabase} from "cordova-sites-database";
 import {Church} from "./Church";
 import {Event} from "./Event";
+import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
 
-export class Region extends EasySyncBaseModel {
+export class Region extends AccessEasySyncModel {
 
     constructor() {
         super();
@@ -57,5 +58,6 @@ export class Region extends EasySyncBaseModel {
         return relations;
     }
 }
+Region.ACCESS_MODIFY = "admin";
 Region.SCHEMA_NAME="Region";
 BaseDatabase.addModel(Region);

@@ -17,13 +17,15 @@ import {BaseDatabase, BaseModel} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
 import {AddEventSite} from "./Sites/AddEventSite";
+import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/client";
 
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 
-console.log("before initialisation", new Date());
+LoginSite.ADD_LOGIN_ACTION = false;
+RegistrationSite.ADD_REGISTRATION_ACTION = false;
 
-App.addInitialization(async () => {
+App.addInitialization(async (app) => {
     if (window.StatusBar) {
         StatusBar.overlaysWebView(true);
         StatusBar.backgroundColorByHexString('#33000000');
@@ -56,32 +58,19 @@ App.addInitialization(async () => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", WelcomeSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", WelcomeSite, MenuAction.SHOW_NEVER));
 
-    //TODO userManagement hinzufügen
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("add event", AddEventSite, MenuAction.SHOW_FOR_MEDIUM));
+
+    NavbarFragment.defaultActions.push(new UserMenuAction("add event", "admin", () => {
+        app.startSite(AddEventSite);
+    }, MenuAction.SHOW_FOR_MEDIUM));
+
+    await UserManager.getInstance().getMe();
 
     //Todo an richtige stelle auslagern
     await new SyncJob().sync([Church, Event, Region]).catch(e => console.error(e));
-
-    // let church = new Church();
-    // church.places = "[]";
-    // church.names = "{}";
-    // church.descriptions = "{}";
-    // church.images = "[]";
-    // church.website = "";
-    // church.id = 100;
-    //
-    // let region = new Region();
-    // region.name = "";
-    // region.id = 200;
-    // // await region.save(true);
-    // // await church.save(true);
-    // region.churches = [church];
-    // await region.save(true);
 });
 
-// DataManager._basePath = "http://localhost:3000/api/v1/";
 DataManager._basePath = __HOST_ADDRESS__;
-// DataManager._basePath = "http://192.168.0.51:3000/api/v1/";
+
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
     "logging":  ["error"]
     // "logging":  true
@@ -91,5 +80,3 @@ let app = new App();
 app.start(WelcomeSite).catch(e => console.error(e)).then(() => {
     console.log("initialisation done!", new Date())
 });
-// }
-// });

@@ -1,7 +1,7 @@
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {BaseDatabase} from "cordova-sites-database";
+import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
 
-export class Church extends EasySyncBaseModel {
+export class Church extends AccessEasySyncModel {
 
     constructor() {
         super();
@@ -44,6 +44,6 @@ export class Church extends EasySyncBaseModel {
         return translations;
     }
 }
-
+Church.ACCESS_MODIFY = "admin";
 Church.SCHEMA_NAME = "Church";
 BaseDatabase.addModel(Church);

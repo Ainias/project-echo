@@ -6,11 +6,13 @@ import {Event} from "../../../model/Event";
 import {Region} from "../../../model/Region";
 import {EventSite} from "./EventSite";
 import flatpickr from "flatpickr";
+import {UserSite} from "cordova-sites-user-management/src/client/js/Context/UserSite";
 
 //TODO userManagement hinzufügen
 export class AddEventSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
+        this.addDelegate(new UserSite(this, "admin"));
     }
 
     async onConstruct(constructParameters) {
