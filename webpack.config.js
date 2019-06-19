@@ -59,7 +59,7 @@ let moduleExports = {
                     terserOptions: {
                         mangle: {
                             reserved: [
-                                "Church", "Event", "Region"
+                                "Church", "Event", "Region", "Version", "Access", "AccessEasySyncModel", "Role", "User", "EasySyncBaseModel", "LastSyncDates"
                             ]
                         }
                     }
