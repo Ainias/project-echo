@@ -57,15 +57,27 @@ export class AddEventSite extends MenuFooterSite {
             time_24hr: true
         });
 
+        let imageInput = this.findBy("#event-image-input");
+        imageInput.addEventListener("change", () => {
+            if (imageInput.files && imageInput.files[0]){
+                let reader = new FileReader();
+                reader.onload = e => {
+                    this.findBy("#event-image").src = e.target.result;
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+        });
+
         this._form = new Form(this.findBy("#add-event-form"), async values => {
             let names = {};
             let descriptions = {};
             let organizers = [];
-            let images = ["https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg"];
+            let images = [values["image"]];
             let places = {};
             let regions = [await Region.findById(1)];
 
             let indexedChurches = Helper.arrayToObject(this._churches, church => church.id);
+            console.log(values);
 
             Object.keys(values).forEach(valName => {
                 if (valName.startsWith("church-")) {
