@@ -1,10 +1,11 @@
 import {FooterSite} from "./FooterSite";
-import {App, Helper, Toast, Translator} from "cordova-sites";
+import {App, ConfirmDialog, DataManager, Helper, Toast, Translator} from "cordova-sites";
 import {Event} from "../../../model/Event";
 
 import view from "../../html/Sites/eventSite.html";
 import {Favorite} from "../Model/Favorite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
+import {UserManager} from "cordova-sites-user-management/client";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -22,6 +23,7 @@ export class EventSite extends FooterSite {
         }
 
         this._event = await Event.findById(constructParameters["id"]);
+        console.log(this._event);
         if (!this._event) {
             new Toast("no event found").show();
             this.finish();
@@ -69,13 +71,13 @@ export class EventSite extends FooterSite {
         let places = this._event.places;
         let placesAreObject = false;
 
-        if (!Array.isArray(places)){
+        if (!Array.isArray(places)) {
             places = Object.keys(places);
             placesAreObject = true;
         }
 
         await Helper.asyncForEach(places, async place => {
-            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject)?this._event.places[place]: place));
+            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject) ? this._event.places[place] : place));
         });
 
         //favorite
@@ -96,7 +98,28 @@ export class EventSite extends FooterSite {
             this._isFavortite = isFavorite;
         });
 
+        this._checkRightsPanel();
         return res;
+    }
+
+    _checkRightsPanel() {
+        UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
+            if (loggedIn && manager.hasAccess(Event.ACCESS_MODIFY)) {
+                this.findBy(".admin-panel").classList.remove("hidden");
+            } else {
+                this.findBy(".admin-panel").classList.add("hidden");
+            }
+        }, true);
+
+        this.findBy("#delete-event").addEventListener("click", async () => {
+            if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
+                if (await new ConfirmDialog("möchtest du das Event wirklich löschen? Es wird unwiederbringlich verloren gehen!", "Event löschen?").show()) {
+                    await this._event.delete();
+                    new Toast("event wurde erfolgreich gelscht").show();
+                    this.finish();
+                }
+            }
+        });
     }
 }
 
