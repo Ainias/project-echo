@@ -7,6 +7,7 @@ import {Region} from "../../../model/Region";
 import {EventSite} from "./EventSite";
 import flatpickr from "flatpickr";
 import {UserSite} from "cordova-sites-user-management/src/client/js/Context/UserSite";
+import {PlaceHelper} from "../Helper/PlaceHelper";
 
 //TODO userManagement hinzufügen
 export class AddEventSite extends MenuFooterSite {
@@ -18,6 +19,8 @@ export class AddEventSite extends MenuFooterSite {
     async onConstruct(constructParameters) {
         let res = super.onConstruct(constructParameters);
         this._churches = await Church.find();
+
+        this._placeNumber = 0;
         return res;
     }
 
@@ -30,7 +33,12 @@ export class AddEventSite extends MenuFooterSite {
         organizerCheckbox.remove();
         organizerCheckbox.classList.remove("organizer-template");
 
-        console.log("churches", this._churches);
+        this._placesContainer = this.findBy("#places-container");
+        this._placesLineTemplate = this.findBy("#place-line-template");
+        this._placesLineTemplate.removeAttribute("id");
+        this._placesLineTemplate.remove();
+
+        this._placePreview = this.findBy("#place-preview");
 
         this._churches.forEach(church => {
             Translator.addDynamicTranslations(church.getDynamicTranslations());
@@ -54,8 +62,7 @@ export class AddEventSite extends MenuFooterSite {
             let descriptions = {};
             let organizers = [];
             let images = ["https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg"];
-            let places = values["places"].split("\n");
-            console.log(places);
+            let places = {};
             let regions = [await Region.findById(1)];
 
             let indexedChurches = Helper.arrayToObject(this._churches, church => church.id);
@@ -64,11 +71,18 @@ export class AddEventSite extends MenuFooterSite {
                 if (valName.startsWith("church-")) {
                     organizers.push(indexedChurches[parseInt(values[valName])]);
                 }
-                if (valName.startsWith("name-")){
+                if (valName.startsWith("name-")) {
                     names[valName.split("-")[1]] = values[valName];
                 }
-                if (valName.startsWith("description-")){
+                if (valName.startsWith("description-")) {
                     descriptions[valName.split("-")[1]] = values[valName];
+                }
+                if (valName.startsWith("place-name-")){
+                    let val = values["place-query-"+valName.substring(11)];
+                    if (val.trim() === ""){
+                        val = values[valName];
+                    }
+                    places[values[valName]] = val;
                 }
             });
 
@@ -89,8 +103,10 @@ export class AddEventSite extends MenuFooterSite {
                 id: event.id
             });
         });
+
+
         this._form.addValidator(values => {
-            if (new Date(values["start"]).getTime() > new Date(values["end"]).getTime()){
+            if (new Date(values["start"]).getTime() > new Date(values["end"]).getTime()) {
                 new Toast("the endpoint must be after the start").show();
                 return {
                     "end": "the endpoint must be after the start"
@@ -98,7 +114,65 @@ export class AddEventSite extends MenuFooterSite {
             }
             return true;
         });
+
+        this.findBy("#add-place").addEventListener("click", () => {
+            this.addPlaceLine();
+        });
+
+        this.addPlaceLine();
         return res;
+    }
+
+    addPlaceLine() {
+        this._placeNumber++;
+        let newLine = this._placesLineTemplate.cloneNode(true);
+
+        let placeNameElem = newLine.querySelector(".place-name");
+        placeNameElem.name = "place-name-" + this._placeNumber;
+
+        let placeQueryElem = newLine.querySelector(".place-query");
+        placeQueryElem.name = "place-query-" + this._placeNumber;
+
+        placeNameElem.addEventListener("keyup", e => {
+            placeQueryElem.placeholder = placeNameElem.value;
+            updatePreview();
+        });
+
+        placeNameElem.addEventListener("change", e => {
+            placeQueryElem.placeholder = placeNameElem.value;
+            updatePreview();
+        });
+
+
+        let updateTimeout = null;
+        let updatePreview = () => {
+
+            if (updateTimeout !== null) {
+                clearTimeout(updateTimeout);
+            }
+            updateTimeout = setTimeout(() => {
+
+                let newSrc = PlaceHelper._buildMapsLink(placeQueryElem.value || placeQueryElem.placeholder);
+                if (this._placePreview.src !== newSrc) {
+                    this._placePreview.src = newSrc;
+                }
+            }, 200);
+        };
+        placeNameElem.addEventListener("focus", updatePreview);
+        placeQueryElem.addEventListener("focus", updatePreview);
+        placeQueryElem.addEventListener("change", updatePreview);
+        placeQueryElem.addEventListener("keyup", updatePreview);
+
+        newLine.querySelector(".remove-place").addEventListener("click", () => {
+            newLine.remove();
+        });
+
+        this._placesContainer.appendChild(newLine);
+        requestAnimationFrame(() => {
+            placeNameElem.focus();
+        });
+
+        Translator.getInstance().updateTranslations(newLine);
     }
 }
 

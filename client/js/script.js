@@ -18,6 +18,7 @@ import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
 import {AddEventSite} from "./Sites/AddEventSite";
 import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/client";
+import {CalendarSite} from "./Sites/CalendarSite";
 
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
@@ -44,7 +45,7 @@ App.addInitialization(async (app) => {
     NavbarFragment.title = "";
 
     //Creating Menu
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", WelcomeSite));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", CalendarSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", WelcomeSite));
     NavbarFragment.defaultActions.push(new MenuAction("language", async () => {

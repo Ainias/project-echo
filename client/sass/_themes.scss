@@ -45,6 +45,8 @@
   }
   button.button, a.button {
     background-color: map-get($theme, themeColor);
+    border: map-get($theme, buttonBorder);
+    color: map-get($theme, buttonColor);
     &.disabled, &.disabled:hover, &.disabled:focus, &:hover {
       background-color: map-get($theme, themeColor);
     }

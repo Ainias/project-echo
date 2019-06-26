@@ -4,6 +4,7 @@ import {Event} from "../../../model/Event";
 
 import view from "../../html/Sites/eventSite.html";
 import {Favorite} from "../Model/Favorite";
+import {PlaceHelper} from "../Helper/PlaceHelper";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -64,13 +65,17 @@ export class EventSite extends FooterSite {
 
         //places
         let placesContainer = this.findBy("#places-container");
-        let placeTemplate = placesContainer.querySelector(".place");
-        placeTemplate.remove();
 
-        this._event.places.forEach(place => {
-            let placeElement = placeTemplate.cloneNode(true);
-            placeElement.querySelector(".place-name").innerText = place;
-            placesContainer.appendChild(placeElement);
+        let places = this._event.places;
+        let placesAreObject = false;
+
+        if (!Array.isArray(places)){
+            places = Object.keys(places);
+            placesAreObject = true;
+        }
+
+        await Helper.asyncForEach(places, async place => {
+            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject)?this._event.places[place]: place));
         });
 
         //favorite

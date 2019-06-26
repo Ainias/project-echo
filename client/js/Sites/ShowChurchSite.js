@@ -3,6 +3,7 @@ import {App, ColorIndicator, Helper, MenuSite, Toast, Translator} from "cordova-
 import {Church} from "../../../model/Church";
 import {MenuFooterSite} from "./MenuFooterSite";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
+import {PlaceHelper} from "../Helper/PlaceHelper";
 
 export class ShowChurchSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {
@@ -59,13 +60,17 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
 
         //places
         let placesContainer = this.findBy("#places-container");
-        let placeTemplate = placesContainer.querySelector(".place");
-        placeTemplate.remove();
 
-        this._church.places.forEach(place => {
-            let placeElement = placeTemplate.cloneNode(true);
-            placeElement.querySelector(".place-name").innerText = place;
-            placesContainer.appendChild(placeElement);
+        let places = this._church.places;
+        let placesAreObject = false;
+
+        if (!Array.isArray(places)){
+            places = Object.keys(places);
+            placesAreObject = true;
+        }
+
+        await Helper.asyncForEach(places, async place => {
+            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject)?this._church.places[place]: place));
         });
 
         return res;

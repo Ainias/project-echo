@@ -2,6 +2,7 @@ import {AlphabeticListFragment, Translator} from "cordova-sites";
 
 import view from "../../html/Fragments/churchListFragment.html";
 import {ShowChurchSite} from "../Sites/ShowChurchSite";
+import {PlaceHelper} from "../Helper/PlaceHelper";
 
 export class ChurchListFragment extends AlphabeticListFragment {
 
@@ -25,10 +26,17 @@ export class ChurchListFragment extends AlphabeticListFragment {
         Translator.getInstance().addDynamicTranslations(church.getDynamicTranslations());
         let churchElem = this._template.cloneNode(true);
         churchElem.querySelector(".name").appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
-        if (church.places.length > 0) {
-            churchElem.querySelector(".place .place-name").appendChild((church.places.length === 1) ?
-                document.createTextNode(church.places[0]) : Translator.makePersistentTranslation("Multiple locations"));
+
+        let places = church.places;
+        if (!Array.isArray(places)) {
+            places = Object.keys(places);
         }
+
+        if (places.length > 0) {
+            ((places.length === 1) ?
+                PlaceHelper.createPlace(places[0]) : PlaceHelper.createMultipleLocationsView()).then(view => churchElem.querySelector(".place-container").appendChild(view));
+        }
+
         churchElem.addEventListener("click", () => {
             this.getSite().startSite(ShowChurchSite, {"id": church.id});
         });

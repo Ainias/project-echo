@@ -9,6 +9,7 @@ import {EventSite} from "./EventSite";
 import {Scaler} from "../Scaler";
 import {Favorite} from "../Model/Favorite";
 import {DragHelper} from "../Helper/DragHelper";
+import {PlaceHelper} from "../Helper/PlaceHelper";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -235,9 +236,15 @@ export class CalendarSite extends FooterSite {
             let eventElement = this._eventOverviewTemplate.cloneNode(true);
             eventElement.querySelector(".name").appendChild(translator.makePersistentTranslation(event.getNameTranslation()));
             eventElement.querySelector(".time").innerText = Helper.strftime("%H:%M", event.startTime);
-            if (event.places.length > 0) {
-                eventElement.querySelector(".place .place-name").appendChild((event.places.length === 1) ?
-                    document.createTextNode(event.places[0]) : Translator.makePersistentTranslation("Multiple locations"));
+
+            let places = event.places;
+            if (!Array.isArray(places)) {
+                places = Object.keys(places);
+            }
+
+            if (places.length > 0) {
+                ((places.length === 1) ?
+                    PlaceHelper.createPlace(places[0]) : PlaceHelper.createMultipleLocationsView()).then(view => eventElement.querySelector(".place-container").appendChild(view));
             }
 
             eventElement.addEventListener("click", () => {
@@ -257,7 +264,6 @@ export class CalendarSite extends FooterSite {
                     e.stopPropagation();
 
                     let isFavourite = await Favorite.toggle(event.id);
-                    console.log("is Favorite", isFavourite);
                     if (isFavourite) {
                         favElem.classList.add("is-favorite");
                         this._favourites[event.id] = true;

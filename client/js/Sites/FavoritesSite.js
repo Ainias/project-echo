@@ -3,6 +3,7 @@ import {FooterSite} from "./FooterSite";
 import {App, Helper, Translator} from "cordova-sites";
 import {Favorite} from "../Model/Favorite";
 import {EventSite} from "./EventSite";
+import {PlaceHelper} from "../Helper/PlaceHelper";
 
 export class FavoritesSite extends FooterSite {
     constructor(siteManager) {
@@ -57,12 +58,12 @@ export class FavoritesSite extends FooterSite {
                 }
             }
 
-            let sortingStartDay = Helper.strftime("%Y.%m.%d", fav.event.startTime) + "," + dayName;
+            let sortingStartDay = Helper.strftime("%Y.%m.%d", fav.event.startTime) + "," + dayName + ","+Helper.strftime("%Y.%m.%d", fav.event.endTime);
             if (Helper.isNull(unsortedFavorites[sortingStartDay])) {
                 unsortedFavorites[sortingStartDay] = {};
             }
 
-            let startTime = Helper.strftime("%H:%M");
+            let startTime = Helper.strftime("%H:%M", fav.event.startTime);
             if (Helper.isNull(unsortedFavorites[sortingStartDay][startTime])) {
                 unsortedFavorites[sortingStartDay][startTime] = [];
             }
@@ -99,9 +100,15 @@ export class FavoritesSite extends FooterSite {
                     let eventElement = this._eventOverviewTemplate.cloneNode(true);
                     eventElement.querySelector(".name").appendChild(translator.makePersistentTranslation(fav.event.getNameTranslation()));
                     eventElement.querySelector(".time").innerText = time;
-                    if (fav.event.places.length > 0) {
-                        eventElement.querySelector(".place .place-name").appendChild((fav.event.places.length === 1) ?
-                            document.createTextNode(fav.event.places[0]) : Translator.makePersistentTranslation("Multiple locations"));
+
+                    let places = fav.event.places;
+                    if (!Array.isArray(places)) {
+                        places = Object.keys(places);
+                    }
+
+                    if (places.length > 0) {
+                        ((places.length === 1) ?
+                            PlaceHelper.createPlace(places[0]) : PlaceHelper.createMultipleLocationsView()).then(view => eventElement.querySelector(".place-container").appendChild(view));
                     }
 
                     eventElement.addEventListener("click", () => {
@@ -129,7 +136,7 @@ export class FavoritesSite extends FooterSite {
                 });
             });
 
-            if (dayParts[0] < today) {
+            if (dayParts[2] < today) {
                 this._favoriteContainerPast.appendChild(dayContainer);
                 this._pastSection.classList.remove("hidden");
             } else {

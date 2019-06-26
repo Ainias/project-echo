@@ -6,10 +6,35 @@ $navBackgroundDefault: $navBackgroundWhite;
 
 $highlightColor: #D56B52;
 
+$defaultThemeValues: (
+        class: "",
+  //themeColor: #383838,
+        themeColor: #ffffff,
+        lightThemeColor: #353535,
+        linkColor: #000,
+        spinnerColor: #000,
+        navBarTextColor: inherit,
+        textColor: #000,
+        textColor2: #555555,
+        lightLinkColor: #fff,
+        linkBorderBottom: none,
+        linkHoverColor: #4e4e4e,
+        lightLinkHoverColor: #cacaca,
+        background: #fff,
+        background-gradient: linear-gradient(#3b3b3b, #191919),
+        highlight: #D56B52,
+        textColorOne: #bcbbbb,
+        colorOne: #F3F1F1,
+        colorTwo: #3B3B3B,
+        colorThree: #FFF,
+        buttonBorder: none,
+        buttonColor: white,
+);
+
 $themes: (
         black:(
                 class: black,
-                //themeColor: #383838,
+          //themeColor: #383838,
                 themeColor: #ffffff,
                 lightThemeColor: #353535,
                 linkColor: #000,
@@ -27,7 +52,9 @@ $themes: (
                 textColorOne: #bcbbbb,
                 colorOne: #F3F1F1,
                 colorTwo: #3B3B3B,
-                colorThree: #FFF
+                colorThree: #FFF,
+                buttonBorder: 1px solid black,
+                buttonColor: black,
         ),
         red:(
                 class: red,
@@ -106,6 +133,23 @@ $themes: (
         )
 );
 
+@function recursive-map-merge($parent-map, $child-map) {
+  $result: $parent-map;
+  @each $key, $value in $child-map {
+    @if (not map-has-key($result, $key)) or (type-of(map-get($result, $key)) != type-of($value)) or (not (type-of(map-get($result, $key)) == map and type-of($value) == map)) {
+      $result: map-merge($result, ($key: $value));
+    } @else {
+      $result: map-merge($result, ($key: non-destructive-map-merge(map-get($result, $key), $value)));
+    }
+  }
+  @return $result;
+}
+
+@each $theme, $values in $themes {
+  $themeMap : recursive-map-merge($defaultThemeValues, $values);
+  $themes: map-merge($themes, ($theme: $themeMap))
+}
+
 $breakpoints: (
         small: 0,
         smedium: 400px,
@@ -117,10 +161,10 @@ $breakpoints: (
 
 $margins: (
         small: 0.625rem,
-        //smedium: 0.625rem,
+  //smedium: 0.625rem,
         medium: 0.9375rem,
-        //large: 0.9375rem,
-        //xlarge: 0.9375rem,
-        //xxlarge: 0.9375rem,
+  //large: 0.9375rem,
+  //xlarge: 0.9375rem,
+  //xxlarge: 0.9375rem,
 )
 
