@@ -20,6 +20,10 @@ export class AddEventSite extends MenuFooterSite {
         let res = super.onConstruct(constructParameters);
         this._churches = await Church.find();
 
+        if (constructParameters["id"]) {
+            this._event = await Event.findById(constructParameters["id"], Event.getRelations());
+        }
+
         this._placeNumber = 0;
         return res;
     }
@@ -59,7 +63,7 @@ export class AddEventSite extends MenuFooterSite {
 
         let imageInput = this.findBy("#event-image-input");
         imageInput.addEventListener("change", () => {
-            if (imageInput.files && imageInput.files[0]){
+            if (imageInput.files && imageInput.files[0]) {
                 let reader = new FileReader();
                 reader.onload = e => {
                     this.findBy("#event-image").src = e.target.result;
@@ -72,12 +76,11 @@ export class AddEventSite extends MenuFooterSite {
             let names = {};
             let descriptions = {};
             let organizers = [];
-            let images = [values["image"]];
+            let images = [values["image"] || values["image-before"]];
             let places = {};
             let regions = [await Region.findById(1)];
 
             let indexedChurches = Helper.arrayToObject(this._churches, church => church.id);
-            console.log(values);
 
             Object.keys(values).forEach(valName => {
                 if (valName.startsWith("church-")) {
@@ -89,16 +92,21 @@ export class AddEventSite extends MenuFooterSite {
                 if (valName.startsWith("description-")) {
                     descriptions[valName.split("-")[1]] = values[valName];
                 }
-                if (valName.startsWith("place-name-")){
-                    let val = values["place-query-"+valName.substring(11)];
-                    if (val.trim() === ""){
+                if (valName.startsWith("place-name-")) {
+                    let val = values["place-query-" + valName.substring(11)];
+                    if (val.trim() === "") {
                         val = values[valName];
                     }
                     places[values[valName]] = val;
                 }
             });
 
-            let event = new Event();
+            let event = null;
+            if (this._event) {
+                event = this._event
+            } else {
+                event = new Event();
+            }
             event.names = names;
             event.descriptions = descriptions;
             event.organisers = organizers;
@@ -108,6 +116,8 @@ export class AddEventSite extends MenuFooterSite {
             event.endTime = new Date(values["end"]);
             event.type = values["type"];
             event.regions = regions;
+
+            console.log(event.organisers);
 
             await event.save();
 
@@ -132,6 +142,9 @@ export class AddEventSite extends MenuFooterSite {
         });
 
         this.addPlaceLine();
+
+        this.setFormValuesFromEvent();
+
         return res;
     }
 
@@ -185,6 +198,58 @@ export class AddEventSite extends MenuFooterSite {
         });
 
         Translator.getInstance().updateTranslations(newLine);
+    }
+
+    async setFormValuesFromEvent() {
+
+        console.log("event", this._event);
+
+        if (this._event instanceof Event) {
+
+            let values = {};
+
+            let names = this._event.names;
+            Object.keys(names).forEach(lang => {
+                values["name-" + lang] = names[lang];
+            });
+
+            let descriptions = this._event.descriptions;
+            Object.keys(descriptions).forEach(lang => {
+                values["description-" + lang] = descriptions[lang];
+            });
+            values["type"] = this._event.type;
+            values["start"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.startTime);
+            values["end"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.endTime);
+
+            this._event.organisers.forEach(church => {
+                values["church-" + church.id] = church.id;
+            });
+
+            this.findBy("#event-image").src = this._event.images[0];
+            this.findBy("input[type='hidden'][name='image-before']").value = this._event.images[0];
+            this.findBy("input[type='file'][name='image']").removeAttribute("required");
+
+            let places = this._event.places;
+            if (Array.isArray(places)) {
+                places = Helper.arrayToObject(places, place => place);
+            }
+            Object.keys(places).forEach((placeName, i) => {
+                if (i > 0) {
+                    this.addPlaceLine();
+                }
+
+                values["place-name-" + (i + 1)] = placeName;
+                if (placeName !== places[placeName]) {
+                    values["place-query-" + (i + 1)] = places[placeName];
+                } else {
+                    let queryElem = this.findBy("[name='place-query-" + (i + 1) + "']");
+                    queryElem.placeholder = placeName;
+                    delete queryElem.removeAttribute("data-translation-placeholder");
+                }
+            });
+
+            await this._form.setValues(values);
+        }
     }
 }
 

@@ -6,6 +6,7 @@ import view from "../../html/Sites/eventSite.html";
 import {Favorite} from "../Model/Favorite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {UserManager} from "cordova-sites-user-management/client";
+import {AddEventSite} from "./AddEventSite";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -22,8 +23,7 @@ export class EventSite extends FooterSite {
             return;
         }
 
-        this._event = await Event.findById(constructParameters["id"]);
-        console.log(this._event);
+        this._event = await Event.findById(constructParameters["id"], Event.getRelations());
         if (!this._event) {
             new Toast("no event found").show();
             this.finish();
@@ -98,6 +98,29 @@ export class EventSite extends FooterSite {
             this._isFavortite = isFavorite;
         });
 
+        let tagPanel = this.findBy("#tag-panel");
+
+        let typeTag = document.createElement("span");
+        typeTag.classList.add("tag");
+        typeTag.appendChild(Translator.makePersistentTranslation(this._event.type));
+        tagPanel.addEventListener("click", () => {
+            alert("to be implemented!");
+        });
+        tagPanel.appendChild(typeTag);
+
+        this._event.organisers.forEach(church => {
+            Translator.addDynamicTranslations(church.getDynamicTranslations());
+
+           let churchTag = document.createElement("span");
+           churchTag.classList.add("tag");
+           churchTag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
+           churchTag.addEventListener("click", () => {
+               alert("to be implemented!");
+           });
+
+           tagPanel.appendChild(churchTag);
+        });
+
         this._checkRightsPanel();
         return res;
     }
@@ -118,6 +141,11 @@ export class EventSite extends FooterSite {
                     new Toast("event wurde erfolgreich gelscht").show();
                     this.finish();
                 }
+            }
+        });
+        this.findBy("#modify-event").addEventListener("click", async () => {
+            if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
+                this.finishAndStartSite(AddEventSite, {id: this._event.id});
             }
         });
     }

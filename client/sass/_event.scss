@@ -24,7 +24,34 @@
   }
 }
 
-#event-image{
+.admin-panel {
+  float: right;
+  white-space: nowrap;
+
+  button {
+    cursor: pointer;
+    color: #D56B52;
+  }
+}
+
+#tag-panel {
+  white-space: nowrap;
+  overflow-x: auto;
+  margin-right: 0.8rem;
+  padding-top: 0.1rem;
+  min-height: 2.5rem;
+  .tag {
+    cursor: pointer;
+    border: 1px solid #BCBBBB;
+    border-radius: 3px;
+    padding: 0.3rem;
+    margin-right: 0.2rem;
+    font-size: 0.7em;
+    color: #BCBBBB;
+  }
+}
+
+#event-image {
   max-width: 200px;
   max-height: 200px;
 }
