@@ -51,18 +51,18 @@ export class EventSite extends FooterSite {
         if (this._event.startTime.getFullYear() === this._event.endTime.getFullYear()) {
             if (this._event.startTime.getMonth() === this._event.endTime.getMonth() && this._event.startTime.getDate() === this._event.endTime.getDate()) {
                 if (this._event.startTime.getHours() === this._event.endTime.getHours() && this._event.startTime.getMinutes() === this._event.endTime.getMinutes()) {
-                    timeElement.innerHTML = Helper.strftime("%d. %B ´%y %H.%M ", this._event.startTime) + translator.makePersistentTranslation("uhr").outerHTML;
+                    timeElement.innerHTML = Helper.strftime("%d. %B ´%y, %H:%M ", this._event.startTime) + translator.makePersistentTranslation("uhr").outerHTML;
                 } else {
                     timeElement.innerHTML =
-                        Helper.strftime("%d. %B ´%y<br/>%H.%M", this._event.startTime) + " - " + Helper.strftime("%H.%M", this._event.endTime);
+                        Helper.strftime("%d. %B ´%y<br/>%H:%M", this._event.startTime) + " - " + Helper.strftime("%H:%M", this._event.endTime);
                 }
             } else {
                 timeElement.innerHTML =
-                    Helper.strftime("%d. %b ´%y %H.%M", this._event.startTime) + " -<br/>" + Helper.strftime("%d. %b ´%y %H.%M", this._event.endTime);
+                    Helper.strftime("%d. %b ´%y, %H:%M", this._event.startTime) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.endTime);
             }
         } else {
             timeElement.innerHTML =
-                Helper.strftime("%d. %b ´%y %H.%M", this._event.startTime) + " -<br/>" + Helper.strftime("%d. %b ´%y %H.%M", this._event.endTime);
+                Helper.strftime("%d. %b ´%y, %H:%M", this._event.startTime) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.endTime);
         }
 
         //places

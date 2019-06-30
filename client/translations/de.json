@@ -16,5 +16,23 @@
   "no events": "Keine Events vorhanden",
   "document-title-empty": "ECHO",
   "merkliste": "Merkliste",
-  "vergangene Veranstaltungen": "vergangene Veranstalungen"
+  "vergangene Veranstaltungen": "vergangene Veranstalungen",
+
+  "name de": "Name (DE)",
+  "name en": "Name (EN)",
+  "description de": "Beschreibung (DE)",
+  "description en": "Beschreibung (EN)",
+  "start time": "Start:",
+  "end time": "Ende:",
+  "type": "Typ",
+  "Bild": "Bild",
+  "places": "Orte",
+  "name": "Name",
+  "Query": "Query",
+  "add place": "Neuer Ort",
+  "speichern": "Speichern",
+  "add event": "Neuer Termin",
+  "gottesdienst": "Gottesdienst",
+  "konzert": "Konzert"
+
 }

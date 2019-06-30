@@ -15,22 +15,22 @@
             </div>
             <div class="grid-x">
                 <label class="columns small-12 smedium-6">
-                    <textarea name='description-de' required></textarea>
                     <span class="translation">description De</span>
+                    <textarea name='description-de' class="editor"></textarea>
                 </label>
                 <label class="columns small-12 smedium-6">
-                    <textarea name='description-en' required></textarea>
                     <span class="translation">description en</span>
+                    <textarea name='description-en' class="editor"></textarea>
                 </label>
             </div>
             <div class="grid-x">
                 <label class="columns small-12 smedium-6">
                     <input type="text" name='start' class="date-time" required>
-                    <span class="translation">start</span>
+                    <span class="translation">start time</span>
                 </label>
                 <label class="columns small-12 smedium-6">
                     <input type="text" name='end' class="date-time" required>
-                    <span class="translation">end</span>
+                    <span class="translation">end time</span>
                 </label>
             </div>
             <div class="grid-x">
@@ -54,9 +54,9 @@
                     <span class="translation" data-translation-title="Bild">Bild</span>
                     <input id = "event-image-input" type="file" accept="image/*" name='image' required>
                 </label>
-                <img id = "event-image" class="small-4" src="http://placehold.it/180" alt="your image">
+                <img id = "event-image" class="small-4" src="http://placehold.it/180">
             </div>
-            <h3>places</h3>
+            <h3 class="translation">places</h3>
             <div id="places-container">
                 <div class="grid-x" id="place-line-template">
                     <label class="columns small-11 smedium-6">

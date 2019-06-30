@@ -9,7 +9,7 @@
   background: map-get($theme, background);
   color: map-get($theme, textColor);
 
-  a.link {
+  a.link, a {
     text-decoration: none;
     color: map-get($theme, highlight);
     border-bottom: map-get($theme, linkBorderBottom);

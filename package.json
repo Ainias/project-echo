@@ -17,6 +17,7 @@
   "author": "Project Echo Team",
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^12.2.0",
     "body-parser": "^1.18.3",
     "cordova-android": "^7.1.2",
     "cordova-browser": "^5.0.4",

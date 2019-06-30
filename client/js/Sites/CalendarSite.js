@@ -10,6 +10,7 @@ import {Scaler} from "../Scaler";
 import {Favorite} from "../Model/Favorite";
 import {DragHelper} from "../Helper/DragHelper";
 import {PlaceHelper} from "../Helper/PlaceHelper";
+import {DateHelper} from "../Helper/DateHelper";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -52,11 +53,13 @@ export class CalendarSite extends FooterSite {
 
         this._monthName = this.findBy("#month-name");
         this.findBy("#button-left").addEventListener("click", () => {
-            this._date.setMonth(this._date.getMonth() - 1);
+            DateHelper.setMonth(this._date.getMonth()-1, this._date);
+            // this._date.setMonth(this._date.getMonth() - 1);
             this.drawMonth(this._date);
         });
         this.findBy("#button-right").addEventListener("click", () => {
-            this._date.setMonth(this._date.getMonth() + 1);
+            DateHelper.setMonth(this._date.getMonth()+1, this._date);
+            // this._date.setMonth(this._date.getMonth() + 1);
             this.drawMonth(this._date);
         });
 
@@ -126,9 +129,9 @@ export class CalendarSite extends FooterSite {
         let isCurrentMonth = (now.getFullYear() === date.getFullYear() && now.getMonth() === month);
 
         let offset = (date.getDay() + 6) % 7;
-        date.setMonth(date.getMonth() + 1);
-        date.setDate(0);
-        let numberDays = date.getDate();
+        // date.setMonth(date.getMonth() + 1);
+        // date.setDate(0);
+        let numberDays = DateHelper.getNumberDaysOfMonth(date);
 
         let eventDays = {};
         events.forEach(event => {
@@ -167,35 +170,23 @@ export class CalendarSite extends FooterSite {
                 day.classList.add("today");
             }
 
+            day.addEventListener("click", () => {
+                let oldActiceDay = this.findBy(".day.active");
+                if (oldActiceDay) {
+                    oldActiceDay.classList.remove("active");
+                }
+                day.classList.add("active");
+                this.showEventOverviews((eventDays[i])?eventDays[i]:[]);
+
+                let newDate = new Date(date);
+                newDate.setDate(i + 1);
+                this._date = newDate;
+                this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
+            });
+
             if (eventDays[i]) {
                 day.classList.add("has-event");
-                day.addEventListener("click", () => {
-                    let oldActiceDay = this.findBy(".day.active");
-                    if (oldActiceDay) {
-                        oldActiceDay.classList.remove("active");
-                    }
-                    day.classList.add("active");
-                    this.showEventOverviews(eventDays[i]);
-
-                    let newDate = new Date(date);
-                    newDate.setDate(i + 1);
-                    this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
-                });
-            } else {
-                day.addEventListener("click", () => {
-                    let oldActiceDay = this.findBy(".day.active");
-                    if (oldActiceDay) {
-                        oldActiceDay.classList.remove("active");
-                    }
-                    day.classList.add("active");
-                    this.showEventOverviews([]);
-
-                    let newDate = new Date(date);
-                    newDate.setDate(i + 1);
-                    this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
-                });
             }
-
             if (i + 1 === actualDayOfMonth) {
                 day.classList.add("active");
                 if (eventDays[i]) {

@@ -41,7 +41,8 @@ describe("church site", () => {
 
     });
 
-    fit("event site - favourites", async function () {
+    it("event site - favorites", async function () {
+
         await browser.url(baseUrl + "?id=4&s=event");
 
         await browser.waitUntil(async () => {
@@ -49,11 +50,15 @@ describe("church site", () => {
             return await element.isDisplayed()
         });
 
-        let favElem = $("#favourite .favourite");
-        expect(await favElem.getAttribute("class")).toEqual("favourite");
+        let favElem = $("#favorite .favorite");
+        expect(await favElem.getAttribute("class")).toEqual("favorite");
 
         await favElem.click();
         await browser.pause(500);
-        expect(await favElem.getAttribute("class")).toEqual("favourite is-favourite");
+        expect(await favElem.getAttribute("class")).toEqual("favorite is-favorite");
+
+        await favElem.click();
+        await browser.pause(500);
+        expect(await favElem.getAttribute("class")).toEqual("favorite");
     });
 });

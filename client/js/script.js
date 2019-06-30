@@ -20,6 +20,8 @@ import {AddEventSite} from "./Sites/AddEventSite";
 import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/client";
 import {CalendarSite} from "./Sites/CalendarSite";
 
+import bibelverse from "./bibelverse.json";
+
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 
@@ -27,6 +29,11 @@ LoginSite.ADD_LOGIN_ACTION = false;
 RegistrationSite.ADD_REGISTRATION_ACTION = false;
 
 App.addInitialization(async (app) => {
+
+    //add Bibelvers to html
+    let vers = bibelverse[Math.floor(Math.random() * (bibelverse.length))];
+    document.head.prepend(document.createComment(vers["vers"] + " \n- " + vers["stelle"] + " (" + vers["uebersetzung"] + ")"));
+
     if (window.StatusBar) {
         StatusBar.overlaysWebView(true);
         StatusBar.backgroundColorByHexString('#33000000');
@@ -74,7 +81,7 @@ DataManager._basePath = __HOST_ADDRESS__;
 
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
     // "synchronize": false,
-    "logging":  ["error"],
+    "logging": ["error"],
     // "logging":  true
 });
 

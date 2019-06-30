@@ -8,6 +8,8 @@ import {EventSite} from "./EventSite";
 import flatpickr from "flatpickr";
 import {UserSite} from "cordova-sites-user-management/src/client/js/Context/UserSite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
+import CKEditor from "@ckeditor/ckeditor5-build-classic";
+import {CONSTANTS} from "../CONSTANTS";
 
 //TODO userManagement hinzufügen
 export class AddEventSite extends MenuFooterSite {
@@ -137,6 +139,10 @@ export class AddEventSite extends MenuFooterSite {
             return true;
         });
 
+        this.findBy(".editor", true).forEach(async e => {
+            this._form.addEditor(await CKEditor.create(e, CONSTANTS.CK_EDITOR_CONFIG));
+        });
+
         this.findBy("#add-place").addEventListener("click", () => {
             this.addPlaceLine();
         });
@@ -201,9 +207,6 @@ export class AddEventSite extends MenuFooterSite {
     }
 
     async setFormValuesFromEvent() {
-
-        console.log("event", this._event);
-
         if (this._event instanceof Event) {
 
             let values = {};
