@@ -21,6 +21,7 @@ import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-
 import {CalendarSite} from "./Sites/CalendarSite";
 
 import bibelverse from "./bibelverse.json";
+import {ModifyChurchSite} from "./Sites/ModifyChurchSite";
 
 BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
@@ -70,6 +71,11 @@ App.addInitialization(async (app) => {
     NavbarFragment.defaultActions.push(new UserMenuAction("add event", "admin", () => {
         app.startSite(AddEventSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
+
+    NavbarFragment.defaultActions.push(new UserMenuAction("add church", "admin", () => {
+        app.startSite(ModifyChurchSite);
+    }, MenuAction.SHOW_FOR_MEDIUM));
+
 
     await UserManager.getInstance().getMe();
 

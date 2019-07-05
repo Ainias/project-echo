@@ -38,7 +38,7 @@ export class ChurchListFragment extends AlphabeticListFragment {
         }
 
         churchElem.addEventListener("click", () => {
-            this.getSite().startSite(ShowChurchSite, {"id": church.id});
+            this.getSite().finishAndStartSite(ShowChurchSite, {"id": church.id});
         });
         return churchElem;
     }

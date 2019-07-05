@@ -1,5 +1,7 @@
 import {BaseDatabase} from "cordova-sites-database";
 import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
+import {Region} from "./Region";
 
 export class Church extends AccessEasySyncModel {
 
@@ -43,7 +45,21 @@ export class Church extends AccessEasySyncModel {
         });
         return translations;
     }
+
+    static getRelationDefinitions() {
+        let relations = EasySyncBaseModel.getRelationDefinitions();
+        relations["regions"] = {
+            target: Region.getSchemaName(),
+            type: "many-to-many",
+            joinTable: {
+                name: "churchRegion"
+            },
+            sync: true
+        };
+        return relations;
+    }
 }
+
 Church.ACCESS_MODIFY = "admin";
 Church.SCHEMA_NAME = "Church";
 BaseDatabase.addModel(Church);

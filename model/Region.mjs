@@ -43,6 +43,7 @@ export class Region extends AccessEasySyncModel {
             joinTable: {
                 name: "churchRegion"
             },
+            sync: false,
             // cascade: true
         };
         relations["events"] = {
