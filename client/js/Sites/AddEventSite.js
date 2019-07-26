@@ -57,12 +57,6 @@ export class AddEventSite extends MenuFooterSite {
             organizerContainer.appendChild(elem);
         });
 
-        flatpickr(this.findBy(".date-time", true), {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-            time_24hr: true
-        });
-
         let imageInput = this.findBy("#event-image-input");
         imageInput.addEventListener("change", () => {
             if (imageInput.files && imageInput.files[0]) {
@@ -149,7 +143,13 @@ export class AddEventSite extends MenuFooterSite {
 
         this.addPlaceLine();
 
-        this.setFormValuesFromEvent();
+        await this.setFormValuesFromEvent();
+
+        flatpickr(this.findBy(".date-time", true), {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            time_24hr: true
+        });
 
         return res;
     }

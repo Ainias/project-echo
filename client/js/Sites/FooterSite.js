@@ -17,37 +17,3 @@ export class FooterSite extends TemplateSite{
         }
     }
 }
-
-// jQuery(function ($) {
-//     try {
-//         var beitrag = $("article#post-419 header");
-//         console.log(beitrag);
-//         beitrag.click((e) => {
-//             e.preventDefault();
-//             e.stopPropagation();
-//             console.log("clicked");
-//             window.location.href = "/was-wir-machen/events/ladies-celebration/";
-//         });
-//         beitrag.style.cursor = "pointer";
-//     } catch (e) {
-//         console.error(e);
-//     }
-// });
-//
-// <script>
-// jQuery(function ($) {
-//     try {
-//         var beitrag = $("article#post-419 header");
-//         console.log(beitrag);
-//         beitrag.click((e) => {
-//             e.preventDefault();
-//             e.stopPropagation();
-//             console.log("clicked");
-//             window.location.href = "/was-wir-machen/events/ladies-celebration/";
-//         });
-//         beitrag.style.cursor = "pointer";
-//     } catch (e) {
-//         console.error(e);
-//     }
-// });
-// </script>

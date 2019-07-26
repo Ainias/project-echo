@@ -77,6 +77,7 @@ App.addInitialization(async (app) => {
     }, MenuAction.SHOW_FOR_MEDIUM));
 
 
+    DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
     await UserManager.getInstance().getMe();
 
     //Todo an richtige stelle auslagern

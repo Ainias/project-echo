@@ -4,13 +4,13 @@ import viewFooter from '../../html/Fragments/footerFragment.html';
 import {WelcomeSite} from "../Sites/WelcomeSite";
 import {CalendarSite} from "../Sites/CalendarSite";
 import {FavoritesSite} from "../Sites/FavoritesSite";
+import {SearchSite} from "../Sites/SearchSite";
 
 
 export class FooterFragment extends AbstractFragment {
     constructor(site) {
         super(site, viewFooter);
     }
-
 
     async onViewLoaded() {
         let res = super.onViewLoaded();
@@ -25,6 +25,10 @@ export class FooterFragment extends AbstractFragment {
 
         this.findBy(".icon.favorites").addEventListener("click", () => {
             this.getSite().startSite(FavoritesSite);
+        });
+
+        this.findBy(".icon.search").addEventListener("click", () => {
+            this.getSite().startSite(SearchSite);
         });
 
         this.findBy(".icon", true).forEach(icon => {
