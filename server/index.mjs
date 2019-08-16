@@ -13,6 +13,10 @@ import "../model/Church";
 import "../model/Event";
 import {BaseModel} from "cordova-sites-database";
 import {setupDB} from "./setupDB";
+import {ServerTranslator} from "cordova-sites/server";
+import {Translator} from "cordova-sites/shared";
+import translationGerman from "../client/translations/de";
+import translationEnglish from "../client/translations/en";
 
 const port = process.env.PORT || 3000;
 process.env.JWT_SECRET = process.env.JWT_SECRET || "bjlsdgjw4tuiopmk24fl450wcui3fz,ogf";
@@ -60,7 +64,7 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
-
+app.use(ServerTranslator.setUserLanguage);
 app.use('/api', routes);
 
 app.use(express.static(path.resolve(path.dirname(process.argv[1]), "public")));
@@ -78,6 +82,16 @@ app.use(function (err, req, res, next) {
 
 EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
     await setupDB();
+    Translator.init({
+        translations: {
+            "de": translationGerman,
+            "en": translationEnglish
+        },
+        fallbackLanguage: "de",
+        // markTranslations: true,
+        markUntranslatedTranslations: true,
+    });
+
     app.listen(port, () => {
         console.log('Server started on Port: ' + port);
     });

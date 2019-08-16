@@ -42,6 +42,8 @@
   "konferenz": "Konferenz",
   "gebetskreis": "Gebetskreis",
   "sport": "Sport",
-  "jugendkreis": "Jugendkreis"
+  "jugendkreis": "Jugendkreis",
 
+  "email-header-usermanager-password-forgotten": "ECHO - Passwort vergessen",
+  "email-usermanager-password-forgotten": "Hallo {0},\n\nUm dein Passwort zu ändern, besuche folgenden Link: {1}"
 }
