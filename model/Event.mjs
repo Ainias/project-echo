@@ -83,5 +83,10 @@ BaseDatabase.addModel(Event);
 
 Event.TYPES = {
     GOTTESDIENST: "gottesdienst",
-    KONZERT: "konzert"
+    KONZERT: "konzert",
+    HAUSKREIS: "hauskreis",
+    KONFERENZ: "konferenz",
+    GEBETSKREIS: "gebetskreis",
+    SPORT: "sport",
+    JUGENDKREIS: "jugendkreis"
 };

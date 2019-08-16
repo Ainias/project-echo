@@ -11,7 +11,7 @@ export class EventOverviewFragment extends AbstractFragment {
         this._events = [];
     }
 
-    async setEvents(events){
+    async setEvents(events) {
         this._events = events;
         await this._viewLoadedPromise;
         await this._renderList();
@@ -37,7 +37,6 @@ export class EventOverviewFragment extends AbstractFragment {
     }
 
     async _renderList() {
-
         let currentYear = Helper.strftime("%y");
         let unsortedFavorites = {};
         this._events.forEach(event => {
@@ -116,7 +115,11 @@ export class EventOverviewFragment extends AbstractFragment {
                     });
 
                     let favElem = eventElement.querySelector(".favorite");
-                    favElem.classList.add("is-favorite");
+                    Favorite.isFavorite(event.id).then(isFavorite => {
+                        if (isFavorite) {
+                            favElem.classList.add("is-favorite");
+                        }
+                    });
 
                     favElem.addEventListener("click", async (e) => {
                         e.stopPropagation();
@@ -146,7 +149,6 @@ export class EventOverviewFragment extends AbstractFragment {
             let elem = document.createElement("div");
             elem.classList.add("no-events");
             elem.appendChild(Translator.makePersistentTranslation("no events"));
-            debugger;
             this._eventContainer.appendChild(elem);
         }
     }

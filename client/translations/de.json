@@ -33,6 +33,15 @@
   "speichern": "Speichern",
   "add event": "Neuer Termin",
   "gottesdienst": "Gottesdienst",
-  "konzert": "Konzert"
+  "konzert": "Konzert",
+
+  "event": "Veranstaltung",
+  "organiser": "Veranstalter",
+  "search": "Suchen",
+  "hauskreis": "Hauskreis",
+  "konferenz": "Konferenz",
+  "gebetskreis": "Gebetskreis",
+  "sport": "Sport",
+  "jugendkreis": "Jugendkreis"
 
 }

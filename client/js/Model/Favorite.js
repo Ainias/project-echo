@@ -32,15 +32,18 @@ export class Favorite extends BaseModel
         return relations;
     }
 
+    static async isFavorite(eventId){
+        let fav = await this.findOne({"eventId": eventId});
+        return (fav instanceof Favorite);
+    }
+
     static async toggle(eventId){
         let fav = await this.findOne({"eventId": eventId});
         if (fav instanceof Favorite){
-            console.log("is favourite, trying to delete");
             await fav.delete();
             return false;
         }
         else {
-            console.log("is not favourite... yet!");
             fav = new Favorite();
             fav.eventId = eventId;
             await fav.save();
