@@ -8,6 +8,7 @@
     "cordova browser start": "cordova run browser",
     "cordova browser prepare": "cordova prepare browser",
     "cordova android": "cordova run android --device",
+    "cordova release android": "cordova build --release android",
     "appium": "appium",
     "appium-doctor": "appium-doctor",
     "test browser": "wdio tests/wdio.config.browser.js",
