@@ -163,7 +163,7 @@ export class ModifyChurchSite extends MenuFooterSite {
     }
 
     async setFormValuesFromChurch() {
-        if (!this._church instanceof Church) {
+        if (Helper.isNull(this._church) || !this._church instanceof Church) {
             return;
         }
 

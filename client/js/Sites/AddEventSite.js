@@ -72,7 +72,12 @@ export class AddEventSite extends MenuFooterSite {
             let names = {};
             let descriptions = {};
             let organizers = [];
-            let images = [values["image"] || values["image-before"]];
+            let images = [values["image"]];
+
+            if (Helper.imageUrlIsEmpty(values["image"])) {
+                images = [values["image-before"]];
+            }
+
             let places = {};
             let regions = [await Region.findById(1)];
 
@@ -112,8 +117,6 @@ export class AddEventSite extends MenuFooterSite {
             event.endTime = new Date(values["end"]);
             event.type = values["type"];
             event.regions = regions;
-
-            console.log(event.organisers);
 
             await event.save();
 
