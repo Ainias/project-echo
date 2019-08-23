@@ -7,6 +7,8 @@ import {Favorite} from "../Model/Favorite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {UserManager} from "cordova-sites-user-management/client";
 import {AddEventSite} from "./AddEventSite";
+import {EventHelper} from "../Helper/EventHelper";
+import {SearchSite} from "./SearchSite";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -89,7 +91,7 @@ export class EventSite extends FooterSite {
         favElem.addEventListener("click", async (e) => {
             e.stopPropagation();
 
-            let isFavorite = await Favorite.toggle(this._event.id);
+            let isFavorite = await EventHelper.toggleFavorite(this._event);
             if (isFavorite) {
                 favElem.classList.add("is-favorite");
             } else {
@@ -104,7 +106,7 @@ export class EventSite extends FooterSite {
         typeTag.classList.add("tag");
         typeTag.appendChild(Translator.makePersistentTranslation(this._event.type));
         tagPanel.addEventListener("click", () => {
-            alert("to be implemented!");
+            this.startSite(SearchSite, {"types": this._event.type});
         });
         tagPanel.appendChild(typeTag);
 
@@ -115,7 +117,7 @@ export class EventSite extends FooterSite {
            churchTag.classList.add("tag");
            churchTag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
            churchTag.addEventListener("click", () => {
-               alert("to be implemented!");
+               this.startSite(SearchSite, {"churches": church.id+""});
            });
 
            tagPanel.appendChild(churchTag);

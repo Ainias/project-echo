@@ -2,6 +2,8 @@ import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {BaseDatabase} from "cordova-sites-database";
 
 export class Variable extends EasySyncBaseModel{
+    private value: null;
+    private name;
 
     constructor() {
         super();

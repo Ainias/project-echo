@@ -5,6 +5,17 @@ import {Region} from "./Region";
 import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
 
 export class Event extends AccessEasySyncModel {
+    private names: {};
+    private descriptions: {};
+    private startTime: Date;
+    private endTime: Date;
+    private type: string;
+    private images: any[];
+    private organisers: any;
+    private places: any[];
+    private regions: any;
+    static TYPES: any;
+
     constructor() {
         super();
         this.names = null;

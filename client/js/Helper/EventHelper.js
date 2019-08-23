@@ -1,7 +1,9 @@
 import {EasySyncClientDb} from "cordova-sites-easy-sync/src/client/EasySyncClientDb";
 import {Event} from "../../../model/Event";
-import {Helper} from "js-helper";
 import {Brackets} from "typeorm";
+import {NotificationScheduler} from "../NotificationScheduler";
+import {Favorite} from "../Model/Favorite";
+import {Translator, Helper} from "cordova-sites/dist/cordova-sites";
 
 export class EventHelper {
     static async search(searchString, beginTime, endTime, types, organisers, regions) {
@@ -42,10 +44,46 @@ export class EventHelper {
             }
         }
 
-
-
         let res = await queryBuilder.getMany();
-        console.log(res);
         return res;
+    }
+
+    static async toggleFavorite(event){
+
+        const TRIGGER_SECONDS_BEFORE = 60*30;
+
+        let notificationScheduler = NotificationScheduler.getInstance();
+
+        if (await Favorite.toggle(event.id)){
+            Translator.getInstance().addDynamicTranslations(event.getDynamicTranslations());
+
+            let timeToNotify = new Date();
+            timeToNotify.setTime(event.startTime.getTime() - TRIGGER_SECONDS_BEFORE*1000);
+
+            let timeFormat = "";
+            if (timeToNotify.getFullYear() !== event.startTime.getFullYear()){
+                timeFormat = Helper.strftime("%a., %d.%m.%y, %H:%M", event.startTime, undefined, true);
+            }
+            else if (timeToNotify.getMonth() !== event.startTime.getMonth()){
+                timeFormat = Helper.strftime("%a., %d.%m, %H:%M", event.startTime, undefined, true);
+            }
+            else if (timeToNotify.getDate() === event.startTime.getDate()){
+                timeFormat = Translator.translate("today")+Helper.strftime(", %H:%M", event.startTime);
+            }
+            else if (timeToNotify.getDate()+1 === event.startTime.getDate()){
+                timeFormat = Translator.getInstance().translate("tomorrow")+Helper.strftime(", %H:%M", event.startTime);
+            }
+            else {
+                timeFormat = Helper.strftime("%a., %d.%m, %H:%M", event.startTime, undefined, false);
+            }
+
+            notificationScheduler.schedule(event.id, Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
+            return true;
+        }
+        else {
+            console.log("deleting notification");
+            notificationScheduler.cancelNotification(event.id);
+            return false;
+        }
     }
 }

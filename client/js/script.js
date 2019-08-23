@@ -23,7 +23,13 @@ import {CalendarSite} from "./Sites/CalendarSite";
 import bibelverse from "./bibelverse.json";
 import {ModifyChurchSite} from "./Sites/ModifyChurchSite";
 
-BaseModel._databaseClass = EasySyncClientDb;
+//translation import
+import "cordova-sites-user-management/src/client/js/translationInit"
+import "cordova-sites/src/client/js/translationInit"
+
+window["JSObject"] = Object;
+
+// BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 
 LoginSite.ADD_LOGIN_ACTION = false;
@@ -82,6 +88,16 @@ App.addInitialization(async (app) => {
 
     //Todo an richtige stelle auslagern
     await new SyncJob().sync([Church, Event, Region]).catch(e => console.error(e));
+
+    try {
+        //Updates height for "mobile browser address bar hiding"-bug
+        let updateWindowHeight = () => {
+            document.body.style.height = window.innerHeight + "px";
+            setTimeout(updateWindowHeight, 350);
+        };
+        updateWindowHeight();
+    } catch (e) {
+    }
 });
 
 DataManager._basePath = __HOST_ADDRESS__;

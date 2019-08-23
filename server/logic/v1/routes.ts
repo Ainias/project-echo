@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import {userRoutes, syncRoutes} from "cordova-sites-user-management/server";
 
 const routerV1 = express.Router();

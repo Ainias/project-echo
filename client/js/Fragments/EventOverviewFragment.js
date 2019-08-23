@@ -3,6 +3,7 @@ import view from "../../html/Fragments/eventOverviewFragment.html"
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {EventSite} from "../Sites/EventSite";
 import {Favorite} from "../Model/Favorite";
+import {EventHelper} from "../Helper/EventHelper";
 
 export class EventOverviewFragment extends AbstractFragment {
 
@@ -126,7 +127,7 @@ export class EventOverviewFragment extends AbstractFragment {
                         e.preventDefault();
 
                         //TODO changing
-                        let isFavourite = await Favorite.toggle(event.id);
+                        let isFavourite = await EventHelper.toggleFavorite(event);
                         if (isFavourite) {
                             favElem.classList.add("is-favorite");
                         } else {

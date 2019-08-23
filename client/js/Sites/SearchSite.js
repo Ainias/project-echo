@@ -3,7 +3,7 @@ import view from "../../html/Sites/searchSite.html";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {App, Helper as SitesHelper, Translator, ViewInflater} from "cordova-sites";
 import {EventHelper} from "../Helper/EventHelper";
-import {Helper} from "js-helper";
+import {Helper} from "js-helper/dist/shared";
 import {Church} from "../../../model/Church";
 import {Event} from "../../../model/Event";
 
@@ -17,8 +17,6 @@ export class SearchSite extends FooterSite {
 
     async onConstruct(constructParameters) {
         let res = super.onConstruct(constructParameters);
-
-        console.log("c", constructParameters);
 
         this._searchString = "";
         if (Helper.isSet(constructParameters, "q")) {

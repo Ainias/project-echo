@@ -1,0 +1,23 @@
+{
+  "version": "2.0.2",
+  "compilerOptions": {
+    "lib": ["es5", "es2015.promise", "dom", "es2015", "es6"],
+    "target": "es6",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "allowJs": true
+  },
+  "include": [
+    "./node_modules/cordova-sites/**/*",
+    "./node_modules/cordova-sites-database/**/*",
+    "./node_modules/cordova-sites-easy-sync/**/*",
+    "./node_modules/cordova-sites-user-management/**/*",
+    "./node_modules/js-helper/**/*",
+    "./model/**/*",
+    "./src/**/*"
+  ],
+  "exclude": []
+}

@@ -11,6 +11,7 @@ import {Favorite} from "../Model/Favorite";
 import {DragHelper} from "../Helper/DragHelper";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {DateHelper} from "../Helper/DateHelper";
+import {EventHelper} from "../Helper/EventHelper";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -254,7 +255,7 @@ export class CalendarSite extends FooterSite {
                 if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
                     e.stopPropagation();
 
-                    let isFavourite = await Favorite.toggle(event.id);
+                    let isFavourite = await EventHelper.toggleFavorite(event);
                     if (isFavourite) {
                         favElem.classList.add("is-favorite");
                         this._favourites[event.id] = true;

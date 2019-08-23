@@ -4,6 +4,11 @@ import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBase
 import {Region} from "./Region";
 
 export class Church extends AccessEasySyncModel {
+    private names: any[];
+    private descriptions: any[];
+    private places: any[];
+    private images: any[];
+    private website: string;
 
     constructor() {
         super();

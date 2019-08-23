@@ -31,7 +31,6 @@ function getIp() {
 }
 
 let moduleExports = {
-
         node: {
             fs: 'empty',
             net: 'empty',
@@ -73,6 +72,9 @@ let moduleExports = {
             path: path.resolve(__dirname, 'www'),
             filename: 'bundle.js'
         },
+        resolve: {
+            extensions: [".ts", ".js", ".mjs", ".json"]
+        },
 
         plugins: [
             //Delete www before every Build (to only have nessesary files)
@@ -99,8 +101,8 @@ let moduleExports = {
             }),
 
             new webpack.DefinePlugin({
-                __HOST_ADDRESS__: "'" + (process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000") + "/api/v1/'",
-                __MAPS_API_KEY__: "'"+process.env.GOOGLE_MAPS_API_KEY+"'",
+                __HOST_ADDRESS__: "'" + (process.env.HOST_URI || ((process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000") + "/api/v1/")) + "'",
+                __MAPS_API_KEY__: "'" + process.env.GOOGLE_MAPS_API_KEY + "'",
             })
         ],
 
@@ -133,6 +135,10 @@ let moduleExports = {
                             }
                         }
                     ],
+                },
+                {
+                    test: /\.tsx?$/,
+                    use: "ts-loader",
                 },
                 {
                     //Kopiert nur benutzte Bilder (benutzt durch JS (import), html oder css/sass)
@@ -200,9 +206,7 @@ if (mode === "production") {
         //PostCSS ist nicht wichtig, autoprefixer schon. Fügt Präfixes hinzu (Bsp.: -webkit), wo diese benötigt werden
         loader: 'postcss-loader',
         options: {
-            plugins: [require('autoprefixer')({
-                browsers: ['last 2 versions', 'ie >= 9', 'android >= 4.4', 'ios >= 7']
-            })]
+            plugins: [require('autoprefixer')()]
         }
     });
 }

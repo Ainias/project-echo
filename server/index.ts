@@ -1,9 +1,9 @@
 import "dotenv/config";
 import {EasySyncServerDb} from "cordova-sites-easy-sync/server";
 
-import path from "path";
+import * as path from "path";
 
-import express from 'express';
+import * as express from 'express';
 import {routes} from './routes';
 import {UserManager} from "cordova-sites-user-management/server";
 
@@ -11,17 +11,16 @@ import {UserManager} from "cordova-sites-user-management/server";
 import "../model/Region";
 import "../model/Church";
 import "../model/Event";
-import {BaseModel} from "cordova-sites-database";
 import {setupDB} from "./setupDB";
 import {ServerTranslator} from "cordova-sites/server";
 import {Translator} from "cordova-sites/shared";
-import translationGerman from "../client/translations/de";
-import translationEnglish from "../client/translations/en";
+const translationGerman = require("../client/translations/de");
+const  translationEnglish = require ("../client/translations/en");
 
 const port = process.env.PORT || 3000;
 process.env.JWT_SECRET = process.env.JWT_SECRET || "bjlsdgjw4tuiopmk24fl450wcui3fz,ogf";
 
-BaseModel._databaseClass = EasySyncServerDb;
+// BaseModel._databaseClass = EasySyncServerDb;
 EasySyncServerDb.CONNECTION_PARAMETERS = {
     "type": "mysql",
     "host": process.env.MYSQL_HOST || "localhost",
