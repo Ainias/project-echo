@@ -12,27 +12,36 @@ let mysqlConn = mysql.createConnection({
     "multipleStatements": true
 });
 
-let process = null;
+let child = null;
 
 async function setup() {
     await generateDb();
     await startTestServer();
+    console.log("setupDone");
 }
 
 async function tearDown() {
-    if (process) {
-        process.kill(0);
+    if (child) {
+        child.kill(0);
     }
 }
 
 async function startTestServer() {
-    process = childProcess.fork("./server/index.mjs", ["silas_test_echo"], {
-        execArgv: ["--experimental-modules"],
-        env: {
-            MYSQL_PASSWORD: pw,
-            MYSQL_DATABASE: db
-        }
-    });
+    return new Promise((resolve, reject) => {
+        child = childProcess.exec("npm run server", {
+            env: Object.assign({}, process.env,{
+                MYSQL_PASSWORD: pw,
+                MYSQL_DATABASE: db
+            }),
+            stdio: "pipe"
+        }, reject);
+        child.stdout.on("data", data => {
+            console.log("[SERVER]", data);
+            if (data.indexOf("Server started on Port: 3000") !== -1){
+                resolve();
+            }
+        });
+    })
 }
 
 async function generateDb() {

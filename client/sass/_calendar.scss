@@ -1,3 +1,9 @@
+#calendar.testing {
+  .day, #month-name {
+    user-select: initial;
+  }
+}
+
 #calendar {
   position: relative;
   background: $navBackgroundWhite;
@@ -20,6 +26,7 @@
 
   #button-left, #button-right, .day {
     cursor: pointer;
+    user-select: none;
   }
 
   #month-navigation {
@@ -50,11 +57,13 @@
     color: #9d9e9c;
     text-align: center;
     margin-bottom: 1.3rem;
+    user-select: none;
   }
 
   .day, #month-name {
     color: $navColorWhite;
     text-align: center;
+    user-select: none;
   }
 
   .day {

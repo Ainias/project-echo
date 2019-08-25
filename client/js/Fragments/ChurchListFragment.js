@@ -18,7 +18,7 @@ export class ChurchListFragment extends AlphabeticListFragment {
         return super.onViewLoaded();
     }
 
-    /**
+    /**4
      *
      * @param {Church} church
      */

@@ -2,7 +2,7 @@ const find = require("../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
 
-describe("edit church", () => {
+xdescribe("edit church", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;

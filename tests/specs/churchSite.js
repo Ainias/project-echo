@@ -31,8 +31,7 @@ describe("church site", () => {
 
     it("church site", async function () {
         expect(await $("#name").getText()).toEqual("KÖLN CITY CHURCH");
-        expect(await $("#description").getText()).toEqual("Lorem ipsum sit doloret.\n" +
-            "Hier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.")
+        expect(await $("#description").getText()).toEqual("Lorem ipsum sit doloret. Hier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.")
 
         let linkElem = $("#website");
         expect(await linkElem.getText()).toEqual("www.citychurch.koeln");

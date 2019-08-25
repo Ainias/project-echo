@@ -2,7 +2,7 @@ const find = require("../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
 
-describe("church site", () => {
+describe("event site", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;
@@ -31,8 +31,8 @@ describe("church site", () => {
         });
 
         expect(await $("#event-name").getText()).toEqual("TERMIN 4");
-        expect(await $("#event-time").getText()).toEqual("29. Apr ´19 10.00 -\n" +
-            "06. Mai ´19 12.00");
+        expect(await $("#event-time").getText()).toEqual("29. Apr ´19, 15:00 -\n" +
+            "02. Mai ´19, 10:00");
 
         expect(await $("#places-container").getText()).toEqual("place 1");
         expect(await $("#places-container").getText()).toEqual("place 1");

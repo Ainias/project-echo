@@ -6,7 +6,6 @@ class PromiseElement {
         this._internalPromise = promiseResolvingToElement;
     }
 
-
     $(selector){
         return new PromiseElement(this.getPromise().then(elem => elem.$(selector)));
     }
@@ -22,6 +21,10 @@ class PromiseElement {
     async isDisplayed(){
         let elem = await this.getPromise();
         return elem.isDisplayed();
+    }
+
+    async isExisting(){
+        return (await this.getPromise()).isExisting();
     }
 
     async isDisplayedInViewport(){

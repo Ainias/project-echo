@@ -91,7 +91,7 @@ LOCK TABLES `church` WRITE;
 INSERT INTO `church`
 VALUES (1, '2020-04-09 19:41:00', '2020-04-09 19:41:00', 1, 0, 'www.citychurch.koeln',
         '{\"de\":\"Köln City Church\", \"en\":\"Colone City Church\"}',
-        '{\"de\":\"Lorem ipsum sit doloret. \\nHier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
+        '{\"de\":\"Lorem ipsum sit doloret. Hier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
         '[\"Köln City Church Headquarter\\nWaltherstraße 51\\nLESKAN Park, Halle 10\\n51069 Köln, Dellbrück\", \"Köln City Church \\n Campus Innenstadt (Cinedom)\\n Im Mediapark 1\\n50670 Köln\",\"Köln City Church \\nSenats Hotel \\nUnter Goldschmied 9-17 \\n50667 Köln \\nEingang über Laurenzplatz\"]',
         '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]'),
        (2, '2020-04-09 19:41:00', '2020-04-09 19:41:00', 1, 0, 'city-church.koeln',
@@ -135,17 +135,17 @@ VALUES (1, '2020-04-09 19:41:00', '2020-04-09 19:41:00', 1, 0, 'www.citychurch.k
         '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]'),
        (10, '2020-04-09 19:41:00', '2020-04-09 19:41:00', 1, 0, 'www.citychurch.koeln',
         '{\"de\":\"AKöln City Church\", \"en\":\"AColone City Church\"}',
-        '{\"de\":\"Lorem ipsum sit doloret. \\nHier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
+        '{\"de\":\"Lorem ipsum sit doloret. Hier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
         '[\"Köln City Church Headquarter\\nWaltherstraße 51\\nLESKAN Park, Halle 10\\n51069 Köln, Dellbrück\", \"Köln City Church \\n Campus Innenstadt (Cinedom)\\n Im Mediapark 1\\n50670 Köln\",\"Köln City Church \\nSenats Hotel \\nUnter Goldschmied 9-17 \\n50667 Köln \\nEingang über Laurenzplatz\"]',
         '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]'),
        (11, '2020-04-09 19:41:00', '2020-04-09 19:41:00', 1, 0, 'www.citychurch.koeln',
         '{\"de\":\"BKöln City Church\", \"en\":\"CBolone City Church\"}',
-        '{\"de\":\"Lorem ipsum sit doloret. \\nHier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
+        '{\"de\":\"Lorem ipsum sit doloret. Hier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
         '[\"Köln City Church Headquarter\\nWaltherstraße 51\\nLESKAN Park, Halle 10\\n51069 Köln, Dellbrück\", \"Köln City Church \\n Campus Innenstadt (Cinedom)\\n Im Mediapark 1\\n50670 Köln\",\"Köln City Church \\nSenats Hotel \\nUnter Goldschmied 9-17 \\n50667 Köln \\nEingang über Laurenzplatz\"]',
         '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]'),
        (12, '2020-04-09 19:41:00', '2020-04-09 19:41:00', 1, 0, 'www.citychurch.koeln',
         '{\"de\":\"CKöln City Church\", \"en\":\"CAolone City Church\"}',
-        '{\"de\":\"Lorem ipsum sit doloret. \\nHier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
+        '{\"de\":\"Lorem ipsum sit doloret. Hier werden dann ganz viele interessante Informationen über die Köln City Church stehen. Außerdem wird der Gottesdienst- Rhythmus in den wechselnden Locations erklärt.\", \"en\":\"Colone City Church description\"}',
         '[\"CKöln City Church Headquarter\\nWaltherstraße 51\\nLESKAN Park, Halle 10\\n51069 Köln, Dellbrück\", \"Köln City Church \\n Campus Innenstadt (Cinedom)\\n Im Mediapark 1\\n50670 Köln\",\"Köln City Church \\nSenats Hotel \\nUnter Goldschmied 9-17 \\n50667 Köln \\nEingang über Laurenzplatz\"]',
         '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]');
 /*!40000 ALTER TABLE `church`
@@ -187,7 +187,9 @@ VALUES (2, 1),
        (7, 1),
        (8, 1),
        (9, 1),
-       (10, 1);
+       (10, 1),
+       (11, 1),
+       (12, 2);
 /*!40000 ALTER TABLE `churchEvent`
     ENABLE KEYS */;
 UNLOCK TABLES;
@@ -312,7 +314,17 @@ VALUES (2, '2019-04-05 00:00:00', '2020-05-05 00:00:00', 1, 0, '2019-03-25 12:45
         '{\"de\":\"Termin 5.4\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
         '[\"place 1\"]', '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]',
-        'gottesdienst');
+        'gottesdienst'),
+       (11, '2019-04-05 00:00:00', '2020-05-05 00:00:00', 1, 0, '2019-06-29 10:00:00', '2019-06-29 12:00:00',
+        '{\"de\":\"Termin later\"}',
+        '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
+        '[\"place 1\"]', '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]',
+        'konzert'),
+       (12, '2019-04-05 00:00:00', '2020-05-05 00:00:00', 1, 0, '2019-06-29 10:00:00', '2019-06-29 12:00:00',
+        '{\"de\":\"Termin later 2\"}',
+        '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
+        '[\"place 1\"]', '[\"https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg\"]',
+        'hauskreis');
 /*!40000 ALTER TABLE `event`
     ENABLE KEYS */;
 UNLOCK TABLES;
@@ -352,7 +364,9 @@ VALUES (1, 2),
        (1, 7),
        (1, 8),
        (1, 9),
-       (1, 10);
+       (1, 10),
+       (1, 11),
+       (1, 12);
 /*!40000 ALTER TABLE `eventRegion`
     ENABLE KEYS */;
 UNLOCK TABLES;
