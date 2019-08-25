@@ -37,7 +37,7 @@ async function startTestServer() {
         }, reject);
         child.stdout.on("data", data => {
             console.log("[SERVER]", data);
-            if (data.indexOf("Server started on Port: 3000") !== -1){
+            if (data.indexOf("Server started on Port: ") !== -1){
                 resolve();
             }
         });

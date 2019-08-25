@@ -14,4 +14,4 @@ cp tools/signing/release-signing.properties platforms/android/
 npm run "cordova release android"
 mv platforms/android/app/build/outputs/apk/release/app-release.apk server/public/echo.apk
 
-git add server/public/*
+git add server/public/ -v

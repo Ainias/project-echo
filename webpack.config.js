@@ -202,7 +202,7 @@ if (mode === "production") {
     });
 
     //Hinzufügen von POSTCSS und Autoprefixer für alte css-Präfixe
-    moduleExports["module"]["rules"][2]["use"].splice(3, 0, {
+    moduleExports["module"]["rules"][3]["use"].splice(3, 0, {
         //PostCSS ist nicht wichtig, autoprefixer schon. Fügt Präfixes hinzu (Bsp.: -webkit), wo diese benötigt werden
         loader: 'postcss-loader',
         options: {

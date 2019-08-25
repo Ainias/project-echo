@@ -1,0 +1,28 @@
+<article id="calendar" class="width-100 height-100 full-width flex-container flex-dir-column">
+    <div id = "scale-container" style="max-width: 100%">
+    <section class="" id="month-navigation">
+        <span id="button-left" class=""><img data-view="img/arrowLeft.svg" alt="prev"></span><span
+            id="month-name" class=""></span><span id="button-right" class=""><img
+            data-view="img/arrowRight.svg" alt="next"></span>
+    </section>
+    <section>
+        <div class="grid-x small-up-7">
+            <span class="cell translation day-header">mon</span>
+            <span class="cell translation day-header">tue</span>
+            <span class="cell translation day-header">wed</span>
+            <span class="cell translation day-header">thu</span>
+            <span class="cell translation day-header">fri</span>
+            <span class="cell translation day-header">sat</span>
+            <span class="cell translation day-header">sun</span>
+        </div>
+        <div id="day-container" class="grid-x small-up-7">
+            <span class="day cell" id="day-template">
+                <span class="day-number-container"><span class="day-number"></span></span>
+            </span>
+        </div>
+    </section>
+    </div>
+    <section id="event-overview-container" class="grow event-overview-container">
+        <span data-view="html/event-overview.html"></span>
+    </section>
+</article>
