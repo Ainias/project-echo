@@ -12,6 +12,7 @@ import {DragHelper} from "../Helper/DragHelper";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {DateHelper} from "../Helper/DateHelper";
 import {EventHelper} from "../Helper/EventHelper";
+import {ViewHelper} from "js-helper/src/client/ViewHelper";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -153,11 +154,11 @@ export class CalendarSite extends FooterSite {
             }
         });
 
-        Helper.removeAllChildren(this._monthName);
+        ViewHelper.removeAllChildren(this._monthName);
         this._monthName.appendChild(Translator.makePersistentTranslation(MONTH_NAMES[date.getMonth()]));
         this._monthName.appendChild(document.createTextNode(" " + date.getFullYear()));
 
-        Helper.removeAllChildren(this._dayContainer);
+        ViewHelper.removeAllChildren(this._dayContainer);
         for (let i = 0; i < offset; i++) {
             let day = this._dayTemplate.cloneNode(true);
             day.classList.add("oldMonth");
@@ -219,7 +220,7 @@ export class CalendarSite extends FooterSite {
     }
 
     showEventOverviews(events) {
-        Helper.removeAllChildren(this._eventOverviewContainer);
+        ViewHelper.removeAllChildren(this._eventOverviewContainer);
         events.forEach(event => {
             let translator =
                 Translator.getInstance();

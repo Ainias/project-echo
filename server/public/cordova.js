@@ -586,7 +586,7 @@ var nextGuid = 1;
  * This object is used to define and control firing of events for
  * cordova initialization, as well as for custom events thereafter.
  *
- * The order of events during page load and Cordova startup is as follows:
+ * The priority of events during page load and Cordova startup is as follows:
  *
  * onDOMContentLoaded*         Internal event that is received when the web page is loaded and parsed.
  * onNativeReady*              Internal event that indicates the Cordova native side is ready.

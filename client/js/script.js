@@ -13,19 +13,21 @@ import {Church} from "../../model/Church";
 import {Region} from "../../model/Region";
 import "./Model/Favorite"
 
-import {BaseDatabase, BaseModel} from "cordova-sites-database";
+import {BaseDatabase} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
 import {AddEventSite} from "./Sites/AddEventSite";
 import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/client";
 import {CalendarSite} from "./Sites/CalendarSite";
+import {ModifyChurchSite} from "./Sites/ModifyChurchSite";
+import {ImpressumSite} from "./Sites/ImpressumSite";
 
 import bibelverse from "./bibelverse.json";
-import {ModifyChurchSite} from "./Sites/ModifyChurchSite";
 
 //translation import
 import "cordova-sites-user-management/src/client/js/translationInit"
 import "cordova-sites/src/client/js/translationInit"
+import {ModifyPostSite} from "./Sites/ModifyPostSite";
 
 window["JSObject"] = Object;
 
@@ -70,8 +72,8 @@ App.addInitialization(async (app) => {
         }
     }, MenuAction.SHOW_FOR_LARGE));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", WelcomeSite, MenuAction.SHOW_NEVER));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", WelcomeSite, MenuAction.SHOW_NEVER));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", WelcomeSite, MenuAction.SHOW_NEVER));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
 
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add event", "admin", () => {
@@ -82,6 +84,9 @@ App.addInitialization(async (app) => {
         app.startSite(ModifyChurchSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
+    NavbarFragment.defaultActions.push(new UserMenuAction("add post", "admin", () => {
+        app.startSite(ModifyPostSite);
+    }, MenuAction.SHOW_FOR_MEDIUM));
 
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
     await UserManager.getInstance().getMe();

@@ -6,6 +6,7 @@ import {EventHelper} from "../Helper/EventHelper";
 import {Helper} from "js-helper/dist/shared";
 import {Church} from "../../../model/Church";
 import {Event} from "../../../model/Event";
+import {ViewHelper} from "js-helper/src/client/ViewHelper";
 
 export class SearchSite extends FooterSite {
     constructor(siteManager) {
@@ -114,8 +115,8 @@ export class SearchSite extends FooterSite {
     }
 
     _filterTags(value) {
-        Helper.removeAllChildren(this._filterEventContainer);
-        Helper.removeAllChildren(this._filterOrganiserContainer);
+        ViewHelper.removeAllChildren(this._filterEventContainer);
+        ViewHelper.removeAllChildren(this._filterOrganiserContainer);
 
         Object.values(Event.TYPES).forEach(type => {
             let translation = Translator.translate(type).toLowerCase();

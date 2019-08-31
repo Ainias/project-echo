@@ -11,6 +11,8 @@ import {UserManager} from "cordova-sites-user-management/server";
 import "../model/Region";
 import "../model/Church";
 import "../model/Event";
+import "../model/Post";
+
 import {setupDB} from "./setupDB";
 import {ServerTranslator} from "cordova-sites/server";
 import {Translator} from "cordova-sites/shared";

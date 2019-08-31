@@ -4,6 +4,7 @@ import {PlaceHelper} from "../Helper/PlaceHelper";
 import {EventSite} from "../Sites/EventSite";
 import {Favorite} from "../Model/Favorite";
 import {EventHelper} from "../Helper/EventHelper";
+import {ViewHelper} from "js-helper/src/client/ViewHelper";
 
 export class EventOverviewFragment extends AbstractFragment {
 
@@ -85,8 +86,8 @@ export class EventOverviewFragment extends AbstractFragment {
 
         let today = Helper.strftime("%Y.%m.%d");
 
-        Helper.removeAllChildren(this._eventContainer);
-        Helper.removeAllChildren(this._eventContainerPast);
+        ViewHelper.removeAllChildren(this._eventContainer);
+        ViewHelper.removeAllChildren(this._eventContainerPast);
 
         let translator = Translator.getInstance();
         Object.keys(sortedFavorites).forEach(day => {

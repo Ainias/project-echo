@@ -1,0 +1,25 @@
+
+#post-container {
+  .post {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+
+    .day-line {
+      border-bottom: 1px solid #bcbbbb;
+      line-height: 0.1em;
+      margin: 10px 0 0;
+      display: block;
+      font-size: 0.8em;
+
+      .date {
+        background: white;
+        padding-right: 10px;
+        color: $highlightColor
+      }
+    }
+    .text{
+      padding-top: 0.5rem;
+      display: inline-block;
+    }
+  }
+}
