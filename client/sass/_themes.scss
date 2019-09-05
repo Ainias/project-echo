@@ -53,9 +53,9 @@
   }
   .switch {
     input {
-      &:checked + .slider {
-        background-color: map-get($theme, themeColor);
-      }
+      //&:checked + .slider {
+      //  background-color: map-get($theme, themeColor);
+      //}
       &:focus + .slider {
         box-shadow: 0 0 1px map-get($theme, themeColor);
       }

@@ -99,5 +99,6 @@ Event.TYPES = {
     KONFERENZ: "konferenz",
     GEBETSKREIS: "gebetskreis",
     SPORT: "sport",
-    JUGENDKREIS: "jugendkreis"
+    JUGENDKREIS: "jugendkreis",
+    SONSTIGES:"sonstiges"
 };

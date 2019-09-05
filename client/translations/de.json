@@ -1,6 +1,6 @@
 {
   "events": "Veranstaltungen",
-  "churches": "Kirchen",
+  "churches": "Veranstalter",
   "about us": "Über uns",
   "language": "Sprache DE/EN",
   "contact": "Kontakt",
@@ -43,6 +43,7 @@
   "gebetskreis": "Gebetskreis",
   "sport": "Sport",
   "jugendkreis": "Jugendkreis",
+  "sonstiges": "Sonstiges",
 
   "email-header-usermanager-password-forgotten": "ECHO - Passwort vergessen",
   "email-usermanager-password-forgotten": "Hallo {0},\n\nUm dein Passwort zu ändern, besuche folgenden Link: {1}",
@@ -61,9 +62,18 @@
   "confirm-button": "OK",
 
   "add church": "Neue Kirche",
+  "add post": "Neuer Post",
 
   "website url": "Website",
 
   "today": "Heute",
-  "tomorrow": "Morgen"
+  "tomorrow": "Morgen",
+  "settings": "Einstellungen",
+  "settings-dialog-heading": "Einstellungen",
+  "send notifications for favorites": "Benachrichtigungen für Favoriten?",
+  "time before start prefix": "",
+  "time before start suffix": " vorher benachrichtigen",
+  "min": "Min.",
+  "hour": "Std.",
+  "days": "Tag(e)"
 }

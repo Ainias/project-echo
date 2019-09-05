@@ -68,6 +68,13 @@ export class AddEventSite extends MenuFooterSite {
             }
         });
 
+        let typeSelect = this.findBy("[name=type]");
+        Object.values(Event.TYPES).forEach(type => {
+            let optionElem = Translator.makePersistentTranslation(type, undefined, "option");
+            optionElem.value = type;
+            typeSelect.appendChild(optionElem);
+        });
+
         this._form = new Form(this.findBy("#add-event-form"), async values => {
             let names = {};
             let descriptions = {};

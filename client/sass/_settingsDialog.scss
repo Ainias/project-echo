@@ -1,0 +1,88 @@
+.setting-row:not(.hidden){
+  line-height: 1;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  width: 100%;
+  cursor: pointer;
+  background: rgba(195, 195, 195, 0.13);
+  font-weight: initial;
+  input[type=checkbox]
+  {
+    margin: 0;
+  }
+}
+
+
+#time-before-setting-row{
+  select{
+    width: 5rem;
+    padding-right: 0.5rem;
+    margin: 0;
+  }
+  input {
+    width: 3rem;
+    display: inline-block;
+    margin: 0;
+  }
+  span{
+    position: relative;
+    color: initial;
+  }
+}
+
+
+.switch {
+  position: relative;
+  //display: inline-block;
+
+  @include breakpoint(small down){
+    //font-size: 0.6em;
+  }
+  @include breakpoint(smedium down){
+    //font-size: 0.7em;
+  }
+
+  input {
+    display: none;
+    &:checked + .slider{
+      background-color: #000000;
+      &:before{
+        transform: translateX(1.5em);
+      }
+    }
+    &:focus + .slider{
+      //box-shadow: 0 0 1px #2196F3;
+    }
+  }
+  .slider {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    width: 3em;
+    height: 1.5em;
+    border-radius: 1.5em;
+    background-color: #ccc;
+    transition: .4s;
+    margin: 0;
+    float: right;
+    &:before{
+      position: absolute;
+      content: "";
+      height: 1.1em;
+      width: 1.1em;
+      left: 0.15em;
+      bottom: 0.15em;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+  }
+  img, svg{
+    width: 1.4em;
+    display: inline;
+    vertical-align: initial;
+    path{
+      stroke-color: inherit;
+    }
+  }
+}

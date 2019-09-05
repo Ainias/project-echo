@@ -2,14 +2,14 @@ import {App, Helper} from "cordova-sites";
 
 export class DragHelper {
     static init() {
-        window.addEventListener("mouseup", () => {
-            this._endDrag();
+        window.addEventListener("mouseup", (e) => {
+            this._endDrag(e);
         });
         window.addEventListener("mousemove", e => {
            this._dragMove(e.clientY)
         });
-        window.addEventListener("touchend", () => {
-            this._endDrag();
+        window.addEventListener("touchend", (e) => {
+            this._endDrag(e);
         });
         window.addEventListener("touchmove", e => {
             this._dragMove(e.targetTouches[0].clientY)
@@ -22,11 +22,11 @@ export class DragHelper {
         threshold = Helper.nonNull(threshold, 15);
 
         elem.addEventListener("mousedown", e => {
-            this._beginDrag(elem, e.clientY);
+            this._beginDrag(elem, e.clientY, e);
         });
         elem.addEventListener("touchstart", e => {
             if (e.targetTouches.length === 1){
-                this._beginDrag(elem, e.targetTouches[0].clientY);
+                this._beginDrag(elem, e.targetTouches[0].clientY, e);
             }
         });
 
@@ -37,13 +37,14 @@ export class DragHelper {
         this._draggendListeners[elem] = listener;
     }
 
-    static _beginDrag(elem, y){
+    static _beginDrag(elem, y, e){
         if (elem.classList.contains("draggable")) {
             DragHelper.mouseDownData = {
                 element: elem,
                 y: y,
                 topStart: parseFloat(window.getComputedStyle(elem).getPropertyValue("top").replace("px", "")),
                 thresholdOverridden: false,
+                event: e
             };
         }
     }
@@ -66,6 +67,7 @@ export class DragHelper {
             //Set new top only if threshold is overridden
             if (topStart !== maxTop || DragHelper.mouseDownData.thresholdOverridden || yDiff > elem.dataset["dragThreshold"]) {
                 elem.classList.add("is-dragging");
+                DragHelper.mouseDownData.event.stopPropagation();
                 if (topStart - yDiff < maxTop) {
                     elem.style.top = Math.max(topStart - yDiff, 0) + "px";
                 } else {
@@ -76,9 +78,10 @@ export class DragHelper {
         }
     }
 
-    static _endDrag(){
+    static _endDrag(e){
         if (DragHelper.mouseDownData !== null) {
             if (DragHelper.mouseDownData.thresholdOverridden) {
+                e.stopPropagation();
                 let elem = DragHelper.mouseDownData.element;
                 requestAnimationFrame(() => {
                     elem.classList.remove("is-dragging");

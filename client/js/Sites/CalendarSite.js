@@ -13,6 +13,7 @@ import {PlaceHelper} from "../Helper/PlaceHelper";
 import {DateHelper} from "../Helper/DateHelper";
 import {EventHelper} from "../Helper/EventHelper";
 import {ViewHelper} from "js-helper/src/client/ViewHelper";
+import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -26,6 +27,9 @@ export class CalendarSite extends FooterSite {
         this._date = new Date();
         this._footerFragment.setSelected(".icon.calendar");
         this._favourites = {};
+
+        this._eventListFragment = new EventOverviewFragment(this);
+        this.addFragment("#event-overview", this._eventListFragment);
     }
 
     async onConstruct(constructParameters) {
@@ -49,19 +53,19 @@ export class CalendarSite extends FooterSite {
         this._dayTemplate.remove();
 
         this._eventOverviewContainer = this.findBy("#event-overview-container");
-        this._eventOverviewTemplate = this.findBy("#event-overview-template");
-        this._eventOverviewTemplate.removeAttribute("id");
-        this._eventOverviewTemplate.remove();
+        // this._eventOverviewContainer = this.findBy("#event-overview");
+        this._eventOverview = this.findBy("#event-overview");
+        // this._eventOverviewTemplate = this.findBy("#event-overview-template");
+        // this._eventOverviewTemplate.removeAttribute("id");
+        // this._eventOverviewTemplate.remove();
 
         this._monthName = this.findBy("#month-name");
         this.findBy("#button-left").addEventListener("click", () => {
             DateHelper.setMonth(this._date.getMonth()-1, this._date);
-            // this._date.setMonth(this._date.getMonth() - 1);
             this.drawMonth(this._date);
         });
         this.findBy("#button-right").addEventListener("click", () => {
             DateHelper.setMonth(this._date.getMonth()+1, this._date);
-            // this._date.setMonth(this._date.getMonth() + 1);
             this.drawMonth(this._date);
         });
 
@@ -106,7 +110,6 @@ export class CalendarSite extends FooterSite {
         });
     }
 
-
     async onStart(pauseArguments) {
         await this.drawMonth(this._date);
         await super.onStart(pauseArguments);
@@ -131,8 +134,6 @@ export class CalendarSite extends FooterSite {
         let isCurrentMonth = (now.getFullYear() === date.getFullYear() && now.getMonth() === month);
 
         let offset = (date.getDay() + 6) % 7;
-        // date.setMonth(date.getMonth() + 1);
-        // date.setDate(0);
         let numberDays = DateHelper.getNumberDaysOfMonth(date);
 
         let eventDays = {};
@@ -219,64 +220,68 @@ export class CalendarSite extends FooterSite {
         this.setParameter("date", Helper.strftime("%Y-%m-%d", date))
     }
 
-    showEventOverviews(events) {
-        ViewHelper.removeAllChildren(this._eventOverviewContainer);
-        events.forEach(event => {
-            let translator =
-                Translator.getInstance();
-            translator.addDynamicTranslations(event.getDynamicTranslations());
-
-            let eventElement = this._eventOverviewTemplate.cloneNode(true);
-            eventElement.querySelector(".name").appendChild(translator.makePersistentTranslation(event.getNameTranslation()));
-            eventElement.querySelector(".time").innerText = Helper.strftime("%H:%M", event.startTime);
-
-            let places = event.places;
-            if (!Array.isArray(places)) {
-                places = Object.keys(places);
-            }
-
-            if (places.length > 0) {
-                ((places.length === 1) ?
-                    PlaceHelper.createPlace(places[0]) : PlaceHelper.createMultipleLocationsView()).then(view => eventElement.querySelector(".place-container").appendChild(view));
-            }
-
-            eventElement.addEventListener("click", () => {
-                if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
-                    this.startSite(EventSite, {"id": event.id});
-                }
-            });
-
-            let favElem = eventElement.querySelector(".favorite");
-
-            if (this._favourites[event.id]) {
-                favElem.classList.add("is-favorite");
-            }
-
-            favElem.addEventListener("click", async (e) => {
-                if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
-                    e.stopPropagation();
-
-                    let isFavourite = await EventHelper.toggleFavorite(event);
-                    if (isFavourite) {
-                        favElem.classList.add("is-favorite");
-                        this._favourites[event.id] = true;
-                    } else {
-                        favElem.classList.remove("is-favorite");
-                        this._favourites[event.id] = false;
-                    }
-                }
-            });
-
-            this._eventOverviewContainer.appendChild(eventElement);
-        });
-
-        if (events.length === 0) {
-            let elem = document.createElement("div");
-            elem.classList.add("no-events");
-            elem.appendChild(Translator.makePersistentTranslation("no events"));
-            this._eventOverviewContainer.appendChild(elem);
-        }
+    async showEventOverviews(events) {
+        await this._eventListFragment.setEvents(events);
     }
+
+    // showEventOverviews(events) {
+    //     ViewHelper.removeAllChildren(this._eventOverviewContainer);
+    //     events.forEach(event => {
+    //         let translator =
+    //             Translator.getInstance();
+    //         translator.addDynamicTranslations(event.getDynamicTranslations());
+    //
+    //         let eventElement = this._eventOverviewTemplate.cloneNode(true);
+    //         eventElement.querySelector(".name").appendChild(translator.makePersistentTranslation(event.getNameTranslation()));
+    //         eventElement.querySelector(".time").innerText = Helper.strftime("%H:%M", event.startTime);
+    //
+    //         let places = event.places;
+    //         if (!Array.isArray(places)) {
+    //             places = Object.keys(places);
+    //         }
+    //
+    //         if (places.length > 0) {
+    //             ((places.length === 1) ?
+    //                 PlaceHelper.createPlace(places[0]) : PlaceHelper.createMultipleLocationsView()).then(view => eventElement.querySelector(".place-container").appendChild(view));
+    //         }
+    //
+    //         eventElement.addEventListener("click", () => {
+    //             if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
+    //                 this.startSite(EventSite, {"id": event.id});
+    //             }
+    //         });
+    //
+    //         let favElem = eventElement.querySelector(".favorite");
+    //
+    //         if (this._favourites[event.id]) {
+    //             favElem.classList.add("is-favorite");
+    //         }
+    //
+    //         favElem.addEventListener("click", async (e) => {
+    //             if (!this._eventOverviewContainer.classList.contains("is-dragging")) {
+    //                 e.stopPropagation();
+    //
+    //                 let isFavourite = await EventHelper.toggleFavorite(event);
+    //                 if (isFavourite) {
+    //                     favElem.classList.add("is-favorite");
+    //                     this._favourites[event.id] = true;
+    //                 } else {
+    //                     favElem.classList.remove("is-favorite");
+    //                     this._favourites[event.id] = false;
+    //                 }
+    //             }
+    //         });
+    //
+    //         this._eventOverviewContainer.appendChild(eventElement);
+    //     });
+    //
+    //     if (events.length === 0) {
+    //         let elem = document.createElement("div");
+    //         elem.classList.add("no-events");
+    //         elem.appendChild(Translator.makePersistentTranslation("no events"));
+    //         this._eventOverviewContainer.appendChild(elem);
+    //     }
+    // }
 }
 
 App.addInitialization((app) => {

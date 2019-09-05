@@ -115,6 +115,7 @@
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     //padding-top: 1rem;
+    padding-top: 0.5rem;
     padding-left: 1rem;
     padding-right: 1rem;
     overflow-y: hidden;
@@ -123,6 +124,14 @@
       overflow-y: auto;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
+    }
+
+    .day {
+      color: $highlightColor;
+      &::before {
+        display: initial;
+        content: initial;
+      }
     }
   }
 }

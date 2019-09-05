@@ -1,9 +1,7 @@
-// import "../../node_modules/sql.js/js/sql-optimized.js"
-// import "../../node_modules/localforage/dist/localforage.js"
-
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
 import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
+import {Helper} from "js-helper/dist/shared"
 import {EasySyncClientDb, SyncJob} from "cordova-sites-easy-sync/client";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
@@ -28,6 +26,8 @@ import bibelverse from "./bibelverse.json";
 import "cordova-sites-user-management/src/client/js/translationInit"
 import "cordova-sites/src/client/js/translationInit"
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
+import {SettingsDialog} from "./Dialoges/SettingsDialog";
+import {EventHelper} from "./Helper/EventHelper";
 
 window["JSObject"] = Object;
 
@@ -55,6 +55,7 @@ App.addInitialization(async (app) => {
         fallbackLanguage: "de",
         // markTranslations: true,
         markUntranslatedTranslations: true,
+        logMissingTranslations: true,
     });
 
     //Setting Title
@@ -71,10 +72,16 @@ App.addInitialization(async (app) => {
             await Translator.getInstance().setLanguage("en");
         }
     }, MenuAction.SHOW_FOR_LARGE));
+
+    if (Helper.isMobileApp()) {
+        NavbarFragment.defaultActions.push(new MenuAction("settings", () => {
+            new SettingsDialog().show();
+        }, MenuAction.SHOW_NEVER));
+    }
+
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", WelcomeSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
-
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add event", "admin", () => {
         app.startSite(AddEventSite);
@@ -92,7 +99,9 @@ App.addInitialization(async (app) => {
     await UserManager.getInstance().getMe();
 
     //Todo an richtige stelle auslagern
-    await new SyncJob().sync([Church, Event, Region]).catch(e => console.error(e));
+    let res = await new SyncJob().sync([Church, Event, Region]).catch(e => console.error(e));
+    EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
+    EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
 
     try {
         //Updates height for "mobile browser address bar hiding"-bug

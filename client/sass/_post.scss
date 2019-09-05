@@ -1,8 +1,12 @@
 
 #post-container {
   .post {
-    padding-top: 1rem;
-    padding-bottom: 0.5rem;
+    //padding-top: 1rem;
+    //padding-bottom: 0.5rem;
+
+    &:first-child {
+      padding-top: 0.5rem;
+    }
 
     .day-line {
       border-bottom: 1px solid #bcbbbb;
@@ -17,7 +21,8 @@
         color: $highlightColor
       }
     }
-    .text{
+
+    .text {
       padding-top: 0.5rem;
       display: inline-block;
     }
