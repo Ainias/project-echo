@@ -1,7 +1,8 @@
 exports.config = {
 
     // Where the files we are testing can be found.
-    specs: ['./tests/specs/**/*.js'],
+    // specs: ['./tests/specs/**/*.js'],
+    specs: ['./tests/specs/**/calendarSite.js'],
 
     runner: "local",
 
@@ -25,6 +26,7 @@ exports.config = {
 
     bail: 0,
 
+    baseUrl: "",
 
     waitforTimeout: 10000,
 

@@ -4,7 +4,7 @@ exports.config = {
 
     // Where the files we are testing can be found.
     specs: ['./tests/specs/**/*.js'],
-    // specs: ['./tests/specs/**/favoriteSite.js'],
+    // specs: ['./tests/specs/**/calendarSite.js'],
 
     runner: "local",
 
