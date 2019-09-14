@@ -11,6 +11,11 @@ export class EventOverviewFragment extends AbstractFragment {
     constructor(site) {
         super(site, view);
         this._events = [];
+        this._showInPast = true;
+    }
+
+    setShowInPast(showInPast){
+        this._showInPast = (showInPast === true);
     }
 
     async setEvents(events) {
@@ -89,6 +94,7 @@ export class EventOverviewFragment extends AbstractFragment {
         ViewHelper.removeAllChildren(this._eventContainer);
         ViewHelper.removeAllChildren(this._eventContainerPast);
 
+        let hasEventsInPast = false;
         let translator = Translator.getInstance();
         Object.keys(sortedFavorites).forEach(day => {
             let dayParts = day.split(",");
@@ -140,9 +146,9 @@ export class EventOverviewFragment extends AbstractFragment {
                 });
             });
 
-            if (dayParts[2] < today) {
+            if (this._showInPast && dayParts[2] < today) {
                 this._eventContainerPast.appendChild(dayContainer);
-                this._pastSection.classList.remove("hidden");
+                hasEventsInPast = true;
             } else {
                 this._eventContainer.appendChild(dayContainer);
             }
@@ -152,6 +158,12 @@ export class EventOverviewFragment extends AbstractFragment {
             elem.classList.add("no-events");
             elem.appendChild(Translator.makePersistentTranslation("no events"));
             this._eventContainer.appendChild(elem);
+        }
+        if (hasEventsInPast) {
+            this._pastSection.classList.remove("hidden");
+        }
+        else {
+            this._pastSection.classList.add("hidden");
         }
     }
 }

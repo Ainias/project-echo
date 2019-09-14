@@ -28,6 +28,7 @@ import "cordova-sites/src/client/js/translationInit"
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
 import {SettingsDialog} from "./Dialoges/SettingsDialog";
 import {EventHelper} from "./Helper/EventHelper";
+import {Post} from "../../model/Post";
 
 window["JSObject"] = Object;
 
@@ -98,10 +99,15 @@ App.addInitialization(async (app) => {
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
     await UserManager.getInstance().getMe();
 
+    console.log("churches before ", await Church.find());
+
     //Todo an richtige stelle auslagern
-    let res = await new SyncJob().sync([Church, Event, Region]).catch(e => console.error(e));
+    let res = await new SyncJob().sync([Church, Event, Region, Post]).catch(e => console.error(e));
+    console.log("churches after", await Church.find());
     EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
     EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
+
+    window["Church"] = Church;
 
     try {
         //Updates height for "mobile browser address bar hiding"-bug
