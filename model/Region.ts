@@ -46,6 +46,7 @@ export class Region extends AccessEasySyncModel {
             joinTable: {
                 name: "churchRegion"
             },
+            inverseSide: "regions",
             sync: false,
             // cascade: true
         };
@@ -55,7 +56,7 @@ export class Region extends AccessEasySyncModel {
             joinTable: {
                 name: "eventRegion"
             },
-            // inverseSide: "regions"
+            inverseSide: "regions",
             // cascade: true
             sync: false,
         };
