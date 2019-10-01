@@ -16,19 +16,7 @@ export class Favorite extends BaseModel
             target: Event.getSchemaName(),
             type: "one-to-one",
             joinColumn: "eventId"
-            // joinTable: {
-            //     name: "churchRegion"
-            // },
-            // cascade: true
         };
-        // relations["events"] = {
-        //     target: Event.getSchemaName(),
-        //     type: "many-to-many",
-        //     joinTable: {
-        //         name: "eventRegion"
-        //     },
-        //     cascade: true
-        // };
         return relations;
     }
 

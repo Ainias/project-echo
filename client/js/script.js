@@ -31,6 +31,7 @@ import {EventHelper} from "./Helper/EventHelper";
 import {Post} from "../../model/Post";
 import {SetupSchema1000000000000} from "../../model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
+import {SetupFavorite1000000000001} from "../../model/migrations/client/SetupSchema";
 
 window["JSObject"] = Object;
 
@@ -129,6 +130,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
     migrationsRun: true,
     migrations: [
         SetupSchema1000000000000,
+        SetupFavorite1000000000001,
         SetupUserManagement1000000001000,
         SetupEasySync1000000000500
     ]
