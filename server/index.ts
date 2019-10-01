@@ -13,9 +13,13 @@ import "../model/Church";
 import "../model/Event";
 import "../model/Post";
 
-import {setupDB} from "./setupDB";
 import {ServerTranslator} from "cordova-sites/server";
 import {Translator} from "cordova-sites/shared";
+import {SetupSchema1000000000000} from "../model/migrations/SetupSchema";
+import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
+import {Data1000000005000} from "../model/migrations/server/Data";
+
+
 const translationGerman = require("../client/translations/de");
 const  translationEnglish = require ("../client/translations/en");
 
@@ -29,7 +33,14 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
     "username": process.env.MYSQL_USER || "root",
     "password": process.env.MYSQL_PASSWORD || "",
     "database": process.env.MYSQL_DATABASE || "echo",
-    "synchronize": process.env.SYNC_DATABASE || true,
+    "synchronize": false,
+    "migrationsRun": true,
+    "migrations": [
+        SetupSchema1000000000000,
+        SetupUserManagement1000000001000,
+        Data1000000005000
+    ],
+
     "logging": ["error", "warn"]
     // "logging": true
 };
@@ -82,7 +93,7 @@ app.use(function (err, req, res, next) {
 });
 
 EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
-    await setupDB();
+    // await setupDB();
     Translator.init({
         translations: {
             "de": translationGerman,

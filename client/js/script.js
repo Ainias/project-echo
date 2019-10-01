@@ -2,7 +2,7 @@ import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
 import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
 import {Helper} from "js-helper/dist/shared"
-import {EasySyncClientDb, SyncJob} from "cordova-sites-easy-sync/client";
+import {EasySyncClientDb, SetupEasySync1000000000500, SyncJob} from "cordova-sites-easy-sync/client";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
 
@@ -29,6 +29,8 @@ import {ModifyPostSite} from "./Sites/ModifyPostSite";
 import {SettingsDialog} from "./Dialoges/SettingsDialog";
 import {EventHelper} from "./Helper/EventHelper";
 import {Post} from "../../model/Post";
+import {SetupSchema1000000000000} from "../../model/migrations/SetupSchema";
+import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
 
 window["JSObject"] = Object;
 
@@ -103,7 +105,6 @@ App.addInitialization(async (app) => {
 
     //Todo an richtige stelle auslagern
     let res = await new SyncJob().sync([Church, Event, Region, Post]).catch(e => console.error(e));
-    console.log("churches after", await Church.find());
     EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
     EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
 
@@ -123,9 +124,14 @@ App.addInitialization(async (app) => {
 DataManager._basePath = __HOST_ADDRESS__;
 
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
-    // "synchronize": false,
-    "logging": ["error"],
-    // "logging":  true
+    logging: ["error",],
+    synchronize: false,
+    migrationsRun: true,
+    migrations: [
+        SetupSchema1000000000000,
+        SetupUserManagement1000000001000,
+        SetupEasySync1000000000500
+    ]
 });
 
 let app = new App();

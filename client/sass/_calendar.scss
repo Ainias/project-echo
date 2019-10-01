@@ -87,7 +87,10 @@
       text-align: center;
       border-radius: 100%;
 
+      transition: none;
+
       .day-number {
+        transition: none;
         margin: auto;
       }
     }
@@ -101,8 +104,8 @@
     }
 
     &.active .day-number-container {
-      color: $navColorBlack;
-      background: $navBackgroundBlack;
+      color: #000;
+      background: #fff;
     }
   }
 
@@ -128,6 +131,7 @@
 
     .day {
       color: $highlightColor;
+
       &::before {
         display: initial;
         content: initial;

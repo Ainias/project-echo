@@ -55,7 +55,7 @@ export class ModifyChurchSite extends MenuFooterSite {
         this._form = new Form(this.findBy("#modify-church-form"), async values => {
             let names = {};
             let descriptions = {};
-            let images = [values["image"] || values["image-before"]];
+            let images = (!Helper.imageUrlIsEmpty(values["image"])?[values["image"]]: [values["image-before"]]);
             let places = {};
             let regions = [await Region.findById(1)];
 
