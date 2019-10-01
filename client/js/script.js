@@ -25,6 +25,8 @@ import bibelverse from "./bibelverse.json";
 //translation import
 import "cordova-sites-user-management/src/client/js/translationInit"
 import "cordova-sites/src/client/js/translationInit"
+import "../img/logo.png"
+
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
 import {SettingsDialog} from "./Dialoges/SettingsDialog";
 import {EventHelper} from "./Helper/EventHelper";

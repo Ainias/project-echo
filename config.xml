@@ -32,6 +32,7 @@
     <preference name="Fullscreen" value="true" />
     <preference name="Orientation" value="portrait" />
     <plugin name="cordova-plugin-local-notification" spec="^0.9.0-beta.2" />
+    <icon src="client/img/logo.png" />
     <engine name="android" spec="^7.1.2" />
     <engine name="browser" spec="^5.0.4" />
 </widget>
