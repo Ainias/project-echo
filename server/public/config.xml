@@ -15,6 +15,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <icon src="client/img/logo.png" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="Fullscreen" value="true" />
     <preference name="Orientation" value="portrait" />
