@@ -25,7 +25,12 @@ describe("church site", () => {
             let element = $("#main-content");
             return await element.isDisplayed()
         });
-        await find.one("[data-translation='churches']").click();
+        if (browser.config.isMobile) {
+            await $("button.menu-icon").click();
+            await find.one("#responsive-menu [data-translation='churches']").click();
+        } else {
+            await find.one("[data-translation='churches']").click();
+        }
         await $(".alphabet-section.K .name").click()
     });
 
@@ -35,7 +40,7 @@ describe("church site", () => {
 
         let linkElem = $("#website");
         expect(await linkElem.getText()).toEqual("www.citychurch.koeln");
-        expect(await linkElem.getAttribute("href")).toEqual("http://www.citychurch.koeln/");
+        expect(await linkElem.getAttribute("href")).toEqual("https://www.citychurch.koeln/");
 
         let places = $$("#places-container .place");
         expect(await places.getLength()).toEqual(3);

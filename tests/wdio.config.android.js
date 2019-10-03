@@ -1,8 +1,12 @@
+const Service = require("./setup");
+
 exports.config = {
 
     // Where the files we are testing can be found.
-    // specs: ['./tests/specs/**/*.js'],
-    specs: ['./tests/specs/**/calendarSite.js'],
+    specs: ['./tests/specs/**/*.js'],
+    // specs: ['./tests/specs/**/favoriteSite.js'],
+
+    isMobile: true,
 
     runner: "local",
 
@@ -45,6 +49,12 @@ exports.config = {
         'appium'
     ],
 
+    appium: {
+        args: {
+            chromedriverExecutable: "/home/silas/Projekte/Web/project-echo/tests/chromedriver",
+        }
+    },
+
     // 4723 is the default port for Appium
     port: 4723,
 
@@ -81,4 +91,10 @@ exports.config = {
         // permissions automatically.
         autoGrantPermissions: true
     }],
+    onPrepare: async function(){
+        await Service.setup();
+    },
+    onComplete: async function(){
+        await Service.tearDown();
+    }
 };

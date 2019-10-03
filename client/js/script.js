@@ -25,7 +25,7 @@ import bibelverse from "./bibelverse.json";
 //translation import
 import "cordova-sites-user-management/src/client/js/translationInit"
 import "cordova-sites/src/client/js/translationInit"
-import "../img/logo.png"
+import logo from "../img/logo.png";
 
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
 import {SettingsDialog} from "./Dialoges/SettingsDialog";
@@ -42,6 +42,8 @@ EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 
 LoginSite.ADD_LOGIN_ACTION = false;
 RegistrationSite.ADD_REGISTRATION_ACTION = false;
+
+App.setLogo(logo);
 
 App.addInitialization(async (app) => {
 

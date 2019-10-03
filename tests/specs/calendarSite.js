@@ -64,15 +64,15 @@ describe("calendar site", () => {
         expect(await $(".day.cell.active").getText()).toEqual("29");
 
         expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
-        expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
+        expect(await $(".name=Termin 5.1").isDisplayed()).toEqual(!browser.config.isMobile);
         expect(await $(".name=Termin 5.2").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.3").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.4").isDisplayed()).toBeFalsy();
         expect(await $(".place-container=place 1").isDisplayed()).toBeTruthy();
 
-        let dragElem = await $("#event-overview-container").getPromise();
-        await dragElem.dragAndDrop(await $("#month-name").getPromise(), 500);
-        await browser.pause(500);
+        // let dragElem = await $("#event-overview-container").getPromise();
+        // await dragElem.dragAndDrop(await $("#month-name").getPromise(), 500);
+        // await browser.pause(15000);
 
         // expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
         // expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
@@ -84,7 +84,7 @@ describe("calendar site", () => {
         // await dragElem.dragAndDrop(await $(".day.cell.active").getPromise(), 1000);
         // await browser.pause(500);
 
-        // expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();2019
+        // expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
         // expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
         // expect(await $(".name=Termin 5.2").isDisplayed()).toBeFalsy();
         // expect(await $(".name=Termin 5.3").isDisplayed()).toBeFalsy();

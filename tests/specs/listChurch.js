@@ -27,7 +27,12 @@ describe("first test suite", () => {
             let element = $("#main-content");
             return await element.isDisplayed()
         });
-        await find.one("[data-translation='churches']").click();
+        if (browser.config.isMobile) {
+            await $("button.menu-icon").click();
+            await find.one("#responsive-menu [data-translation='churches']").click();
+        } else {
+            await find.one("[data-translation='churches']").click();
+        }
     });
 
     it("first test", async function () {

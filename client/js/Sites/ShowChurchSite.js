@@ -1,7 +1,6 @@
 import view from "../../html/Sites/showChurchSite.html"
-import {App, ColorIndicator, ConfirmDialog, Helper, MenuSite, Toast, Translator} from "cordova-sites";
+import {App, ConfirmDialog, Helper, Toast, Translator} from "cordova-sites";
 import {Church} from "../../../model/Church";
-import {MenuFooterSite} from "./MenuFooterSite";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
@@ -55,7 +54,7 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
 
         let href = this._church.website;
         if (!href.startsWith("http") && !href.startsWith("//")) {
-            href = "//" + href;
+            href = "https://" + href;
         }
         link.href = href;
         link.appendChild(document.createTextNode(this._church.website));

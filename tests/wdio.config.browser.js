@@ -3,8 +3,10 @@ const Service = require("./setup");
 exports.config = {
 
     // Where the files we are testing can be found.
-    specs: ['./tests/specs/**/*.js'],
-    // specs: ['./tests/specs/**/calendarSite.js'],
+    // specs: ['./tests/specs/**/*.js'],
+    specs: ['./tests/specs/**/calendarSite.js'],
+
+    isMobile: false,
 
     runner: "local",
 
