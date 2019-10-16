@@ -12,12 +12,14 @@ import "../model/Region";
 import "../model/Church";
 import "../model/Event";
 import "../model/Post";
+import "../model/Fsj";
 
 import {ServerTranslator} from "cordova-sites/server";
 import {Translator} from "cordova-sites/shared";
 import {SetupSchema1000000000000} from "../model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
 import {Data1000000005000} from "../model/migrations/server/Data";
+import {FsjSchema1000000006000} from "../model/migrations/FsjSchema";
 
 
 const translationGerman = require("../client/translations/de");
@@ -38,7 +40,8 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
     "migrations": [
         SetupSchema1000000000000,
         SetupUserManagement1000000001000,
-        Data1000000005000
+        Data1000000005000,
+        FsjSchema1000000006000,
     ],
 
     "logging": ["error", "warn"]

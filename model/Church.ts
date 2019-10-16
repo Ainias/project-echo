@@ -1,55 +1,43 @@
 import {BaseDatabase} from "cordova-sites-database";
-import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
 import {Region} from "./Region";
+import {FsjChurchBaseObject} from "./FsjChurchBaseObject";
 
-export class Church extends AccessEasySyncModel {
-    private names: any[];
-    private descriptions: any[];
-    private places: any[];
-    private images: any[];
-    private website: string;
+export class Church extends FsjChurchBaseObject {
+    public places: any[];
 
     constructor() {
         super();
-        this.names = [];
-        this.descriptions = [];
         this.places = [];
-        this.images = [];
-        this.website = null;
     }
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["names"] = BaseDatabase.TYPES.MY_JSON;
-        columns["descriptions"] = BaseDatabase.TYPES.MY_JSON;
         columns["places"] = BaseDatabase.TYPES.MY_JSON;
-        columns["images"] = BaseDatabase.TYPES.MY_JSON;
-        columns["website"] = BaseDatabase.TYPES.STRING;
         return columns;
     }
 
-    getNameTranslation() {
-        return "church-name-" + this.id;
-    }
-
-    getDescriptionTranslation() {
-        return "church-description-" + this.id;
-    }
-
-    getDynamicTranslations() {
-        let translations = {};
-        Object.keys(this.names).forEach(language => {
-            translations[language] = translations[language] || {};
-            translations[language][this.getNameTranslation()] = this.names[language];
-        });
-
-        Object.keys(this.descriptions).forEach(language => {
-            translations[language] = translations[language] || {};
-            translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
-        });
-        return translations;
-    }
+    // getNameTranslation() {
+    //     return "church-name-" + this.id;
+    // }
+    //
+    // getDescriptionTranslation() {
+    //     return "church-description-" + this.id;
+    // }
+    //
+    // getDynamicTranslations() {
+    //     let translations = {};
+    //     Object.keys(this.names).forEach(language => {
+    //         translations[language] = translations[language] || {};
+    //         translations[language][this.getNameTranslation()] = this.names[language];
+    //     });
+    //
+    //     Object.keys(this.descriptions).forEach(language => {
+    //         translations[language] = translations[language] || {};
+    //         translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
+    //     });
+    //     return translations;
+    // }
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();

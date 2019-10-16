@@ -34,6 +34,10 @@ import {Post} from "../../model/Post";
 import {SetupSchema1000000000000} from "../../model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
 import {SetupFavorite1000000000001} from "../../model/migrations/client/SetupSchema";
+import {FsjSchema1000000006000} from "../../model/migrations/FsjSchema";
+import {Fsj} from "../../model/Fsj";
+import {ModifyFsjSite} from "./Sites/ModifyFsjSite";
+import {ListFsjsSite} from "./Sites/ListFsjsSite";
 
 window["JSObject"] = Object;
 
@@ -72,7 +76,8 @@ App.addInitialization(async (app) => {
     //Creating Menu
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", CalendarSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", WelcomeSite));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", WelcomeSite, MenuAction.SHOW_FOR_LARGE));
     NavbarFragment.defaultActions.push(new MenuAction("language", async () => {
         if (Translator.getInstance().getCurrentLanguage() === "en") {
             await Translator.getInstance().setLanguage("de");
@@ -99,6 +104,10 @@ App.addInitialization(async (app) => {
         app.startSite(ModifyChurchSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
+    NavbarFragment.defaultActions.push(new UserMenuAction("add fsj", "admin", () => {
+        app.startSite(ModifyFsjSite);
+    }, MenuAction.SHOW_FOR_MEDIUM));
+
     NavbarFragment.defaultActions.push(new UserMenuAction("add post", "admin", () => {
         app.startSite(ModifyPostSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
@@ -109,7 +118,7 @@ App.addInitialization(async (app) => {
     console.log("churches before ", await Church.find());
 
     //Todo an richtige stelle auslagern
-    let res = await new SyncJob().sync([Church, Event, Region, Post]).catch(e => console.error(e));
+    let res = await new SyncJob().sync([Church, Event, Region, Post, Fsj]).catch(e => console.error(e));
     EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
     EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
 
@@ -136,7 +145,8 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         SetupSchema1000000000000,
         SetupFavorite1000000000001,
         SetupUserManagement1000000001000,
-        SetupEasySync1000000000500
+        SetupEasySync1000000000500,
+        FsjSchema1000000006000,
     ]
 });
 
