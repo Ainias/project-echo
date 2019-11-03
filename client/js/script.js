@@ -33,11 +33,13 @@ import {EventHelper} from "./Helper/EventHelper";
 import {Post} from "../../model/Post";
 import {SetupSchema1000000000000} from "../../model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
-import {SetupFavorite1000000000001} from "../../model/migrations/client/SetupSchema";
+import {SetupFavorite1000000000001} from "../../model/migrations/client/SetupFavorite";
 import {FsjSchema1000000006000} from "../../model/migrations/FsjSchema";
 import {Fsj} from "../../model/Fsj";
 import {ModifyFsjSite} from "./Sites/ModifyFsjSite";
 import {ListFsjsSite} from "./Sites/ListFsjsSite";
+import {SystemCalendar} from "./SystemCalendar";
+import {FavoriteWithSystemCalendar1000000000002} from "../../model/migrations/client/FavoriteWithSystemCalendar";
 
 window["JSObject"] = Object;
 
@@ -113,15 +115,16 @@ App.addInitialization(async (app) => {
     }, MenuAction.SHOW_FOR_MEDIUM));
 
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
-    await UserManager.getInstance().getMe();
+    await UserManager.getInstance().getMe().catch(e => console.error(e));
 
-    console.log("churches before ", await Church.find());
+    // await SystemCalendar.createCalendar("echo");
 
     //Todo an richtige stelle auslagern
     let res = await new SyncJob().sync([Church, Event, Region, Post, Fsj]).catch(e => console.error(e));
-    EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
-    EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
+    // EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
+    // EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
 
+    await SystemCalendar.deleteCalendar();
     window["Church"] = Church;
 
     try {
@@ -135,7 +138,16 @@ App.addInitialization(async (app) => {
     }
 });
 
+//TODO anpassen
+SystemCalendar.NAME = "echo";
+SystemCalendar.WEBSITE = "echo.silas.link";
+
 DataManager._basePath = __HOST_ADDRESS__;
+DataManager.onlineCallback = isOnline => {
+    if (!isOnline){
+
+    }
+};
 
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
     logging: ["error",],
@@ -146,6 +158,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         SetupFavorite1000000000001,
         SetupUserManagement1000000001000,
         SetupEasySync1000000000500,
+        FavoriteWithSystemCalendar1000000000002,
         FsjSchema1000000006000,
     ]
 });

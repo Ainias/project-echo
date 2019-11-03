@@ -2,11 +2,20 @@ import {BaseDatabase, BaseModel} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
 import {Event} from "../../../model/Event";
 
-export class Favorite extends BaseModel
-{
+export class Favorite extends BaseModel {
+
+
+    constructor() {
+        super();
+        this.isFavorite = true;
+        this.systemCalendaId = null;
+    }
+
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
         columns["eventId"] = {type: BaseDatabase.TYPES.INTEGER};
+        columns["isFavorite"] = BaseDatabase.TYPES.BOOLEAN;
+        columns["systemCalendarId"] = {type: BaseDatabase.TYPES.BOOLEAN, nullable: true};
         return columns;
     }
 
@@ -20,18 +29,18 @@ export class Favorite extends BaseModel
         return relations;
     }
 
-    static async isFavorite(eventId){
+    static async eventIsFavorite(eventId) {
         let fav = await this.findOne({"eventId": eventId});
-        return (fav instanceof Favorite);
+        return (fav instanceof Favorite && fav.isFavorite);
     }
 
-    static async toggle(eventId){
+    static async toggle(eventId) {
         let fav = await this.findOne({"eventId": eventId});
-        if (fav instanceof Favorite){
-            await fav.delete();
-            return false;
-        }
-        else {
+        if (fav instanceof Favorite) {
+            fav.isFavorite = !fav.isFavorite;
+            await fav.save();
+            return fav.isFavorite;
+        } else {
             fav = new Favorite();
             fav.eventId = eventId;
             await fav.save();
@@ -39,4 +48,5 @@ export class Favorite extends BaseModel
         }
     }
 }
+
 BaseDatabase.addModel(Favorite);

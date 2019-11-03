@@ -123,7 +123,7 @@ export class EventOverviewFragment extends AbstractFragment {
                     });
 
                     let favElem = eventElement.querySelector(".favorite");
-                    Favorite.isFavorite(event.id).then(isFavorite => {
+                    Favorite.eventIsFavorite(event.id).then(isFavorite => {
                         if (isFavorite) {
                             favElem.classList.add("is-favorite");
                         }

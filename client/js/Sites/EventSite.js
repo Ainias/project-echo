@@ -31,7 +31,7 @@ export class EventSite extends FooterSite {
             this.finish();
             return;
         }
-        this._isFavortite = (await Favorite.findOne({eventId: this._event.id}) !== null);
+        this._isFavortite = (await Favorite.findOne({eventId: this._event.id, isFavorite: true}) !== null);
 
         return res;
     }

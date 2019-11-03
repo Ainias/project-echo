@@ -4,6 +4,7 @@ import {Brackets, In} from "typeorm";
 import {NotificationScheduler} from "../NotificationScheduler";
 import {Favorite} from "../Model/Favorite";
 import {Translator, Helper, NativeStoragePromise} from "cordova-sites/dist/cordova-sites";
+import {SystemCalendar} from "../SystemCalendar";
 
 export class EventHelper {
     static async search(searchString, beginTime, endTime, types, organisers, regions) {
@@ -50,10 +51,12 @@ export class EventHelper {
     static async toggleFavorite(event) {
         if (await Favorite.toggle(event.id)) {
             await EventHelper.setNotificationFor(event);
+            await SystemCalendar.addEventToSystemCalendar(event);
             return true;
         } else {
             let notificationScheduler = NotificationScheduler.getInstance();
             await notificationScheduler.cancelNotification(event.id);
+            await SystemCalendar.deleteEventFromSystemCalendar(event);
             return false;
         }
     }
@@ -75,7 +78,7 @@ export class EventHelper {
         await Promise.all(promises);
     }
 
-    static async deleteNotificationsForEvents(events){
+    static async deleteNotificationsForEvents(events) {
         let notificationScheduler = NotificationScheduler.getInstance();
         await Helper.asyncForEach(events, e => notificationScheduler.cancelNotification(e.id), true);
     }
@@ -85,7 +88,9 @@ export class EventHelper {
             favorites = await Favorite.find();
         }
         await Helper.asyncForEach(favorites, fav => {
-            EventHelper.setNotificationFor(fav.event);
+            if (fav.isFavorite) {
+                EventHelper.setNotificationFor(fav.event);
+            }
         }, true);
     }
 
