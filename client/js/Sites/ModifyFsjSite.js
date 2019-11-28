@@ -84,7 +84,7 @@ export class ModifyFsjSite extends MenuFooterSite {
     }
 
     async setFormValuesFromFsj() {
-        if (Helper.isNull(this._fsj) || !this._fsj instanceof Church) {
+        if (Helper.isNull(this._fsj) || !this._fsj instanceof Fsj) {
             return;
         }
 
