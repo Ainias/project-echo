@@ -1,6 +1,5 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 import {BaseDatabase} from "cordova-sites-database/dist/cordova-sites-database";
-import {Event} from "../Event";
 import {MigrationHelper} from "js-helper/src/shared/MigrationHelper";
 
 export class SetupSchema1000000000000 implements MigrationInterface {

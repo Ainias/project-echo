@@ -15,7 +15,7 @@ export class Favorite extends BaseModel {
         let columns = super.getColumnDefinitions();
         columns["eventId"] = {type: BaseDatabase.TYPES.INTEGER};
         columns["isFavorite"] = BaseDatabase.TYPES.BOOLEAN;
-        columns["systemCalendarId"] = {type: BaseDatabase.TYPES.BOOLEAN, nullable: true};
+        columns["systemCalendarId"] = {type: BaseDatabase.TYPES.INTEGER, nullable: true};
         return columns;
     }
 

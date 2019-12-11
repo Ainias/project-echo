@@ -28,8 +28,6 @@ import "cordova-sites/src/client/js/translationInit"
 import logo from "../img/logo.png";
 
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
-import {SettingsDialog} from "./Dialoges/SettingsDialog";
-import {EventHelper} from "./Helper/EventHelper";
 import {Post} from "../../model/Post";
 import {SetupSchema1000000000000} from "../../model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
@@ -40,6 +38,9 @@ import {ModifyFsjSite} from "./Sites/ModifyFsjSite";
 import {ListFsjsSite} from "./Sites/ListFsjsSite";
 import {SystemCalendar} from "./SystemCalendar";
 import {FavoriteWithSystemCalendar1000000000002} from "../../model/migrations/client/FavoriteWithSystemCalendar";
+import {SettingsSite} from "./Sites/SettingsSite";
+import {RepeatedEvent} from "../../model/RepeatedEvent";
+import {AddRepeatedEvent1000000007000} from "../../model/migrations/AddRepeatedEvent";
 
 window["JSObject"] = Object;
 
@@ -90,13 +91,15 @@ App.addInitialization(async (app) => {
 
     if (Helper.isMobileApp()) {
         NavbarFragment.defaultActions.push(new MenuAction("settings", () => {
-            new SettingsDialog().show();
+            app.startSite(SettingsSite);
+            // new SettingsDialog().show();
         }, MenuAction.SHOW_NEVER));
     }
 
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", WelcomeSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("settings", SettingsSite, MenuAction.SHOW_NEVER));
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add event", "admin", () => {
         app.startSite(AddEventSite);
@@ -120,11 +123,11 @@ App.addInitialization(async (app) => {
     // await SystemCalendar.createCalendar("echo");
 
     //Todo an richtige stelle auslagern
-    let res = await new SyncJob().sync([Church, Event, Region, Post, Fsj]).catch(e => console.error(e));
+    let res = await new SyncJob().sync([Church, RepeatedEvent, Event, Region, Post, Fsj]).catch(e => console.error(e));
     // EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
     // EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
 
-    await SystemCalendar.deleteCalendar();
+    // await SystemCalendar.deleteCalendar();
     window["Church"] = Church;
 
     try {
@@ -145,7 +148,7 @@ SystemCalendar.WEBSITE = "echo.silas.link";
 DataManager._basePath = __HOST_ADDRESS__;
 DataManager.onlineCallback = isOnline => {
     if (!isOnline){
-
+        console.log("not (yet) online!");
     }
 };
 
@@ -160,6 +163,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         SetupEasySync1000000000500,
         FavoriteWithSystemCalendar1000000000002,
         FsjSchema1000000006000,
+        AddRepeatedEvent1000000007000,
     ]
 });
 

@@ -68,6 +68,11 @@ export class Event extends AccessEasySyncModel {
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
+        relations["repeatedEvent"] = {
+            target: "RepeatedEvent",
+            type: "many-to-one",
+            nullable: true
+        };
         relations["organisers"] = {
             target: Church.getSchemaName(),
             type: "many-to-many",

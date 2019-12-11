@@ -10,6 +10,7 @@ import {UserSite} from "cordova-sites-user-management/src/client/js/Context/User
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";
+import {RepeatedEvent} from "../../../model/RepeatedEvent";
 
 //TODO userManagement hinzufügen
 export class AddEventSite extends MenuFooterSite {
@@ -22,8 +23,16 @@ export class AddEventSite extends MenuFooterSite {
         let res = super.onConstruct(constructParameters);
         this._churches = await Church.find();
 
+        this._isRepeatable = false;
+
         if (constructParameters["id"]) {
-            this._event = await Event.findById(constructParameters["id"], Event.getRelations());
+
+            if (constructParameters["isRepeatableEvent"]) {
+                this._event = await RepeatedEvent.findById(constructParameters["id"], RepeatedEvent.getRelations());
+                this._isRepeatable = true;
+            } else {
+                this._event = await Event.findById(constructParameters["id"], Event.getRelations());
+            }
         }
 
         this._placeNumber = 0;

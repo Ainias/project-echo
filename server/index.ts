@@ -20,6 +20,7 @@ import {SetupSchema1000000000000} from "../model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
 import {Data1000000005000} from "../model/migrations/server/Data";
 import {FsjSchema1000000006000} from "../model/migrations/FsjSchema";
+import {AddRepeatedEvent1000000007000} from "../model/migrations/AddRepeatedEvent";
 
 
 const translationGerman = require("../client/translations/de");
@@ -42,6 +43,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
         SetupUserManagement1000000001000,
         Data1000000005000,
         FsjSchema1000000006000,
+        AddRepeatedEvent1000000007000,
     ],
 
     "logging": ["error", "warn"]

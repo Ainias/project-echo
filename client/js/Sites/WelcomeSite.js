@@ -3,12 +3,11 @@ import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import componentImg from "../../img/component.png"
 import {Post} from "../../../model/Post";
 import {Translator} from "cordova-sites/src/client/js/Translator";
-import {Helper} from "cordova-sites/src/client/js/Helper";
+import {Helper} from "cordova-sites/dist/cordova-sites";
 import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
 import {Event} from "../../../model/Event";
 import {ConfirmDialog} from "cordova-sites/src/client/js/Dialog/ConfirmDialog";
 import {Toast} from "cordova-sites/src/client/js/Toast/Toast";
-import {AddEventSite} from "./AddEventSite";
 import {ModifyPostSite} from "./ModifyPostSite";
 
 export class WelcomeSite extends AbsoluteBarMenuSite {

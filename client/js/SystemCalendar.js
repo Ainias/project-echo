@@ -2,6 +2,7 @@ import {Favorite} from "./Model/Favorite";
 import {Translator} from "cordova-sites/src/client/js/Translator";
 import {DataManager} from "cordova-sites/src/client/js/DataManager";
 import {Helper} from "js-helper/src/shared/Helper";
+import {NativeStoragePromise} from "cordova-sites/src/client/js/NativeStoragePromise";
 
 export class SystemCalendar {
     static async createCalendar() {
@@ -33,7 +34,7 @@ export class SystemCalendar {
                 resolve();
             } else {
 
-                let calendar = await this.getMyCalendar();
+                let calendar = await this.getSelectedCalendar();
                 let options = window.plugins.calendar.getCalendarOptions();
                 options.calendarName = calendar.name;
                 options.calendarId = calendar.id;
@@ -61,7 +62,7 @@ export class SystemCalendar {
 
     static async listCalendars() {
         return new Promise((resolve, reject) => {
-            if (device.platform === "browser"){
+            if (device.platform === "browser") {
                 return resolve([]);
             }
             window.plugins.calendar.listCalendars(resolve, reject)
@@ -76,13 +77,14 @@ export class SystemCalendar {
 
         let translator = Translator.getInstance();
         translator.addDynamicTranslations(event.getDynamicTranslations());
-        fav.systemCalendaId = await this.createEvent(translator.translate(event.getNameTranslation()),
+        fav.systemCalendarId = await this.createEvent(translator.translate(event.getNameTranslation()),
             ((Helper.isNotNull(event.places) && Object.keys(event.places).length >= 1) ? Object.keys(event.places)[0] : ""),
             translator.translate(event.getDescriptionTranslation()) + "\n\n",
             event.startTime,
             event.endTime,
             SystemCalendar.WEBSITE + DataManager.buildQuery({s: "event", "id": event.id})
         );
+        await fav.save();
     }
 
     static async deleteEventFromSystemCalendar(event) {
@@ -90,7 +92,10 @@ export class SystemCalendar {
         if (!fav) {
             return;
         }
-        return this.deleteEvenById(fav.systemCalendaId);
+        let res = this.deleteEvenById(fav.systemCalendarId);
+        fav.systemCalendarId = null;
+        await fav.save();
+        return res;
     }
 
     static async deleteEvenById(id) {
@@ -106,7 +111,6 @@ export class SystemCalendar {
         let calendars = await this.listCalendars();
         let calendar = null;
 
-        console.log("calendars", calendars);
         calendars.some(sysCalendar => {
             if (sysCalendar.name === SystemCalendar.NAME) {
                 calendar = sysCalendar;
@@ -116,8 +120,32 @@ export class SystemCalendar {
         });
 
         if (calendar === null) {
-            console.log("c", await this.createCalendar());
             return this.getMyCalendar();
+        }
+
+        return calendar;
+    }
+
+    static async getSelectedCalendar() {
+        let calendars = await this.listCalendars();
+        let calendar = null;
+
+        let calendarId = await NativeStoragePromise.getItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY);
+
+        calendars.some(sysCalendar => {
+            if ((Helper.isNotNull(calendarId) && sysCalendar.id === calendarId) ||
+                (Helper.isNull(calendarId) && sysCalendar.isPrimary && sysCalendar.name.indexOf("@") !== -1)){
+                calendar = sysCalendar;
+                return true;
+            }
+            return false;
+        });
+
+        if (calendar === null) {
+            let id = await this.createCalendar();
+            console.log("id");
+            await NativeStoragePromise.setItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY, id);
+            return this.getSelectedCalendar();
         }
 
         return calendar;
@@ -125,4 +153,5 @@ export class SystemCalendar {
 }
 
 SystemCalendar.NAME = "echo";
+SystemCalendar.SYSTEM_CALENDAR_ID_KEY = "system-calendar-id";
 SystemCalendar.WEBSITE = "echo.silas.link";
