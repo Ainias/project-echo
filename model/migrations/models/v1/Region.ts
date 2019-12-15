@@ -60,10 +60,9 @@ export class Region extends AccessEasySyncModel {
             // cascade: true
             sync: false,
         };
-
         return relations;
     }
 }
 Region.ACCESS_MODIFY = "admin";
 Region.SCHEMA_NAME="Region";
-BaseDatabase.addModel(Region);
+// BaseDatabase.addModel(Region);

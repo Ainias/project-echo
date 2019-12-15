@@ -38,8 +38,9 @@ export class CalendarSite extends FooterSite {
             this._date = new Date(constructParameters["date"]);
         }
 
-        let favourites = await Favorite.find();
-        favourites.forEach(fav => {
+        debugger;
+        let favorites = await Favorite.find();
+        favorites.forEach(fav => {
             this._favourites[fav.eventId] = true;
         });
         return res;
@@ -97,6 +98,8 @@ export class CalendarSite extends FooterSite {
 
         let firstDayOfNextMonth = new Date(firstDay);
         firstDayOfNextMonth.setMonth(firstDayOfNextMonth.getMonth() + 1);
+
+        debugger;
 
         //TODO filter nach region
         return Event.find({

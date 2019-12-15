@@ -54,6 +54,8 @@ App.setLogo(logo);
 
 App.addInitialization(async (app) => {
 
+    console.log(BaseDatabase._models);
+
     //add Bibelvers to html
     let vers = bibelverse[Math.floor(Math.random() * (bibelverse.length))];
     document.head.prepend(document.createComment(vers["vers"] + " \n- " + vers["stelle"] + " (" + vers["uebersetzung"] + ")"));
@@ -123,7 +125,7 @@ App.addInitialization(async (app) => {
     // await SystemCalendar.createCalendar("echo");
 
     //Todo an richtige stelle auslagern
-    let res = await new SyncJob().sync([Church, RepeatedEvent, Event, Region, Post, Fsj]).catch(e => console.error(e));
+    let res = await new SyncJob().sync([Church, Event, Region, Post, Fsj, RepeatedEvent]).catch(e => console.error(e));
     // EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
     // EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
 

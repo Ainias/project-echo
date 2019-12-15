@@ -71,9 +71,7 @@ export class Event extends AccessEasySyncModel {
         relations["repeatedEvent"] = {
             target: "RepeatedEvent",
             type: "many-to-one",
-            nullable: true,
-            joinColumn: true,
-            inverseSide: "events"
+            nullable: true
         };
         relations["organisers"] = {
             target: Church.getSchemaName(),
@@ -97,7 +95,7 @@ export class Event extends AccessEasySyncModel {
 
 Event.ACCESS_MODIFY = "admin";
 Event.SCHEMA_NAME = "Event";
-BaseDatabase.addModel(Event);
+// BaseDatabase.addModel(Event);
 
 Event.TYPES = {
     GOTTESDIENST: "gottesdienst",
@@ -107,6 +105,5 @@ Event.TYPES = {
     GEBETSKREIS: "gebetskreis",
     SPORT: "sport",
     JUGENDKREIS: "jugendkreis",
-    SONSTIGES:"sonstiges",
-    STUDENTENKREIS:"studentenkreis"
+    SONSTIGES:"sonstiges"
 };
