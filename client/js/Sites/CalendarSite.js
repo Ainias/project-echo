@@ -38,7 +38,6 @@ export class CalendarSite extends FooterSite {
             this._date = new Date(constructParameters["date"]);
         }
 
-        debugger;
         let favorites = await Favorite.find();
         favorites.forEach(fav => {
             this._favourites[fav.eventId] = true;

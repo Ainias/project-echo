@@ -11,6 +11,7 @@ import {PlaceHelper} from "../Helper/PlaceHelper";
 import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";
 import {RepeatedEvent} from "../../../model/RepeatedEvent";
+import {German} from "flatpickr/dist/l10n/de";
 
 //TODO userManagement hinzufügen
 export class AddEventSite extends MenuFooterSite {
@@ -167,7 +168,8 @@ export class AddEventSite extends MenuFooterSite {
         flatpickr(this.findBy(".date-time", true), {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
-            time_24hr: true
+            time_24hr: true,
+            locale: German
         });
 
         return res;

@@ -1,8 +1,6 @@
 import {BaseDatabase} from "cordova-sites-database/src/BaseDatabase";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
 import {Event} from "./Event";
-import {Church} from "./Church";
-import {Region} from "./Region";
 import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
 
 export class RepeatedEvent extends AccessEasySyncModel {

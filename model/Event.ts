@@ -107,6 +107,6 @@ Event.TYPES = {
     GEBETSKREIS: "gebetskreis",
     SPORT: "sport",
     JUGENDKREIS: "jugendkreis",
+    STUDENTENKREIS:"studentenkreis",
     SONSTIGES:"sonstiges",
-    STUDENTENKREIS:"studentenkreis"
 };
