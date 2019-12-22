@@ -16,6 +16,7 @@ export class RepeatedEvent extends AccessEasySyncModel {
         this.repeatingStrategy = 0;
         this.repeatingArguments = "";
         this.generatedUntil = new Date();
+        this.originalEvent = null;
 
         this.endsAt = null;
     }
@@ -35,6 +36,7 @@ export class RepeatedEvent extends AccessEasySyncModel {
             target: Event.getSchemaName(),
             type: "one-to-one",
             joinColumn: true,
+            eager: true,
             sync: true,
         };
         relations["events"] = {
@@ -44,6 +46,43 @@ export class RepeatedEvent extends AccessEasySyncModel {
         };
         return relations;
     }
+
+    getNames(): {} {
+        return this.originalEvent.getNames();
+    }
+
+    getDescriptions(): {} {
+        return this.originalEvent.getDescriptions();
+    }
+
+    getStartTime(): Date {
+        return this.originalEvent.getStartTime();
+    }
+
+    getEndTime(): Date {
+        return this.originalEvent.getEndTime();
+    }
+
+    getType(): string {
+        return this.originalEvent.getType();
+    }
+
+    getImages(): any[] {
+        return this.originalEvent.getImages();
+    }
+
+    getOrganisers(): any {
+        return this.originalEvent.getOrganisers();
+    }
+
+    getPlaces(): any[] {
+        return this.originalEvent.getPlaces();
+    }
+
+    getRegions(): any {
+        return this.originalEvent.getRegions();
+    }
+
 }
 
 RepeatedEvent.SCHEMA_NAME = "RepeatedEvent";

@@ -13,6 +13,7 @@ import "../model/Church";
 import "../model/Event";
 import "../model/Post";
 import "../model/Fsj";
+import "../model/RepeatedEvent"
 
 import {ServerTranslator} from "cordova-sites/server";
 import {Translator} from "cordova-sites/shared";

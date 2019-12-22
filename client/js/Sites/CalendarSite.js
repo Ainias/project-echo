@@ -98,8 +98,6 @@ export class CalendarSite extends FooterSite {
         let firstDayOfNextMonth = new Date(firstDay);
         firstDayOfNextMonth.setMonth(firstDayOfNextMonth.getMonth() + 1);
 
-        debugger;
-
         //TODO filter nach region
         return Event.find({
             startTime: LessThan(Helper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
@@ -135,12 +133,12 @@ export class CalendarSite extends FooterSite {
 
         let eventDays = {};
         events.forEach(event => {
-            let firstDayOfEvent = event.startTime.getDate();
-            let lastDayOfEvent = event.endTime.getDate();
+            let firstDayOfEvent = event.getStartTime().getDate();
+            let lastDayOfEvent = event.getEndTime().getDate();
 
-            if (month > event.startTime.getMonth()) {
+            if (month > event.getStartTime().getMonth()) {
                 firstDayOfEvent = 1;
-            } else if (month < event.endTime.getMonth()) {
+            } else if (month < event.getEndTime().getMonth()) {
                 lastDayOfEvent = numberDays;
             }
 
@@ -171,9 +169,9 @@ export class CalendarSite extends FooterSite {
             }
 
             day.addEventListener("click", () => {
-                let oldActiceDay = this.findBy(".day.active");
-                if (oldActiceDay) {
-                    oldActiceDay.classList.remove("active");
+                let oldActiveDay = this.findBy(".day.active");
+                if (oldActiveDay) {
+                    oldActiveDay.classList.remove("active");
                 }
                 day.classList.add("active");
                 this.showEventOverviews((eventDays[i])?eventDays[i]:[]);

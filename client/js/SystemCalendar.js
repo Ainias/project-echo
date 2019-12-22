@@ -1,7 +1,7 @@
 import {Favorite} from "./Model/Favorite";
 import {Translator} from "cordova-sites/src/client/js/Translator";
 import {DataManager} from "cordova-sites/src/client/js/DataManager";
-import {Helper} from "js-helper/src/shared/Helper";
+import {Helper} from "js-helper";
 import {NativeStoragePromise} from "cordova-sites/src/client/js/NativeStoragePromise";
 
 export class SystemCalendar {

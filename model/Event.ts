@@ -3,6 +3,8 @@ import {BaseDatabase} from "cordova-sites-database";
 import {Church} from "./Church";
 import {Region} from "./Region";
 import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
+import {Helper} from "js-helper/src/shared/Helper";
+import {type} from "os";
 
 export class Event extends AccessEasySyncModel {
     private names: {};
@@ -14,7 +16,19 @@ export class Event extends AccessEasySyncModel {
     private organisers: any;
     private places: any[];
     private regions: any;
-    static TYPES: any;
+    private repeatedEvent: any;
+
+    static readonly TYPES: any = {
+        GOTTESDIENST: "gottesdienst",
+        KONZERT: "konzert",
+        HAUSKREIS: "hauskreis",
+        KONFERENZ: "konferenz",
+        GEBETSKREIS: "gebetskreis",
+        SPORT: "sport",
+        JUGENDKREIS: "jugendkreis",
+        STUDENTENKREIS: "studentenkreis",
+        SONSTIGES: "sonstiges",
+    };
 
     constructor() {
         super();
@@ -39,31 +53,66 @@ export class Event extends AccessEasySyncModel {
 
     getDynamicTranslations() {
         let translations = {};
-        Object.keys(this.names).forEach(language => {
+        Object.keys(this.getNames()).forEach(language => {
             translations[language] = translations[language] || {};
-            translations[language][this.getNameTranslation()] = this.names[language];
+            translations[language][this.getNameTranslation()] = this.getNames()[language];
         });
 
-        Object.keys(this.descriptions).forEach(language => {
+        Object.keys(this.getDescriptions()).forEach(language => {
             translations[language] = translations[language] || {};
-            translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
+            translations[language][this.getDescriptionTranslation()] = this.getDescriptions()[language];
         });
         return translations;
     }
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["names"] = BaseDatabase.TYPES.MY_JSON;
-        columns["descriptions"] = BaseDatabase.TYPES.MY_JSON;
-        columns["places"] = BaseDatabase.TYPES.MY_JSON;
-        columns["images"] = BaseDatabase.TYPES.MY_JSON;
-        columns["startTime"] = BaseDatabase.TYPES.DATE;
-        columns["endTime"] = BaseDatabase.TYPES.DATE;
+        columns["names"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
+        columns["descriptions"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
+        columns["places"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
+        columns["images"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
+        columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable:true};
+        columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable:true};
         columns["type"] = {
             type: BaseDatabase.TYPES.STRING,
             default: Event.TYPES.GOTTESDIENST
         };
         return columns;
+    }
+
+    static async find(where?, order?, limit?, offset?, relations?){
+        if (typeof relations === "undefined"){
+            relations = Event.getRelations();
+        }
+        return this._database.findEntities(this, where, order, limit, offset, relations);
+    }
+
+    static async findAndCount(where?, order?, limit?, offset?, relations?) {
+        if (typeof relations === "undefined"){
+            relations = Event.getRelations();
+        }
+        return this._database.findAndCountEntities(this, where, order, limit, offset, relations);
+    }
+
+    static async findOne(where?, order?, offset?, relations?) {
+        if (typeof relations === "undefined"){
+            relations = Event.getRelations();
+        }
+        return this._database.findOneEntity(this, where, order, offset, relations);
+    }
+
+    static async findById(id, relations?) {
+        if (typeof relations === "undefined"){
+            relations = Event.getRelations();
+        }
+        return this._database.findById(this, id, relations);
+    }
+
+    static async findByIds(ids, relations?) {
+        if (typeof relations === "undefined"){
+            relations = Event.getRelations();
+        }
+        return this._database.findByIds(this, ids, relations);
     }
 
     static getRelationDefinitions() {
@@ -93,20 +142,116 @@ export class Event extends AccessEasySyncModel {
         };
         return relations;
     }
+
+    getNames(): {} {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getNames();
+        }
+        return this.names;
+    }
+
+    setNames(value: {}) {
+        this.names = value;
+    }
+
+    getDescriptions(): {} {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getDescription();
+        }
+        return this.descriptions;
+    }
+
+    setDescriptions(value: {}) {
+        this.descriptions = value;
+    }
+
+    getStartTime(): Date {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getStartTime();
+        }
+        return this.startTime;
+    }
+
+    setStartTime(value: Date) {
+        this.startTime = value;
+    }
+
+    getEndTime(): Date {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getEndTime();
+        }
+        return this.endTime;
+    }
+
+    setEndTime(value: Date) {
+        this.endTime = value;
+    }
+
+    getType(): string {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getType();
+        }
+        return this.type;
+    }
+
+    setType(value: string) {
+        this.type = value;
+    }
+
+    getImages(): any[] {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getImages();
+        }
+        return this.images;
+    }
+
+    setImages(value: any[]) {
+        this.images = value;
+    }
+
+    getOrganisers(): any {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getOrganisers();
+        }
+        return this.organisers;
+    }
+
+    setOrganisers(value: any) {
+        this.organisers = value;
+    }
+
+    getPlaces(): any[] {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getPlaces();
+        }
+        return this.places;
+    }
+
+    setPlaces(value: any[]) {
+        this.places = value;
+    }
+
+    getRegions(): any {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
+        {
+            return this.repeatedEvent.getRegions();
+        }
+        return this.regions;
+    }
+
+    setRegions(value: any) {
+        this.regions = value;
+    }
 }
 
 Event.ACCESS_MODIFY = "admin";
 Event.SCHEMA_NAME = "Event";
 BaseDatabase.addModel(Event);
-
-Event.TYPES = {
-    GOTTESDIENST: "gottesdienst",
-    KONZERT: "konzert",
-    HAUSKREIS: "hauskreis",
-    KONFERENZ: "konferenz",
-    GEBETSKREIS: "gebetskreis",
-    SPORT: "sport",
-    JUGENDKREIS: "jugendkreis",
-    STUDENTENKREIS:"studentenkreis",
-    SONSTIGES:"sonstiges",
-};

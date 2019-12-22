@@ -31,7 +31,7 @@ export class EventSite extends FooterSite {
             this.finish();
             return;
         }
-        this._isFavortite = (await Favorite.findOne({eventId: this._event.id, isFavorite: true}) !== null);
+        this._isFavortite = (await Favorite.findOne({eventId: this._event.getId(), isFavorite: true}) !== null);
 
         return res;
     }
@@ -44,33 +44,33 @@ export class EventSite extends FooterSite {
 
         this.findBy("#event-name").appendChild(translator.makePersistentTranslation(this._event.getNameTranslation()));
         this.findBy("#event-description").appendChild(translator.makePersistentTranslation(this._event.getDescriptionTranslation()));
-        if (this._event.images.length > 0) {
-            this.findBy("#event-img").src = this._event.images[0];
+        if (this._event.getImages().length > 0) {
+            this.findBy("#event-img").src = this._event.getImages()[0];
         }
 
         //time
         let timeElement = this.findBy("#event-time");
-        if (this._event.startTime.getFullYear() === this._event.endTime.getFullYear()) {
-            if (this._event.startTime.getMonth() === this._event.endTime.getMonth() && this._event.startTime.getDate() === this._event.endTime.getDate()) {
-                if (this._event.startTime.getHours() === this._event.endTime.getHours() && this._event.startTime.getMinutes() === this._event.endTime.getMinutes()) {
-                    timeElement.innerHTML = Helper.strftime("%d. %B ´%y, %H:%M ", this._event.startTime) + translator.makePersistentTranslation("uhr").outerHTML;
+        if (this._event.getStartTime().getFullYear() === this._event.getEndTime().getFullYear()) {
+            if (this._event.getStartTime().getMonth() === this._event.getEndTime().getMonth() && this._event.getStartTime().getDate() === this._event.getEndTime().getDate()) {
+                if (this._event.getStartTime().getHours() === this._event.getEndTime().getHours() && this._event.getStartTime().getMinutes() === this._event.getEndTime().getMinutes()) {
+                    timeElement.innerHTML = Helper.strftime("%d. %B ´%y, %H:%M ", this._event.getStartTime()) + translator.makePersistentTranslation("uhr").outerHTML;
                 } else {
                     timeElement.innerHTML =
-                        Helper.strftime("%d. %B ´%y<br/>%H:%M", this._event.startTime) + " - " + Helper.strftime("%H:%M", this._event.endTime);
+                        Helper.strftime("%d. %B ´%y<br/>%H:%M", this._event.getStartTime()) + " - " + Helper.strftime("%H:%M", this._event.getEndTime());
                 }
             } else {
                 timeElement.innerHTML =
-                    Helper.strftime("%d. %b ´%y, %H:%M", this._event.startTime) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.endTime);
+                    Helper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
             }
         } else {
             timeElement.innerHTML =
-                Helper.strftime("%d. %b ´%y, %H:%M", this._event.startTime) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.endTime);
+                Helper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
         }
 
         //places
         let placesContainer = this.findBy("#places-container");
 
-        let places = this._event.places;
+        let places = this._event.getPlaces();
         let placesAreObject = false;
 
         if (!Array.isArray(places)) {
@@ -79,7 +79,7 @@ export class EventSite extends FooterSite {
         }
 
         await Helper.asyncForEach(places, async place => {
-            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject) ? this._event.places[place] : place));
+            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject) ? this._event.getPlaces()[place] : place));
         });
 
         //favorite
@@ -104,13 +104,13 @@ export class EventSite extends FooterSite {
 
         let typeTag = document.createElement("span");
         typeTag.classList.add("tag");
-        typeTag.appendChild(Translator.makePersistentTranslation(this._event.type));
+        typeTag.appendChild(Translator.makePersistentTranslation(this._event.getType()));
         tagPanel.addEventListener("click", () => {
-            this.startSite(SearchSite, {"types": this._event.type});
+            this.startSite(SearchSite, {"types": this._event.getType()});
         });
         tagPanel.appendChild(typeTag);
 
-        this._event.organisers.forEach(church => {
+        this._event.getOrganisers().forEach(church => {
             Translator.addDynamicTranslations(church.getDynamicTranslations());
 
            let churchTag = document.createElement("span");
@@ -147,7 +147,7 @@ export class EventSite extends FooterSite {
         });
         this.findBy("#modify-event").addEventListener("click", async () => {
             if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
-                this.finishAndStartSite(AddEventSite, {id: this._event.id});
+                this.finishAndStartSite(AddEventSite, {id: this._event.getId()});
             }
         });
     }

@@ -3,12 +3,12 @@ import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import componentImg from "../../img/component.png"
 import {Post} from "../../../model/Post";
 import {Translator} from "cordova-sites/src/client/js/Translator";
-import {Helper} from "cordova-sites/dist/cordova-sites";
 import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
 import {Event} from "../../../model/Event";
 import {ConfirmDialog} from "cordova-sites/src/client/js/Dialog/ConfirmDialog";
 import {Toast} from "cordova-sites/src/client/js/Toast/Toast";
 import {ModifyPostSite} from "./ModifyPostSite";
+import {DateHelper} from "js-helper";
 
 export class WelcomeSite extends AbsoluteBarMenuSite {
 
@@ -42,7 +42,7 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
 
             let postElem = this._postTemplate.cloneNode(true);
             postElem.querySelector(".text").appendChild(Translator.getInstance().makePersistentTranslation(post.getTextTranslation()));
-            postElem.querySelector(".date").innerText = Helper.strftime("%d.%m.%y, %H:%M", post.createdAt);
+            postElem.querySelector(".date").innerText = DateHelper.strftime("%d.%m.%y, %H:%M", post.createdAt);
             postElem.querySelector(".delete-button").addEventListener("click", async () => {
                 if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
                     if (await new ConfirmDialog("Möchtest du den Post wirklich löschen? Er wird unwiederbringlich verloren gehen!", "Post löschen?").show()) {

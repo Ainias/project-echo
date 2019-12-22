@@ -125,15 +125,15 @@ export class AddEventSite extends MenuFooterSite {
             } else {
                 event = new Event();
             }
-            event.names = names;
-            event.descriptions = descriptions;
-            event.organisers = organizers;
-            event.images = images;
-            event.places = places;
-            event.startTime = new Date(values["start"]);
-            event.endTime = new Date(values["end"]);
-            event.type = values["type"];
-            event.regions = regions;
+            event.setNames(names);
+            event.setDescriptions(descriptions);
+            event.setOrganisers(organizers);
+            event.setImages(images);
+            event.setPlaces(places);
+            event.setStartTime(new Date(values["start"]));
+            event.setEndTime(new Date(values["end"]));
+            event.setType(values["type"]);
+            event.setRegions(regions);
 
             await event.save();
 
@@ -232,28 +232,28 @@ export class AddEventSite extends MenuFooterSite {
 
             let values = {};
 
-            let names = this._event.names;
+            let names = this._event.getNames();
             Object.keys(names).forEach(lang => {
                 values["name-" + lang] = names[lang];
             });
 
-            let descriptions = this._event.descriptions;
+            let descriptions = this._event.getDescriptions();
             Object.keys(descriptions).forEach(lang => {
                 values["description-" + lang] = descriptions[lang];
             });
-            values["type"] = this._event.type;
-            values["start"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.startTime);
-            values["end"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.endTime);
+            values["type"] = this._event.getType();
+            values["start"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.getStartTime());
+            values["end"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.getEndTime());
 
-            this._event.organisers.forEach(church => {
+            this._event.getOrganisers().forEach(church => {
                 values["church-" + church.id] = church.id;
             });
 
-            this.findBy("#event-image").src = this._event.images[0];
-            this.findBy("input[type='hidden'][name='image-before']").value = this._event.images[0];
+            this.findBy("#event-image").src = this._event.getImages()[0];
+            this.findBy("input[type='hidden'][name='image-before']").value = this._event.getImages()[0];
             this.findBy("input[type='file'][name='image']").removeAttribute("required");
 
-            let places = this._event.places;
+            let places = this._event.getPlaces();
             if (Array.isArray(places)) {
                 places = Helper.arrayToObject(places, place => place);
             }

@@ -18,9 +18,9 @@ export class AddRepeatedEvent1000000007000 implements MigrationInterface {
         await queryRunner.createTable(table);
 
         if (this._isServer()) {
-            await queryRunner.query("ALTER TABLE event ADD repeatedEventId INTEGER NULL;");
-            await queryRunner.query("CREATE INDEX IDX_event_repeatedEventId ON event(repeatedEventId);");
-            await queryRunner.query("ALTER TABLE event ADD CONSTRAINT FK_event_repeatedEventId FOREIGN KEY (repeatedEventId) REFERENCES repeated_event(id);");
+            await queryRunner.query("SET foreign_key_checks=0;");
+            await MigrationHelper.updateModel(queryRunner, Event);
+            await queryRunner.query("SET foreign_key_checks=1;");
         } else {
             await queryRunner.query("PRAGMA foreign_keys = OFF");
             await MigrationHelper.updateModel(queryRunner, Event);

@@ -105,6 +105,7 @@ export class SearchSite extends FooterSite {
             "churches": this._churches
         });
 
+        //TODO check if realy all events found (or better to say, that all data is loaded!)
         let events = await EventHelper.search(this._searchString, this._start, this._end, this._types, this._churches);
         await this._eventListFragment.setEvents(events);
 
@@ -121,6 +122,7 @@ export class SearchSite extends FooterSite {
         Object.values(Event.TYPES).forEach(type => {
             let translation = Translator.translate(type).toLowerCase();
 
+            //TODO überprüfen, warum true ||
             if (true || translation.indexOf(value.toLowerCase()) !== -1 || this._types.indexOf(type) !== -1) {
                 let tag = this._filterTagTemplate.cloneNode(true);
                 tag.appendChild(Translator.makePersistentTranslation(type));
