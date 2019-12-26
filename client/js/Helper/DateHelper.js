@@ -1,6 +1,6 @@
-import {Helper} from "cordova-sites";
+import {Helper, DateHelper as OriginalDateHelper} from "js-helper";
 
-export class DateHelper {
+export class DateHelper extends OriginalDateHelper{
 
     static setMonth(newMonth, day, date) {
         if (Helper.isNull(date) && day instanceof Date) {

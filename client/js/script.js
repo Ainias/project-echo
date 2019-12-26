@@ -41,6 +41,7 @@ import {FavoriteWithSystemCalendar1000000000002} from "../../model/migrations/cl
 import {SettingsSite} from "./Sites/SettingsSite";
 import {RepeatedEvent} from "../../model/RepeatedEvent";
 import {AddRepeatedEvent1000000007000} from "../../model/migrations/AddRepeatedEvent";
+import {BlockedDay} from "../../model/BlockedDay";
 
 window["JSObject"] = Object;
 
@@ -125,7 +126,7 @@ App.addInitialization(async (app) => {
     // await SystemCalendar.createCalendar("echo");
 
     //Todo an richtige stelle auslagern
-    let res = await new SyncJob().sync([Church, Event, Region, Post, Fsj, RepeatedEvent]).catch(e => console.error(e));
+    let res = await new SyncJob().syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay]).catch(e => console.error(e));
     // EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
     // EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
 

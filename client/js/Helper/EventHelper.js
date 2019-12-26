@@ -1,10 +1,12 @@
 import {EasySyncClientDb} from "cordova-sites-easy-sync/src/client/EasySyncClientDb";
 import {Event} from "../../../model/Event";
-import {Brackets, In} from "typeorm";
+import {Between, Brackets, In} from "typeorm";
 import {NotificationScheduler} from "../NotificationScheduler";
 import {Favorite} from "../Model/Favorite";
 import {Translator, Helper, NativeStoragePromise} from "cordova-sites/dist/cordova-sites";
 import {SystemCalendar} from "../SystemCalendar";
+import {BlockedDay} from "../../../model/BlockedDay";
+import {DateHelper} from "js-helper";
 
 export class EventHelper {
     static async search(searchString, beginTime, endTime, types, organisers, regions) {
@@ -126,5 +128,82 @@ export class EventHelper {
         }
 
         await notificationScheduler.schedule(event.id, Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
+    }
+
+    static async generateSingleEventFromRepeatedEvent(repeatedEvent, day){
+        let events = await this.generateEventFromRepeatedEvent(repeatedEvent, day, day);
+        if (events.length === 1){
+            return events[0];
+        }
+        else {
+            return null;
+        }
+    }
+
+    static async generateEventFromRepeatedEvent(repeatedEvent, from, to){
+
+        if (repeatedEvent.repeatingStrategy !== 0){
+            return [];
+        }
+
+        if (from.getTime() < repeatedEvent.startDate.getTime()){
+            from = repeatedEvent.startDate;
+        }
+
+        from = new Date(from.getTime());
+        to = new Date(to.getTime());
+
+        from.setHours(0);
+        to.setHours(23);
+
+        let between = new Date(from.getTime());
+
+        let fromString = DateHelper.strftime("%Y-%m-%d", from);
+        let toString = DateHelper.strftime("%Y-%m-%d %H:%M", to);
+
+        let blockedDaysObjects = await BlockedDay.find({
+            repeatedEvent: {id: repeatedEvent.id},
+            day: Between(fromString, toString)
+        });
+
+        let blockedDays = [];
+        blockedDaysObjects.forEach(blockedDay => {
+            blockedDays.push(DateHelper.strftime("%Y-%m-%d", blockedDay.day));
+        });
+
+        debugger;
+        let weekdaysString = repeatedEvent.repeatingArguments.split(",");
+        let weekdays = [];
+        weekdaysString.forEach(weekday => {
+            weekdays.push(parseInt(weekday))
+        });
+
+        between.setHours(repeatedEvent.getStartTime().getHours());
+        between.setMinutes(repeatedEvent.getStartTime().getMinutes());
+        between.setSeconds(repeatedEvent.getStartTime().getSeconds());
+        between.setMilliseconds(repeatedEvent.getStartTime().getMilliseconds());
+
+        let duration = repeatedEvent.getEndTime().getTime()-repeatedEvent.getStartTime().getTime();
+
+        let events = [];
+        while(from.getTime() < to.getTime()){
+
+            if (blockedDays.indexOf(DateHelper.strftime("%Y-%m-%d", from)) === -1 && weekdays.indexOf(from.getDay()) !== -1){
+                let event = new Event();
+                event.id= "r"+repeatedEvent.id+"-"+DateHelper.strftime("%Y-%m-%d", between);
+                event.repeatedEvent = repeatedEvent;
+                event.setStartTime(new Date(between.getTime()));
+
+                event.setEndTime(new Date(between.getTime()+duration));
+                event.setPlaces(null);
+                event.setImages(null);
+
+                events.push(event);
+            }
+            from.setDate(from.getDate()+1);
+            between.setDate(between.getDate()+1);
+        }
+
+        return events;
     }
 }

@@ -73,9 +73,11 @@ export class Event extends AccessEasySyncModel {
         columns["images"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
         columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable:true};
         columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable:true};
+        columns["isTemplate"] = {type: BaseDatabase.TYPES.BOOLEAN, default:false};
         columns["type"] = {
             type: BaseDatabase.TYPES.STRING,
-            default: Event.TYPES.GOTTESDIENST
+            default: Event.TYPES.GOTTESDIENST,
+            nullable:true
         };
         return columns;
     }

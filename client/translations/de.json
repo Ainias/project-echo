@@ -79,5 +79,7 @@
   "time before start suffix": " vorher benachrichtigen",
   "min": "Min.",
   "hour": "Std.",
-  "days": "Tag(e)"
+  "days": "Tag(e)",
+
+  "no event found": "Kein Event gefunden :("
 }

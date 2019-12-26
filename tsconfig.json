@@ -19,5 +19,7 @@
     "./model/**/*",
     "./src/**/*"
   ],
-  "exclude": []
+  "exclude": [],
+  "emitDecoratorMetadata": true,
+  "experimentalDecorators": true
 }

@@ -2,32 +2,39 @@ import {BaseDatabase} from "cordova-sites-database/src/BaseDatabase";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
 import {Event} from "./Event";
 import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
+import {BlockedDay} from "./BlockedDay";
 
 export class RepeatedEvent extends AccessEasySyncModel {
     private repeatingStrategy: number;
     private repeatingArguments: string;
-    private generatedUntil: Date;
     private originalEvent: Event;
+    private startDate: Date;
 
-    private endsAt: Date;
+    private repeatUntil: Date;
 
     constructor() {
         super();
         this.repeatingStrategy = 0;
         this.repeatingArguments = "";
-        this.generatedUntil = new Date();
         this.originalEvent = null;
 
-        this.endsAt = null;
+        this.repeatUntil = null;
+        this.startDate = null;
     }
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["generatedUntil"] = BaseDatabase.TYPES.DATE;
-        columns["endsAt"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
+        columns["repeatUntil"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
+        columns["startDate"] = {type: BaseDatabase.TYPES.DATE};
         columns["repeatingStrategy"] = BaseDatabase.TYPES.INTEGER;
         columns["repeatingArguments"] = BaseDatabase.TYPES.TEXT;
         return columns;
+    }
+
+    static getSchemaDefinition(){
+        let schemaDefinition = super.getSchemaDefinition();
+        // debugger;
+        return schemaDefinition;
     }
 
     static getRelationDefinitions() {
@@ -39,8 +46,8 @@ export class RepeatedEvent extends AccessEasySyncModel {
             eager: true,
             sync: true,
         };
-        relations["events"] = {
-            target: Event.getSchemaName(),
+        relations["blockedDays"] = {
+            target: BlockedDay.getSchemaName(),
             type: "one-to-many",
             inverseSide: "repeatedEvent",
         };
@@ -84,6 +91,6 @@ export class RepeatedEvent extends AccessEasySyncModel {
     }
 
 }
-
+RepeatedEvent.ACCESS_MODIFY = "admin";
 RepeatedEvent.SCHEMA_NAME = "RepeatedEvent";
 BaseDatabase.addModel(RepeatedEvent);

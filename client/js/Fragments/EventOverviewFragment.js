@@ -50,10 +50,10 @@ export class EventOverviewFragment extends AbstractFragment {
             //adding translations
             Translator.addDynamicTranslations(event.getDynamicTranslations());
 
-            let yearSuffixStart = (Helper.strftime("%y", event.startTime));
-            let yearSuffixEnd = (Helper.strftime("%y", event.endTime));
-            let dayName = Helper.strftime("%a %d.%m.", event.startTime);
-            let endDay = Helper.strftime("%a %d.%m.", event.endTime);
+            let yearSuffixStart = (Helper.strftime("%y", event.getStartTime()));
+            let yearSuffixEnd = (Helper.strftime("%y", event.getEndTime()));
+            let dayName = Helper.strftime("%a %d.%m.", event.getStartTime());
+            let endDay = Helper.strftime("%a %d.%m.", event.getEndTime());
 
             if (yearSuffixEnd !== yearSuffixStart) {
                 dayName += " " + yearSuffixStart + " - " + endDay + " " + yearSuffixEnd;
@@ -64,12 +64,12 @@ export class EventOverviewFragment extends AbstractFragment {
                 }
             }
 
-            let sortingStartDay = Helper.strftime("%Y.%m.%d", event.startTime) + "," + dayName + "," + Helper.strftime("%Y.%m.%d", event.endTime);
+            let sortingStartDay = Helper.strftime("%Y.%m.%d", event.getStartTime()) + "," + dayName + "," + Helper.strftime("%Y.%m.%d", event.getEndTime());
             if (Helper.isNull(unsortedFavorites[sortingStartDay])) {
                 unsortedFavorites[sortingStartDay] = {};
             }
 
-            let startTime = Helper.strftime("%H:%M", event.startTime);
+            let startTime = Helper.strftime("%H:%M", event.getStartTime());
             if (Helper.isNull(unsortedFavorites[sortingStartDay][startTime])) {
                 unsortedFavorites[sortingStartDay][startTime] = [];
             }
@@ -108,7 +108,7 @@ export class EventOverviewFragment extends AbstractFragment {
                     eventElement.querySelector(".name").appendChild(translator.makePersistentTranslation(event.getNameTranslation()));
                     eventElement.querySelector(".time").innerText = time;
 
-                    let places = event.places;
+                    let places = event.getPlaces();
                     if (!Array.isArray(places)) {
                         places = Object.keys(places);
                     }
@@ -119,11 +119,11 @@ export class EventOverviewFragment extends AbstractFragment {
                     }
 
                     eventElement.addEventListener("click", () => {
-                        this.startSite(EventSite, {"id": event.id});
+                        this.startSite(EventSite, {"id": event.getId()});
                     });
 
                     let favElem = eventElement.querySelector(".favorite");
-                    Favorite.eventIsFavorite(event.id).then(isFavorite => {
+                    Favorite.eventIsFavorite(event.getId()).then(isFavorite => {
                         if (isFavorite) {
                             favElem.classList.add("is-favorite");
                         }

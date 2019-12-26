@@ -1,9 +1,9 @@
-import {Helper, App, Translator} from "cordova-sites"
+import {App, Translator} from "cordova-sites"
 import {Event} from "../../../model/Event";
 import view from "../../html/Sites/calendarSite.html";
 import {FooterSite} from "./FooterSite";
 // import * as _typeorm from "typeorm";
-import {LessThan} from "typeorm";
+import {IsNull, LessThan} from "typeorm";
 import {MoreThanOrEqual} from "typeorm";
 import {EventSite} from "./EventSite";
 import {Scaler} from "../Scaler";
@@ -12,6 +12,9 @@ import {DragHelper} from "../Helper/DragHelper";
 import {DateHelper} from "../Helper/DateHelper";
 import {ViewHelper} from "js-helper/src/client/ViewHelper";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
+import {RepeatedEvent} from "../../../model/RepeatedEvent";
+import {Helper} from "js-helper"
+import {EventHelper} from "../Helper/EventHelper";
 
 // let typeorm = _typeorm;
 // if (typeorm.default) {
@@ -56,11 +59,11 @@ export class CalendarSite extends FooterSite {
 
         this._monthName = this.findBy("#month-name");
         this.findBy("#button-left").addEventListener("click", () => {
-            DateHelper.setMonth(this._date.getMonth()-1, this._date);
+            DateHelper.setMonth(this._date.getMonth() - 1, this._date);
             this.drawMonth(this._date);
         });
         this.findBy("#button-right").addEventListener("click", () => {
-            DateHelper.setMonth(this._date.getMonth()+1, this._date);
+            DateHelper.setMonth(this._date.getMonth() + 1, this._date);
             this.drawMonth(this._date);
         });
 
@@ -73,8 +76,7 @@ export class CalendarSite extends FooterSite {
                 } else {
                     this._eventOverviewContainer.style.top = maxTop + "px";
                 }
-            }
-            else {
+            } else {
                 if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.25) {
                     this._eventOverviewContainer.style.top = "0";
                 } else {
@@ -99,10 +101,34 @@ export class CalendarSite extends FooterSite {
         firstDayOfNextMonth.setMonth(firstDayOfNextMonth.getMonth() + 1);
 
         //TODO filter nach region
-        return Event.find({
-            startTime: LessThan(Helper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
-            endTime: MoreThanOrEqual(Helper.strftime("%Y-%m-%d %H:%M:%S", firstDay))
+        let loadedEventsPromise = Event.find({
+            startTime: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
+            endTime: MoreThanOrEqual(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDay))
         });
+
+        let repeatedEvents  = await RepeatedEvent.find([{
+            startDate: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
+            repeatUntil: MoreThanOrEqual(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDay)),
+        }, {
+            startDate: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
+            repeatUntil: IsNull(),
+        }], null, null, null, RepeatedEvent.getRelations());
+
+        console.log("r", repeatedEvents);
+
+        let lastDayOfMonth = new Date(firstDayOfNextMonth.getTime());
+        lastDayOfMonth.setDate(lastDayOfMonth.getDate()-1);
+
+        let createdEvents = await Helper.asyncForEach(repeatedEvents, repeatedEvent => {
+            return EventHelper.generateEventFromRepeatedEvent(repeatedEvent, firstDay, lastDayOfMonth);
+        }, true);
+
+        let events = await loadedEventsPromise;
+        createdEvents.forEach(generatedEvents => {
+            events.push(...generatedEvents);
+        });
+
+        return events;
     }
 
     async onStart(pauseArguments) {
@@ -174,12 +200,12 @@ export class CalendarSite extends FooterSite {
                     oldActiveDay.classList.remove("active");
                 }
                 day.classList.add("active");
-                this.showEventOverviews((eventDays[i])?eventDays[i]:[]);
+                this.showEventOverviews((eventDays[i]) ? eventDays[i] : []);
 
                 let newDate = new Date(date);
                 newDate.setDate(i + 1);
                 this._date = newDate;
-                this.setParameter("date", Helper.strftime("%Y-%m-%d", newDate));
+                this.setParameter("date", DateHelper.strftime("%Y-%m-%d", newDate));
             });
 
             if (eventDays[i]) {
@@ -211,7 +237,7 @@ export class CalendarSite extends FooterSite {
 
         await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.70);
 
-        this.setParameter("date", Helper.strftime("%Y-%m-%d", date))
+        this.setParameter("date", DateHelper.strftime("%Y-%m-%d", date))
     }
 
     async showEventOverviews(events) {

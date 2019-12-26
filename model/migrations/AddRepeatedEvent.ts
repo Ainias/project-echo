@@ -2,6 +2,7 @@ import {MigrationInterface, QueryRunner, Table} from "typeorm";
 import {MigrationHelper} from "js-helper/src/shared/MigrationHelper";
 import {RepeatedEvent} from "../RepeatedEvent";
 import {Event} from "./models/v1/Event";
+import {BlockedDay} from "../BlockedDay";
 
 export class AddRepeatedEvent1000000007000 implements MigrationInterface {
 
@@ -14,8 +15,11 @@ export class AddRepeatedEvent1000000007000 implements MigrationInterface {
     }
 
     async up(queryRunner: QueryRunner): Promise<any> {
-        let table = MigrationHelper.createTableFromModelClass(RepeatedEvent);
-        await queryRunner.createTable(table);
+        let repeatedEventTable = MigrationHelper.createTableFromModelClass(RepeatedEvent);
+        await queryRunner.createTable(repeatedEventTable);
+
+        let blockedDayTable = MigrationHelper.createTableFromModelClass(BlockedDay);
+        await queryRunner.createTable(blockedDayTable);
 
         if (this._isServer()) {
             await queryRunner.query("SET foreign_key_checks=0;");

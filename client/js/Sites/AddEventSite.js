@@ -12,8 +12,11 @@ import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";
 import {RepeatedEvent} from "../../../model/RepeatedEvent";
 import {German} from "flatpickr/dist/l10n/de";
+import {DateHelper} from "js-helper/dist/shared/DateHelper";
+import {EventHelper} from "../Helper/EventHelper";
+import {BlockedDay} from "../../../model/BlockedDay";
+import {CalendarSite} from "./CalendarSite";
 
-//TODO userManagement hinzufügen
 export class AddEventSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
@@ -24,15 +27,22 @@ export class AddEventSite extends MenuFooterSite {
         let res = super.onConstruct(constructParameters);
         this._churches = await Church.find();
 
-        this._isRepeatable = false;
-
         if (constructParameters["id"]) {
 
             if (constructParameters["isRepeatableEvent"]) {
                 this._event = await RepeatedEvent.findById(constructParameters["id"], RepeatedEvent.getRelations());
-                this._isRepeatable = true;
             } else {
-                this._event = await Event.findById(constructParameters["id"], Event.getRelations());
+                let id = constructParameters["id"];
+                if (typeof id === "string" && id.startsWith("r")) {
+                    let parts = id.split("-");
+                    if (parts.length === 4) {
+                        let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), RepeatedEvent.getRelations());
+                        this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, new Date(parts[1], parts[2] - 1, parts[3]))
+                        this._event.id = null;
+                    }
+                } else {
+                    this._event = await Event.findById(id, Event.getRelations());
+                }
             }
         }
 
@@ -121,10 +131,16 @@ export class AddEventSite extends MenuFooterSite {
 
             let event = null;
             if (this._event) {
-                event = this._event
+                if (this._event instanceof RepeatedEvent) {
+                    event = this._event.originalEvent;
+                } else {
+                    event = this._event;
+                }
+
             } else {
                 event = new Event();
             }
+
             event.setNames(names);
             event.setDescriptions(descriptions);
             event.setOrganisers(organizers);
@@ -135,13 +151,60 @@ export class AddEventSite extends MenuFooterSite {
             event.setType(values["type"]);
             event.setRegions(regions);
 
+            if (Helper.isNotNull(event.repeatedEvent) && event.id === null) {
+                let blockedDay = new BlockedDay();
+                blockedDay.day = new Date(values["start"]);
+                blockedDay.day.setHours(12);
+                blockedDay.repeatedEvent = event.repeatedEvent;
+                event.repeatedEvent.blockedDays.push(blockedDay);
+                await blockedDay.save();
+            }
+
             await event.save();
+            if (values["repeatable"]) {
+                let repeatedEvent = null;
+                if (this._event instanceof RepeatedEvent) {
+                    repeatedEvent = this._event;
+                } else {
+                    repeatedEvent = new RepeatedEvent();
+                    this._event = repeatedEvent;
+                }
 
-            this.finishAndStartSite(EventSite, {
-                id: event.id
-            });
+                repeatedEvent.startDate = new Date(values["start"]);
+
+                repeatedEvent.originalEvent = event;
+                event.repeatedEvent = repeatedEvent;
+                event.setIsTemplate(true);
+
+                let repeatUntil = new Date(values["repeat-until"]);
+                if (isNaN(repeatUntil.getTime())) {
+                    repeatedEvent.repeatUntil = null;
+                } else {
+                    repeatedEvent.repeatUntil = repeatUntil;
+                }
+
+                let repeatedDays = [];
+                let days = [1, 2, 3, 4, 5, 6, 0];
+
+                days.forEach(day => {
+                    if (values["repeat-" + day]) {
+                        repeatedDays.push(values["repeat-" + day]);
+                    }
+                });
+
+                repeatedEvent.repeatingArguments = repeatedDays.join(",");
+                await repeatedEvent.save();
+                await event.save()
+            }
+
+            if (this._event instanceof RepeatedEvent) {
+                this.finishAndStartSite(CalendarSite);
+            } else {
+                this.finishAndStartSite(EventSite, {
+                    id: event.id
+                });
+            }
         });
-
 
         this._form.addValidator(values => {
             if (new Date(values["start"]).getTime() > new Date(values["end"]).getTime()) {
@@ -162,6 +225,17 @@ export class AddEventSite extends MenuFooterSite {
         });
 
         this.addPlaceLine();
+
+        this._repeatableSectionElement = this.findBy("#repeatable-section");
+
+        this._repeatableCheckbox = this.findBy("#repeatable-checkbox");
+        this._repeatableCheckbox.addEventListener("change", () => {
+            if (this._repeatableCheckbox.checked) {
+                this._repeatableSectionElement.classList.remove("hidden");
+            } else {
+                this._repeatableSectionElement.classList.add("hidden");
+            }
+        });
 
         await this.setFormValuesFromEvent();
 
@@ -228,7 +302,7 @@ export class AddEventSite extends MenuFooterSite {
     }
 
     async setFormValuesFromEvent() {
-        if (this._event instanceof Event) {
+        if (this._event instanceof Event || this._event instanceof RepeatedEvent) {
 
             let values = {};
 
@@ -242,12 +316,15 @@ export class AddEventSite extends MenuFooterSite {
                 values["description-" + lang] = descriptions[lang];
             });
             values["type"] = this._event.getType();
-            values["start"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.getStartTime());
-            values["end"] = Helper.strftime("%Y-%m-%d %H:%M", this._event.getEndTime());
+            values["start"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.getStartTime());
+            values["end"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.getEndTime());
 
-            this._event.getOrganisers().forEach(church => {
-                values["church-" + church.id] = church.id;
-            });
+            let organisers = this._event.getOrganisers();
+            if (Helper.isNotNull(organisers)) {
+                organisers.forEach(church => {
+                    values["church-" + church.id] = church.id;
+                });
+            }
 
             this.findBy("#event-image").src = this._event.getImages()[0];
             this.findBy("input[type='hidden'][name='image-before']").value = this._event.getImages()[0];
@@ -271,6 +348,25 @@ export class AddEventSite extends MenuFooterSite {
                     delete queryElem.removeAttribute("data-translation-placeholder");
                 }
             });
+
+            if (this._event instanceof RepeatedEvent) {
+                this._repeatableCheckbox.checked = true;
+                this._repeatableCheckbox.setAttribute("readonly", true);
+                this._repeatableCheckbox.setAttribute("disabled", true);
+                this._repeatableSectionElement.classList.remove("hidden");
+
+                if (Helper.isNotNull(this._event.repeatUntil)) {
+                    values["repeat-until"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.repeatUntil)
+                }
+
+                let repeatingArguments = this._event.repeatingArguments.split(",");
+                repeatingArguments.forEach(weekday => {
+                    values["repeat-" + weekday] = weekday;
+                });
+            } else if (this._event.repeatedEvent) {
+                this._repeatableCheckbox.setAttribute("readonly", true);
+                this._repeatableCheckbox.setAttribute("disabled", true);
+            }
 
             await this._form.setValues(values);
         }

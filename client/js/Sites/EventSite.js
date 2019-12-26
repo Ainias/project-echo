@@ -1,5 +1,5 @@
 import {FooterSite} from "./FooterSite";
-import {App, ConfirmDialog, DataManager, Helper, Toast, Translator} from "cordova-sites";
+import {App, ButtonChooseDialog, ConfirmDialog, Toast, Translator} from "cordova-sites";
 import {Event} from "../../../model/Event";
 
 import view from "../../html/Sites/eventSite.html";
@@ -9,6 +9,9 @@ import {UserManager} from "cordova-sites-user-management/client";
 import {AddEventSite} from "./AddEventSite";
 import {EventHelper} from "../Helper/EventHelper";
 import {SearchSite} from "./SearchSite";
+import {Helper} from "js-helper";
+import {DateHelper} from "js-helper/dist/shared/DateHelper";
+import {RepeatedEvent} from "../../../model/RepeatedEvent";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -25,7 +28,22 @@ export class EventSite extends FooterSite {
             return;
         }
 
-        this._event = await Event.findById(constructParameters["id"], Event.getRelations());
+        let id = constructParameters["id"];
+
+        if (typeof id === "string" && id.startsWith("r")) {
+            let parts = id.split("-");
+
+            if (parts.length === 4) {
+
+                console.log(parts);
+                let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), RepeatedEvent.getRelations());
+
+                this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, new Date(parts[1], parts[2] - 1, parts[3]))
+            }
+        } else {
+            this._event = await Event.findById(constructParameters["id"], Event.getRelations());
+        }
+
         if (!this._event) {
             new Toast("no event found").show();
             this.finish();
@@ -53,18 +71,18 @@ export class EventSite extends FooterSite {
         if (this._event.getStartTime().getFullYear() === this._event.getEndTime().getFullYear()) {
             if (this._event.getStartTime().getMonth() === this._event.getEndTime().getMonth() && this._event.getStartTime().getDate() === this._event.getEndTime().getDate()) {
                 if (this._event.getStartTime().getHours() === this._event.getEndTime().getHours() && this._event.getStartTime().getMinutes() === this._event.getEndTime().getMinutes()) {
-                    timeElement.innerHTML = Helper.strftime("%d. %B ´%y, %H:%M ", this._event.getStartTime()) + translator.makePersistentTranslation("uhr").outerHTML;
+                    timeElement.innerHTML = DateHelper.strftime("%d. %B ´%y, %H:%M ", this._event.getStartTime()) + translator.makePersistentTranslation("uhr").outerHTML;
                 } else {
                     timeElement.innerHTML =
-                        Helper.strftime("%d. %B ´%y<br/>%H:%M", this._event.getStartTime()) + " - " + Helper.strftime("%H:%M", this._event.getEndTime());
+                        DateHelper.strftime("%d. %B ´%y<br/>%H:%M", this._event.getStartTime()) + " - " + DateHelper.strftime("%H:%M", this._event.getEndTime());
                 }
             } else {
                 timeElement.innerHTML =
-                    Helper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
+                    Helper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + DateHelper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
             }
         } else {
             timeElement.innerHTML =
-                Helper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + Helper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
+                DateHelper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + DateHelper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
         }
 
         //places
@@ -110,18 +128,21 @@ export class EventSite extends FooterSite {
         });
         tagPanel.appendChild(typeTag);
 
-        this._event.getOrganisers().forEach(church => {
-            Translator.addDynamicTranslations(church.getDynamicTranslations());
+        let organisers = this._event.getOrganisers();
+        if (Array.isArray(organisers)) {
+            organisers.forEach(church => {
+                Translator.addDynamicTranslations(church.getDynamicTranslations());
 
-           let churchTag = document.createElement("span");
-           churchTag.classList.add("tag");
-           churchTag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
-           churchTag.addEventListener("click", () => {
-               this.startSite(SearchSite, {"churches": church.id+""});
-           });
+                let churchTag = document.createElement("span");
+                churchTag.classList.add("tag");
+                churchTag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
+                churchTag.addEventListener("click", () => {
+                    this.startSite(SearchSite, {"churches": church.id + ""});
+                });
 
-           tagPanel.appendChild(churchTag);
-        });
+                tagPanel.appendChild(churchTag);
+            });
+        }
 
         this._checkRightsPanel();
         return res;
@@ -147,7 +168,23 @@ export class EventSite extends FooterSite {
         });
         this.findBy("#modify-event").addEventListener("click", async () => {
             if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
-                this.finishAndStartSite(AddEventSite, {id: this._event.getId()});
+
+                if (Helper.isNotNull(this._event.repeatedEvent)) {
+                    let editSeries = await new ButtonChooseDialog("", "edit event or event series", {
+                        "0" : "event",
+                        "1" : "series"
+                    }).show();
+
+                    if (editSeries === "1"){
+                        this.finishAndStartSite(AddEventSite, {id: this._event.repeatedEvent.id, isRepeatableEvent: true});
+                    }
+                    else {
+                        this.finishAndStartSite(AddEventSite, {id: this._event.getId()});
+                    }
+
+                } else {
+                    this.finishAndStartSite(AddEventSite, {id: this._event.getId()});
+                }
             }
         });
     }
