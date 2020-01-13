@@ -171,7 +171,6 @@ export class EventHelper {
             blockedDays.push(DateHelper.strftime("%Y-%m-%d", blockedDay.day));
         });
 
-        debugger;
         let weekdaysString = repeatedEvent.repeatingArguments.split(",");
         let weekdays = [];
         weekdaysString.forEach(weekday => {

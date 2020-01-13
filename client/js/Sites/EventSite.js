@@ -78,7 +78,7 @@ export class EventSite extends FooterSite {
                 }
             } else {
                 timeElement.innerHTML =
-                    Helper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + DateHelper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
+                    DateHelper.strftime("%d. %b ´%y, %H:%M", this._event.getStartTime()) + " -<br/>" + DateHelper.strftime("%d. %b ´%y, %H:%M", this._event.getEndTime());
             }
         } else {
             timeElement.innerHTML =
@@ -159,7 +159,19 @@ export class EventSite extends FooterSite {
 
         this.findBy("#delete-event").addEventListener("click", async () => {
             if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
-                if (await new ConfirmDialog("möchtest du das Event wirklich löschen? Es wird unwiederbringlich verloren gehen!", "Event löschen?").show()) {
+
+                if (Helper.isNotNull(this._event.repeatedEvent)) {
+                    let editSeries = await new ButtonChooseDialog("", "delete event or event series", {
+                        "0" : "event",
+                        "1" : "series",
+                        "2" : "abort"
+                    }).show();
+                    if (editSeries === "1"){
+                        this._event.repeatedEvent.delete()
+                    }
+                }
+
+                else if (await new ConfirmDialog("möchtest du das Event wirklich löschen? Es wird unwiederbringlich verloren gehen!", "Event löschen?").show()) {
                     await this._event.delete();
                     new Toast("event wurde erfolgreich gelscht").show();
                     this.finish();

@@ -12,6 +12,8 @@ export class RepeatedEvent extends AccessEasySyncModel {
 
     private repeatUntil: Date;
 
+    private static DELETE_PATH = "/sync/deleteRepeatedEvent";
+
     constructor() {
         super();
         this.repeatingStrategy = 0;
@@ -29,12 +31,6 @@ export class RepeatedEvent extends AccessEasySyncModel {
         columns["repeatingStrategy"] = BaseDatabase.TYPES.INTEGER;
         columns["repeatingArguments"] = BaseDatabase.TYPES.TEXT;
         return columns;
-    }
-
-    static getSchemaDefinition(){
-        let schemaDefinition = super.getSchemaDefinition();
-        // debugger;
-        return schemaDefinition;
     }
 
     static getRelationDefinitions() {
@@ -90,7 +86,13 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.originalEvent.getRegions();
     }
 
+    async delete(): Promise<any | DeleteResult> {
+        return super.delete();
+    }
 }
+
 RepeatedEvent.ACCESS_MODIFY = "admin";
 RepeatedEvent.SCHEMA_NAME = "RepeatedEvent";
+
+
 BaseDatabase.addModel(RepeatedEvent);

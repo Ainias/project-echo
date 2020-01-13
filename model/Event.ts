@@ -4,7 +4,6 @@ import {Church} from "./Church";
 import {Region} from "./Region";
 import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
 import {Helper} from "js-helper/src/shared/Helper";
-import {type} from "os";
 import {JsonHelper} from "js-helper/dist/shared/JsonHelper";
 import {BaseModel} from "cordova-sites-database/src/BaseModel";
 
