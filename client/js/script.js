@@ -42,6 +42,7 @@ import {SettingsSite} from "./Sites/SettingsSite";
 import {RepeatedEvent} from "../../model/RepeatedEvent";
 import {AddRepeatedEvent1000000007000} from "../../model/migrations/AddRepeatedEvent";
 import {BlockedDay} from "../../model/BlockedDay";
+import {EventHelper} from "./Helper/EventHelper";
 
 window["JSObject"] = Object;
 
@@ -54,8 +55,6 @@ RegistrationSite.ADD_REGISTRATION_ACTION = false;
 App.setLogo(logo);
 
 App.addInitialization(async (app) => {
-
-    console.log(BaseDatabase._models);
 
     //add Bibelvers to html
     let vers = bibelverse[Math.floor(Math.random() * (bibelverse.length))];
@@ -126,9 +125,13 @@ App.addInitialization(async (app) => {
     // await SystemCalendar.createCalendar("echo");
 
     //Todo an richtige stelle auslagern
-    let res = await new SyncJob().syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay]).catch(e => console.error(e));
-    // EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
-    // EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
+    let syncJob = new SyncJob();
+    await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay]).catch(e => console.error(e));
+    syncJob.getSyncPromise().then(async res => {
+        await EventHelper.updateFavorites(res["BlockedDay"]);
+        // EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
+        // EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
+    });
 
     // await SystemCalendar.deleteCalendar();
     window["Church"] = Church;
@@ -150,7 +153,7 @@ SystemCalendar.WEBSITE = "echo.silas.link";
 
 DataManager._basePath = __HOST_ADDRESS__;
 DataManager.onlineCallback = isOnline => {
-    if (!isOnline){
+    if (!isOnline) {
         console.log("not (yet) online!");
     }
 };

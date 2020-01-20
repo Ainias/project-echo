@@ -12,6 +12,7 @@ import {SearchSite} from "./SearchSite";
 import {Helper} from "js-helper";
 import {DateHelper} from "js-helper/dist/shared/DateHelper";
 import {RepeatedEvent} from "../../../model/RepeatedEvent";
+import {BlockedDay} from "../../../model/BlockedDay";
 
 export class EventSite extends FooterSite {
     constructor(siteManager) {
@@ -162,19 +163,40 @@ export class EventSite extends FooterSite {
 
                 if (Helper.isNotNull(this._event.repeatedEvent)) {
                     let editSeries = await new ButtonChooseDialog("", "delete event or event series", {
-                        "0" : "event",
-                        "1" : "series",
-                        "2" : "abort"
+                        "0": "event",
+                        "1": "series",
+                        "2": "abort",
                     }).show();
-                    if (editSeries === "1"){
-                        this._event.repeatedEvent.delete()
+                    if (editSeries === "1") {
+                        this.showLoadingSymbol();
+                        this._event.repeatedEvent.delete();
+                        new Toast("eventserie wurde erfolgreich gelöscht").show();
+                        this.finish();
+                        this.removeLoadingSymbol();
+                    } else if (editSeries === "0") {
+                        this.showLoadingSymbol();
+                        if (this._event.id.startsWith("r")) {
+                            let blockedDay = new BlockedDay();
+                            blockedDay.day = this._event.startTime;
+                            blockedDay.day.setHours(12);
+                            blockedDay.repeatedEvent = this._event.repeatedEvent;
+                            this._event.repeatedEvent.blockedDays.push(blockedDay);
+                            await blockedDay.save();
+                            new Toast("event wurde erfolgreich gelöscht").show();
+                            this.finish();
+                        } else {
+                            this._event.delete();
+                            new Toast("event wurde erfolgreich gelöscht").show();
+                            this.finish();
+                        }
+                        this.removeLoadingSymbol();
                     }
-                }
-
-                else if (await new ConfirmDialog("möchtest du das Event wirklich löschen? Es wird unwiederbringlich verloren gehen!", "Event löschen?").show()) {
+                } else if (await new ConfirmDialog("möchtest du das Event wirklich löschen? Es wird unwiederbringlich verloren gehen!", "Event löschen?").show()) {
+                    this.showLoadingSymbol();
                     await this._event.delete();
-                    new Toast("event wurde erfolgreich gelscht").show();
+                    new Toast("event wurde erfolgreich gelöscht").show();
                     this.finish();
+                    this.removeLoadingSymbol();
                 }
             }
         });
@@ -183,14 +205,16 @@ export class EventSite extends FooterSite {
 
                 if (Helper.isNotNull(this._event.repeatedEvent)) {
                     let editSeries = await new ButtonChooseDialog("", "edit event or event series", {
-                        "0" : "event",
-                        "1" : "series"
+                        "1": "event",
+                        "2": "series"
                     }).show();
 
-                    if (editSeries === "1"){
-                        this.finishAndStartSite(AddEventSite, {id: this._event.repeatedEvent.id, isRepeatableEvent: true});
-                    }
-                    else {
+                    if (editSeries === "2") {
+                        this.finishAndStartSite(AddEventSite, {
+                            id: this._event.repeatedEvent.id,
+                            isRepeatableEvent: true
+                        });
+                    } else if (editSeries === "1") {
                         this.finishAndStartSite(AddEventSite, {id: this._event.getId()});
                     }
 

@@ -86,7 +86,7 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.originalEvent.getRegions();
     }
 
-    async delete(): Promise<any | DeleteResult> {
+    async delete(): Promise<any> {
         return super.delete();
     }
 }

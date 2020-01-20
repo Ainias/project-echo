@@ -37,7 +37,9 @@ export class AddEventSite extends MenuFooterSite {
                     let parts = id.split("-");
                     if (parts.length === 4) {
                         let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), RepeatedEvent.getRelations());
-                        this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, new Date(parts[1], parts[2] - 1, parts[3]))
+
+                        this._blockedDay = new Date(parts[1], parts[2] - 1, parts[3]);
+                        this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, this._blockedDay);
                         this._event.id = null;
                     }
                 } else {
@@ -96,6 +98,7 @@ export class AddEventSite extends MenuFooterSite {
         });
 
         this._form = new Form(this.findBy("#add-event-form"), async values => {
+            this.showLoadingSymbol()
             let names = {};
             let descriptions = {};
             let organizers = [];
@@ -151,16 +154,21 @@ export class AddEventSite extends MenuFooterSite {
             event.setType(values["type"]);
             event.setRegions(regions);
 
-            if (Helper.isNotNull(event.repeatedEvent) && event.id === null) {
+            let eventId = event.id;
+            let savePromise = event.save();
+            if (Helper.isNotNull(event.repeatedEvent) && eventId === null) {
                 let blockedDay = new BlockedDay();
-                blockedDay.day = new Date(values["start"]);
+                blockedDay.day = this._blockedDay;
                 blockedDay.day.setHours(12);
                 blockedDay.repeatedEvent = event.repeatedEvent;
+                blockedDay.event = event;
                 event.repeatedEvent.blockedDays.push(blockedDay);
+                await savePromise;
                 await blockedDay.save();
             }
+            await savePromise;
+            eventId = event.id;
 
-            await event.save();
             if (values["repeatable"]) {
                 let repeatedEvent = null;
                 if (this._event instanceof RepeatedEvent) {
@@ -204,6 +212,7 @@ export class AddEventSite extends MenuFooterSite {
                     id: event.id
                 });
             }
+            this.showLoadingSymbol();
         });
 
         this._form.addValidator(values => {

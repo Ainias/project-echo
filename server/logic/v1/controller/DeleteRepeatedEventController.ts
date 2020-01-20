@@ -30,8 +30,7 @@ export class DeleteRepeatedEventController {
         let queryBuilder = await EasySyncServerDb.getInstance().createQueryBuilder();
         await queryBuilder.update(Event)
             .set({deleted: true, updatedAt: now})
-            .innerJoin("Event.repeatedEvent", "repeatedEvent")
-            .where("repeatedEvent IN (:...ids)", {ids: modelIds})
+            .where("repeatedEventId IN (:...ids)", {ids: modelIds})
             .execute();
 
         await EasySyncServerDb.getInstance().deleteEntity(modelIds, model);

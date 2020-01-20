@@ -10,7 +10,10 @@ import {DateHelper} from "js-helper";
 
 export class EventHelper {
     static async search(searchString, beginTime, endTime, types, organisers, regions) {
+
         let queryBuilder = await EasySyncClientDb.getInstance().createQueryBuilder(Event);
+        queryBuilder = queryBuilder.innerJoinAndSelect("Event.repeatedEvent", "repeatedEvent");
+        queryBuilder = queryBuilder.innerJoinAndSelect("repeatedEvent.originalEvent", "originalEvent");
 
         if (Helper.isNotNull(searchString) && searchString.trim() !== "") {
             searchString = "%" + searchString + "%";
@@ -20,13 +23,6 @@ export class EventHelper {
                     .orWhere("Event.descriptions LIKE :searchString", {searchString: searchString})
                     .orWhere("Event.places LIKE :searchString", {searchString: searchString})
             }));
-        }
-        if (Helper.isNotNull(beginTime) && beginTime.trim() !== "") {
-            queryBuilder = queryBuilder.andWhere("Event.endTime >= :beginTime", {beginTime: beginTime});
-        }
-
-        if (Helper.isNotNull(endTime) && endTime.trim() !== "") {
-            queryBuilder = queryBuilder.andWhere("Event.startTime <= :endTime", {endTime: endTime});
         }
 
         if (Helper.isNotNull(types)) {
@@ -46,8 +42,51 @@ export class EventHelper {
                 queryBuilder = queryBuilder.innerJoin("Event.organisers", "organiser").andWhere("organiser.id IN(:...organisers)", {organisers: organisers})
             }
         }
+        let repeatedEventQueryBuilder = queryBuilder.clone();
 
-        return await queryBuilder.getMany();
+        queryBuilder = queryBuilder.andWhere("Event.isTemplate = 0");
+        if (Helper.isNotNull(beginTime) && beginTime.trim() !== "") {
+            queryBuilder = queryBuilder.andWhere("Event.endTime >= :beginTime", {beginTime: beginTime});
+        }
+
+        if (Helper.isNotNull(endTime) && endTime.trim() !== "") {
+            queryBuilder = queryBuilder.andWhere("Event.startTime <= :endTime", {endTime: endTime});
+        }
+
+        let eventPromise = queryBuilder.getMany();
+
+        repeatedEventQueryBuilder = repeatedEventQueryBuilder.andWhere("Event.isTemplate = 1");
+        if (Helper.isNotNull(beginTime) && beginTime.trim() !== "") {
+            repeatedEventQueryBuilder = repeatedEventQueryBuilder.andWhere("(repeatedEvent.repeatUntil >= :beginTime OR repeatedEvent.repeatUntil IS NULL)", {beginTime: beginTime});
+        }
+
+        if (Helper.isNotNull(endTime) && endTime.trim() !== "") {
+            repeatedEventQueryBuilder = repeatedEventQueryBuilder.andWhere("repeatedEvent.startDate <= :endTime", {endTime: endTime});
+        }
+
+        let repeatUntilEvents = await repeatedEventQueryBuilder.getMany();
+
+        if (Helper.isNull(beginTime) || beginTime.trim() === ""){
+            beginTime = new Date();
+        }
+        else {
+            beginTime = new Date(Date.parse(beginTime));
+        }
+
+        if (Helper.isNull(endTime) || endTime.trim() === ""){
+            endTime = new Date(beginTime.getTime()+1000*60*60*24*7);
+        }
+        else {
+            endTime = new Date(Date.parse(endTime));
+        }
+
+        let events = [];
+        await Helper.asyncForEach(repeatUntilEvents, async event => {
+            events.push.apply(events, await EventHelper.generateEventFromRepeatedEvent(event.repeatedEvent, beginTime, endTime))
+        });
+        events.push.apply(events, await eventPromise);
+
+        return events;
     }
 
     static async toggleFavorite(event) {
@@ -130,23 +169,23 @@ export class EventHelper {
         await notificationScheduler.schedule(event.id, Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
     }
 
-    static async generateSingleEventFromRepeatedEvent(repeatedEvent, day){
-        let events = await this.generateEventFromRepeatedEvent(repeatedEvent, day, day);
-        if (events.length === 1){
+    static async generateSingleEventFromRepeatedEvent(repeatedEvent, day, addDatabaseEvents) {
+        let events = await this.generateEventFromRepeatedEvent(repeatedEvent, day, day, addDatabaseEvents);
+        if (events.length === 1) {
             return events[0];
-        }
-        else {
+        } else {
             return null;
         }
     }
 
-    static async generateEventFromRepeatedEvent(repeatedEvent, from, to){
+    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents) {
+        addDatabaseEvents = Helper.nonNull(addDatabaseEvents, false);
 
-        if (repeatedEvent.repeatingStrategy !== 0){
+        if (repeatedEvent.repeatingStrategy !== 0) {
             return [];
         }
 
-        if (from.getTime() < repeatedEvent.startDate.getTime()){
+        if (from.getTime() < repeatedEvent.startDate.getTime()) {
             from = repeatedEvent.startDate;
         }
 
@@ -164,12 +203,10 @@ export class EventHelper {
         let blockedDaysObjects = await BlockedDay.find({
             repeatedEvent: {id: repeatedEvent.id},
             day: Between(fromString, toString)
-        });
+        }, null, null, null, BlockedDay.getRelations());
 
-        let blockedDays = [];
-        blockedDaysObjects.forEach(blockedDay => {
-            blockedDays.push(DateHelper.strftime("%Y-%m-%d", blockedDay.day));
-        });
+        let indexedBlockedDaysObjects = Helper.arrayToObject(blockedDaysObjects, blockedDay => DateHelper.strftime("%Y-%m-%d", blockedDay.day));
+        let blockedDays = Object.keys(indexedBlockedDaysObjects);
 
         let weekdaysString = repeatedEvent.repeatingArguments.split(",");
         let weekdays = [];
@@ -182,27 +219,75 @@ export class EventHelper {
         between.setSeconds(repeatedEvent.getStartTime().getSeconds());
         between.setMilliseconds(repeatedEvent.getStartTime().getMilliseconds());
 
-        let duration = repeatedEvent.getEndTime().getTime()-repeatedEvent.getStartTime().getTime();
+        let duration = repeatedEvent.getEndTime().getTime() - repeatedEvent.getStartTime().getTime();
 
         let events = [];
-        while(from.getTime() < to.getTime()){
+        while (from.getTime() < to.getTime()) {
 
-            if (blockedDays.indexOf(DateHelper.strftime("%Y-%m-%d", from)) === -1 && weekdays.indexOf(from.getDay()) !== -1){
+            let today = DateHelper.strftime("%Y-%m-%d", from);
+
+            if (blockedDays.indexOf(today) === -1 && weekdays.indexOf(from.getDay()) !== -1) {
                 let event = new Event();
-                event.id= "r"+repeatedEvent.id+"-"+DateHelper.strftime("%Y-%m-%d", between);
+                event.id = "r" + repeatedEvent.id + "-" + DateHelper.strftime("%Y-%m-%d", between);
                 event.repeatedEvent = repeatedEvent;
                 event.setStartTime(new Date(between.getTime()));
 
-                event.setEndTime(new Date(between.getTime()+duration));
+                event.setEndTime(new Date(between.getTime() + duration));
                 event.setPlaces(null);
                 event.setImages(null);
 
                 events.push(event);
             }
-            from.setDate(from.getDate()+1);
-            between.setDate(between.getDate()+1);
+            else if (addDatabaseEvents && blockedDays.indexOf(today) !== -1) {
+                if (indexedBlockedDaysObjects[today].event !== null){
+                    indexedBlockedDaysObjects[today].event.repeatedEvent = repeatedEvent;
+                    events.push(indexedBlockedDaysObjects[today].event);
+                }
+            }
+            from.setDate(from.getDate() + 1);
+            between.setDate(between.getDate() + 1);
         }
 
         return events;
+    }
+
+    static async updateFavorites(res) {
+
+        //load blockedDays with repeatedEvent
+        let blockedDayIds = [];
+        res["changed"].forEach(blockedDay => {
+            blockedDayIds.push(blockedDay.id);
+        });
+
+        let changedBlockedDays = await BlockedDay.findByIds(blockedDayIds, BlockedDay.getRelations());
+
+        let favEventIds = {};
+        changedBlockedDays.forEach(blockedDay => {
+            favEventIds["r"+blockedDay.repeatedEvent.id+ "-" + DateHelper.strftime("%Y-%m-%d", blockedDay.day)] = blockedDay;
+        });
+
+        let favorites = await Favorite.find({
+            eventId: In(Object.keys(favEventIds))
+        });
+
+        let deleteFavIds = [];
+        let saveFavs = [];
+
+        favorites.forEach(fav => {
+            let blockedDay = favEventIds[fav.eventId];
+            if (blockedDay.event){
+                fav.event = blockedDay.event;
+                fav.eventId = blockedDay.event.id;
+                saveFavs.push(fav);
+            }
+            else {
+                deleteFavIds.push(fav.id);
+            }
+        });
+
+        await Promise.all([
+            Favorite.saveMany(saveFavs),
+            EasySyncClientDb.getInstance().deleteEntity(deleteFavIds, Favorite)
+        ]);
     }
 }

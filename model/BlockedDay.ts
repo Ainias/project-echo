@@ -20,6 +20,12 @@ export class BlockedDay extends AccessEasySyncModel{
             joinColumn: true,
             sync: true,
         };
+        relations["event"] = {
+            target: Event.getSchemaName(),
+            type: "one-to-one",
+            joinColumn: true,
+            sync: true,
+        };
         return relations;
     }
 }

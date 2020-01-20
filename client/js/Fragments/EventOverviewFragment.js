@@ -14,7 +14,7 @@ export class EventOverviewFragment extends AbstractFragment {
         this._showInPast = true;
     }
 
-    setShowInPast(showInPast){
+    setShowInPast(showInPast) {
         this._showInPast = (showInPast === true);
     }
 
@@ -47,33 +47,35 @@ export class EventOverviewFragment extends AbstractFragment {
         let currentYear = Helper.strftime("%y");
         let unsortedFavorites = {};
         this._events.forEach(event => {
-            //adding translations
-            Translator.addDynamicTranslations(event.getDynamicTranslations());
+            if (Helper.isNotNull(event)) {
+                //adding translations
+                Translator.addDynamicTranslations(event.getDynamicTranslations());
 
-            let yearSuffixStart = (Helper.strftime("%y", event.getStartTime()));
-            let yearSuffixEnd = (Helper.strftime("%y", event.getEndTime()));
-            let dayName = Helper.strftime("%a %d.%m.", event.getStartTime());
-            let endDay = Helper.strftime("%a %d.%m.", event.getEndTime());
+                let yearSuffixStart = (Helper.strftime("%y", event.getStartTime()));
+                let yearSuffixEnd = (Helper.strftime("%y", event.getEndTime()));
+                let dayName = Helper.strftime("%a %d.%m.", event.getStartTime());
+                let endDay = Helper.strftime("%a %d.%m.", event.getEndTime());
 
-            if (yearSuffixEnd !== yearSuffixStart) {
-                dayName += " " + yearSuffixStart + " - " + endDay + " " + yearSuffixEnd;
-            } else if (dayName !== endDay) {
-                dayName += " - " + endDay;
-                if (currentYear !== yearSuffixStart) {
-                    dayName += " " + yearSuffixStart;
+                if (yearSuffixEnd !== yearSuffixStart) {
+                    dayName += " " + yearSuffixStart + " - " + endDay + " " + yearSuffixEnd;
+                } else if (dayName !== endDay) {
+                    dayName += " - " + endDay;
+                    if (currentYear !== yearSuffixStart) {
+                        dayName += " " + yearSuffixStart;
+                    }
                 }
-            }
 
-            let sortingStartDay = Helper.strftime("%Y.%m.%d", event.getStartTime()) + "," + dayName + "," + Helper.strftime("%Y.%m.%d", event.getEndTime());
-            if (Helper.isNull(unsortedFavorites[sortingStartDay])) {
-                unsortedFavorites[sortingStartDay] = {};
-            }
+                let sortingStartDay = Helper.strftime("%Y.%m.%d", event.getStartTime()) + "," + dayName + "," + Helper.strftime("%Y.%m.%d", event.getEndTime());
+                if (Helper.isNull(unsortedFavorites[sortingStartDay])) {
+                    unsortedFavorites[sortingStartDay] = {};
+                }
 
-            let startTime = Helper.strftime("%H:%M", event.getStartTime());
-            if (Helper.isNull(unsortedFavorites[sortingStartDay][startTime])) {
-                unsortedFavorites[sortingStartDay][startTime] = [];
+                let startTime = Helper.strftime("%H:%M", event.getStartTime());
+                if (Helper.isNull(unsortedFavorites[sortingStartDay][startTime])) {
+                    unsortedFavorites[sortingStartDay][startTime] = [];
+                }
+                unsortedFavorites[sortingStartDay][startTime].push(event);
             }
-            unsortedFavorites[sortingStartDay][startTime].push(event);
         });
 
         let sortedFavorites = {};
@@ -161,8 +163,7 @@ export class EventOverviewFragment extends AbstractFragment {
         }
         if (hasEventsInPast) {
             this._pastSection.classList.remove("hidden");
-        }
-        else {
+        } else {
             this._pastSection.classList.add("hidden");
         }
     }

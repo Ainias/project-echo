@@ -114,8 +114,6 @@ export class CalendarSite extends FooterSite {
             repeatUntil: IsNull(),
         }], null, null, null, RepeatedEvent.getRelations());
 
-        console.log("r", repeatedEvents);
-
         let lastDayOfMonth = new Date(firstDayOfNextMonth.getTime());
         lastDayOfMonth.setDate(lastDayOfMonth.getDate()-1);
 

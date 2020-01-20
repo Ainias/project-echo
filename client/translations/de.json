@@ -81,5 +81,9 @@
   "hour": "Std.",
   "days": "Tag(e)",
 
-  "no event found": "Kein Event gefunden :("
+  "no event found": "Kein Event gefunden :(",
+
+  "edit event or event series": "Veranstaltung oder Terminserie bearbeiten?",
+  "series": "Serie",
+  "abort": "Abbruch"
 }
