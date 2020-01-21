@@ -15,6 +15,10 @@ export class AddRepeatedEvent1000000007000 implements MigrationInterface {
     }
 
     async up(queryRunner: QueryRunner): Promise<any> {
+        if (this._isServer()){
+            await queryRunner.query("ALTER TABLE event ENGINE=InnoDB;");
+        }
+
         let repeatedEventTable = MigrationHelper.createTableFromModelClass(RepeatedEvent);
         await queryRunner.createTable(repeatedEventTable);
 

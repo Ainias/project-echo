@@ -67,51 +67,51 @@ export class Event extends AccessEasySyncModel {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["names"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
-        columns["descriptions"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
-        columns["places"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
-        columns["images"] = {type: BaseDatabase.TYPES.MY_JSON, nullable:true};
-        columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable:true};
-        columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable:true};
-        columns["isTemplate"] = {type: BaseDatabase.TYPES.BOOLEAN, default:false};
+        columns["names"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
+        columns["descriptions"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
+        columns["places"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
+        columns["images"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
+        columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
+        columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
+        columns["isTemplate"] = {type: BaseDatabase.TYPES.BOOLEAN, default: 0};
         columns["type"] = {
             type: BaseDatabase.TYPES.STRING,
             default: Event.TYPES.GOTTESDIENST,
-            nullable:true
+            nullable: true
         };
         return columns;
     }
 
-    static async find(where?, order?, limit?, offset?, relations?){
-        if (typeof relations === "undefined"){
+    static async find(where?, order?, limit?, offset?, relations?) {
+        if (typeof relations === "undefined") {
             relations = Event.getRelations();
         }
         return this._database.findEntities(this, where, order, limit, offset, relations);
     }
 
     static async findAndCount(where?, order?, limit?, offset?, relations?) {
-        if (typeof relations === "undefined"){
+        if (typeof relations === "undefined") {
             relations = Event.getRelations();
         }
         return this._database.findAndCountEntities(this, where, order, limit, offset, relations);
     }
 
     static async findOne(where?, order?, offset?, relations?) {
-        if (typeof relations === "undefined"){
+        if (typeof relations === "undefined") {
             relations = Event.getRelations();
         }
         return this._database.findOneEntity(this, where, order, offset, relations);
     }
 
     static async findById(id, relations?) {
-        if (typeof relations === "undefined"){
+        if (typeof relations === "undefined") {
             relations = Event.getRelations();
         }
         return this._database.findById(this, id, relations);
     }
 
     static async findByIds(ids, relations?) {
-        if (typeof relations === "undefined"){
+        if (typeof relations === "undefined") {
             relations = Event.getRelations();
         }
         return this._database.findByIds(this, ids, relations);
@@ -146,8 +146,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getNames(): {} {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getNames();
         }
         return this.names;
@@ -158,8 +157,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getDescriptions(): {} {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getDescription();
         }
         return this.descriptions;
@@ -170,8 +168,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getStartTime(): Date {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getStartTime();
         }
         return this.startTime;
@@ -182,8 +179,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getEndTime(): Date {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getEndTime();
         }
         return this.endTime;
@@ -194,8 +190,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getType(): string {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getType();
         }
         return this.type;
@@ -206,8 +201,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getImages(): any[] {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getImages();
         }
         return this.images;
@@ -218,8 +212,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getOrganisers(): any {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getOrganisers();
         }
         return this.organisers;
@@ -230,8 +223,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getPlaces(): any[] {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getPlaces();
         }
         return this.places;
@@ -242,8 +234,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     getRegions(): any {
-        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent))
-        {
+        if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getRegions();
         }
         return this.regions;
