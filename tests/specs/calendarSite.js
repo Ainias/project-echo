@@ -42,14 +42,14 @@ describe("calendar site", () => {
             return await element.isDisplayed()
         });
         await find.one(".footer .icon.calendar").click();
-    });
-
-    it("termin tests", async function () {
 
         await browser.waitUntil(async () => {
             let element = $("#calendar");
             return await element.isDisplayed()
         });
+    });
+
+    it("termin tests", async function () {
 
         await browser.execute(() => {
             let article = document.getElementById("calendar");
@@ -64,11 +64,11 @@ describe("calendar site", () => {
         expect(await $(".day.cell.active").getText()).toEqual("29");
 
         expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
-        expect(await $(".name=Termin 5.1").isDisplayed()).toEqual(false);
+        expect(await $(".name=Termin 5.1").isDisplayed()).toEqual(!browser.config.isMobile);
         expect(await $(".name=Termin 5.2").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.3").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.4").isDisplayed()).toBeFalsy();
-        await browser.pause(20000);
+        // await browser.pause(20000);
         // expect(await $(".place-container=place 1").isDisplayed()).toBeTruthy();
 
         // let dragElem = await $("#event-overview-container").getPromise();
@@ -94,6 +94,7 @@ describe("calendar site", () => {
     });
 
     it("browse calendar", async function () {
+        await browser.pause(3000);
         expect(await $("#month-name").getText()).toEqual("MAI 2019");
         expect(await $(".day.cell.active").getText()).toEqual("26");
 
@@ -114,6 +115,57 @@ describe("calendar site", () => {
         await $("#button-left").click();
         expect(await $("#month-name").getText()).toEqual("APRIL 2019");
         expect(await $(".day.cell.active").getText()).toEqual("30");
+    });
+
+    it("repeated events displayed", async function () {
+        await browser.pause(2500);
+        expect(await $("#month-name").getText()).toEqual("MAI 2019");
+
+        await $("#button-right").click();
+        await $("#button-right").click();
+        expect(await $("#month-name").getText()).toEqual("JULI 2019");
+
+        await $(".day-number=2").click();
+        expect(await $(".day.cell.active").getText()).toEqual("2");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeFalsy();
+
+        await $(".day-number=4").click();
+        expect(await $(".day.cell.active").getText()).toEqual("4");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeFalsy();
+
+        await $(".day-number=9").click();
+        expect(await $(".day.cell.active").getText()).toEqual("9");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
+
+        await $(".day-number=11").click();
+        expect(await $(".day.cell.active").getText()).toEqual("11");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
+
+        await $(".day-number=16").click();
+        expect(await $(".day.cell.active").getText()).toEqual("16");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeFalsy();
+
+        await $(".day-number=17").click();
+        expect(await $(".day.cell.active").getText()).toEqual("17");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
+
+        await $(".day-number=18").click();
+        expect(await $(".day.cell.active").getText()).toEqual("18");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
+
+        await $(".day-number=23").click();
+        expect(await $(".day.cell.active").getText()).toEqual("23");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeFalsy();
+
+        await $(".day-number=25").click();
+        expect(await $(".day.cell.active").getText()).toEqual("25");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
+
+        await $(".day-number=30").click();
+        expect(await $(".day.cell.active").getText()).toEqual("30");
+        expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
+
+
     });
 
 });

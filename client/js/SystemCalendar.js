@@ -77,18 +77,21 @@ export class SystemCalendar {
 
         let translator = Translator.getInstance();
         translator.addDynamicTranslations(event.getDynamicTranslations());
+
+        let places = await event.getPlaces();
+
         fav.systemCalendarId = await this.createEvent(translator.translate(event.getNameTranslation()),
-            ((Helper.isNotNull(event.places) && Object.keys(event.places).length >= 1) ? Object.keys(event.places)[0] : ""),
+            ((Helper.isNotNull(places) && Object.keys(places).length >= 1) ? Object.keys(places)[0] : ""),
             translator.translate(event.getDescriptionTranslation()) + "\n\n",
-            event.startTime,
-            event.endTime,
+            await event.getStartTime(),
+            await event.getEndTime(),
             SystemCalendar.WEBSITE + DataManager.buildQuery({s: "event", "id": event.id})
         );
         await fav.save();
     }
 
     static async deleteEventFromSystemCalendar(event) {
-        let fav = await Favorite.findOne({event: {id: event.id}});
+        let fav = await Favorite.findOne({eventId: event.id});
         if (!fav) {
             return;
         }

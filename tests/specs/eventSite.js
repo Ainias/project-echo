@@ -1,17 +1,14 @@
 const find = require("../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
+const functions = require("../lib/functions.js");
 
 describe("event site", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;
     beforeAll(async () => {
-        if (browser.config.baseUrl.trim() !== "") {
-            baseUrl = browser.config.baseUrl;
-        } else {
-            baseUrl = await browser.getUrl();
-        }
+        baseUrl = await functions.getBaseUrl();
 
         browser.setTimeout({
             implicit: 5000
@@ -31,8 +28,8 @@ describe("event site", () => {
         });
 
         expect(await $("#event-name").getText()).toEqual("TERMIN 4");
-        expect(await $("#event-time").getText()).toEqual("29. Apr ´19, 15:00 -\n" +
-            "02. Mai ´19, 10:00");
+        expect(await $("#event-time").getText()).toEqual("29. Apr ´19, 15:00 -\n"+
+        "02. May ´19, 10:00");
 
         expect(await $("#places-container").getText()).toEqual("place 1");
         expect(await $("#places-container").getText()).toEqual("place 1");
@@ -54,11 +51,11 @@ describe("event site", () => {
         expect(await favElem.getAttribute("class")).toEqual("favorite");
 
         await favElem.click();
-        await browser.pause(500);
+        await browser.pause(3000);
         expect(await favElem.getAttribute("class")).toEqual("favorite is-favorite");
 
         await favElem.click();
-        await browser.pause(500);
+        await browser.pause(1000);
         expect(await favElem.getAttribute("class")).toEqual("favorite");
     });
 });

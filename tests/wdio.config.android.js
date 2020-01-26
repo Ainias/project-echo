@@ -4,7 +4,7 @@ exports.config = {
 
     // Where the files we are testing can be found.
     specs: ['./tests/specs/**/*.js'],
-    // specs: ['./tests/specs/**/favoriteSite.js'],
+    // specs: ['./tests/specs/**/searchSite.js'],
 
     isMobile: true,
 
@@ -25,6 +25,8 @@ exports.config = {
     // How much detail should be logged. The options are:
     // 'silent', 'verbose', 'command', 'data', 'result', 'error'
     logLevel: 'error',
+
+    mysqlConnection: Service.mysqlConnection,
 
     deprecationWarnings: true,
 
@@ -73,7 +75,7 @@ exports.config = {
         platformName: 'Android',
 
         // The version of the Android or iOS system
-        platformVersion: '8.1',
+        platformVersion: '9',
 
         orientation: "PORTRAIT",
 

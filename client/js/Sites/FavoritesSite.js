@@ -15,7 +15,7 @@ export class FavoritesSite extends FooterSite {
     async onStart(pauseArguments) {
         let res = super.onStart(pauseArguments);
 
-        let favorites = await Favorite.find({isFavorite: true}, undefined, undefined, undefined, ["event", "event.repeatedEvent", "event.organisers", "event.regions"]);
+        let favorites = await Favorite.find({isFavorite: true}, undefined, undefined, undefined);
         let events = await Favorite.getEvents(favorites);
 
         this._eventListFragment.setEvents(events);

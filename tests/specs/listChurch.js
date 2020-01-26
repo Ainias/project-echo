@@ -35,10 +35,7 @@ describe("first test suite", () => {
         }
     });
 
-    it("first test", async function () {
-        // let element = $("#main-content");
-        // expect(await element.isDisplayed()).toEqual(true);
-        // expect(await $(".alphabet-class"))
+    it("check list", async function () {
         let elem = $(".alphabet-section.K .church-info");
         expect(await elem.isDisplayed()).toBeTruthy();
         expect(await elem.$(".name .translation").getText()).toEqual("Köln City Church");

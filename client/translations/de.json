@@ -85,5 +85,11 @@
 
   "edit event or event series": "Veranstaltung oder Terminserie bearbeiten?",
   "series": "Serie",
-  "abort": "Abbruch"
+  "abort": "Abbruch",
+
+  "add fsj": "Neues FSJ",
+  "post de": "Post (DE)",
+  "post en": "Post (EN)",
+
+  "kalender": "Kalender"
 }

@@ -50,12 +50,12 @@ export class NotificationScheduler extends Singleton {
         });
     }
 
-    async cancelNotification(eventId) {
+    async cancelNotification(id) {
         if (!this._canNotify()){
             return;
         }
         return new Promise(resolve => {
-            cordova.plugins.notification.local.cancel(eventId, resolve);
+            cordova.plugins.notification.local.cancel(id, resolve);
         });
     };
 

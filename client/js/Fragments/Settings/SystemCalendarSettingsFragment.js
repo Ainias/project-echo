@@ -20,12 +20,12 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
         this.findBy("#system-calendar-line").addEventListener("click", async () => {
             this.getSite().showLoadingSymbol();
 
-            let selectedCalendar = await (new ChooseDialog(calendarOptions, "select-calendar").show());
+            let selectedCalendar = await (new ChooseDialog(calendarOptions, "select-calendar", false).show());
 
-
-            await NativeStoragePromise.setItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY, selectedCalendar);
-
-            this.findBy("#system-calendar").innerText = calendarOptions[selectedCalendar];
+            if (selectedCalendar) {
+                await NativeStoragePromise.setItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY, selectedCalendar);
+                this.findBy("#system-calendar").innerText = calendarOptions[selectedCalendar];
+            }
 
             this.getSite().removeLoadingSymbol();
         });

@@ -4,7 +4,7 @@ exports.config = {
 
     // Where the files we are testing can be found.
     specs: ['./tests/specs/**/*.js'],
-    // specs: ['./tests/specs/**/calendarSite.js'],
+    // specs: ['./tests/specs/**/searchSite.js'],
 
     isMobile: false,
 
@@ -23,8 +23,10 @@ exports.config = {
     sync: true,
 
     // How much detail should be logged. The options are:
-    // 'silent', 'verbose', 'command', 'data', 'result', 'error'
+    // trace | debug | info | warn | error | silent
     logLevel: 'error',
+
+    mysqlConnection: Service.mysqlConnection,
 
     deprecationWarnings: true,
 
@@ -54,7 +56,8 @@ exports.config = {
     capabilities: [{
         browserName: "chrome",
         baseUrl: "http://127.0.0.1:8000",
-        maxInstances: 1,
+        maxInstances: 10,
+        // maxInstances: 1,
     }],
     onPrepare: async function(){
         await Service.setup();

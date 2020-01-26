@@ -43,6 +43,7 @@ import {RepeatedEvent} from "../../model/RepeatedEvent";
 import {AddRepeatedEvent1000000007000} from "../../model/migrations/AddRepeatedEvent";
 import {BlockedDay} from "../../model/BlockedDay";
 import {EventHelper} from "./Helper/EventHelper";
+import {FavoriteWithoutEventRelation1000000008000} from "../../model/migrations/client/FavoriteWithoutEventRelation";
 
 window["JSObject"] = Object;
 
@@ -92,16 +93,12 @@ App.addInitialization(async (app) => {
     }, MenuAction.SHOW_FOR_LARGE));
 
     if (Helper.isMobileApp()) {
-        NavbarFragment.defaultActions.push(new MenuAction("settings", () => {
-            app.startSite(SettingsSite);
-            // new SettingsDialog().show();
-        }, MenuAction.SHOW_NEVER));
+        NavbarFragment.defaultActions.push(new StartSiteMenuAction("settings", SettingsSite, MenuAction.SHOW_NEVER, 99000));
     }
 
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", WelcomeSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("settings", SettingsSite, MenuAction.SHOW_NEVER));
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add event", "admin", () => {
         app.startSite(AddEventSite);
@@ -170,6 +167,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         FavoriteWithSystemCalendar1000000000002,
         FsjSchema1000000006000,
         AddRepeatedEvent1000000007000,
+        FavoriteWithoutEventRelation1000000008000,
     ]
 });
 

@@ -77,6 +77,7 @@ describe("search site", () => {
         await $(".filter-tag=Köln City Church").click();
         await $("#search-button").click();
 
+        await browser.pause(1000);
         expect(await $(".day=Sa 29.06.")).toBeTruthy();
         expect(await $(".name=Termin later").isDisplayed()).toBeTruthy();
         expect(await $(".name=Termin later 2").isExisting()).toBeFalsy();
@@ -102,6 +103,7 @@ describe("search site", () => {
         await $(".filter-tag=Konzert").click();
         await $("#search-button").click();
 
+        await browser.pause(1000);
         expect(await $(".name=Termin later").isDisplayed()).toBeTruthy();
         expect(await $(".name=Termin later 2").isExisting()).toBeFalsy();
     });

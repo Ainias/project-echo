@@ -9,6 +9,7 @@ import {ConfirmDialog} from "cordova-sites/src/client/js/Dialog/ConfirmDialog";
 import {Toast} from "cordova-sites/src/client/js/Toast/Toast";
 import {ModifyPostSite} from "./ModifyPostSite";
 import {DateHelper} from "js-helper";
+import {ViewHelper} from "js-helper/dist/client/ViewHelper";
 
 export class WelcomeSite extends AbsoluteBarMenuSite {
 
@@ -19,15 +20,6 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         this._navbarFragment.setBackgroundImage(componentImg);
     }
 
-    async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
-        this._posts = await Post.find(undefined, {
-            priority: "DESC",
-            createdAt: "ASC"
-        });
-        return res;
-    }
-
     async onViewLoaded() {
         let res = super.onViewLoaded();
 
@@ -36,13 +28,22 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         this._postTemplate.removeAttribute("id");
 
         this._postContainer = this.findBy("#post-container");
+        return res;
+    }
+
+    async onStart(pauseArguments) {
+        this._posts = await Post.find(undefined, {
+            priority: "DESC",
+            createdAt: "ASC"
+        });
+        ViewHelper.removeAllChildren(this._postContainer);
 
         this._posts.forEach(post => {
             Translator.getInstance().addDynamicTranslations(post.getDynamicTranslations());
 
             let postElem = this._postTemplate.cloneNode(true);
             postElem.querySelector(".text").appendChild(Translator.getInstance().makePersistentTranslation(post.getTextTranslation()));
-            postElem.querySelector(".date").innerText = DateHelper.strftime("%d.%m.%y, %H:%M", post.createdAt);
+            postElem.querySelector(".date").innerText = DateHelper.strftime("%d.%m.%y", post.createdAt);
             postElem.querySelector(".delete-button").addEventListener("click", async () => {
                 if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
                     if (await new ConfirmDialog("Möchtest du den Post wirklich löschen? Er wird unwiederbringlich verloren gehen!", "Post löschen?").show()) {
@@ -60,9 +61,9 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
 
             this._postContainer.appendChild(postElem);
         });
-
         this._checkRightsPanel();
-        return res;
+        Translator.getInstance().updateTranslations(this._postContainer);
+
     }
 
     _checkRightsPanel() {

@@ -47,6 +47,10 @@ class PromiseElement {
         return (await this.getPromise()).setValue(value);
     }
 
+    async getValue(){
+        return (await this.getPromise()).getValue();
+    }
+
     pause(miliseconds){
         return new PromiseElement(this.getPromise().then(async res => {
             await browser.pause(miliseconds);

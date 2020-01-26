@@ -7,13 +7,14 @@ import {Translator, Helper, NativeStoragePromise} from "cordova-sites/dist/cordo
 import {SystemCalendar} from "../SystemCalendar";
 import {BlockedDay} from "../../../model/BlockedDay";
 import {DateHelper} from "js-helper";
+import {RepeatedEvent} from "../../../model/RepeatedEvent";
 
 export class EventHelper {
     static async search(searchString, beginTime, endTime, types, organisers, regions) {
 
         let queryBuilder = await EasySyncClientDb.getInstance().createQueryBuilder(Event);
-        queryBuilder = queryBuilder.innerJoinAndSelect("Event.repeatedEvent", "repeatedEvent");
-        queryBuilder = queryBuilder.innerJoinAndSelect("repeatedEvent.originalEvent", "originalEvent");
+        queryBuilder = queryBuilder.leftJoinAndSelect("Event.repeatedEvent", "repeatedEvent");
+        queryBuilder = queryBuilder.leftJoinAndSelect("repeatedEvent.originalEvent", "originalEvent");
 
         if (Helper.isNotNull(searchString) && searchString.trim() !== "") {
             searchString = "%" + searchString + "%";
@@ -66,23 +67,25 @@ export class EventHelper {
 
         let repeatUntilEvents = await repeatedEventQueryBuilder.getMany();
 
-        if (Helper.isNull(beginTime) || beginTime.trim() === ""){
+        if (Helper.isNull(beginTime) || beginTime.trim() === "") {
             beginTime = new Date();
-        }
-        else {
+        } else {
             beginTime = new Date(Date.parse(beginTime));
         }
 
-        if (Helper.isNull(endTime) || endTime.trim() === ""){
-            endTime = new Date(beginTime.getTime()+1000*60*60*24*7);
-        }
-        else {
+        if (Helper.isNull(endTime) || endTime.trim() === "") {
+            endTime = new Date(beginTime.getTime() + 1000 * 60 * 60 * 24 * 7);
+        } else {
             endTime = new Date(Date.parse(endTime));
         }
 
+        console.log("event-templates", repeatUntilEvents, await RepeatedEvent.find());
+
         let events = [];
         await Helper.asyncForEach(repeatUntilEvents, async event => {
-            events.push.apply(events, await EventHelper.generateEventFromRepeatedEvent(event.repeatedEvent, beginTime, endTime))
+            if (event.repeatedEvent) {
+                events.push.apply(events, await EventHelper.generateEventFromRepeatedEvent(event.repeatedEvent, beginTime, endTime))
+            }
         });
         events.push.apply(events, await eventPromise);
 
@@ -90,13 +93,14 @@ export class EventHelper {
     }
 
     static async toggleFavorite(event) {
-        if (await Favorite.toggle(event.id)) {
-            await EventHelper.setNotificationFor(event);
+        let fav = await Favorite.toggle(event.id);
+        if (fav.isFavorite) {
+            await EventHelper.setNotificationFor(fav.id, event);
             await SystemCalendar.addEventToSystemCalendar(event);
             return true;
         } else {
             let notificationScheduler = NotificationScheduler.getInstance();
-            await notificationScheduler.cancelNotification(event.id);
+            await notificationScheduler.cancelNotification(fav.id);
             await SystemCalendar.deleteEventFromSystemCalendar(event);
             return false;
         }
@@ -128,22 +132,22 @@ export class EventHelper {
         if (Helper.isNull(favorites)) {
             favorites = await Favorite.find();
         }
-        await Helper.asyncForEach(favorites, fav => {
+        await Helper.asyncForEach(favorites, async fav => {
             if (fav.isFavorite) {
-                EventHelper.setNotificationFor(fav.event);
+                await EventHelper.setNotificationFor(fav.id, fav.event);
             }
         }, true);
     }
 
-    static async setNotificationFor(event) {
+    static async setNotificationFor(id, event) {
         let timeInfos = await Promise.all([NativeStoragePromise.getItem("send-notifications"),
-            NativeStoragePromise.getItem("time-to-notify-base"),
-            NativeStoragePromise.getItem("time-to-notify-multiplier")]);
+            NativeStoragePromise.getItem("time-to-notify-base", 1),
+            NativeStoragePromise.getItem("time-to-notify-multiplier"), 60 * 60 * 24]);
 
         let notificationScheduler = NotificationScheduler.getInstance();
 
         if (timeInfos[0] === "0") {
-            await notificationScheduler.cancelNotification(event.id);
+            await notificationScheduler.cancelNotification(id);
             return;
         }
 
@@ -151,22 +155,25 @@ export class EventHelper {
 
 
         let timeToNotify = new Date();
-        timeToNotify.setTime(event.startTime.getTime() - (parseInt(timeInfos[1]) * parseInt(timeInfos[2]) * 1000));
+
+        let startTime = await event.getStartTime();
+
+        timeToNotify.setTime(startTime.getTime() - (parseInt(timeInfos[1]) * parseInt(timeInfos[2]) * 1000));
 
         let timeFormat = "";
-        if (timeToNotify.getFullYear() !== event.startTime.getFullYear()) {
-            timeFormat = Helper.strftime("%a., %d.%m.%y, %H:%M", event.startTime, undefined, true);
-        } else if (timeToNotify.getMonth() !== event.startTime.getMonth()) {
-            timeFormat = Helper.strftime("%a., %d.%m, %H:%M", event.startTime, undefined, true);
-        } else if (timeToNotify.getDate() === event.startTime.getDate()) {
-            timeFormat = Translator.translate("today") + Helper.strftime(", %H:%M", event.startTime);
-        } else if (timeToNotify.getDate() + 1 === event.startTime.getDate()) {
-            timeFormat = Translator.getInstance().translate("tomorrow") + Helper.strftime(", %H:%M", event.startTime);
+        if (timeToNotify.getFullYear() !== startTime.getFullYear()) {
+            timeFormat = Helper.strftime("%a., %d.%m.%y, %H:%M", startTime, undefined, true);
+        } else if (timeToNotify.getMonth() !== startTime.getMonth()) {
+            timeFormat = Helper.strftime("%a., %d.%m, %H:%M", startTime, undefined, true);
+        } else if (timeToNotify.getDate() === startTime.getDate()) {
+            timeFormat = Translator.translate("today") + Helper.strftime(", %H:%M", startTime);
+        } else if (timeToNotify.getDate() + 1 === startTime.getDate()) {
+            timeFormat = Translator.getInstance().translate("tomorrow") + Helper.strftime(", %H:%M", startTime);
         } else {
-            timeFormat = Helper.strftime("%a., %d.%m, %H:%M", event.startTime, undefined, false);
+            timeFormat = Helper.strftime("%a., %d.%m, %H:%M", startTime, undefined, false);
         }
 
-        await notificationScheduler.schedule(event.id, Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
+        await notificationScheduler.schedule(id, Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
     }
 
     static async generateSingleEventFromRepeatedEvent(repeatedEvent, day, addDatabaseEvents) {
@@ -237,9 +244,8 @@ export class EventHelper {
                 event.setImages(null);
 
                 events.push(event);
-            }
-            else if (addDatabaseEvents && blockedDays.indexOf(today) !== -1) {
-                if (indexedBlockedDaysObjects[today].event !== null){
+            } else if (addDatabaseEvents && blockedDays.indexOf(today) !== -1) {
+                if (indexedBlockedDaysObjects[today].event !== null) {
                     indexedBlockedDaysObjects[today].event.repeatedEvent = repeatedEvent;
                     events.push(indexedBlockedDaysObjects[today].event);
                 }
@@ -263,7 +269,7 @@ export class EventHelper {
 
         let favEventIds = {};
         changedBlockedDays.forEach(blockedDay => {
-            favEventIds["r"+blockedDay.repeatedEvent.id+ "-" + DateHelper.strftime("%Y-%m-%d", blockedDay.day)] = blockedDay;
+            favEventIds["r" + blockedDay.repeatedEvent.id + "-" + DateHelper.strftime("%Y-%m-%d", blockedDay.day)] = blockedDay;
         });
 
         let favorites = await Favorite.find({
@@ -275,12 +281,10 @@ export class EventHelper {
 
         favorites.forEach(fav => {
             let blockedDay = favEventIds[fav.eventId];
-            if (blockedDay.event){
-                fav.event = blockedDay.event;
+            if (blockedDay.event) {
                 fav.eventId = blockedDay.event.id;
                 saveFavs.push(fav);
-            }
-            else {
+            } else {
                 deleteFavIds.push(fav.id);
             }
         });

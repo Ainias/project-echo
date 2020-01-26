@@ -31,6 +31,9 @@ export class ModifyPostSite extends MenuFooterSite {
         let res = super.onViewLoaded();
 
         this._form = new Form(this.findBy("#modify-post-form"), async values => {
+
+            this.showLoadingSymbol();
+
             let texts = {};
             let regions = [await Region.findById(1)];
 
@@ -51,7 +54,7 @@ export class ModifyPostSite extends MenuFooterSite {
             post.priority = parseInt(values["priority"]);
 
             await post.save();
-
+            this.removeLoadingSymbol();
             this.finish();
         });
 

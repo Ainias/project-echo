@@ -101,6 +101,14 @@ module.exports = [
             "cordova.plugins.notification.local.core",
             "plugin.notification.local.core"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-calendar/www/Calendar.js",
+        "id": "cordova-plugin-calendar.Calendar",
+        "pluginId": "cordova-plugin-calendar",
+        "clobbers": [
+            "Calendar"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -113,7 +121,8 @@ module.exports.metadata =
     "cordova-sqlite-storage": "3.2.0",
     "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-badge": "0.8.8",
-    "cordova-plugin-local-notification": "0.9.0-beta.2"
+    "cordova-plugin-local-notification": "0.9.0-beta.2",
+    "cordova-plugin-calendar": "5.1.5"
 }
 // BOTTOM OF METADATA
 });

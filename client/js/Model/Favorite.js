@@ -28,9 +28,7 @@ export class Favorite extends BaseModel {
 
 
         favorites.forEach((fav, index) => {
-            if (fav.event !== null) {
-                events[index] = fav.event
-            } else if (fav.eventId.startsWith("r")) {
+            if (fav.eventId.startsWith("r")) {
                 let parts = fav.eventId.substr(1).split("-");
                 repeatedEventIds[parts[0]] = Helper.nonNull(repeatedEventIds[parts[0]], []);
                 repeatedEventIds[parts[0]].push(index);
@@ -69,10 +67,6 @@ export class Favorite extends BaseModel {
     }
 
     async getEvent() {
-        if (this.event !== null) {
-            return this.event
-        }
-
         if (this.eventId.startsWith("r")) {
             let parts = this.eventId.substr(1).split("-");
             let repeatedEvent = await RepeatedEvent.findById(parts[0]);
@@ -88,16 +82,6 @@ export class Favorite extends BaseModel {
         }
     }
 
-    static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["event"] = {
-            target: Event.getSchemaName(),
-            type: "one-to-one",
-            joinColumn: "eventId"
-        };
-        return relations;
-    }
-
     static async eventIsFavorite(eventId) {
         let fav = await this.findOne({"eventId": eventId});
         return (fav instanceof Favorite && fav.isFavorite);
@@ -108,13 +92,12 @@ export class Favorite extends BaseModel {
         if (fav instanceof Favorite) {
             fav.isFavorite = !fav.isFavorite;
             await fav.save();
-            return fav.isFavorite;
         } else {
             fav = new Favorite();
             fav.eventId = eventId;
             await fav.save();
-            return true;
         }
+        return fav;
     }
 }
 

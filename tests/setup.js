@@ -86,7 +86,7 @@ class InitService {
 }
 
 
-module.exports = {setup: setup, tearDown: tearDown, service: InitService};
+module.exports = {setup: setup, tearDown: tearDown, service: InitService, mysqlConnection: mysqlConn};
 
 
 // <script>
