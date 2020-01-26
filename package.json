@@ -54,6 +54,7 @@
     "nodemailer": "^6.4.2",
     "reflect-metadata": "^0.1.13",
     "sql.js": "^0.5.0",
+    "typescript": "^3.7.4",
     "ts-node": "8.3.0",
     "typeorm": "^0.2.21"
   },
@@ -87,7 +88,6 @@
     "selenium-standalone": "^6.17.0",
     "terser-webpack-plugin": "^1.4.3",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.7.4",
     "uglifyjs-webpack-plugin": "^2.1.2",
     "wd": "^1.11.4",
     "webdriverio": "^5.18.0",
