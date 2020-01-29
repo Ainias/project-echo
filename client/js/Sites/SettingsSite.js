@@ -1,4 +1,4 @@
-import {MenuSite} from "cordova-sites/src/client/js/Context/MenuSite";
+import {MenuSite} from "cordova-sites/dist/client/js/Context/MenuSite";
 
 import view from "../../html/Sites/settingsSite.html"
 import {SystemCalendarSettingsFragment} from "../Fragments/Settings/SystemCalendarSettingsFragment";

@@ -1,5 +1,5 @@
-import {AbstractFragment} from "cordova-sites/src/client/js/Context/AbstractFragment";
-import {NativeStoragePromise} from "cordova-sites/src/client/js/NativeStoragePromise";
+import {AbstractFragment} from "cordova-sites/dist/client/js/Context/AbstractFragment";
+import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 import view from "../../../html/Fragments/Settings/notificationsSettingsFragment.html";
 

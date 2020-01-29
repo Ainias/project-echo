@@ -1,10 +1,10 @@
 const Service = require("./setup");
+const functions = require("./lib/functions");
+const find = require("./lib/PromiseSelector");
+const $ = find.one;
+const $$ = find.multiple;
 
 exports.config = {
-
-    // Where the files we are testing can be found.
-    specs: ['./tests/specs/**/*.js'],
-    // specs: ['./tests/specs/**/searchSite.js'],
 
     isMobile: false,
 
@@ -53,17 +53,85 @@ exports.config = {
         // [Service.service,{}]
     ],
 
+    // Where the files we are testing can be found.
+    specs: ['./tests/specs/**/*.js'],
+    // specs: [
+    //     './tests/specs/**/posts.js',
+    //     './tests/specs/**/editChurch.js'
+    // ],
+
+
     capabilities: [{
         browserName: "chrome",
+        // browserName: "firefox",
         baseUrl: "http://127.0.0.1:8000",
-        maxInstances: 10,
+        maxInstances: 5,
         // maxInstances: 1,
-    }],
-    onPrepare: async function(){
+        // 'goog:chromeOptions': {
+        //     to run chrome headless the following flags are required
+        //     (see https://developers.google.com/web/updates/2017/04/headless-chrome)
+        //     args: ['--headless', '--disable-gpu'],
+        // },
+        // 'moz:firefoxOptions': {
+        //     args: [
+        //         "-headless",
+        //     ],
+        //     prefs: {"intl.accept_languages": "de, de-DE"}
+        // }
+    },
+        // {
+        //     browserName: "firefox",
+        //     baseUrl: "http://127.0.0.1:8000",
+        //     maxInstances: 10,
+        //     // maxInstances: 1,
+        //     'moz:firefoxOptions': {
+        //         // args:["-headless"]
+        //     }
+        // }
+    ],
+    onPrepare: async function (conf, cap) {
         await Service.setup();
     },
-    onComplete: async function(){
+    onComplete: async function () {
         await Service.tearDown();
-    }
+    },
 
+    lastCapability: null,
+
+    before: async function (config, cap, spec) {
+        // console.log(config);
+        // if (config.lastCapability !== cap.browserName){
+        //     if (config.lastCapability !== null){
+        // await Service.generateDb();
+        //     }
+        //     config.lastCapability = cap.browserName;
+        //     console.log("changed", config.lastCapability);
+        // }
+        // console.log("changed?", config.lastCapability);
+    },
+
+    beforeTest: async function () {
+        // await browser.url(await functions.getBaseUrl());
+        //
+        // await browser.execute((year, month, date, hour, minute, second) => {
+        //     const OldDate = window["Date"];
+        //
+        //     class Date extends OldDate {
+        //         constructor(...args) {
+        //             if (arguments.length === 0) {
+        //                 super(year, month - 1, date, hour, minute, second);
+        //             } else {
+        //                 super(...arguments)
+        //             }
+        //         }
+        //     }
+        //
+        //     window["Date"] = Date;
+        // }, 2019, 5, 26, 14, 30, 42);
+        //
+        // await browser.waitUntil(async () => {
+        //     let element = $("#main-content");
+        //     return await element.isDisplayed()
+        // });
+    }
 };

@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 import {BaseDatabase} from "cordova-sites-database/dist/cordova-sites-database";
-import {MigrationHelper} from "js-helper/src/shared/MigrationHelper";
+import {MigrationHelper} from "js-helper/dist/shared";
 
 export class SetupSchema1000000000000 implements MigrationInterface {
 
@@ -21,6 +21,9 @@ export class SetupSchema1000000000000 implements MigrationInterface {
         await this._addChurchRegion(queryRunner);
         await this._addEventRegion(queryRunner);
         await this._addPostRegion(queryRunner);
+
+        //For new setup remove clear-table Possible endless-loop if error in clean setup
+        await queryRunner.dropTable("Clear_Database_Migrations", true);
     }
 
     async _addChurch(queryRunner: QueryRunner) {

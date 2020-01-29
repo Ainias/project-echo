@@ -6,7 +6,7 @@ import {EventHelper} from "../Helper/EventHelper";
 import {Helper} from "js-helper/dist/shared";
 import {Church} from "../../../model/Church";
 import {Event} from "../../../model/Event";
-import {ViewHelper} from "js-helper/src/client/ViewHelper";
+import {ViewHelper} from "js-helper/dist/client/ViewHelper";
 
 export class SearchSite extends FooterSite {
     constructor(siteManager) {

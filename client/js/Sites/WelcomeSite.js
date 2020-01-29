@@ -2,11 +2,11 @@ import view from "../../html/Sites/welcomeSite.html";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import componentImg from "../../img/component.png"
 import {Post} from "../../../model/Post";
-import {Translator} from "cordova-sites/src/client/js/Translator";
+import {Translator} from "cordova-sites/dist/client/js/Translator";
 import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
 import {Event} from "../../../model/Event";
-import {ConfirmDialog} from "cordova-sites/src/client/js/Dialog/ConfirmDialog";
-import {Toast} from "cordova-sites/src/client/js/Toast/Toast";
+import {ConfirmDialog} from "cordova-sites/dist/client/js/Dialog/ConfirmDialog";
+import {Toast} from "cordova-sites/dist/client/js/Toast/Toast";
 import {ModifyPostSite} from "./ModifyPostSite";
 import {DateHelper} from "js-helper";
 import {ViewHelper} from "js-helper/dist/client/ViewHelper";

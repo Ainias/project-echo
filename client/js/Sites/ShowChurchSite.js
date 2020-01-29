@@ -1,5 +1,5 @@
 import view from "../../html/Sites/showChurchSite.html"
-import {App, ConfirmDialog, Helper, Toast, Translator} from "cordova-sites";
+import {App, ConfirmDialog, Helper, Toast, Translator} from "cordova-sites/dist/client";
 import {Church} from "../../../model/Church";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import {PlaceHelper} from "../Helper/PlaceHelper";

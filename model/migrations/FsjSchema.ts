@@ -1,7 +1,6 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 import {BaseDatabase} from "cordova-sites-database/dist/cordova-sites-database";
-import {Event} from "../Event";
-import {MigrationHelper} from "js-helper/src/shared/MigrationHelper";
+import {MigrationHelper} from "js-helper/dist/shared/MigrationHelper";
 
 export class FsjSchema1000000006000 implements MigrationInterface {
 

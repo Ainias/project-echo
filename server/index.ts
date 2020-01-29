@@ -15,8 +15,8 @@ import "../model/Post";
 import "../model/Fsj";
 import "../model/RepeatedEvent"
 
-import {ServerTranslator} from "cordova-sites/server";
-import {Translator} from "cordova-sites/shared";
+import {ServerTranslator} from "cordova-sites/dist/server";
+import {Translator} from "cordova-sites/dist/shared";
 import {SetupSchema1000000000000} from "../model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
 import {Data1000000005000} from "../model/migrations/server/Data";
@@ -99,7 +99,6 @@ app.use(function (err, req, res, next) {
 });
 
 EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
-    // await setupDB();
     Translator.init({
         translations: {
             "de": translationGerman,

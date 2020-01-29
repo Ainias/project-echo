@@ -1,8 +1,8 @@
-import {Dialog} from "cordova-sites/src/client/js/Dialog/Dialog";
+import {Dialog} from "cordova-sites/dist/client/js/Dialog/Dialog";
 
 import view from "../../html/Dialoges/settingsDialog.html"
-import {ViewInflater} from "cordova-sites/src/client/js/ViewInflater";
-import {NativeStoragePromise} from "cordova-sites/src/client/js/NativeStoragePromise";
+import {ViewInflater} from "cordova-sites/dist/client/js/ViewInflater";
+import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 import {EventHelper} from "../Helper/EventHelper";
 
 export class SettingsDialog extends Dialog {

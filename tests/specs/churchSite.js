@@ -21,10 +21,27 @@ describe("church site", () => {
     beforeEach(async function () {
         await browser.url(baseUrl);
 
+        await browser.execute((year, month, date, hour, minute, second) => {
+            const OldDate = window["Date"];
+
+            class Date extends OldDate {
+                constructor(...args) {
+                    if (arguments.length === 0) {
+                        super(year, month - 1, date, hour, minute, second);
+                    } else {
+                        super(...arguments)
+                    }
+                }
+            }
+
+            window["Date"] = Date;
+        }, 2019, 5, 26, 14, 30, 42);
+
         await browser.waitUntil(async () => {
             let element = $("#main-content");
             return await element.isDisplayed()
         });
+
         if (browser.config.isMobile) {
             await $("button.menu-icon").click();
             await find.one("#responsive-menu [data-translation='churches']").click();

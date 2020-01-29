@@ -1,5 +1,5 @@
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
-import {MigrationHelper} from "js-helper/src/shared/MigrationHelper";
+import {MigrationInterface, QueryRunner} from "typeorm";
+import {MigrationHelper} from "js-helper/dist/shared/MigrationHelper";
 import {RepeatedEvent} from "../RepeatedEvent";
 import {Event} from "./models/v1/Event";
 import {BlockedDay} from "../BlockedDay";

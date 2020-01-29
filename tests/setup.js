@@ -48,13 +48,7 @@ async function generateDb() {
 
     let sqlStrings = fs.readFileSync(__dirname + '/setup.sql', 'utf-8');
 
-    // console.log(sqlStrings);
-    // sqlStrings = sqlStrings.split(";");
-
-    let mysqlPromise = Promise.resolve();
-    // sqlStrings.forEach((sql) => {
-    //     if (sql.trim() !== "") {
-    mysqlPromise = mysqlPromise.then(() => new Promise(r => {
+    let mysqlPromise = Promise.resolve().then(() => new Promise(r => {
         mysqlConn.query(sqlStrings + ";", function (err, result) {
             if (!err) {
                 r(result);
@@ -64,8 +58,6 @@ async function generateDb() {
             }
         });
     }));
-    // }
-    // });
     await mysqlPromise;
     console.log("mysqlPromise resolved!");
     return true;
@@ -86,7 +78,7 @@ class InitService {
 }
 
 
-module.exports = {setup: setup, tearDown: tearDown, service: InitService, mysqlConnection: mysqlConn};
+module.exports = {setup: setup, tearDown: tearDown, service: InitService, mysqlConnection: mysqlConn, generateDb: generateDb};
 
 
 // <script>

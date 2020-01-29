@@ -23,6 +23,11 @@ describe("edit church", () => {
     beforeEach(async function () {
         await functions.setCurrentDate();
         await functions.login("echo@silas.link", "123456")
+
+        await browser.waitUntil(async () => {
+            let element = $("#main-content");
+            return await element.isDisplayed()
+        });
     });
 
     afterEach(async function () {
@@ -42,7 +47,7 @@ describe("edit church", () => {
             "name-en":"New Church",
             // "description-de":"Meine Beschreibung",
             // "description-en":"My english description",
-            "image": path.join(__dirname, "../img/church.jpeg"),
+            "image": path.join(__dirname, "../misc/img/church.jpeg"),
             "website-url":"echo.silas.link",
             "place-name-1":"Köln"
         });
@@ -73,7 +78,7 @@ describe("edit church", () => {
         expect(data["regionId"]).toEqual(1);
     });
 
-    it("edit church", async function () {
+    fit("edit church", async function () {
         if (browser.config.isMobile) {
             await $("button.menu-icon").click();
             await find.one("#responsive-menu [data-translation='churches']").click();
@@ -119,14 +124,14 @@ describe("edit church", () => {
         await functions.setFormValues({
             "name-de":"Bearbeitete Kirche",
             "name-en":"Edited Church",
-            "image": path.join(__dirname, "../img/church.jpeg"),
+            "image": path.join(__dirname, "../misc/img/church.jpeg"),
             "website-url":"echo.silas.link2",
             "place-name-1":"Köln bearbeitet"
         });
 
         await $("button.button=Speichern").click();
 
-        await browser.pause(1500);
+        await browser.pause(2500);
         expect(await $("h1#name=Bearbeitete Kirche").isDisplayed()).toBeTruthy();
 
         let data = await functions.queryDatabase("SELECT * FROM church WHERE website='echo.silas.link2' LIMIT 1");

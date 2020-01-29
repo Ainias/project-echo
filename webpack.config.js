@@ -11,7 +11,6 @@ const os = require('os');
 const ifaces = os.networkInterfaces();
 
 let mode = (process.env.MODE || "development");
-
 // let mode = "production";
 
 function getIp() {
@@ -49,7 +48,7 @@ let moduleExports = {
         ],
 
         optimization: {
-            // minimize: false
+            // minimize: false,
             minimizer: [
                 new TerserPlugin({
                     cache: true,
@@ -58,14 +57,38 @@ let moduleExports = {
                     terserOptions: {
                         mangle: {
                             reserved: [
-                                "Church", "Event", "Region", "Version", "Access", "AccessEasySyncModel", "Role", "User", "EasySyncBaseModel", "LastSyncDates"
+                                "BlockedDay",
+                                "Church",
+                                "Event",
+                                "Fsj",
+                                "FsjChurchBaseObject",
+                                "Post",
+                                "Region",
+                                "RepeatedEvent",
+                                "Favorite",
+                                "Version",
+                                "Access",
+                                "AccessEasySyncModel",
+                                "Role",
+                                "User",
+                                "EasySyncBaseModel",
+                                "LastSyncDates",
+                                "SetupSchema1000000000000",
+                                "SetupFavorite1000000000001",
+                                "SetupUserManagement1000000001000",
+                                "SetupEasySync1000000000500",
+                                "FavoriteWithSystemCalendar1000000000002",
+                                "FsjSchema1000000006000",
+                                "AddRepeatedEvent1000000007000",
+                                "FavoriteWithoutEventRelation1000000008000",
+                                "ClearDatabaseMigration1000000000000"
                             ]
                         }
                     }
                 })
             ]
         },
-        // devtool: 'inline-source-map',
+        devtool: 'source-map',
 
         //Gibt Ausgabename und Ort für JS-File an
         output: {
@@ -138,7 +161,7 @@ let moduleExports = {
                 },
                 {
                     test: /\.tsx?$/,
-                    use: "ts-loader",
+                    use: ["ts-loader"],
                 },
                 {
                     //Kopiert nur benutzte Bilder (benutzt durch JS (import), html oder css/sass)
@@ -192,12 +215,25 @@ if (mode === "production") {
     //Transpilieren zu ES5
     moduleExports["module"]["rules"].push({
         test: /\.m?js$/,
-        exclude: /node_modules\/(?!(cordova-sites))/,
+        exclude: /node_modules\/(?!(cordova-sites|js-helper|cs-event-manager))/,
         use: {
             loader: 'babel-loader',
             options: {
                 presets: ['@babel/preset-env'],
+                inputSourceMap: "inline",
+                sourceMaps: true
+
             }
+        }
+    });
+
+    moduleExports["module"]["rules"][1]["use"].unshift({
+        loader: 'babel-loader',
+        options: {
+            presets: ['@babel/preset-env'],
+            inputSourceMap: "inline",
+            sourceMaps: true
+
         }
     });
 

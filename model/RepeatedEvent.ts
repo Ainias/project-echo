@@ -1,4 +1,4 @@
-import {BaseDatabase} from "cordova-sites-database/src/BaseDatabase";
+import {BaseDatabase} from "cordova-sites-database/dist/BaseDatabase";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
 import {Event} from "./Event";
 import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
@@ -93,6 +93,5 @@ export class RepeatedEvent extends AccessEasySyncModel {
 
 RepeatedEvent.ACCESS_MODIFY = "admin";
 RepeatedEvent.SCHEMA_NAME = "RepeatedEvent";
-
 
 BaseDatabase.addModel(RepeatedEvent);

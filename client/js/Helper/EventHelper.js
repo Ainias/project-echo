@@ -3,7 +3,7 @@ import {Event} from "../../../model/Event";
 import {Between, Brackets, In} from "typeorm";
 import {NotificationScheduler} from "../NotificationScheduler";
 import {Favorite} from "../Model/Favorite";
-import {Translator, Helper, NativeStoragePromise} from "cordova-sites/dist/cordova-sites";
+import {Translator, Helper, NativeStoragePromise} from "cordova-sites/dist/client";
 import {SystemCalendar} from "../SystemCalendar";
 import {BlockedDay} from "../../../model/BlockedDay";
 import {DateHelper} from "js-helper";

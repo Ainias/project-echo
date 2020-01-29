@@ -1,5 +1,5 @@
-import {Singleton} from "cordova-sites/src/client/js/Singleton";
-import {App} from "cordova-sites/src/client/js/App";
+import {Singleton} from "cordova-sites/dist/client/js/Singleton";
+import {App} from "cordova-sites/dist/client/js/App";
 import {EventSite} from "./Sites/EventSite";
 
 export class NotificationScheduler extends Singleton {

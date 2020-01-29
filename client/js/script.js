@@ -24,7 +24,7 @@ import bibelverse from "./bibelverse.json";
 
 //translation import
 import "cordova-sites-user-management/src/client/js/translationInit"
-import "cordova-sites/src/client/js/translationInit"
+import "cordova-sites/dist/client/js/translationInit"
 import logo from "../img/logo.png";
 
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
@@ -44,6 +44,8 @@ import {AddRepeatedEvent1000000007000} from "../../model/migrations/AddRepeatedE
 import {BlockedDay} from "../../model/BlockedDay";
 import {EventHelper} from "./Helper/EventHelper";
 import {FavoriteWithoutEventRelation1000000008000} from "../../model/migrations/client/FavoriteWithoutEventRelation";
+import {ClearDatabaseDatabase} from "./ClearDatabase/ClearDatabaseDatabase";
+import {ClearDatabaseJob} from "./ClearDatabase/ClearDatabaseJob";
 
 window["JSObject"] = Object;
 
@@ -170,6 +172,18 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         FavoriteWithoutEventRelation1000000008000,
     ]
 });
+
+EasySyncClientDb.errorListener = async (e) => {
+    console.error(e);
+    await ClearDatabaseJob.doJob();
+    debugger;
+    //work with timeout since saving of db only occurs after 150ms in browser
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(window.location.reload(true));
+        }, 200);
+    });
+};
 
 let app = new App();
 app.start(WelcomeSite).catch(e => console.error(e)).then(() => {

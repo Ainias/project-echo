@@ -41,6 +41,7 @@ describe("calendar site", () => {
             let element = $("#main-content");
             return await element.isDisplayed()
         });
+
         await find.one(".footer .icon.calendar").click();
 
         await browser.waitUntil(async () => {
@@ -164,8 +165,6 @@ describe("calendar site", () => {
         await $(".day-number=30").click();
         expect(await $(".day.cell.active").getText()).toEqual("30");
         expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
-
-
     });
 
 });

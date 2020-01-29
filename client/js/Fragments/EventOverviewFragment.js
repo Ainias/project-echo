@@ -4,7 +4,7 @@ import {PlaceHelper} from "../Helper/PlaceHelper";
 import {EventSite} from "../Sites/EventSite";
 import {Favorite} from "../Model/Favorite";
 import {EventHelper} from "../Helper/EventHelper";
-import {ViewHelper} from "js-helper/src/client/ViewHelper";
+import {ViewHelper} from "js-helper/dist/client";
 
 export class EventOverviewFragment extends AbstractFragment {
 

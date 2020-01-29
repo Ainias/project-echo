@@ -10,7 +10,7 @@ import {Scaler} from "../Scaler";
 import {Favorite} from "../Model/Favorite";
 import {DragHelper} from "../Helper/DragHelper";
 import {DateHelper} from "../Helper/DateHelper";
-import {ViewHelper} from "js-helper/src/client/ViewHelper";
+import {ViewHelper} from "js-helper/dist/client";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {RepeatedEvent} from "../../../model/RepeatedEvent";
 import {Helper} from "js-helper"

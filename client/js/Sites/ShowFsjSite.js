@@ -1,9 +1,9 @@
 import {ShowFsjChurchSite} from "./ShowFsjChurchSite";
 import {Fsj} from "../../../model/Fsj";
-import {App} from "cordova-sites/src/client/js/App";
+import {App} from "cordova-sites/dist/client/js/App";
 import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
-import {ConfirmDialog} from "cordova-sites/src/client/js/Dialog/ConfirmDialog";
-import {Toast} from "cordova-sites/src/client/js/Toast/Toast";
+import {ConfirmDialog} from "cordova-sites/dist/client/js/Dialog/ConfirmDialog";
+import {Toast} from "cordova-sites/dist/client/js/Toast/Toast";
 import {ModifyFsjSite} from "./ModifyFsjSite";
 
 export class ShowFsjSite extends ShowFsjChurchSite{

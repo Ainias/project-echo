@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 import {UserManager} from "cordova-sites-user-management/src/server/v1/UserManager";
 import {User} from "cordova-sites-user-management/src/shared/v1/model/User";
-import {Helper} from "js-helper/src/shared/Helper";
+import {Helper} from "js-helper/dist/shared/Helper";
 
 export class Data1000000005000 implements MigrationInterface {
     async up(queryRunner: QueryRunner): Promise<any> {

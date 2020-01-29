@@ -216,6 +216,12 @@ export class AddEventSite extends MenuFooterSite {
         });
 
         this._form.addValidator(values => {
+
+            console.log(values);
+            return {
+                "error": "the endpoint must be after the start"
+            };
+
             if (new Date(values["start"]).getTime() > new Date(values["end"]).getTime()) {
                 new Toast("the endpoint must be after the start").show();
                 return {

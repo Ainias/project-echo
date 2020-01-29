@@ -1,9 +1,9 @@
-import {AbstractFragment} from "cordova-sites/src/client/js/Context/AbstractFragment";
+import {AbstractFragment} from "cordova-sites/dist/client/js/Context/AbstractFragment";
 import {SystemCalendar} from "../../SystemCalendar";
-import {ChooseDialog} from "cordova-sites/src/client/js/Dialog/ChooseDialog";
+import {ChooseDialog} from "cordova-sites/dist/client/js/Dialog/ChooseDialog";
 
 import view from "../../../html/Fragments/Settings/systemCalendarSettingsFragment.html";
-import {NativeStoragePromise} from "cordova-sites/src/client/js/NativeStoragePromise";
+import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 export class SystemCalendarSettingsFragment extends AbstractFragment {
 

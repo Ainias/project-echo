@@ -1,8 +1,8 @@
 import {Favorite} from "./Model/Favorite";
-import {Translator} from "cordova-sites/src/client/js/Translator";
-import {DataManager} from "cordova-sites/src/client/js/DataManager";
+import {Translator} from "cordova-sites/dist/client/js/Translator";
+import {DataManager} from "cordova-sites/dist/client/js/DataManager";
 import {Helper} from "js-helper";
-import {NativeStoragePromise} from "cordova-sites/src/client/js/NativeStoragePromise";
+import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 export class SystemCalendar {
     static async createCalendar() {
