@@ -1,6 +1,7 @@
-const find = require("../lib/PromiseSelector");
+const find = require("../../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
+const functions = require("../../lib/functions.js");
 
 describe("church site", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
@@ -44,11 +45,12 @@ describe("church site", () => {
 
         if (browser.config.isMobile) {
             await $("button.menu-icon").click();
+            await functions.pause(1500);
             await find.one("#responsive-menu [data-translation='churches']").click();
         } else {
             await find.one("[data-translation='churches']").click();
         }
-        await $(".alphabet-section.K .name").click()
+        await $(".alphabet-section.K .name").click();
     });
 
     it("church site", async function () {

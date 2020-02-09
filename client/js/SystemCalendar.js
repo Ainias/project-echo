@@ -10,10 +10,9 @@ export class SystemCalendar {
             if (device.platform === "browser") {
                 resolve();
             } else {
-                await this.deleteCalendar();
+                // await this.deleteCalendar();
                 let options = window.plugins.calendar.getCreateCalendarOptions();
                 options.calendarName = SystemCalendar.NAME;
-                options.accountName = "silas@silas.link";
                 window.plugins.calendar.createCalendar(options, resolve, reject);
             }
         });
@@ -33,8 +32,7 @@ export class SystemCalendar {
             if (device.platform === "browser") {
                 resolve();
             } else {
-
-                let calendar = await this.getSelectedCalendar();
+                let calendar = await this.getSelectedCalendar().catch(e => console.error(e));
                 let options = window.plugins.calendar.getCalendarOptions();
                 options.calendarName = calendar.name;
                 options.calendarId = calendar.id;
@@ -137,7 +135,9 @@ export class SystemCalendar {
 
         calendars.some(sysCalendar => {
             if ((Helper.isNotNull(calendarId) && sysCalendar.id === calendarId) ||
-                (Helper.isNull(calendarId) && sysCalendar.isPrimary && sysCalendar.name.indexOf("@") !== -1)){
+                (Helper.isNull(calendarId) && (sysCalendar.isPrimary) && sysCalendar.name.indexOf("@") !== -1) ||
+                (calendarId === "OK, Calendar already exists" && sysCalendar.name === SystemCalendar.NAME)
+            ){
                 calendar = sysCalendar;
                 return true;
             }
@@ -146,7 +146,6 @@ export class SystemCalendar {
 
         if (calendar === null) {
             let id = await this.createCalendar();
-            console.log("id");
             await NativeStoragePromise.setItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY, id);
             return this.getSelectedCalendar();
         }

@@ -1,6 +1,6 @@
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
-import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
+import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction, Toast} from "cordova-sites";
 import {Helper} from "js-helper/dist/shared"
 import {EasySyncClientDb, SetupEasySync1000000000500, SyncJob} from "cordova-sites-easy-sync/client";
 
@@ -187,5 +187,12 @@ EasySyncClientDb.errorListener = async (e) => {
 
 let app = new App();
 app.start(WelcomeSite).catch(e => console.error(e)).then(() => {
-    console.log("initialisation done!", new Date())
+    console.log("initialisation done!", new Date());
+    // let i = 0;
+    // let messageFunc = () => {
+    //     new Toast(""+i).show();
+    //     i++;
+    //     setTimeout(messageFunc, 1000);
+    // };
+    // messageFunc();
 });

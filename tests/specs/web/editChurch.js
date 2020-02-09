@@ -1,7 +1,7 @@
-const find = require("../lib/PromiseSelector");
+const find = require("../../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
-const functions = require("../lib/functions");
+const functions = require("../../lib/functions");
 const path = require("path");
 
 describe("edit church", () => {
@@ -78,7 +78,7 @@ describe("edit church", () => {
         expect(data["regionId"]).toEqual(1);
     });
 
-    fit("edit church", async function () {
+    it("edit church", async function () {
         if (browser.config.isMobile) {
             await $("button.menu-icon").click();
             await find.one("#responsive-menu [data-translation='churches']").click();
@@ -131,7 +131,7 @@ describe("edit church", () => {
 
         await $("button.button=Speichern").click();
 
-        await browser.pause(2500);
+        await functions.pause(2500);
         expect(await $("h1#name=Bearbeitete Kirche").isDisplayed()).toBeTruthy();
 
         let data = await functions.queryDatabase("SELECT * FROM church WHERE website='echo.silas.link2' LIMIT 1");
@@ -158,7 +158,7 @@ describe("edit church", () => {
         await $("#delete-church").click();
         await $(".button=OK").click();
 
-        await browser.pause(1000);
+        await functions.pause(1000);
 
         let data = await functions.queryDatabase("SELECT * FROM church WHERE id=14 LIMIT 1");
         data = data[0];

@@ -16,8 +16,12 @@ async function login(email, password) {
     await browser.pause(3000);
 }
 
-async function logout(){
+async function logout() {
     await $("span=Logout").click();
+}
+
+async function pause(delay) {
+    await browser.pause(delay * browser.config.delayFactor);
 }
 
 async function queryDatabase(query) {
@@ -94,13 +98,13 @@ async function verifyFormValues(values, useSelector) {
     return promise;
 }
 
-async function addCustomChildSelector(){
+async function addCustomChildSelector() {
     await browser.addLocatorStategy("selectParent", (parentSelector, childSelector) => {
         let children = document.querySelectorAll(childSelector);
         let parents = [];
         children.forEach(child => {
             let parent = child.closest(parentSelector);
-            if (parent){
+            if (parent) {
                 parents.push(parent);
             }
         });
@@ -108,11 +112,24 @@ async function addCustomChildSelector(){
     });
 }
 
-async function getBaseUrl(){
+async function getBaseUrl() {
     if (browser.config.baseUrl.trim() !== "") {
         return browser.config.baseUrl;
     } else {
         return await browser.getUrl();
+    }
+}
+
+async function acceptAlert() {
+    try {
+        await pause(2000);
+        await browser.acceptAlert();
+        await pause(1000);
+    } catch (e) {
+        if (e.message !== "An attempt was made to operate on a modal dialog when one was not open."){
+            expect(e.message).toEqual("error message");
+            throw e;
+        }
     }
 }
 
@@ -126,4 +143,6 @@ module.exports = {
     verifyFormValues: verifyFormValues,
     addCustomChildSelector: addCustomChildSelector,
     getBaseUrl: getBaseUrl,
+    pause: pause,
+    acceptAlert: acceptAlert,
 };

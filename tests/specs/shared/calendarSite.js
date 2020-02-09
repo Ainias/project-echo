@@ -1,9 +1,10 @@
-const find = require("../lib/PromiseSelector");
+const find = require("../../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
+const functions = require("../../lib/functions.js");
 
 describe("calendar site", () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
+    // jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;
     beforeAll(async () => {
@@ -39,14 +40,14 @@ describe("calendar site", () => {
 
         await browser.waitUntil(async () => {
             let element = $("#main-content");
-            return await element.isDisplayed()
+            return await element.isDisplayed();
         });
 
         await find.one(".footer .icon.calendar").click();
 
         await browser.waitUntil(async () => {
             let element = $("#calendar");
-            return await element.isDisplayed()
+            return await element.isDisplayed();
         });
     });
 
@@ -57,6 +58,7 @@ describe("calendar site", () => {
             article.classList.add("testing");
         });
 
+        await functions.pause(3000);
         expect(await $("#month-name").getText()).toEqual("MAI 2019");
         expect(await $(".day.cell.active").getText()).toEqual("26");
         expect(await $("#event-overview-container").getText()).toEqual("Keine Events vorhanden");
@@ -69,12 +71,12 @@ describe("calendar site", () => {
         expect(await $(".name=Termin 5.2").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.3").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.4").isDisplayed()).toBeFalsy();
-        // await browser.pause(20000);
+        // await functions.pause(20000);
         // expect(await $(".place-container=place 1").isDisplayed()).toBeTruthy();
 
         // let dragElem = await $("#event-overview-container").getPromise();
         // await dragElem.dragAndDrop(await $("#month-name").getPromise(), 500);
-        // await browser.pause(15000);
+        // await functions.pause(15000);
 
         // expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
         // expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
@@ -84,7 +86,7 @@ describe("calendar site", () => {
 
         // dragElem = await $(".name=Termin 5").getPromise();
         // await dragElem.dragAndDrop(await $(".day.cell.active").getPromise(), 1000);
-        // await browser.pause(500);
+        // await functions.pause(500);
 
         // expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
         // expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
@@ -95,7 +97,7 @@ describe("calendar site", () => {
     });
 
     it("browse calendar", async function () {
-        await browser.pause(3000);
+        await functions.pause(3000);
         expect(await $("#month-name").getText()).toEqual("MAI 2019");
         expect(await $(".day.cell.active").getText()).toEqual("26");
 
@@ -103,27 +105,33 @@ describe("calendar site", () => {
         expect(await $(".day.cell.active").getText()).toEqual("31");
 
         await $("#button-right").click();
+        await functions.pause(500);
         expect(await $("#month-name").getText()).toEqual("JUNI 2019");
         expect(await $(".day.cell.active").getText()).toEqual("30");
 
         await $("#button-left").click();
+        await functions.pause(500);
         expect(await $("#month-name").getText()).toEqual("MAI 2019");
         expect(await $(".day.cell.active").getText()).toEqual("30");
 
         await $(".day-number=31").click();
+        await functions.pause(500);
         expect(await $(".day.cell.active").getText()).toEqual("31");
 
         await $("#button-left").click();
+        await functions.pause(500);
         expect(await $("#month-name").getText()).toEqual("APRIL 2019");
         expect(await $(".day.cell.active").getText()).toEqual("30");
     });
 
     it("repeated events displayed", async function () {
-        await browser.pause(2500);
+        await functions.pause(1000);
         expect(await $("#month-name").getText()).toEqual("MAI 2019");
 
         await $("#button-right").click();
+        await functions.pause(2000);
         await $("#button-right").click();
+        await functions.pause(2000);
         expect(await $("#month-name").getText()).toEqual("JULI 2019");
 
         await $(".day-number=2").click();

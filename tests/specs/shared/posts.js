@@ -1,6 +1,7 @@
-const find = require("../lib/PromiseSelector");
+const find = require("../../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
+const functions = require("../../lib/functions.js");
 
 describe("post suite", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
@@ -39,7 +40,7 @@ describe("post suite", () => {
 
         await browser.waitUntil(async () => {
             let element = $("#main-content");
-            return await element.isDisplayed()
+            return await element.isDisplayed();
         });
     });
 

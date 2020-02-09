@@ -8,11 +8,14 @@
     "cordova browser start": "cordova run browser",
     "cordova browser prepare": "cordova prepare browser",
     "cordova android": "cordova run android --device",
+    "cordova ios": "cordova emulate ios --target=\"iPhone-11\"",
     "cordova release android": "cordova build android --release",
     "appium": "appium --chromedriver-executable tests/misc/chromedriver",
     "appium-doctor": "appium-doctor",
     "test browser": "wdio tests/wdio.config.browser.js",
+    "test safari": "wdio tests/wdio.config.safari.js",
     "test android": "wdio tests/wdio.config.android.js",
+    "test ios": "wdio tests/wdio.config.ios.js",
     "selenium": "selenium-standalone",
     "ts-node": "ts-node --ignore=/node_modules\\/\\([^cj]\\|.[^os]\\|..[^r\\-]\\|...[^dh]\\|....[^oe]\\|.....[^vl]\\|......[^ap]\\|.......[^\\-e]\\|........[^sr]\\).*/",
     "wdio": "wdio"
@@ -25,6 +28,7 @@
     "body-parser": "^1.18.3",
     "cordova-android": "^7.1.2",
     "cordova-browser": "^5.0.4",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-calendar": "^5.1.5",
     "cordova-plugin-device": "^2.0.2",
@@ -55,9 +59,9 @@
     "nodemailer": "^6.4.2",
     "reflect-metadata": "^0.1.13",
     "sql.js": "^0.5.0",
-    "typescript": "^3.7.4",
     "ts-node": "8.3.0",
-    "typeorm": "^0.2.21"
+    "typeorm": "^0.2.21",
+    "typescript": "^3.7.4"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
@@ -82,7 +86,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "jasmine": "^3.5.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "opencv4nodejs": "^4.14.1",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.3.1",
@@ -107,7 +111,8 @@
     },
     "platforms": [
       "android",
-      "browser"
+      "browser",
+      "ios"
     ]
   },
   "browserslist": [

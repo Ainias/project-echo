@@ -1,10 +1,11 @@
-const find = require("../lib/PromiseSelector");
+const find = require("../../lib/PromiseSelector");
 const $ = find.one;
 // const $$ = find.multiple;
+const functions = require("../../lib/functions.js");
 
 // const EnvController = require("../setup");
 
-describe("first test suite", () => {
+describe("church list suite", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;
@@ -47,12 +48,12 @@ describe("first test suite", () => {
         expect(await aElem.isDisplayedInViewport()).toBeTruthy();
         expect(await vElem.isDisplayedInViewport()).toBeFalsy();
         await $(".alphabet-scroll-to[data-letter=V]").click();
-        await browser.pause(700);
+        await functions.pause(700);
 
         expect(await aElem.isDisplayedInViewport()).toBeFalsy();
         expect(await vElem.isDisplayedInViewport()).toBeTruthy();
         await $(".alphabet-scroll-to[data-letter=A]").click();
-        await browser.pause(700);
+        await functions.pause(700);
 
         expect(await aElem.isDisplayedInViewport()).toBeTruthy();
         expect(await vElem.isDisplayedInViewport()).toBeFalsy();

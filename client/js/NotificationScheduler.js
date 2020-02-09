@@ -37,7 +37,7 @@ export class NotificationScheduler extends Singleton {
         }
 
         if (!await this.hasPermission() && !await this.requestPermission()) {
-            return
+            return;
         }
 
         return new Promise(resolve => {

@@ -79,8 +79,6 @@ export class EventHelper {
             endTime = new Date(Date.parse(endTime));
         }
 
-        console.log("event-templates", repeatUntilEvents, await RepeatedEvent.find());
-
         let events = [];
         await Helper.asyncForEach(repeatUntilEvents, async event => {
             if (event.repeatedEvent) {
@@ -95,8 +93,9 @@ export class EventHelper {
     static async toggleFavorite(event) {
         let fav = await Favorite.toggle(event.id);
         if (fav.isFavorite) {
-            await EventHelper.setNotificationFor(fav.id, event);
-            await SystemCalendar.addEventToSystemCalendar(event);
+            await Promise.all([
+                EventHelper.setNotificationFor(fav.id, event).catch(console.error),
+                SystemCalendar.addEventToSystemCalendar(event).catch(console.error)]);
             return true;
         } else {
             let notificationScheduler = NotificationScheduler.getInstance();
@@ -142,7 +141,7 @@ export class EventHelper {
     static async setNotificationFor(id, event) {
         let timeInfos = await Promise.all([NativeStoragePromise.getItem("send-notifications"),
             NativeStoragePromise.getItem("time-to-notify-base", 1),
-            NativeStoragePromise.getItem("time-to-notify-multiplier"), 60 * 60 * 24]);
+            NativeStoragePromise.getItem("time-to-notify-multiplier", 60 * 60 * 24)]);
 
         let notificationScheduler = NotificationScheduler.getInstance();
 
@@ -152,7 +151,6 @@ export class EventHelper {
         }
 
         Translator.getInstance().addDynamicTranslations(event.getDynamicTranslations());
-
 
         let timeToNotify = new Date();
 

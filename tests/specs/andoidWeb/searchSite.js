@@ -1,9 +1,10 @@
-const find = require("../lib/PromiseSelector");
+const find = require("../../lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
+const functions = require("../../lib/functions.js");
 
 describe("search site", () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 90 * 1000 * browser.config.delayFactor;
 
     let baseUrl = null;
     beforeAll(async () => {
@@ -39,9 +40,8 @@ describe("search site", () => {
 
         await browser.waitUntil(async () => {
             let element = $("#main-content");
-            return await element.isDisplayed()
+            return await element.isDisplayed();
         });
-        await find.one(".footer .icon.search").click();
     });
 
     it("search without parameters", async function () {
@@ -63,10 +63,15 @@ describe("search site", () => {
         expect(await $("#event-name").isDisplayed()).toBeTruthy();
     });
 
-    it("search with types", async function () {
+    fit("search with types", async function () {
+        await find.one(".footer .icon.search").click();
         await $(".filter-tag=Konzert").click();
         await $(".filter-tag=Hauskreis").click();
+        //
+        await functions.pause(3000);
         await $("#search-button").click();
+        // await browser.debug();
+        await functions.pause(3000);
 
         expect(await $(".day=Sa 29.06.")).toBeTruthy();
         expect(await $(".name=Termin later").isDisplayed()).toBeTruthy();
@@ -77,7 +82,7 @@ describe("search site", () => {
         await $(".filter-tag=Köln City Church").click();
         await $("#search-button").click();
 
-        await browser.pause(1000);
+        await functions.pause(1000);
         expect(await $(".day=Sa 29.06.")).toBeTruthy();
         expect(await $(".name=Termin later").isDisplayed()).toBeTruthy();
         expect(await $(".name=Termin later 2").isExisting()).toBeFalsy();
@@ -103,7 +108,7 @@ describe("search site", () => {
         await $(".filter-tag=Konzert").click();
         await $("#search-button").click();
 
-        await browser.pause(1000);
+        await functions.pause(1000);
         expect(await $(".name=Termin later").isDisplayed()).toBeTruthy();
         expect(await $(".name=Termin later 2").isExisting()).toBeFalsy();
     });
