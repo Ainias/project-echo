@@ -1,10 +1,19 @@
 const Service = require("./setup");
+const path = require("path");
 
 exports.config = {
 
     // Where the files we are testing can be found.
-    specs: ['./tests/specs/**/*.js'],
-    // specs: ['./tests/specs/**/searchSite.js'],
+    specs: [
+        './tests/specs/mobile/*.js',
+        './tests/specs/androidWeb/*.js',
+        './tests/specs/shared/*.js',
+    ],
+    specs: [
+        './tests/specs/**/favoriteSite.js'
+    ],
+
+    delayFactor: 1,
 
     isMobile: true,
 
@@ -53,7 +62,7 @@ exports.config = {
 
     appium: {
         args: {
-            chromedriverExecutable: "/home/silas/Projekte/Web/project-echo/tests/chromedriver",
+            chromedriverExecutable: path.join(__dirname, "misc/chromedriver"),
         }
     },
 
@@ -93,10 +102,10 @@ exports.config = {
         // permissions automatically.
         autoGrantPermissions: true
     }],
-    onPrepare: async function(){
+    onPrepare: async function () {
         await Service.setup();
     },
-    onComplete: async function(){
+    onComplete: async function () {
         await Service.tearDown();
     }
 };

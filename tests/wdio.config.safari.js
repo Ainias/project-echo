@@ -14,6 +14,8 @@ exports.config = {
     // much like the reporters. The full list is at https://www.npmjs.com/search?q=wdio-framework
     framework: 'jasmine',
 
+    delayFactor: 1,
+
     // By default, Jasmine times out within 10 seconds. This is not really enough time
     // for us as it takes a while for Appium to get set up.
     jasmineNodeOpts: {

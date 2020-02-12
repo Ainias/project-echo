@@ -53,11 +53,16 @@ exports.config = {
         // [Service.service,{}]
     ],
 
+    delayFactor: 1,
+
     // Where the files we are testing can be found.
-    specs: ['./tests/specs/**/*.js'],
+    specs: [
+        './tests/specs/web/*.js',
+        './tests/specs/androidWeb/*.js',
+        './tests/specs/shared/*.js',
+    ],
     // specs: [
-    //     './tests/specs/**/posts.js',
-    //     './tests/specs/**/editChurch.js'
+    //     './tests/specs/**/favoriteSite.js',
     // ],
 
 
@@ -65,7 +70,7 @@ exports.config = {
         browserName: "chrome",
         // browserName: "firefox",
         baseUrl: "http://127.0.0.1:8000",
-        maxInstances: 5,
+        maxInstances: 3,
         // maxInstances: 1,
         // 'goog:chromeOptions': {
         //     to run chrome headless the following flags are required

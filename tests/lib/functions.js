@@ -116,7 +116,7 @@ async function getBaseUrl() {
     if (browser.config.baseUrl.trim() !== "") {
         return browser.config.baseUrl;
     } else {
-        return await browser.getUrl();
+        return browser.getUrl();
     }
 }
 
@@ -126,7 +126,7 @@ async function acceptAlert() {
         await browser.acceptAlert();
         await pause(1000);
     } catch (e) {
-        if (e.message !== "An attempt was made to operate on a modal dialog when one was not open."){
+        if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")){
             expect(e.message).toEqual("error message");
             throw e;
         }

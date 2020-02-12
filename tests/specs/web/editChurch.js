@@ -47,7 +47,7 @@ describe("edit church", () => {
             "name-en":"New Church",
             // "description-de":"Meine Beschreibung",
             // "description-en":"My english description",
-            "image": path.join(__dirname, "../misc/img/church.jpeg"),
+            "image": path.join(__dirname, "../../misc/img/church.jpeg"),
             "website-url":"echo.silas.link",
             "place-name-1":"Köln"
         });
@@ -124,7 +124,7 @@ describe("edit church", () => {
         await functions.setFormValues({
             "name-de":"Bearbeitete Kirche",
             "name-en":"Edited Church",
-            "image": path.join(__dirname, "../misc/img/church.jpeg"),
+            "image": path.join(__dirname, "../../misc/img/church.jpeg"),
             "website-url":"echo.silas.link2",
             "place-name-1":"Köln bearbeitet"
         });

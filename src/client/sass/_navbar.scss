@@ -1,0 +1,127 @@
+@import "../../../node_modules/foundation-sites/scss/foundation";
+@import "settings";
+
+#navbar-fragment {
+  .grid-container {
+    @include breakpoint(medium down) {
+      padding-top: 1rem;
+    }
+  }
+
+  .top-bar {
+    #responsive-menu-toggle {
+      z-index: 10000;
+    }
+  }
+}
+
+.navbar-menu {
+  &.hidden-menu {
+    top: 1.6rem;
+    @include breakpoint(medium down) {
+      top: 2.6rem
+    }
+    bottom: 0;
+    border-top-left-radius: 15px;
+
+    > li {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  .menu, &.menu {
+    li {
+      z-index: 100;
+
+      a {
+        @each $breakpoint, $value in $margins {
+          @include breakpoint($breakpoint) {
+            padding-left: 2*$value;
+          }
+        }
+      }
+
+      @include breakpoint(smedium down) {
+        a {
+          width: 100%;
+        }
+      }
+
+      &:not(.is-dropdown-submenu-parent) {
+        a {
+          @each $breakpoint, $value in $margins {
+            @include breakpoint($breakpoint) {
+              padding-right: 2*$value;
+            }
+          }
+        }
+      }
+
+      &.img a {
+        padding-top: 0;
+        padding-bottom: 0;
+
+        img {
+          vertical-align: inherit;
+          max-height: 1.8rem;
+        }
+      }
+
+    }
+
+    > li > ul.is-dropdown-submenu {
+      min-width: 0;
+
+      li {
+        display: inherit;
+      }
+    }
+
+    > li.opens-right > a {
+      margin-right: 0.5rem;
+
+      &:after {
+        right: 0.1rem;
+      }
+    }
+  }
+}
+
+
+.absolute-menu-site #navbar-fragment {
+  position: absolute;
+  width: 100%;
+
+  > * {
+    position: relative;
+  }
+
+  .top-bar {
+    color: inherit !important;
+    background-color: initial;
+
+    .menu-icon::after, .menu-icon:hover::after {
+      background: white;
+      box-shadow: 0 7px 0 white, 0 14px 0 white;
+    }
+
+    #navbar-menu-visible {
+      background-color: initial !important;
+    }
+
+    .navbar-menu.hidden-menu {
+      border-color: #3b3b3b;
+    }
+  ;
+
+    ul {
+      background-color: #3b3b3b !important;
+
+      a {
+        color: inherit;
+      }
+
+    }
+  }
+}

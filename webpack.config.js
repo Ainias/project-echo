@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const webpack = require('webpack');
 const path = require("path");
@@ -9,6 +9,8 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 const os = require('os');
 const ifaces = os.networkInterfaces();
+
+const version = require("./package.json").version;
 
 let mode = (process.env.MODE || "development");
 // let mode = "production";
@@ -43,8 +45,8 @@ let moduleExports = {
         entry: [
             // __dirname + "/node_modules/localforage/dist/localforage.js",
             // __dirname + "/node_modules/sql.js/js/sql-optimized.js",
-            __dirname + "/client/js/script.js",
-            __dirname + "/client/sass/index.scss",
+            __dirname + "/src//client/js/script.js",
+            __dirname + "/src//client/sass/index.scss",
         ],
 
         optimization: {
@@ -101,12 +103,16 @@ let moduleExports = {
 
         plugins: [
             //Delete www before every Build (to only have nessesary files)
-            new CleanWebpackPlugin(["www/*"], {exclude: [".gitkeep"]}),
+            new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns: ['**/*', '!**/.gitkeep']}),
 
             new CopyWebpackPlugin([
                 {
-                    from: path.resolve("./node_modules/sql.js/js/sql-optimized.js"),
+                    from: path.resolve("./node_modules/sql.js/dist/sql-wasm.js"),
                     to: "scripts/"
+                },
+                {
+                    from: path.resolve("./node_modules/sql.js/dist/sql-wasm.wasm"),
+                    to: "sql-wasm.wasm"
                 },
                 {
                     from: path.resolve("./node_modules/localforage/dist/localforage.js"),
@@ -116,7 +122,7 @@ let moduleExports = {
 
             //Erstellt (kopiert) die Index.html
             new HtmlWebpackPlugin({
-                template: '!!html-loader!client/index.html'
+                template: '!!html-loader!src/client/index.html'
             }),
 
             new webpack.NormalModuleReplacementPlugin(/typeorm$/, function (result) {
@@ -126,6 +132,7 @@ let moduleExports = {
             new webpack.DefinePlugin({
                 __HOST_ADDRESS__: "'" + (process.env.HOST_URI || ((process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000") + "/api/v1/")) + "'",
                 __MAPS_API_KEY__: "'" + process.env.GOOGLE_MAPS_API_KEY + "'",
+                __VERSION__: "'"+version+"'",
             })
         ],
 
@@ -165,7 +172,7 @@ let moduleExports = {
                 },
                 {
                     //Kopiert nur benutzte Bilder (benutzt durch JS (import), html oder css/sass)
-                    test: /img[\\\/]/,
+                    test: /(img|video)[\\\/]/,
                     use: [
                         {
                             loader: 'file-loader',
