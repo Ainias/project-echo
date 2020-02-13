@@ -1,8 +1,8 @@
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
-import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction, Toast} from "cordova-sites";
+import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
 import {Helper} from "js-helper/dist/shared"
-import {EasySyncClientDb, SetupEasySync1000000000500, SyncJob} from "cordova-sites-easy-sync/client";
+import {EasySyncClientDb, SetupEasySync1000000000500, SyncJob} from "cordova-sites-easy-sync/dist/client";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
 
@@ -12,10 +12,10 @@ import {Region} from "../../shared/model/Region";
 import "./Model/Favorite"
 
 import {BaseDatabase} from "cordova-sites-database";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
 import {AddEventSite} from "./Sites/AddEventSite";
-import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/client";
+import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/dist/client";
 import {CalendarSite} from "./Sites/CalendarSite";
 import {ModifyChurchSite} from "./Sites/ModifyChurchSite";
 import {ImpressumSite} from "./Sites/ImpressumSite";
@@ -23,14 +23,14 @@ import {ImpressumSite} from "./Sites/ImpressumSite";
 import bibelverse from "./bibelverse.json";
 
 //translation import
-import "cordova-sites-user-management/src/client/js/translationInit"
+import "cordova-sites-user-management/dist/client/js/translationInit"
 import "cordova-sites/dist/client/js/translationInit"
 import logo from "../img/logo.png";
 
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
 import {Post} from "../../shared/model/Post";
 import {SetupSchema1000000000000} from "../../shared/model/migrations/SetupSchema";
-import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
+import {SetupUserManagement1000000001000} from "cordova-sites-user-management/dist/shared/migrations/SetupUserManagement"
 import {SetupFavorite1000000000001} from "../../shared/model/migrations/client/SetupFavorite";
 import {FsjSchema1000000006000} from "../../shared/model/migrations/FsjSchema";
 import {Fsj} from "../../shared/model/Fsj";

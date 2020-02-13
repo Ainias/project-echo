@@ -1,7 +1,7 @@
 import {BaseDatabase} from "cordova-sites-database/dist/BaseDatabase";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
 import {Event} from "./Event";
-import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
+import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
 import {BlockedDay} from "./BlockedDay";
 
 export class RepeatedEvent extends AccessEasySyncModel {

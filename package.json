@@ -4,7 +4,7 @@
   "version": "0.1.1",
   "description": "Ein christlicher Terminkalender für Gemeinden rund un Köln",
   "scripts": {
-    "server": "ts-node --ignore=/node_modules\\/\\([^cj]\\|.[^os]\\|..[^r\\-]\\|...[^dh]\\|....[^oe]\\|.....[^vl]\\|......[^ap]\\|.......[^\\-e]\\|........[^sr]\\).*/ src/server/index.ts",
+    "server": "ts-node src/server/index.ts",
     "cordova browser start": "cordova run browser",
     "cordova browser prepare": "cordova prepare browser",
     "cordova android": "cordova run android --device",
@@ -17,7 +17,7 @@
     "test android": "wdio tests/wdio.config.android.js",
     "test ios": "wdio tests/wdio.config.ios.js",
     "selenium": "selenium-standalone",
-    "ts-node": "ts-node --ignore=/node_modules\\/\\([^cj]\\|.[^os]\\|..[^r\\-]\\|...[^dh]\\|....[^oe]\\|.....[^vl]\\|......[^ap]\\|.......[^\\-e]\\|........[^sr]\\).*/",
+    "ts-node": "ts-node",
     "wdio": "wdio"
   },
   "author": "Project Echo Team",
@@ -40,8 +40,8 @@
     "cordova-plugin-whitelist": "^1.3.4",
     "cordova-sites": "git+https://github.com/Ainias/cordova-sites.git#0.4.1",
     "cordova-sites-database": "git+https://github.com/Ainias/cordova-sites-database.git#0.4.1",
-    "cordova-sites-easy-sync": "git+https://github.com/Ainias/cordova-sites-easy-sync.git#0.5.1",
-    "cordova-sites-user-management": "git+https://github.com/Ainias/cordova-sites-user-management.git#0.4",
+    "cordova-sites-easy-sync": "git+https://github.com/Ainias/cordova-sites-easy-sync.git#0.6",
+    "cordova-sites-user-management": "git+https://github.com/Ainias/cordova-sites-user-management.git#0.5",
     "cordova-sqlite-storage": "^4.0.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

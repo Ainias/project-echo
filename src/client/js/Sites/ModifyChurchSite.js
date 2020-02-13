@@ -2,7 +2,7 @@ import {MenuFooterSite} from "./MenuFooterSite";
 import view from "../../html/Sites/modifyChurchSite.html";
 import {App, ConfirmDialog, Form, Helper, Toast, Translator} from "cordova-sites";
 import {Church} from "../../../shared/model/Church";
-import {UserSite} from "cordova-sites-user-management/src/client/js/Context/UserSite";
+import {UserSite} from "cordova-sites-user-management/dist/client/js/Context/UserSite";
 import {Region} from "../../../shared/model/Region";
 import {Event} from "../../../shared/model/Event";
 import {EventSite} from "./EventSite";
@@ -10,7 +10,7 @@ import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {ShowChurchSite} from "./ShowChurchSite";
-import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
+import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";
 import {AddEventSite} from "./AddEventSite";
 
 export class ModifyChurchSite extends MenuFooterSite {

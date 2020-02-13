@@ -6,7 +6,7 @@ import {Event} from "../../../shared/model/Event";
 import {Region} from "../../../shared/model/Region";
 import {EventSite} from "./EventSite";
 import flatpickr from "flatpickr";
-import {UserSite} from "cordova-sites-user-management/src/client/js/Context/UserSite";
+import {UserSite} from "cordova-sites-user-management/dist/client/js/Context/UserSite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";

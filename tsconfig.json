@@ -11,11 +11,6 @@
     "allowJs": true
   },
   "include": [
-    "./node_modules/cordova-sites/**/*",
-    "./node_modules/cordova-sites-database/**/*",
-    "./node_modules/cordova-sites-easy-sync/**/*",
-    "./node_modules/cordova-sites-user-management/**/*",
-//    "./node_modules/js-helper/**/*",
     "./src/shared/model/**/*",
     "./src/client/**/*"
   ],

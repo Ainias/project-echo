@@ -5,7 +5,7 @@ import {Event} from "../../../shared/model/Event";
 import view from "../../html/Sites/eventSite.html";
 import {Favorite} from "../Model/Favorite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
-import {UserManager} from "cordova-sites-user-management/client";
+import {UserManager} from "cordova-sites-user-management/dist/client";
 import {AddEventSite} from "./AddEventSite";
 import {EventHelper} from "../Helper/EventHelper";
 import {SearchSite} from "./SearchSite";

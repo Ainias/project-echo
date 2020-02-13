@@ -1,4 +1,4 @@
-import {EasySyncClientDb} from "cordova-sites-easy-sync/src/client/EasySyncClientDb";
+import {EasySyncClientDb} from "cordova-sites-easy-sync/dist/client/EasySyncClientDb";
 import {Event} from "../../../shared/model/Event";
 import {Between, Brackets, In} from "typeorm";
 import {NotificationScheduler} from "../NotificationScheduler";
