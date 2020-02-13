@@ -5,13 +5,13 @@ export MODE=production
 export HOST_URI=https://echo.silas.link/api/v1/
 
 npm run "cordova browser prepare"
-rm -rf server/public
-mv platforms/browser/www server/public
+rm -rf src/server/public
+mv platforms/browser/www src/server/public
 
 cp tools/signing/echo.jks platforms/android/
 cp tools/signing/release-signing.properties platforms/android/
 
 npm run "cordova release android"
-mv platforms/android/app/build/outputs/apk/release/app-release.apk server/public/echo.apk
+mv platforms/android/app/build/outputs/apk/release/app-release.apk src/server/public/echo.apk
 
-git add server/public/ -v
+git add src/server/public/ -v
