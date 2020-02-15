@@ -23,13 +23,10 @@ export class CookieDialog extends Dialog{
             });
 
 
-            console.log("c", currentConsent);
             let values = {};
             currentConsent.forEach(cookie => {
                 values[cookie] = 1;
             });
-
-            console.log(values);
 
             form.setValues(values);
 

@@ -56,14 +56,14 @@ exports.config = {
     delayFactor: 1,
 
     // Where the files we are testing can be found.
-    specs: [
-        './tests/specs/web/*.js',
-        './tests/specs/androidWeb/*.js',
-        './tests/specs/shared/*.js',
-    ],
     // specs: [
-    //     './tests/specs/**/favoriteSite.js',
+    //     './tests/specs/web/*.js',
+    //     './tests/specs/androidWeb/*.js',
+    //     './tests/specs/shared/*.js',
     // ],
+    specs: [
+        './tests/specs/**/editChurch.js',
+    ],
 
 
     capabilities: [{

@@ -34,6 +34,8 @@ describe("event site", () => {
             window["Date"] = Date;
         }, 2019, 5, 26, 14, 30, 42);
 
+        await functions.acceptCookies();
+
         await browser.waitUntil(async () => {
             let element = $("#main-content");
             return await element.isDisplayed();

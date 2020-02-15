@@ -45,6 +45,8 @@ describe("favorite site", () => {
             return await element.isDisplayed()
         });
 
+        await functions.acceptCookies();
+
         await $(".footer .icon.favorites").click();
         let favs = $$(".favorite.is-favorite");
         let length = await favs.getLength();
@@ -114,7 +116,7 @@ describe("favorite site", () => {
         expect(await $(".name=Termin 4").isExisting()).toBeTruthy();
     });
 
-    fit("repeated Event favorites", async function () {
+    it("repeated Event favorites", async function () {
         await $(".footer .icon.calendar").click();
         await functions.pause(500);
         await $("#button-right").click();

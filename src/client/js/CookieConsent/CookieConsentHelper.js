@@ -18,9 +18,9 @@ export class CookieConsentHelper {
     }
 
     static async getConsent() {
-        if (device.platform !== "browser"){
-            return ["functional", "statistic", "thirdParty"]
-        }
+        // if (device.platform !== "browser"){
+        //     return ["functional", "statistic", "thirdParty"]
+        // }
         return JSON.parse(await NecessaryNativeStoragePromise.getItem(CookieConsentHelper.consentKey, "[]"));
     }
 

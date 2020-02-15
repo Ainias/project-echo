@@ -191,11 +191,20 @@ let app = new App();
 app.start(WelcomeSite).catch(e => console.error(e)).then(async () => {
     console.log("initialisation done!", new Date());
 
-    if (device.platform === "browser" && await CookieConsentHelper.mustAskForConsent()){
-        await CookieConsentHelper.showCookieDialog();
-    }
-    else {
-        await NativeStoragePromise.makePersistent();
+    //cookie compliance
+    if (device.platform === "browser") {
+        if (await CookieConsentHelper.mustAskForConsent()) {
+            await CookieConsentHelper.showCookieDialog();
+        } else {
+            await NativeStoragePromise.makePersistent();
+        }
+    } else {
+        if (await CookieConsentHelper.mustAskForConsent()) {
+            await CookieConsentHelper.giveConsentToCookies(["functional", "statistic", "thirdParty"]);
+        }
+        if (await CookieConsentHelper.hasConsent("functional")) {
+            await NativeStoragePromise.makePersistent();
+        }
     }
 
     //For testing purposes
