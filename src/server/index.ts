@@ -1,5 +1,5 @@
 import "dotenv/config";
-import {EasySyncServerDb} from "cordova-sites-easy-sync/dist/server";
+import {EasySyncServerDb, EasySyncController} from "cordova-sites-easy-sync/dist/server";
 
 import * as path from "path";
 
@@ -25,6 +25,8 @@ import {AddRepeatedEvent1000000007000} from "../shared/model/migrations/AddRepea
 
 const translationGerman = require("../client/translations/de");
 const  translationEnglish = require ("../client/translations/en");
+
+EasySyncController.MAX_MODELS_PER_RUN = 10;
 
 const port = process.env.PORT || 3000;
 process.env.JWT_SECRET = process.env.JWT_SECRET || "bjlsdgjw4tuiopmk24fl450wcui3fz,ogf";
