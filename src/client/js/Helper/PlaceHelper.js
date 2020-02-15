@@ -1,6 +1,7 @@
 import {Helper, Translator, ViewInflater} from "cordova-sites";
 
 import placeView from "../../html/place.html"
+import {CookieConsentHelper} from "../CookieConsent/CookieConsentHelper";
 
 export class PlaceHelper {
     static async createPlace(placeName, placeQuery) {
@@ -11,7 +12,7 @@ export class PlaceHelper {
         if (placeQuery === false) {
             view.querySelector(".place").classList.add("small")
         } else {
-            view.querySelector(".place-google-maps").src = this._buildMapsLink(placeQuery);
+            await this.buildGoogleMaps(view, placeQuery);
         }
 
         return view;
@@ -27,6 +28,26 @@ export class PlaceHelper {
         view.querySelector(".place").classList.add("small");
 
         return view;
+    }
+
+    static async buildGoogleMaps(view, placeQuery) {
+        let iframe = view.querySelector(".place-google-maps");
+        if (await CookieConsentHelper.hasConsent("thirdParty")) {
+            iframe.src = this._buildMapsLink(placeQuery);
+            iframe.classList.remove("hidden");
+        } else {
+            let policyNotice = view.querySelector(".non-third-party-cookies-accepted-message");
+            policyNotice.classList.remove("hidden");
+
+            view.querySelector(".activate-map").addEventListener("click", () => {
+                iframe.src = this._buildMapsLink(placeQuery);
+                iframe.classList.remove("hidden");
+                policyNotice.classList.add("hidden");
+                if (view.querySelector(".accept-third-party-cookies").checked){
+                    CookieConsentHelper.addConsent("thirdParty");
+                }
+            });
+        }
     }
 }
 

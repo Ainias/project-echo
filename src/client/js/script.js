@@ -45,6 +45,8 @@ import {BlockedDay} from "../../shared/model/BlockedDay";
 import {EventHelper} from "./Helper/EventHelper";
 import {FavoriteWithoutEventRelation1000000008000} from "../../shared/model/migrations/client/FavoriteWithoutEventRelation";
 import {ClearDatabaseJob} from "./ClearDatabase/ClearDatabaseJob";
+import {CookieConsentHelper} from "./CookieConsent/CookieConsentHelper";
+import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -119,8 +121,6 @@ App.addInitialization(async (app) => {
     }, MenuAction.SHOW_FOR_MEDIUM));
 
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
-    await UserManager.getInstance().getMe().catch(e => console.error(e));
-
     // await SystemCalendar.createCalendar("echo");
 
     //Todo an richtige stelle auslagern
@@ -132,8 +132,7 @@ App.addInitialization(async (app) => {
         EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
     });
 
-    // await SystemCalendar.deleteCalendar();
-    window["Church"] = Church;
+    UserManager.getInstance().getMe().catch(e => console.error(e));
 
     try {
         //Updates height for "mobile browser address bar hiding"-bug
@@ -185,11 +184,19 @@ EasySyncClientDb.errorListener = async (e) => {
     });
 };
 
-DataManager.fetch("https://silas.link").then(res => console.log(res));
+NativeStoragePromise.prefix = "functional_";
+NativeStoragePromise.persistent = false;
 
 let app = new App();
-app.start(WelcomeSite).catch(e => console.error(e)).then(() => {
+app.start(WelcomeSite).catch(e => console.error(e)).then(async () => {
     console.log("initialisation done!", new Date());
+
+    if (device.platform === "browser" && await CookieConsentHelper.mustAskForConsent()){
+        await CookieConsentHelper.showCookieDialog();
+    }
+    else {
+        await NativeStoragePromise.makePersistent();
+    }
 
     //For testing purposes
     window["queryDb"] = async (sql) => {
