@@ -3,16 +3,17 @@ const Service = require("./setup");
 exports.config = {
 
     // Where the files we are testing can be found.
-    specs: [
-        './tests/specs/mobile/*.js',
-        './tests/specs/shared/*.js',
-    ],
     // specs: [
-        // './tests/specs/**/searchSite.js',
-        // './tests/specs/**/favorite.js',
+    //     './tests/specs/mobile/*.js',
+    //     './tests/specs/shared/*.js',
     // ],
+    specs: [
+        './tests/specs/**/settingsSite.js',
+        './tests/specs/**/calendarSite.js',
+        './tests/specs/**/favoriteSite.js',
+    ],
 
-    delayFactor: 2.5,
+    delayFactor: 4,
 
     isMobile: true,
 
@@ -80,13 +81,14 @@ exports.config = {
         // string simply needs to be non-empty.
         // For iOS, this must exactly match the device name as seen in Xcode.
         // deviceName: 'iPhone 11 Pro Max',
-        deviceName: 'iPhone 8',
+        deviceName: 'iPhone 6',
 
         // 'Android' or 'iOS'
         platformName: 'iOS',
 
         // The version of the Android or iOS system
         platformVersion: '13.3',
+        platformVersion: '12.4',
 
         orientation: "PORTRAIT",
 

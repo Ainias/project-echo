@@ -3,7 +3,7 @@ const childProcess = require("child_process");
 const fs = require("fs");
 
 let db = "silas_test_echo";
-let pw = "123456";
+let pw = "123456789";
 let mysqlConn = mysql.createConnection({
     host: "localhost",
     "user": "root",

@@ -105,9 +105,9 @@ describe("settingsSite", () => {
         expect(val).toEqual("0");
 
         val = await browser.execute(() => {
-            return new Promise((r, rej) => cordova.plugins.notification.local.getScheduledIds(r, r));
+            return window["notifications"];
         });
-        expect(val).toEqual([]);
+        expect(val).toEqual({});
 
         await $("#send-notifications+span.slider").click();
         await functions.pause(1500);
