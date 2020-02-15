@@ -8,7 +8,7 @@
   "author": "Project Echo Team",
   "icons": [
     {
-      "src": "client/img/logo.png",
+      "src": "src/client/img/logo.png",
       "type": "image/png",
       "sizes": "undefinedxundefined"
     }

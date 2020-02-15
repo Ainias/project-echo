@@ -43,6 +43,8 @@ describe("church site", () => {
             return await element.isDisplayed()
         });
 
+        await functions.acceptCookies();
+
         if (browser.config.isMobile) {
             await $("button.menu-icon").click();
             await functions.pause(1500);

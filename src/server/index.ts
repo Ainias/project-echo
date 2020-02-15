@@ -1,11 +1,11 @@
 import "dotenv/config";
-import {EasySyncServerDb} from "cordova-sites-easy-sync/server";
+import {EasySyncServerDb} from "cordova-sites-easy-sync/dist/server";
 
 import * as path from "path";
 
 import * as express from 'express';
 import {routes} from './routes';
-import {UserManager} from "cordova-sites-user-management/server";
+import {UserManager} from "cordova-sites-user-management/dist/server";
 
 //Import Models
 import "../shared/model/Region";
@@ -18,7 +18,7 @@ import "../shared/model/RepeatedEvent"
 import {ServerTranslator} from "cordova-sites/dist/server";
 import {Translator} from "cordova-sites/dist/shared";
 import {SetupSchema1000000000000} from "../shared/model/migrations/SetupSchema";
-import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
+import {SetupUserManagement1000000001000} from "cordova-sites-user-management/dist/shared"
 import {Data1000000005000} from "../shared/model/migrations/server/Data";
 import {FsjSchema1000000006000} from "../shared/model/migrations/FsjSchema";
 import {AddRepeatedEvent1000000007000} from "../shared/model/migrations/AddRepeatedEvent";

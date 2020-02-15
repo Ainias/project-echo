@@ -56,7 +56,7 @@ describe("settingsSite", () => {
         expect(await $("#system-calendar").getText()).toEqual("echo");
 
         let key = await browser.execute(() => {
-            return new Promise((r, rej) => NativeStorage.getItem("system-calendar-id", r, r));
+            return new Promise((r, rej) => NativeStorage.getItem("functional_system-calendar-id", r, r));
         });
         expect(key).toEqual("8");
     });
@@ -100,7 +100,7 @@ describe("settingsSite", () => {
         expect(await $("#time-before-setting-row").isDisplayed()).toBeFalsy();
 
         let val = await browser.execute(() => {
-            return new Promise((r, rej) => NativeStorage.getItem("send-notifications", r, r));
+            return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
         expect(val).toEqual("0");
 
@@ -115,7 +115,7 @@ describe("settingsSite", () => {
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
         val = await browser.execute(() => {
-            return new Promise((r, rej) => NativeStorage.getItem("send-notifications", r, r));
+            return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
         expect(val).toEqual("1");
 

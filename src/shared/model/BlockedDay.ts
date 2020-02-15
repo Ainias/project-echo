@@ -1,6 +1,6 @@
-import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
+import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
 import {BaseDatabase} from "cordova-sites-database/dist/BaseDatabase";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
 import {RepeatedEvent} from "./RepeatedEvent";
 import {Event} from "./Event";
 

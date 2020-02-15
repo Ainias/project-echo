@@ -22,7 +22,8 @@ describe("edit church", () => {
 
     beforeEach(async function () {
         await functions.setCurrentDate();
-        await functions.login("echo@silas.link", "123456")
+
+        await functions.login("echo@silas.link", "123456");
 
         await browser.waitUntil(async () => {
             let element = $("#main-content");

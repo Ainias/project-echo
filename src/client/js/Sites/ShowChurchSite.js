@@ -3,7 +3,7 @@ import {App, ConfirmDialog, Helper, Toast, Translator} from "cordova-sites/dist/
 import {Church} from "../../../shared/model/Church";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
-import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
+import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";
 import {ModifyChurchSite} from "./ModifyChurchSite";
 
 export class ShowChurchSite extends AbsoluteBarMenuSite {

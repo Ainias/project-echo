@@ -45,6 +45,8 @@ describe("favorite site", () => {
             return await element.isDisplayed()
         });
 
+        await functions.acceptCookies();
+
         await $(".footer .icon.favorites").click();
         let favs = $$(".favorite.is-favorite");
         let length = await favs.getLength();

@@ -2,7 +2,7 @@ import {MenuFooterSite} from "./MenuFooterSite";
 import view from "../../html/Sites/modifyFsjSite.html";
 import {App, Form, Helper, Translator} from "cordova-sites";
 import {Church} from "../../../shared/model/Church";
-import {UserSite} from "cordova-sites-user-management/src/client/js/Context/UserSite";
+import {UserSite} from "cordova-sites-user-management/dist/client/js/Context/UserSite";
 import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";
 import {Fsj} from "../../../shared/model/Fsj";

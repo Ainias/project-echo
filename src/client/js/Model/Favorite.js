@@ -1,5 +1,5 @@
 import {BaseDatabase, BaseModel} from "cordova-sites-database";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
 import {Event} from "../../../shared/model/Event";
 import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
 import {EventHelper} from "../Helper/EventHelper";

@@ -1,8 +1,8 @@
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
 import {BaseDatabase} from "cordova-sites-database";
 import {Church} from "./Church";
 import {Region} from "./Region";
-import {AccessEasySyncModel} from "cordova-sites-user-management/src/shared/v1/model/AccessEasySyncModel";
+import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
 import {Helper} from "js-helper/dist/shared/Helper";
 
 export class Event extends AccessEasySyncModel {

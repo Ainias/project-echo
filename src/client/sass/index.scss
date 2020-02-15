@@ -245,6 +245,81 @@ a.link {
 }
 
 
+.switch {
+  position: relative;
+  display: inline-block;
+
+  @include breakpoint(small down) {
+    font-size: 0.6em;
+  }
+  @include breakpoint(smedium down) {
+    font-size: 0.7em;
+  }
+
+  input {
+    display: none;
+
+    &:checked + .slider {
+      &:before {
+        transform: translateX(1.5em);
+      }
+    }
+
+    &:focus + .slider {
+      //box-shadow: 0 0 1px #2196F3;
+    }
+  }
+
+  .slider {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    width: 3em;
+    height: 1.5em;
+    border-radius: 1.5em;
+    background-color: #ccc;
+    transition: .4s;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 1.1em;
+      width: 1.1em;
+      left: 0.15em;
+      bottom: 0.15em;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+  }
+
+  img, svg {
+    width: 1.4em;
+    display: inline;
+    vertical-align: initial;
+
+    path {
+      stroke-color: inherit;
+    }
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.margin-none {
+  margin: 0;
+}
+
+body, body.black {
+  a, button {
+    &.button.highlight {
+      background-color: lightgray;
+    }
+  }
+}
+
 //Nur hier, damit PHPStorm die Klasse in der Autovervollständigung hat
 .translation {
 }

@@ -10,6 +10,15 @@
   &.small .place-google-maps {
     display: none;
   }
+
+  .non-third-party-cookies-accepted-message{
+    padding: 2rem 0.7rem;
+    text-align: center;
+    color: black;
+    border: 1px solid #bcbbbb;
+    border-radius: 3px;
+  }
+
 }
 
 .place-query, .place-name {

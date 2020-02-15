@@ -42,6 +42,8 @@ describe("search site", () => {
             let element = $("#main-content");
             return await element.isDisplayed();
         });
+
+        await functions.acceptCookies();
     });
 
     it("search without parameters", async function () {

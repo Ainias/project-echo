@@ -1,5 +1,5 @@
 import {BaseDatabase} from "cordova-sites-database";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/src/shared/EasySyncBaseModel";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
 import {Region} from "./Region";
 import {FsjChurchBaseObject} from "./FsjChurchBaseObject";
 

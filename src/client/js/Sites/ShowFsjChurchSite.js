@@ -2,7 +2,7 @@ import view from "../../html/Sites/showFsjChurchSite.html"
 import {Helper, Toast, Translator} from "cordova-sites";
 import {Church} from "../../../shared/model/Church";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
-import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
+import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";
 
 export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {

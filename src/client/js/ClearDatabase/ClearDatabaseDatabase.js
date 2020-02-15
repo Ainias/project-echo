@@ -1,4 +1,4 @@
-import {EasySyncClientDb} from "cordova-sites-easy-sync/src/client/EasySyncClientDb";
+import {EasySyncClientDb} from "cordova-sites-easy-sync/dist/client/EasySyncClientDb";
 import {ClearDatabaseMigration1000000000000} from "./ClearDatabaseMigration";
 
 export class ClearDatabaseDatabase extends EasySyncClientDb{

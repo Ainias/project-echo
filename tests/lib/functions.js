@@ -8,6 +8,7 @@ async function login(email, password) {
         let element = $("#main-content");
         return await element.isDisplayed()
     });
+    await acceptCookies();
 
     await browser.pause(2000);
     await $("input[name=email]").setValue(email);
@@ -80,6 +81,16 @@ async function setFormValues(values, useSelector) {
     return promise;
 }
 
+async function acceptCookies() {
+    if (!browser.config.isMobile) {
+        try {
+            await $("#accept-all").click();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}
+
 async function verifyFormValues(values, useSelector) {
     if (useSelector === undefined) {
         useSelector = false;
@@ -126,7 +137,7 @@ async function acceptAlert() {
         await browser.acceptAlert();
         await pause(1000);
     } catch (e) {
-        if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")){
+        if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")) {
             expect(e.message).toEqual("error message");
             throw e;
         }
@@ -145,4 +156,5 @@ module.exports = {
     getBaseUrl: getBaseUrl,
     pause: pause,
     acceptAlert: acceptAlert,
+    acceptCookies: acceptCookies,
 };

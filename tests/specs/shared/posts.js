@@ -42,6 +42,8 @@ describe("post suite", () => {
             let element = $("#main-content");
             return await element.isDisplayed();
         });
+
+        await functions.acceptCookies();
     });
 
     it("check posts", async function () {

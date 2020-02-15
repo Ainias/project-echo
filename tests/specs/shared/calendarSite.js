@@ -43,6 +43,8 @@ describe("calendar site", () => {
             return await element.isDisplayed();
         });
 
+        await functions.acceptCookies();
+
         await find.one(".footer .icon.calendar").click();
 
         await browser.waitUntil(async () => {

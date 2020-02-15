@@ -92,5 +92,25 @@
   "post en": "Post (EN)",
 
   "kalender": "Kalender",
-  "select-calendar": "Kalender aussuchen"
+  "select-calendar": "Kalender aussuchen",
+
+  "mit dem laden der karte akzeptieren sie die datenschutzerklärung von google.": "Mit dem Laden der Karte akzeptieren Sie die Datenschutzerklärung von Google.",
+  "mehr erfahren": "Mehr erfahren",
+  "karte laden": "Karte laden",
+  "cookies für externe medien immer zulassen": "Cookies für externe Medien immer zulassen.",
+
+  "cookie-einstellungen": "Cookie Einstellungen",
+  "diese website setzt cookies ein. einige davon sind essenziell, während andere dazu dienen, diese website und ihre erfahrung zu verbessern.": "Diese Website setzt Cookies ein. Einige davon sind essenziell, während andere dazu dienen, diese Website und Ihre Erfahrung zu verbessern.",
+  "alle akzeptieren": "Alle akzeptieren",
+  "cookie einstellungen": "Weitere Einstellungen",
+  "notwendige cookies": "Notwendige Cookies",
+  "funktionale cookies": "Funktionale Cookies",
+  "statistische cookies": "Statistische Cookies",
+  "externe medien cookies": "Externe Medien Cookies",
+
+  "diese cookies werden für die grundlegende funktionen dieser website benötigt und müssen daher akzeptiert werden.": "Diese Cookies werden für die grundlegende Funktionen dieser Website benötigt und müssen daher akzeptiert werden.",
+  "diese cookies dienen dazu, um weitere funktionalitäten dieser website sicherzustellen, wie z.b. das speichern der sprache": "Diese Cookies dienen dazu, um weitere Funktionalitäten dieser Website sicherzustellen, wie z.B. das Speichern der Sprache.",
+  "statistische cookies helfen uns anonymisiert informationen über die nutzung unserer website zu erfassen und so die website zu verbessern.": "Statistische Cookies helfen uns anonymisiert Informationen über die Nutzung unserer Website zu erfassen und so die Website zu verbessern.",
+  "inhalte von drittparteien, wie google-maps hinterlegen cookies. um diese dienste zu nutzen, müssen die cookies von drittanbietern akzeptiert werden.": "Inhalte von Drittparteien, wie Google-Maps hinterlegen Cookies. Um diese Inhalte anzusehen, müssen die Cookies von Drittanbietern akzeptiert werden.",
+  "save": "Speichern"
 }

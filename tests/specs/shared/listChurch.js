@@ -28,6 +28,9 @@ describe("church list suite", () => {
             let element = $("#main-content");
             return await element.isDisplayed()
         });
+
+        await functions.acceptCookies();
+
         if (browser.config.isMobile) {
             await $("button.menu-icon").click();
             await find.one("#responsive-menu [data-translation='churches']").click();

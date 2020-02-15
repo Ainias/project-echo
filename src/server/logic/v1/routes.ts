@@ -1,6 +1,6 @@
 import * as express from 'express';
-import {userRoutes, syncRoutes} from "cordova-sites-user-management/server";
-import {UserManager} from "cordova-sites-user-management/server";
+import {userRoutes, syncRoutes} from "cordova-sites-user-management/dist/server";
+import {UserManager} from "cordova-sites-user-management/dist/server";
 import {DeleteRepeatedEventController} from "./controller/DeleteRepeatedEventController";
 
 const routerV1 = express.Router();

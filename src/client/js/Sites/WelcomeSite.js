@@ -3,7 +3,7 @@ import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import componentImg from "../../img/component.png"
 import {Post} from "../../../shared/model/Post";
 import {Translator} from "cordova-sites/dist/client/js/Translator";
-import {UserManager} from "cordova-sites-user-management/src/client/js/UserManager";
+import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";
 import {Event} from "../../../shared/model/Event";
 import {ConfirmDialog} from "cordova-sites/dist/client/js/Dialog/ConfirmDialog";
 import {Toast} from "cordova-sites/dist/client/js/Toast/Toast";

@@ -1,8 +1,8 @@
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
-import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction, Toast} from "cordova-sites";
+import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
 import {Helper} from "js-helper/dist/shared"
-import {EasySyncClientDb, SetupEasySync1000000000500, SyncJob} from "cordova-sites-easy-sync/client";
+import {EasySyncClientDb, SetupEasySync1000000000500, SyncJob} from "cordova-sites-easy-sync/dist/client";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
 
@@ -12,10 +12,10 @@ import {Region} from "../../shared/model/Region";
 import "./Model/Favorite"
 
 import {BaseDatabase} from "cordova-sites-database";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/model";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
 import {AddEventSite} from "./Sites/AddEventSite";
-import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/client";
+import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/dist/client";
 import {CalendarSite} from "./Sites/CalendarSite";
 import {ModifyChurchSite} from "./Sites/ModifyChurchSite";
 import {ImpressumSite} from "./Sites/ImpressumSite";
@@ -23,14 +23,14 @@ import {ImpressumSite} from "./Sites/ImpressumSite";
 import bibelverse from "./bibelverse.json";
 
 //translation import
-import "cordova-sites-user-management/src/client/js/translationInit"
+import "cordova-sites-user-management/dist/client/js/translationInit"
 import "cordova-sites/dist/client/js/translationInit"
 import logo from "../img/logo.png";
 
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
 import {Post} from "../../shared/model/Post";
 import {SetupSchema1000000000000} from "../../shared/model/migrations/SetupSchema";
-import {SetupUserManagement1000000001000} from "cordova-sites-user-management/src/migrations/SetupUserManagement"
+import {SetupUserManagement1000000001000} from "cordova-sites-user-management/dist/shared/migrations/SetupUserManagement"
 import {SetupFavorite1000000000001} from "../../shared/model/migrations/client/SetupFavorite";
 import {FsjSchema1000000006000} from "../../shared/model/migrations/FsjSchema";
 import {Fsj} from "../../shared/model/Fsj";
@@ -45,6 +45,8 @@ import {BlockedDay} from "../../shared/model/BlockedDay";
 import {EventHelper} from "./Helper/EventHelper";
 import {FavoriteWithoutEventRelation1000000008000} from "../../shared/model/migrations/client/FavoriteWithoutEventRelation";
 import {ClearDatabaseJob} from "./ClearDatabase/ClearDatabaseJob";
+import {CookieConsentHelper} from "./CookieConsent/CookieConsentHelper";
+import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -119,8 +121,6 @@ App.addInitialization(async (app) => {
     }, MenuAction.SHOW_FOR_MEDIUM));
 
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
-    await UserManager.getInstance().getMe().catch(e => console.error(e));
-
     // await SystemCalendar.createCalendar("echo");
 
     //Todo an richtige stelle auslagern
@@ -132,8 +132,7 @@ App.addInitialization(async (app) => {
         EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
     });
 
-    // await SystemCalendar.deleteCalendar();
-    window["Church"] = Church;
+    UserManager.getInstance().getMe().catch(e => console.error(e));
 
     try {
         //Updates height for "mobile browser address bar hiding"-bug
@@ -185,11 +184,28 @@ EasySyncClientDb.errorListener = async (e) => {
     });
 };
 
-DataManager.fetch("https://silas.link").then(res => console.log(res));
+NativeStoragePromise.prefix = "functional_";
+NativeStoragePromise.persistent = false;
 
 let app = new App();
-app.start(WelcomeSite).catch(e => console.error(e)).then(() => {
+app.start(WelcomeSite).catch(e => console.error(e)).then(async () => {
     console.log("initialisation done!", new Date());
+
+    //cookie compliance
+    if (device.platform === "browser") {
+        if (await CookieConsentHelper.mustAskForConsent()) {
+            await CookieConsentHelper.showCookieDialog();
+        } else {
+            await NativeStoragePromise.makePersistent();
+        }
+    } else {
+        if (await CookieConsentHelper.mustAskForConsent()) {
+            await CookieConsentHelper.giveConsentToCookies(["functional", "statistic", "thirdParty"]);
+        }
+        if (await CookieConsentHelper.hasConsent("functional")) {
+            await NativeStoragePromise.makePersistent();
+        }
+    }
 
     //For testing purposes
     window["queryDb"] = async (sql) => {

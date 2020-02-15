@@ -1,5 +1,5 @@
-import {EasySyncServerDb} from "cordova-sites-easy-sync/src/server/EasySyncServerDb";
-import {UserManager} from "cordova-sites-user-management/server";
+import {EasySyncServerDb} from "cordova-sites-easy-sync/dist/server/EasySyncServerDb";
+import {UserManager} from "cordova-sites-user-management/dist/server";
 import {RepeatedEvent} from "../../../../shared/model/RepeatedEvent";
 import {Event} from "../../../../shared/model/Event";
 
