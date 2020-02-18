@@ -73,6 +73,10 @@ let moduleExports = {
                                 "AccessEasySyncModel",
                                 "Role",
                                 "User",
+                                "churchImages",
+                                "FileMedium",
+                                "fsjImages",
+                                "eventImages",
                                 "EasySyncBaseModel",
                                 "LastSyncDates",
                                 "SetupSchema1000000000000",
@@ -83,7 +87,8 @@ let moduleExports = {
                                 "FsjSchema1000000006000",
                                 "AddRepeatedEvent1000000007000",
                                 "FavoriteWithoutEventRelation1000000008000",
-                                "ClearDatabaseMigration1000000000000"
+                                "ClearDatabaseMigration1000000000000",
+                                "ImagesSchema1000000010000",
                             ]
                         }
                     }
