@@ -9,7 +9,7 @@ import {ModifyFsjSite} from "./ModifyFsjSite";
 export class ShowFsjSite extends ShowFsjChurchSite{
 
     async _loadElem(id) {
-        return await Fsj.findById(id);
+        return await Fsj.findById(id, Fsj.getRelations());
     }
 
     async _deleteElem() {

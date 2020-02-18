@@ -1,18 +1,17 @@
 import {BaseDatabase} from "cordova-sites-database";
 import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
 
 export class FsjChurchBaseObject extends AccessEasySyncModel {
     private names: any[];
     private descriptions: any[];
-    private images: any[];
+    private images: any;
     private website: string;
 
     constructor() {
         super();
         this.names = [];
         this.descriptions = [];
-        this.images = [];
         this.website = null;
     }
 
@@ -20,7 +19,6 @@ export class FsjChurchBaseObject extends AccessEasySyncModel {
         let columns = super.getColumnDefinitions();
         columns["names"] = BaseDatabase.TYPES.MY_JSON;
         columns["descriptions"] = BaseDatabase.TYPES.MY_JSON;
-        columns["images"] = BaseDatabase.TYPES.MY_JSON;
         columns["website"] = BaseDatabase.TYPES.STRING;
         return columns;
     }

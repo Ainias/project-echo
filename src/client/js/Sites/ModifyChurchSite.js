@@ -1,17 +1,14 @@
 import {MenuFooterSite} from "./MenuFooterSite";
 import view from "../../html/Sites/modifyChurchSite.html";
-import {App, ConfirmDialog, Form, Helper, Toast, Translator} from "cordova-sites";
+import {App, Form, Helper, Translator} from "cordova-sites";
 import {Church} from "../../../shared/model/Church";
 import {UserSite} from "cordova-sites-user-management/dist/client/js/Context/UserSite";
 import {Region} from "../../../shared/model/Region";
-import {Event} from "../../../shared/model/Event";
-import {EventSite} from "./EventSite";
 import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {ShowChurchSite} from "./ShowChurchSite";
-import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";
-import {AddEventSite} from "./AddEventSite";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 
 export class ModifyChurchSite extends MenuFooterSite {
     constructor(siteManager) {
@@ -55,7 +52,7 @@ export class ModifyChurchSite extends MenuFooterSite {
         this._form = new Form(this.findBy("#modify-church-form"), async values => {
             let names = {};
             let descriptions = {};
-            let images = (!Helper.imageUrlIsEmpty(values["image"])?[values["image"]]: [values["image-before"]]);
+            let imageSrc = (!Helper.imageUrlIsEmpty(values["image"])?values["image"]: values["image-before"]);
             let places = {};
             let regions = [await Region.findById(1)];
 
@@ -81,9 +78,21 @@ export class ModifyChurchSite extends MenuFooterSite {
             } else {
                 church = new Church();
             }
+
+            let img = null;
+            if (church.images && church.images.length >= 0){
+                img = church.images[0];
+            }
+            else {
+                img = new FileMedium();
+            }
+
+            img.src = imageSrc;
+            await img.save();
+
             church.names = names;
             church.descriptions = descriptions;
-            church.images = images;
+            church.images = [img];
             church.places = places;
             church.website = values["website-url"];
             church.regions = regions;

@@ -14,6 +14,7 @@ import "../shared/model/Event";
 import "../shared/model/Post";
 import "../shared/model/Fsj";
 import "../shared/model/RepeatedEvent"
+import {ServerFileMedium} from "cordova-sites-easy-sync/dist/server";
 
 import {ServerTranslator} from "cordova-sites/dist/server";
 import {Translator} from "cordova-sites/dist/shared";
@@ -22,11 +23,13 @@ import {SetupUserManagement1000000001000} from "cordova-sites-user-management/di
 import {Data1000000005000} from "../shared/model/migrations/server/Data";
 import {FsjSchema1000000006000} from "../shared/model/migrations/FsjSchema";
 import {AddRepeatedEvent1000000007000} from "../shared/model/migrations/AddRepeatedEvent";
+import {ImagesSchema1000000010000} from "../shared/model/migrations/ImagesSchema";
 
 const translationGerman = require("../client/translations/de");
 const  translationEnglish = require ("../client/translations/en");
 
-EasySyncController.MAX_MODELS_PER_RUN = 10;
+EasySyncController.MAX_MODELS_PER_RUN = 100;
+ServerFileMedium.SAVE_PATH = __dirname+"/uploads/img_";
 
 const port = process.env.PORT || 3000;
 process.env.JWT_SECRET = process.env.JWT_SECRET || "bjlsdgjw4tuiopmk24fl450wcui3fz,ogf";
@@ -46,6 +49,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
         Data1000000005000,
         FsjSchema1000000006000,
         AddRepeatedEvent1000000007000,
+        ImagesSchema1000000010000,
     ],
 
     "logging": ["error", "warn"]
@@ -87,6 +91,7 @@ app.use(ServerTranslator.setUserLanguage);
 app.use('/api', routes);
 
 app.use(express.static(path.resolve(path.dirname(process.argv[1]), "public")));
+app.use("/uploads", express.static(path.resolve(path.dirname(process.argv[1]), "uploads")));
 
 //Handle errors
 app.use(function (err, req, res, next) {

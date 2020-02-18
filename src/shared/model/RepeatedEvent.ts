@@ -24,6 +24,12 @@ export class RepeatedEvent extends AccessEasySyncModel {
         this.startDate = null;
     }
 
+    static getRelations(){
+        let relations = super.getRelations();
+        // relations.push("originalEvent.images");
+        return relations;
+    }
+
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
         columns["repeatUntil"] = {type: BaseDatabase.TYPES.DATE, nullable: true};

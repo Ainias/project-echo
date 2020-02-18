@@ -66,21 +66,6 @@ export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
         link.href = href;
         link.appendChild(document.createTextNode(this._element.website));
 
-        // //places
-        // let placesContainer = this.findBy("#places-container");
-        //
-        // let places = this._element.places;
-        // let placesAreObject = false;
-        //
-        // if (!Array.isArray(places)){
-        //     places = Object.keys(places);
-        //     placesAreObject = true;
-        // }
-
-        // await Helper.asyncForEach(places, async place => {
-        //     placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject)?this._element.places[place]: place));
-        // });
-
 
         UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
             if (loggedIn && manager.hasAccess(Church.ACCESS_MODIFY)) {
