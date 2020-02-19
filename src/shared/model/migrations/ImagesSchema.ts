@@ -8,25 +8,18 @@ import {Event} from "../Event";
 export class ImagesSchema1000000010000 implements MigrationInterface {
 
     async up(queryRunner: QueryRunner): Promise<any> {
-        let fsjImages = await queryRunner.query("SELECT id, images FROM fsj;");
-        let churchImages = await queryRunner.query("SELECT id, images FROM church;");
-        let eventImages = await queryRunner.query("SELECT id, images FROM event;");
-
-        await MigrationHelper.addTableFromModelClass(FileMedium, queryRunner);
-
         if (MigrationHelper.isServer()) {
-            await queryRunner.query("SET foreign_key_checks=0;");
-            await MigrationHelper.updateModel(queryRunner, Fsj);
-            await MigrationHelper.updateModel(queryRunner, Church);
-            await MigrationHelper.updateModel(queryRunner, Event);
-            await queryRunner.query("SET foreign_key_checks=1;");
-        } else {
-            await queryRunner.query("PRAGMA foreign_keys = OFF");
-            await MigrationHelper.updateModel(queryRunner, Fsj);
-            await MigrationHelper.updateModel(queryRunner, Church);
-            await MigrationHelper.updateModel(queryRunner, Event);
-            await queryRunner.query("PRAGMA foreign_keys = ON");
+            await queryRunner.query("ALTER TABLE church ENGINE=InnoDB;");
+            await queryRunner.query("ALTER TABLE fsj ENGINE=InnoDB;");
         }
+
+        let table = MigrationHelper.createTableFromModelClass(FileMedium);
+        table.columns.forEach(column => {
+            if (column.name === "src"){
+                column.type = MigrationHelper.isServer() ? "MEDIUMTEXT" : "TEXT";
+            }
+        });
+        await queryRunner.createTable(table);
 
         let fsjManyToManyTable = MigrationHelper.createManyToManyTable("fsj", "fileMedium");
         fsjManyToManyTable.name = "fsjImages";
@@ -35,52 +28,39 @@ export class ImagesSchema1000000010000 implements MigrationInterface {
         let eventManyToManyTable = MigrationHelper.createManyToManyTable("event", "fileMedium");
         eventManyToManyTable.name = "eventImages";
 
-        await queryRunner.createTable(fsjManyToManyTable);
         await queryRunner.createTable(churchManyToManyTable);
+        await queryRunner.createTable(fsjManyToManyTable);
         await queryRunner.createTable(eventManyToManyTable);
 
-        let fsjImageIds = [];
-        let insertIntoFileMedium = [];
-        let id = 0;
-        fsjImages.forEach(images => {
-            JSON.parse(images["images"]).forEach(image => {
-                id++;
-                insertIntoFileMedium.push("(" + [id, "now()", "now()", "1", "0", "\"" + image + "\""].join(",") + ")");
-                fsjImageIds.push("(" + [images["id"], id].join(",") + ")");
-            });
-        });
+        if (MigrationHelper.isServer()) {
+            await queryRunner.query("SET foreign_key_checks=0;");
+        } else {
+            await queryRunner.query("PRAGMA foreign_keys = OFF");
+        }
 
-        let churchImageIds = [];
-        churchImages.forEach(images => {
-            JSON.parse(images["images"]).forEach(image => {
-                id++;
-                insertIntoFileMedium.push("(" + [id, "now()", "now()", "1", "0", "\"" + image + "\""].join(",") + ")");
-                churchImageIds.push("(" + [images["id"], id].join(",") + ")");
-            });
-        });
+        await queryRunner.query("INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) SELECT id, now(), now(), 1, 0, SUBSTRING(images, 3, LENGTH(images)-4) FROM fsj");
+        await queryRunner.query("INSERT INTO fsjImages (fsjId, fileMediumId) SELECT id, id FROM fsj");
 
-        let eventImageIds = [];
-        eventImages.forEach(images => {
-            if (images["images"] && images["images"].trim() !== "") {
-                JSON.parse(images["images"]).forEach(image => {
-                    id++;
-                    insertIntoFileMedium.push("(" + [id, "now()", "now()", "1", "0", "\"" + image + "\""].join(",") + ")");
-                    eventImageIds.push("(" + [images["id"], id].join(",") + ")");
-                });
-            }
-        });
+        let idOffset = (await queryRunner.query("SELECT MAX(id) AS maxId FROM file_medium"))[0]["maxId"];
+        idOffset++;
 
-        if (churchImageIds.length + fsjImageIds.length + eventImageIds.length> 0) {
-            await queryRunner.query("INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) VALUES " + insertIntoFileMedium.join(",") + ";");
-            if (fsjImageIds.length > 0) {
-                await queryRunner.query("INSERT INTO fsjImages (fsjId, fileMediumId) VALUES " + fsjImageIds.join(",") + ";");
-            }
-            if (churchImageIds.length > 0) {
-                await queryRunner.query("INSERT INTO churchImages (churchId, fileMediumId) VALUES " + churchImageIds.join(",") + ";");
-            }
-            if (eventImageIds.length > 0) {
-                await queryRunner.query("INSERT INTO eventImages (eventId, fileMediumId) VALUES " + eventImageIds.join(",") + ";");
-            }
+        await queryRunner.query("INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) SELECT id+" + idOffset + ", now(), now(), 1, 0, SUBSTRING(images, 3, LENGTH(images)-4) FROM church");
+        await queryRunner.query("INSERT INTO churchImages (churchId, fileMediumId) SELECT id, id+" + idOffset + " FROM church");
+
+        idOffset = (await queryRunner.query("SELECT MAX(id) AS maxId FROM file_medium"))[0]["maxId"];
+        idOffset++;
+
+        await queryRunner.query("INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) SELECT id+" + idOffset + ", now(), now(), 1, 0, SUBSTRING(images, 3, LENGTH(images)-4) FROM event");
+        await queryRunner.query("INSERT INTO eventImages (eventId, fileMediumId) SELECT id, id+" + idOffset + " FROM event");
+
+        await MigrationHelper.updateModel(queryRunner, Fsj);
+        await MigrationHelper.updateModel(queryRunner, Church);
+        await MigrationHelper.updateModel(queryRunner, Event);
+
+        if (MigrationHelper.isServer()) {
+            await queryRunner.query("SET foreign_key_checks=1;");
+        } else {
+            await queryRunner.query("PRAGMA foreign_keys = ON");
         }
     }
 

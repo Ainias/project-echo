@@ -12,8 +12,8 @@ const ifaces = os.networkInterfaces();
 
 const version = require("./package.json").version;
 
-let mode = (process.env.MODE || "development");
-// let mode = "production";
+// let mode = (process.env.MODE || "development");
+let mode = "production";
 
 function getIp() {
     let ip = null;
