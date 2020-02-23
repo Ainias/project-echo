@@ -36,6 +36,8 @@ describe("edit church", () => {
     });
 
     it("new church", async function () {
+        let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
+
         await $("span=Neue Kirche").click();
 
         let editors = $$(".ck.ck-content");
@@ -48,7 +50,7 @@ describe("edit church", () => {
             "name-en":"New Church",
             // "description-de":"Meine Beschreibung",
             // "description-en":"My english description",
-            "image": path.join(__dirname, "../../misc/img/church.jpeg"),
+            "image": imagePath,
             "website-url":"echo.silas.link",
             "place-name-1":"Köln"
         });
@@ -73,12 +75,23 @@ describe("edit church", () => {
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");
         expect(data["places"]).toEqual("{\"Köln\":\"Köln\",\"Aachen\":\"Aachen\",\"Remscheid\":\"Remscheid\"}");
 
-        data = await functions.queryDatabase("SELECT * FROM churchRegion WHERE churchId = "+data["id"]);
+        let id = data["id"];
+
+        data = await functions.queryDatabase("SELECT * FROM churchRegion WHERE churchId = "+id);
         data = data[0];
         expect(data["regionId"]).toEqual(1);
+
+        data = await functions.queryDatabase("SELECT * FROM churchImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE churchId = "+id);
+        expect(data.length).toEqual(1);
+
+        data = data[0];
+        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_"+data["src"]);
+        await functions.compareFiles(imagePath, savedImagePath);
     });
 
     it("edit church", async function () {
+        let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
+
         if (browser.config.isMobile) {
             await $("button.menu-icon").click();
             await find.one("#responsive-menu [data-translation='churches']").click();
@@ -124,7 +137,7 @@ describe("edit church", () => {
         await functions.setFormValues({
             "name-de":"Bearbeitete Kirche",
             "name-en":"Edited Church",
-            "image": path.join(__dirname, "../../misc/img/church.jpeg"),
+            "image": imagePath,
             "website-url":"echo.silas.link2",
             "place-name-1":"Köln bearbeitet"
         });
@@ -142,6 +155,15 @@ describe("edit church", () => {
         expect(data["names"]).toEqual("{\"de\":\"Bearbeitete Kirche\",\"en\":\"Edited Church\"}");
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete BeschreibungDeutsche Beschreibung vor <strong>Bearbeitung!</strong>.</p>\",\"en\":\"<p>Meine english BeschreibungEnglische Beschreibung</p>\"}");
         expect(data["places"]).toEqual("{\"Köln bearbeitet\":\"Köln bearbeitet\"}");
+
+        let id = data["id"];
+
+        data = await functions.queryDatabase("SELECT * FROM churchImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE churchId = "+id);
+        expect(data.length).toEqual(1);
+
+        data = data[0];
+        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_"+data["src"]);
+        await functions.compareFiles(imagePath, savedImagePath);
     });
 
     it("delete church", async function () {

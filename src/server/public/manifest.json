@@ -3,16 +3,10 @@
   "display": "standalone",
   "name": "Echo",
   "short_name": "Echo",
-  "version": "link.silas.echo",
+  "version": "de.echoapp",
   "description": "Ein christlicher Terminkalender für Gemeinden rund un Köln.",
   "author": "Project Echo Team",
-  "icons": [
-    {
-      "src": "src/client/img/logo.png",
-      "type": "image/png",
-      "sizes": "undefinedxundefined"
-    }
-  ],
+  "icons": [],
   "orientation": "portrait",
   "start_url": "index.html"
 }

@@ -49,6 +49,8 @@ import {CookieConsentHelper} from "./CookieConsent/CookieConsentHelper";
 import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 import {ImagesSchema1000000010000} from "../../shared/model/migrations/ImagesSchema";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
+import {ImagesSchemaDownload1000000011000} from "../../shared/model/migrations/ImagesSchemaDownload";
+import {ContactSite} from "./Sites/ContactSite";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -103,7 +105,7 @@ App.addInitialization(async (app) => {
         NavbarFragment.defaultActions.push(new StartSiteMenuAction("settings", SettingsSite, MenuAction.SHOW_NEVER, 99000));
     }
 
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", WelcomeSite, MenuAction.SHOW_NEVER));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", ContactSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
 
@@ -134,7 +136,7 @@ App.addInitialization(async (app) => {
         await EventHelper.updateFavorites(res["BlockedDay"]);
         EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
         EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
-    });
+    }).catch(e => console.error(e));
 
     UserManager.getInstance().getMe().catch(e => console.error(e));
 
@@ -175,6 +177,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         AddRepeatedEvent1000000007000,
         FavoriteWithoutEventRelation1000000008000,
         ImagesSchema1000000010000,
+        ImagesSchemaDownload1000000011000,
     ]
 });
 

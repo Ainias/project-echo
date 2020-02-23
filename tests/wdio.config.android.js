@@ -9,9 +9,9 @@ exports.config = {
         './tests/specs/androidWeb/*.js',
         './tests/specs/shared/*.js',
     ],
-    // specs: [
-    //     './tests/specs/**/favoriteSite.js'
-    // ],
+    specs: [
+        './tests/specs/**/favoriteSite2.js'
+    ],
 
     delayFactor: 1,
 

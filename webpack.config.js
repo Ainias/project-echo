@@ -12,8 +12,8 @@ const ifaces = os.networkInterfaces();
 
 const version = require("./package.json").version;
 
-let mode = (process.env.MODE || "development");
-// let mode = "production";
+// let mode = (process.env.MODE || "development");
+let mode = "production";
 
 function getIp() {
     let ip = null;
@@ -89,6 +89,7 @@ let moduleExports = {
                                 "FavoriteWithoutEventRelation1000000008000",
                                 "ClearDatabaseMigration1000000000000",
                                 "ImagesSchema1000000010000",
+                                "ImagesSchemaDownload1000000011000",
                             ]
                         }
                     }

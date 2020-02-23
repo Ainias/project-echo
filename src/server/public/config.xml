@@ -1,21 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="link.silas.echo" version="0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="de.echoapp" version="0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Echo</name>
     <description>
         Ein christlicher Terminkalender für Gemeinden rund un Köln.
     </description>
-    <author email="echo@silas.link" href="http://echo.silas.link">
+    <author email="echo@silas.link" href="http://echoapp.">
         Project Echo Team
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <icon src="src/client/img/logo.png" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="Fullscreen" value="true" />
     <preference name="Orientation" value="portrait" />

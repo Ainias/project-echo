@@ -2,6 +2,8 @@ import * as express from 'express';
 import {userRoutes, syncRoutes} from "cordova-sites-user-management/dist/server";
 import {UserManager} from "cordova-sites-user-management/dist/server";
 import {DeleteRepeatedEventController} from "./controller/DeleteRepeatedEventController";
+import {UpdateImagesController} from "./controller/UpdateImagesController";
+import {ContactController} from "./controller/ContactController";
 
 const routerV1 = express.Router();
 
@@ -18,5 +20,7 @@ syncRoutes.post("/deleteRepeatedEvent", errorHandler(UserManager.setUserFromToke
 
 routerV1.use("/sync", syncRoutes);
 routerV1.use("/user", userRoutes);
+routerV1.get("/updateImages", errorHandler(UpdateImagesController.updateImages, UpdateImagesController));
+routerV1.post("/contact", errorHandler(ContactController.sendContactMail, ContactController));
 
 export {routerV1};

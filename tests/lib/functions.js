@@ -1,5 +1,6 @@
 const find = require("../lib/PromiseSelector");
 const $ = find.one;
+const fs = require("fs");
 
 async function login(email, password) {
     await browser.url(await getBaseUrl() + "?s=login");
@@ -144,6 +145,15 @@ async function acceptAlert() {
     }
 }
 
+async function compareFiles(originalPath, expectedPath){
+    let filePromises = [
+        new Promise((res, rej) => fs.readFile(originalPath, (err, data) => err?rej(err):res(data))),
+        new Promise((res, rej) => fs.readFile(expectedPath, (err, data) => err?rej(err):res(data)))
+    ];
+
+    let fileData = await Promise.all(filePromises);
+    expect(fileData[0]).toEqual(fileData[1]);
+}
 
 module.exports = {
     login: login,
@@ -157,4 +167,5 @@ module.exports = {
     pause: pause,
     acceptAlert: acceptAlert,
     acceptCookies: acceptCookies,
+    compareFiles: compareFiles,
 };

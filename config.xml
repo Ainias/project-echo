@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="link.silas.echo" version="0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="de.echoapp" version="0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Echo</name>
     <description>
         Ein christlicher Terminkalender für Gemeinden rund un Köln.
     </description>
-    <author email="echo@silas.link" href="http://echo.silas.link">
+    <author email="echo@silas.link" href="http://echoapp.">
         Project Echo Team
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -25,7 +26,24 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-        <icon height="180" src="src/client/img/logo_ios.png" width="180" />
+        <icon src="src/client/img/ios/180.png" width="180" height="180" />
+        <icon src="src/client/img/ios/120.png" width="120" height="120" />
+        <icon src="src/client/img/ios/60.png" width="60" height="60" />
+        <icon src="src/client/img/ios/76.png" width="76" height="76" />
+        <icon src="src/client/img/ios/152.png" width="152" height="152" />
+        <icon src="src/client/img/ios/40.png" width="40" height="40" />
+        <icon src="src/client/img/ios/80.png" width="80" height="80" />
+        <icon src="src/client/img/ios/57.png" width="57" height="57" />
+        <icon src="src/client/img/ios/114.png" width="114" height="114" />
+        <icon src="src/client/img/ios/72.png" width="72" height="72" />
+        <icon src="src/client/img/ios/144.png" width="144" height="144" />
+        <icon src="src/client/img/ios/167.png" width="167" height="167" />
+        <icon src="src/client/img/ios/29.png" width="29" height="29" />
+        <icon src="src/client/img/ios/58.png" width="58" height="58" />
+        <icon src="src/client/img/ios/87.png" width="87" height="87" />
+        <icon src="src/client/img/ios/50.png" width="50" height="50" />
+        <icon src="src/client/img/ios/100.png" width="100" height="100" />
+        <icon src="src/client/img/ios/167.png" width="167" height="167" />
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="^1" />
     <plugin name="cordova-plugin-webpack" spec="^0.4.7" />

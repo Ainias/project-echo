@@ -61,16 +61,16 @@ exports.config = {
         './tests/specs/androidWeb/*.js',
         './tests/specs/shared/*.js',
     ],
-    // specs: [
-    //     './tests/specs/**/editChurch.js',
-    // ],
+    specs: [
+        './tests/specs/**/editChurch.js',
+    ],
 
 
     capabilities: [{
         browserName: "chrome",
         // browserName: "firefox",
         baseUrl: "http://127.0.0.1:8000",
-        maxInstances: 3,
+        maxInstances: 1,
         // maxInstances: 1,
         // 'goog:chromeOptions': {
         //     to run chrome headless the following flags are required
