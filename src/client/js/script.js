@@ -47,9 +47,12 @@ import {FavoriteWithoutEventRelation1000000008000} from "../../shared/model/migr
 import {ClearDatabaseJob} from "./ClearDatabase/ClearDatabaseJob";
 import {CookieConsentHelper} from "./CookieConsent/CookieConsentHelper";
 import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
+import {ImagesSchema1000000010000} from "../../shared/model/migrations/ImagesSchema";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
+
 
 // BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
@@ -125,8 +128,9 @@ App.addInitialization(async (app) => {
 
     //Todo an richtige stelle auslagern
     let syncJob = new SyncJob();
-    await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay]).catch(e => console.error(e));
-    syncJob.getSyncPromise().then(async res => {
+    await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium]).catch(e => console.error(e));
+    await syncJob.getSyncPromise().then(async res => {
+        console.log("synched!");
         await EventHelper.updateFavorites(res["BlockedDay"]);
         EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
         EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
@@ -149,7 +153,8 @@ App.addInitialization(async (app) => {
 SystemCalendar.NAME = "echo";
 SystemCalendar.WEBSITE = "echo.silas.link";
 
-DataManager._basePath = __HOST_ADDRESS__;
+DataManager._basePath = __HOST_ADDRESS__+ "/api/v1/";
+FileMedium.PUBLIC_PATH = __HOST_ADDRESS__ + "/uploads/img_";
 DataManager.onlineCallback = isOnline => {
     if (!isOnline) {
         console.log("not (yet) online!");
@@ -169,6 +174,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         FsjSchema1000000006000,
         AddRepeatedEvent1000000007000,
         FavoriteWithoutEventRelation1000000008000,
+        ImagesSchema1000000010000,
     ]
 });
 

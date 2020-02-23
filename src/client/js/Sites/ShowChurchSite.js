@@ -21,7 +21,7 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         }
 
         /** @var {Church} */
-        this._church = await Church.findById(parseInt(constructParameters["id"]));
+        this._church = await Church.findById(parseInt(constructParameters["id"]), Church.getRelations());
 
         if (Helper.isNull(this._church)) {
             new Toast("no church found").show();

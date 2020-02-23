@@ -73,6 +73,10 @@ let moduleExports = {
                                 "AccessEasySyncModel",
                                 "Role",
                                 "User",
+                                "churchImages",
+                                "FileMedium",
+                                "fsjImages",
+                                "eventImages",
                                 "EasySyncBaseModel",
                                 "LastSyncDates",
                                 "SetupSchema1000000000000",
@@ -83,7 +87,8 @@ let moduleExports = {
                                 "FsjSchema1000000006000",
                                 "AddRepeatedEvent1000000007000",
                                 "FavoriteWithoutEventRelation1000000008000",
-                                "ClearDatabaseMigration1000000000000"
+                                "ClearDatabaseMigration1000000000000",
+                                "ImagesSchema1000000010000",
                             ]
                         }
                     }
@@ -130,7 +135,7 @@ let moduleExports = {
             }),
 
             new webpack.DefinePlugin({
-                __HOST_ADDRESS__: "'" + (process.env.HOST_URI || ((process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000") + "/api/v1/")) + "'",
+                __HOST_ADDRESS__: "'" + (process.env.HOST_URI || ((process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000"))) + "'",
                 __MAPS_API_KEY__: "'" + process.env.GOOGLE_MAPS_API_KEY + "'",
                 __VERSION__: "'"+version+"'",
             })

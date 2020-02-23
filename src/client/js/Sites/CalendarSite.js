@@ -104,9 +104,9 @@ export class CalendarSite extends FooterSite {
         let loadedEventsPromise = Event.find({
             startTime: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
             endTime: MoreThanOrEqual(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDay))
-        }, null, null, null, ["repeatedEvent", "repeatedEvent.originalEvent"]);
+        }, null, null, null, ["repeatedEvent", "repeatedEvent.originalEvent", "repeatedEvent.originalEvent.images"]);
 
-        let repeatedEvents  = await RepeatedEvent.find([{
+        let repeatedEvents = await RepeatedEvent.find([{
             startDate: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
             repeatUntil: MoreThanOrEqual(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDay)),
         }, {
@@ -114,13 +114,10 @@ export class CalendarSite extends FooterSite {
             repeatUntil: IsNull(),
         }], null, null, null, RepeatedEvent.getRelations());
 
-
-
         let lastDayOfMonth = new Date(firstDayOfNextMonth.getTime());
-        lastDayOfMonth.setDate(lastDayOfMonth.getDate()-1);
+        lastDayOfMonth.setDate(lastDayOfMonth.getDate() - 1);
 
         let createdEvents = await Helper.asyncForEach(repeatedEvents, repeatedEvent => {
-            console.log(repeatedEvent.originalEvent);
             return EventHelper.generateEventFromRepeatedEvent(repeatedEvent, firstDay, lastDayOfMonth);
         }, true);
 

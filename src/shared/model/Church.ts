@@ -2,6 +2,7 @@ import {BaseDatabase} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
 import {Region} from "./Region";
 import {FsjChurchBaseObject} from "./FsjChurchBaseObject";
+import { FileMedium } from "cordova-sites-easy-sync/dist/shared";
 
 export class Church extends FsjChurchBaseObject {
     public places: any[];
@@ -46,6 +47,14 @@ export class Church extends FsjChurchBaseObject {
             type: "many-to-many",
             joinTable: {
                 name: "churchRegion"
+            },
+            sync: true
+        };
+        relations["images"] = {
+            target: FileMedium.getSchemaName(),
+            type: "many-to-many",
+            joinTable: {
+                name: "churchImages"
             },
             sync: true
         };

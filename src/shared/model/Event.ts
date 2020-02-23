@@ -6,6 +6,7 @@ import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/
 import {Helper} from "js-helper/dist/shared/Helper";
 import {JsonHelper} from "js-helper/dist/shared/JsonHelper";
 import {BaseModel} from "cordova-sites-database/dist/BaseModel";
+import { FileMedium } from "cordova-sites-easy-sync/dist/shared";
 
 export class Event extends AccessEasySyncModel {
     private names: {};
@@ -13,7 +14,7 @@ export class Event extends AccessEasySyncModel {
     private startTime: Date;
     private endTime: Date;
     private type: string;
-    private images: any[];
+    private images: any;
     private organisers: any;
     private places: any[];
     private regions: any;
@@ -39,11 +40,17 @@ export class Event extends AccessEasySyncModel {
         this.startTime = null;
         this.endTime = null;
         this.type = null;
-        this.images = [];
         this.organisers = null;
         this.places = [];
         this.regions = null;
         this.isTemplate = false;
+    }
+
+    static getRelations(){
+        let relations = super.getRelations();
+        relations.push("repeatedEvent.originalEvent");
+        relations.push("repeatedEvent.originalEvent.images");
+        return relations;
     }
 
     getNameTranslation() {
@@ -73,7 +80,6 @@ export class Event extends AccessEasySyncModel {
         columns["names"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
         columns["descriptions"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
         columns["places"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["images"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
         columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
         columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
         columns["isTemplate"] = {type: BaseDatabase.TYPES.BOOLEAN, default: false};
@@ -135,11 +141,7 @@ export class Event extends AccessEasySyncModel {
             relations = Event.getRelations();
         }
 
-        let event = await this._database.findById(this, id, relations);
-        // if (Helper.isNotNull(event) && event.getIsTemplate()){
-        //     event = null;
-        // }
-        return event;
+        return await this._database.findById(this, id, relations);
     }
 
     static async findByIds(ids, relations?) {
@@ -183,6 +185,14 @@ export class Event extends AccessEasySyncModel {
                 name: "eventRegion"
             },
             // inverseSide: "events",
+            sync: true
+        };
+        relations["images"] = {
+            target: FileMedium.getSchemaName(),
+            type: "many-to-many",
+            joinTable: {
+                name: "eventImages"
+            },
             sync: true
         };
         return relations;

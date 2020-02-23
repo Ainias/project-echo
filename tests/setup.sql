@@ -1,3 +1,7 @@
+DROP DATABASE silas_test_echo;
+CREATE DATABASE silas_test_echo;
+USE silas_test_echo;
+
 -- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: localhost    Database: silas_test_echo

@@ -16,6 +16,7 @@ import {DateHelper} from "js-helper/dist/shared/DateHelper";
 import {EventHelper} from "../Helper/EventHelper";
 import {BlockedDay} from "../../../shared/model/BlockedDay";
 import {CalendarSite} from "./CalendarSite";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 
 export class AddEventSite extends MenuFooterSite {
     constructor(siteManager) {
@@ -30,13 +31,17 @@ export class AddEventSite extends MenuFooterSite {
         if (constructParameters["id"]) {
 
             if (constructParameters["isRepeatableEvent"]) {
-                this._event = await RepeatedEvent.findById(constructParameters["id"], RepeatedEvent.getRelations());
+                let relations = RepeatedEvent.getRelations();
+                relations.push("originalEvent.images");
+                this._event = await RepeatedEvent.findById(constructParameters["id"], relations);
             } else {
                 let id = constructParameters["id"];
                 if (typeof id === "string" && id.startsWith("r")) {
                     let parts = id.split("-");
                     if (parts.length === 4) {
-                        let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), RepeatedEvent.getRelations());
+                        let relations = RepeatedEvent.getRelations();
+                        relations.push("originalEvent.images");
+                        let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), relations);
 
                         this._blockedDay = new Date(parts[1], parts[2] - 1, parts[3]);
                         this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, this._blockedDay);
@@ -102,10 +107,10 @@ export class AddEventSite extends MenuFooterSite {
             let names = {};
             let descriptions = {};
             let organizers = [];
-            let images = [values["image"]];
+            let imageSrc = values["image"];
 
             if (Helper.imageUrlIsEmpty(values["image"])) {
-                images = [values["image-before"]];
+                imageSrc = values["image-before"];
             }
 
             let places = {};
@@ -132,22 +137,31 @@ export class AddEventSite extends MenuFooterSite {
                 }
             });
 
-            let event = null;
+            let event;
             if (this._event) {
                 if (this._event instanceof RepeatedEvent) {
                     event = this._event.originalEvent;
                 } else {
                     event = this._event;
                 }
-
             } else {
                 event = new Event();
             }
 
+            let img = null;
+            if (event.images && event.images.length >= 0) {
+                img = event.images[0];
+            } else {
+                img = new FileMedium();
+            }
+
+            img.src = imageSrc;
+            await img.save();
+
             event.setNames(names);
             event.setDescriptions(descriptions);
             event.setOrganisers(organizers);
-            event.setImages(images);
+            event.setImages([img]);
             event.setPlaces(places);
             event.setStartTime(new Date(values["start"]));
             event.setEndTime(new Date(values["end"]));
@@ -222,13 +236,13 @@ export class AddEventSite extends MenuFooterSite {
             //     "error": "the endpoint must be after the start"
             // };
             let errors = {};
-            if (values["start"].trim() === ""){
+            if (values["start"].trim() === "") {
                 errors["error1"] = "required"
             }
-            if (values["end"].trim() === ""){
+            if (values["end"].trim() === "") {
                 errors["error2"] = "reqired";
             }
-            if (Object.keys(errors).length > 0){
+            if (Object.keys(errors).length > 0) {
                 return errors;
             }
 

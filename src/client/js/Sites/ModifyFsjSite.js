@@ -7,6 +7,7 @@ import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {CONSTANTS} from "../CONSTANTS";
 import {Fsj} from "../../../shared/model/Fsj";
 import {ShowFsjSite} from "./ShowFsjSite";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 
 export class ModifyFsjSite extends MenuFooterSite {
     constructor(siteManager) {
@@ -45,7 +46,7 @@ export class ModifyFsjSite extends MenuFooterSite {
 
             let names = {};
             let descriptions = {};
-            let images = (!Helper.imageUrlIsEmpty(values["image"])?[values["image"]]: [values["image-before"]]);
+            let imageSrc = (!Helper.imageUrlIsEmpty(values["image"])?values["image"]: values["image-before"]);
 
             Object.keys(values).forEach(valName => {
                 if (valName.startsWith("name-")) {
@@ -58,14 +59,26 @@ export class ModifyFsjSite extends MenuFooterSite {
 
             let fsj = null;
             if (this._fsj) {
-                fsj = this._fsj
+                fsj = this._fsj;
             } else {
                 fsj = new Fsj();
             }
+
+            let img = null;
+            if (fsj.images && fsj.images.length >= 0){
+                img = fsj.images[0];
+            }
+            else {
+                img = new FileMedium();
+            }
+
+            img.src = imageSrc;
+            await img.save();
+
             fsj.names = names;
             fsj.descriptions = descriptions;
-            fsj.images = images;
             fsj.website = values["website-url"];
+            fsj.images = [img];
 
             await fsj.save();
 
