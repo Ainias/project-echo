@@ -139,6 +139,7 @@ let moduleExports = {
                 __HOST_ADDRESS__: "'" + (process.env.HOST_URI || ((process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000"))) + "'",
                 __MAPS_API_KEY__: "'" + process.env.GOOGLE_MAPS_API_KEY + "'",
                 __VERSION__: "'"+version+"'",
+                __CONTACT_EMAIL__: "'"+process.env.CONTACT_EMAIL+"'",
             })
         ],
 

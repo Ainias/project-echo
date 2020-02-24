@@ -1,6 +1,6 @@
 import view from "../../html/Sites/welcomeSite.html";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
-import componentImg from "../../img/component.png"
+import componentImg from "../../img/component.jpg"
 import {Post} from "../../../shared/model/Post";
 import {Translator} from "cordova-sites/dist/client/js/Translator";
 import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";

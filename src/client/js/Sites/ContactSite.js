@@ -14,6 +14,8 @@ export class ContactSite extends MenuFooterSite {
     onViewLoaded() {
         let res = super.onViewLoaded();
 
+        this.findBy("#contactText").appendChild(Translator.makePersistentTranslation("contact text", [__CONTACT_EMAIL__]))
+
         new Form(this.findBy("#contact-form"), async values => {
 
             let result = await DataManager.send("contact", values);

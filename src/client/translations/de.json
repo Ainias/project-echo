@@ -112,5 +112,13 @@
   "diese cookies dienen dazu, um weitere funktionalitäten dieser website sicherzustellen, wie z.b. das speichern der sprache": "Diese Cookies dienen dazu, um weitere Funktionalitäten dieser Website sicherzustellen, wie z.B. das Speichern der Sprache.",
   "statistische cookies helfen uns anonymisiert informationen über die nutzung unserer website zu erfassen und so die website zu verbessern.": "Statistische Cookies helfen uns anonymisiert Informationen über die Nutzung unserer Website zu erfassen und so die Website zu verbessern.",
   "inhalte von drittparteien, wie google-maps hinterlegen cookies. um diese dienste zu nutzen, müssen die cookies von drittanbietern akzeptiert werden.": "Inhalte von Drittparteien, wie Google-Maps hinterlegen Cookies. Um diese Inhalte anzusehen, müssen die Cookies von Drittanbietern akzeptiert werden.",
-  "save": "Speichern"
+  "save": "Speichern",
+
+  "kontakt": "Kontakt",
+  "Datenschutzbestimmung": "Datenschutzbestimmung",
+  "Nachricht": "Nachricht",
+  "e-mailadresse": "E-Mailadresse",
+  "senden": "Senden",
+  "contact privacy policy accepted": "gelese und akzeptiert",
+  "contact text": "Du möchtest Kontakt mit uns aufnehmen? Kein Problem, nutze einfach das Kontaktformular oder sende uns eine E-Mail an <a href='mailto:{0}'>{0}</a>.\n    Egal, ob du uns eine E-Mail sendest oder das Kontaktformular benutzt, akzeptierst du unsere <a href=\"/?s=impressum\">Datenschutzbestimmung"
 }
