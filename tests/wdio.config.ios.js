@@ -3,15 +3,15 @@ const Service = require("./setup");
 exports.config = {
 
     // Where the files we are testing can be found.
-    // specs: [
-    //     './tests/specs/mobile/*.js',
-    //     './tests/specs/shared/*.js',
-    // ],
-    specs: [
-        './tests/specs/**/settingsSite.js',
-        './tests/specs/**/calendarSite.js',
-        './tests/specs/**/favoriteSite.js',
-    ],
+     specs: [
+         './tests/specs/mobile/*.js',
+         './tests/specs/shared/*.js',
+     ],
+    //specs: [
+    //    './tests/specs/**/posts.js',
+    //    './tests/specs/**/calendarSite.js',
+    //    './tests/specs/**/favoriteSite.js',
+    //],
 
     delayFactor: 4,
 
@@ -43,7 +43,7 @@ exports.config = {
 
     baseUrl: "",
 
-    waitforTimeout: 10000,
+    waitforTimeout: 10000*4,
 
     connectionRetryTimeout: 90000,
 
@@ -75,20 +75,20 @@ exports.config = {
 
         app: 'platforms/ios/build/emulator/Echo.app',
 
-        // automationName: "UiAutomator2",
+        automationName: "XCUITest",
 
         // For Android, Appium uses the first device it finds using "adb devices". So, this
         // string simply needs to be non-empty.
         // For iOS, this must exactly match the device name as seen in Xcode.
-        // deviceName: 'iPhone 11 Pro Max',
-        deviceName: 'iPhone 6',
+         deviceName: 'iPhone 11 Pro Max',
+        //deviceName: 'any',
 
         // 'Android' or 'iOS'
         platformName: 'iOS',
 
         // The version of the Android or iOS system
         platformVersion: '13.3',
-        platformVersion: '12.4',
+        //platformVersion: '12.4',
 
         orientation: "PORTRAIT",
 

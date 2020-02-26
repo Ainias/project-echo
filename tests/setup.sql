@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS silas_test_echo;
-CREATE DATABASE silas_text_echo;
-USE silas_text_echo;
+CREATE DATABASE silas_test_echo;
+USE silas_test_echo;
 
 -- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
 --

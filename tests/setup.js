@@ -8,7 +8,7 @@ let mysqlConn = mysql.createConnection({
     host: "localhost",
     "user": "root",
     "password": pw,
-    "database": db,
+//    "database": db,
     "multipleStatements": true
 });
 
