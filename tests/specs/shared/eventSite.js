@@ -77,6 +77,7 @@ describe("event site", () => {
         await favElem.click();
         await functions.pause(1000);
         await functions.acceptAlert();
+        await functions.acceptAlert();
         await functions.pause(1000);
 
         await functions.pause(1000);

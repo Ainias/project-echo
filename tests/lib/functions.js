@@ -134,11 +134,11 @@ async function getBaseUrl() {
 
 async function acceptAlert() {
     try {
-        await pause(2000);
+        await pause(1500);
         await browser.acceptAlert();
-        await pause(1000);
-	await browser.acceptAlert();
-	await pause(1000);
+        await pause(500);
+	    // await browser.acceptAlert();
+	    // await pause(500);
     } catch (e) {
         if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")) {
             expect(e.message).toEqual("error message");

@@ -7,13 +7,11 @@ exports.config = {
          './tests/specs/mobile/*.js',
          './tests/specs/shared/*.js',
      ],
-    //specs: [
-    //    './tests/specs/**/posts.js',
-    //    './tests/specs/**/calendarSite.js',
-    //    './tests/specs/**/favoriteSite.js',
-    //],
+    specs: [
+       './tests/specs/**/settingsSite.js',
+    ],
 
-    delayFactor: 4,
+    delayFactor: 3,
 
     isMobile: true,
 
@@ -100,10 +98,10 @@ exports.config = {
 
         // When set to true, it will not show permission dialogs, but instead grant all
         // permissions automatically.
-        autoGrantPermissions: true,
-        autoAcceptAlerts: true
+        // autoGrantPermissions: true,
+        // autoAcceptAlerts: true
     }],
-    autoAcceptAlerts: true,
+    // autoAcceptAlerts: true,
     onPrepare: async function(){
         await Service.setup();
     },

@@ -40,7 +40,7 @@ describe("church site", () => {
 
         await browser.waitUntil(async () => {
             let element = $("#main-content");
-            return await element.isDisplayed()
+            return await element.isDisplayed();
         });
 
         await functions.acceptCookies();

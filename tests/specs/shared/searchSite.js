@@ -47,6 +47,8 @@ describe("search site", () => {
     });
 
     it("search without parameters", async function () {
+        await find.one(".footer .icon.search").click();
+        await functions.pause(500);
         await $("#search-button").click();
 
         expect(await $(".day=Mi 29.05.")).toBeTruthy();
@@ -62,11 +64,13 @@ describe("search site", () => {
         expect(await $(".name=Termin later 2").isDisplayed()).toBeTruthy();
 
         await $(".name=Termin 5").click();
+        await functions.pause(500);
         expect(await $("#event-name").isDisplayed()).toBeTruthy();
     });
 
-    fit("search with types", async function () {
+    it("search with types", async function () {
         await find.one(".footer .icon.search").click();
+        await functions.pause(500);
         await $(".filter-tag=Konzert").click();
         await $(".filter-tag=Hauskreis").click();
         //
@@ -81,6 +85,8 @@ describe("search site", () => {
     });
 
     it("search with churches", async function () {
+        await find.one(".footer .icon.search").click();
+        await functions.pause(500);
         await $(".filter-tag=Köln City Church").click();
         await $("#search-button").click();
 
@@ -93,12 +99,15 @@ describe("search site", () => {
 
         await $(".filter-tag=A City Church").click();
         await $("#search-button").click();
+        await functions.pause(500);
 
         expect(await $(".name=Termin later").isDisplayed()).toBeTruthy();
         expect(await $(".name=Termin later 2").isDisplayed()).toBeTruthy();
     });
 
     it("search with types and churches", async function () {
+        await find.one(".footer .icon.search").click();
+        await functions.pause(500);
         await $(".filter-tag=Hauskreis").click();
         await $(".filter-tag=Köln City Church").click();
         await $("#search-button").click();
@@ -116,6 +125,8 @@ describe("search site", () => {
     });
 
     it("search with text", async function () {
+        await find.one(".footer .icon.search").click();
+        await functions.pause(500);
         await $("#search-input").setValue("3");
         await $("#search-button").click();
 

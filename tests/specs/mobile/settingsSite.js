@@ -48,6 +48,7 @@ describe("settingsSite", () => {
     });
 
     it("calendar selection", async function () {
+        await browser.debug();
         expect(await $("#system-calendar").getText()).toEqual("silas@silas.link");
         await $("#system-calendar").click();
 
@@ -61,7 +62,7 @@ describe("settingsSite", () => {
         expect(key).toEqual("8");
     });
 
-    it("deactivate notifications", async function () {
+    fit("deactivate notifications", async function () {
         await browser.execute(async () => {
             window["notifications"] = {};
             cordova.plugins.notification.local.schedule = (options, callback) => {
@@ -91,6 +92,10 @@ describe("settingsSite", () => {
             await Promise.all(promises);
         });
 
+        await functions.acceptAlert();
+
+        // await browser.debug();
+
         expect(await $("#send-notifications").getValue()).toEqual("1");
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
@@ -102,29 +107,31 @@ describe("settingsSite", () => {
         let val = await browser.execute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
+        console.log(val);
+        await browser.debug();
         expect(val).toEqual("0");
 
-        val = await browser.execute(() => {
+        let val2 = await browser.execute(() => {
             return window["notifications"];
         });
-        expect(val).toEqual({});
+        expect(val2).toEqual({});
 
         await $("#send-notifications+span.slider").click();
         await functions.pause(1500);
 
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
-        val = await browser.execute(() => {
+        let val3 = await browser.execute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
-        expect(val).toEqual("1");
+        expect(val3).toEqual("1");
 
         await browser.pause(1000);
-        val = await browser.execute(() => {
+        let val4 = await browser.execute(() => {
             return window["notifications"];
         });
-        expect(Object.keys(val).length).toEqual(2);
-        expect(val[1].id).toEqual(1);
-        expect(val[2].id).toEqual(2);
+        expect(Object.keys(val4).length).toEqual(2);
+        expect(val4[1].id).toEqual(1);
+        expect(val4[2].id).toEqual(2);
     });
 });

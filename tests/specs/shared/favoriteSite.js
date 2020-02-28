@@ -65,7 +65,10 @@ describe("favorite site", () => {
         await $(".footer .icon.calendar").click();
         await $(".day-number=29").click();
         await $(".favorite").click();
+        // await browser.debug();
         await functions.acceptAlert();
+        await functions.acceptAlert();
+        // await browser.debug();
 
         expect(await $(".favorite.is-favorite").isExisting()).toBeTruthy();
 
