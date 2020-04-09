@@ -104,9 +104,9 @@ export class EventHelper {
         }
     }
 
-    static async updateNotificationsForEvents(events) {
-        let eventIds = [];
-        events.forEach(event => eventIds.push(event.id));
+    static async updateNotificationsForEvents(eventIds) {
+
+        let events = await Event.findByIds(eventIds);
 
         let notificationScheduler = NotificationScheduler.getInstance();
 
@@ -124,10 +124,7 @@ export class EventHelper {
         await Promise.all(promises);
     }
 
-    static async deleteNotificationsForEvents(events) {
-        let eventIds = [];
-        events.forEach(event => eventIds.push(event.id));
-
+    static async deleteNotificationsForEvents(eventIds) {
         let notificationScheduler = NotificationScheduler.getInstance();
 
         let favorites = await Favorite.find({event: {id: In(eventIds)}});
@@ -273,7 +270,7 @@ export class EventHelper {
         //load blockedDays with repeatedEvent
         let blockedDayIds = [];
         res["changed"].forEach(blockedDay => {
-            blockedDayIds.push(blockedDay.id);
+            blockedDayIds.push(blockedDay);
         });
 
         let changedBlockedDays = await BlockedDay.findByIds(blockedDayIds, BlockedDay.getRelations());

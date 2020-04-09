@@ -3,17 +3,17 @@ require("dotenv").config();
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require('webpack');
 const path = require("path");
-const TerserPlugin = require("terser-webpack-plugin");
 
 const os = require('os');
 const ifaces = os.networkInterfaces();
 
 const version = require("./package.json").version;
 
-// let mode = (process.env.MODE || "development");
-let mode = "production";
+let mode = (process.env.MODE || "development");
+// let mode = "production";
 
 function getIp() {
     let ip = null;
@@ -38,8 +38,8 @@ let moduleExports = {
             tls: 'empty'
         },
 
-        //Development oder production, wird oben durch Variable angegeben (damit später per IF überprüft)
-        mode: mode,
+    //Development oder production, wird oben durch Variable angegeben (damit später per IF überprüft)
+    mode: mode,
 
         //Beinhaltet den JS-Startpunkt und SCSS-Startpunkt
         entry: [

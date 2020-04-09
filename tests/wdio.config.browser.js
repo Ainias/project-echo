@@ -62,7 +62,7 @@ exports.config = {
         './tests/specs/shared/*.js',
     ],
     specs: [
-        './tests/specs/**/editChurch.js',
+        './tests/specs/**/editFsj.js',
     ],
 
 

@@ -26,7 +26,7 @@ export class RepeatedEvent extends AccessEasySyncModel {
 
     static getRelations(){
         let relations = super.getRelations();
-        // relations.push("originalEvent.images");
+        relations.push("originalEvent.images");
         return relations;
     }
 

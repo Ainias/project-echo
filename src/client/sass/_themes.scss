@@ -13,6 +13,7 @@
     text-decoration: none;
     color: map-get($theme, highlight);
     border-bottom: map-get($theme, linkBorderBottom);
+
     &:hover {
       color: map-get($theme, highlight);
       border-bottom-color: map-get($theme, linkHoverColor);
@@ -25,7 +26,7 @@
   nav.top-bar {
     //color: map-get($theme, navBarTextColor);
     //background: map-get($theme, themeColor);
-    .top-bar-title a.hidden-link{
+    .top-bar-title a.hidden-link {
       //color: map-get($theme, navBarTextColor);
     }
   }
@@ -37,7 +38,7 @@
       }
     }
 
-    .menu-icon::after, .menu-icon:hover::after{
+    .menu-icon::after, .menu-icon:hover::after {
       background: map-get($theme, navBarTextColor);
       box-shadow: 0 7px 0 map-get($theme, navBarTextColor), 0 14px 0 map-get($theme, navBarTextColor);
     }
@@ -47,6 +48,7 @@
     background-color: map-get($theme, themeColor);
     border: map-get($theme, buttonBorder);
     color: map-get($theme, buttonColor);
+
     &.disabled, &.disabled:hover, &.disabled:focus, &:hover {
       background-color: map-get($theme, themeColor);
     }
@@ -69,10 +71,11 @@
   }
 
   svg {
-    .fill-color, &.fill-color{
+    .fill-color, &.fill-color {
       fill: currentColor;
     }
-    .fill-background, &.fill-background{
+
+    .fill-background, &.fill-background {
       fill: #{map-get($theme, background)};
     }
   }
@@ -82,20 +85,23 @@
     [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, input[type=text], input:not([type]) {
       border-bottom: solid #{map-get($theme, textColor)};
       background: #{map-get($theme, background)};
-      color:#{map-get($theme, textColor)};
+      color: #{map-get($theme, textColor)};
 
       &:focus {
         border-bottom: solid #{map-get($theme, textColor)};
       }
+
       &:focus, &.notEmpty:not(:focus) {
         ~ span {
           color: #{map-get($theme, textColor)};
         }
       }
+
       ~ span {
         color: #{adjust_color( map-get($theme, textColor), $alpha: -0.35)};
       }
     }
+
     textarea {
       box-shadow: 0 0 3px 2px hsla(0, 0%, 53%, .31) !important;
     }
@@ -104,16 +110,16 @@
     background-color: #{adjust_color( map-get($theme, themeColor), $alpha: -0.35)};
   }
 
-  .footer{
+  .footer {
     border-top: solid 2.5px map-get($theme, textColorOne);
   }
 
-  #church-info-container{
-    .church-info{
+  #church-info-container {
+    .church-info {
       border-top: 1px solid map-get($theme, colorOne);
     }
   }
-  .place, .alphabet-scroll-to, .faded-text{
+  .place, .alphabet-scroll-to, .faded-text {
     color: map-get($theme, textColorOne);
   }
 }
@@ -129,3 +135,104 @@ body {
     }
   }
 }
+
+@each $marginName, $marginValue in $marginClasses {
+  .margin-#{$marginName} {
+    margin: $marginValue;
+  }
+  .margin-top-#{$marginName} {
+    margin-top: $marginValue;
+  }
+  .margin-bottom-#{$marginName} {
+    margin-bottom: $marginValue;
+  }
+  .margin-left-#{$marginName} {
+    margin-left: $marginValue;
+  }
+  .margin-right-#{$marginName} {
+    margin-right: $marginValue;
+  }
+
+  .padding-#{$marginName} {
+    padding: $marginValue;
+  }
+  .padding-top-#{$marginName} {
+    padding-top: $marginValue;
+  }
+  .padding-bottom-#{$marginName} {
+    padding-bottom: $marginValue;
+  }
+  .padding-left-#{$marginName} {
+    padding-left: $marginValue;
+  }
+  .padding-right-#{$marginName} {
+    padding-right: $marginValue;
+  }
+}
+
+@each $class in $breakpoint-classes {
+  @each $marginName, $marginValue in $marginClasses {
+    @media screen and (min-width: map-get($breakpoints, $class)) {
+      .#{$class}-margin-#{$marginName} {
+        margin: $marginValue;
+      }
+      .#{$class}-margin-top-#{$marginName} {
+        margin-top: $marginValue;
+      }
+      .#{$class}-margin-bottom-#{$marginName} {
+        margin-bottom: $marginValue;
+      }
+      .#{$class}-margin-left-#{$marginName} {
+        margin-left: $marginValue;
+      }
+      .#{$class}-margin-right-#{$marginName} {
+        margin-right: $marginValue;
+      }
+
+      .#{$class}-padding-#{$marginName} {
+        padding: $marginValue;
+      }
+      .#{$class}-padding-top-#{$marginName} {
+        padding-top: $marginValue;
+      }
+      .#{$class}-padding-bottom-#{$marginName} {
+        padding-bottom: $marginValue;
+      }
+      .#{$class}-padding-left-#{$marginName} {
+        padding-left: $marginValue;
+      }
+      .#{$class}-padding-right-#{$marginName} {
+        padding-right: $marginValue;
+      }
+    }
+  }
+}
+
+@each $widthName, $widthValue in $widths {
+  .width-#{$widthName} {
+    width: $widthValue;
+  }
+  .max-width-#{$widthName} {
+    max-width: $widthValue;
+  }
+  .min-width-#{$widthName} {
+    min-width: $widthValue;
+  }
+}
+
+@each $class in $breakpoint-classes {
+  @each $widthName, $widthValue in $widths {
+    @media all and (min-width: map-get($breakpoints, $class)) {
+      .#{$class}-width-#{$widthName} {
+        width: $widthValue;
+      }
+      .#{$class}-max-width-#{$widthName} {
+        max-width: $widthValue;
+      }
+      .#{$class}-min-width-#{$widthName} {
+        min-width: $widthValue;
+      }
+    }
+  }
+}
+

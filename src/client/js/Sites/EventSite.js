@@ -36,7 +36,7 @@ export class EventSite extends FooterSite {
             let parts = id.split("-");
 
             if (parts.length === 4) {
-                let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1),RepeatedEvent.getRelations);
+                let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1),RepeatedEvent.getRelations());
                 this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, new Date(parts[1], parts[2] - 1, parts[3]))
             }
         } else {

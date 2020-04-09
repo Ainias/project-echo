@@ -5,6 +5,7 @@ import {App} from "cordova-sites/dist/client/js/App";
 import {Form} from "cordova-sites/dist/client/js/Form";
 import {DataManager} from "cordova-sites/dist/client/js/DataManager";
 import {Toast} from "cordova-sites/dist/client/js/Toast/Toast";
+import {Translator} from "cordova-sites/dist/client/js/Translator";
 
 export class ContactSite extends MenuFooterSite {
     constructor(siteManager) {

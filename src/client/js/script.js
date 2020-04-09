@@ -51,6 +51,8 @@ import {ImagesSchema1000000010000} from "../../shared/model/migrations/ImagesSch
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 import {ImagesSchemaDownload1000000011000} from "../../shared/model/migrations/ImagesSchemaDownload";
 import {ContactSite} from "./Sites/ContactSite";
+import * as typeorm from "typeorm";
+import {AboutUsSite} from "./Sites/AboutUsSite";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -92,7 +94,7 @@ App.addInitialization(async (app) => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", CalendarSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", WelcomeSite, MenuAction.SHOW_FOR_LARGE));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", AboutUsSite, MenuAction.SHOW_FOR_LARGE));
     NavbarFragment.defaultActions.push(new MenuAction("language", async () => {
         if (Translator.getInstance().getCurrentLanguage() === "en") {
             await Translator.getInstance().setLanguage("de");
@@ -131,11 +133,11 @@ App.addInitialization(async (app) => {
     //Todo an richtige stelle auslagern
     let syncJob = new SyncJob();
     await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium]).catch(e => console.error(e));
-    await syncJob.getSyncPromise().then(async res => {
-        console.log("synched!");
+    syncJob.getSyncPromise().then(async res => {
+        console.log("synched!", res);
         await EventHelper.updateFavorites(res["BlockedDay"]);
-        EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
-        EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
+        await EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
+        await EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
     }).catch(e => console.error(e));
 
     UserManager.getInstance().getMe().catch(e => console.error(e));
@@ -155,7 +157,7 @@ App.addInitialization(async (app) => {
 SystemCalendar.NAME = "echo";
 SystemCalendar.WEBSITE = "echo.silas.link";
 
-DataManager._basePath = __HOST_ADDRESS__+ "/api/v1/";
+DataManager._basePath = __HOST_ADDRESS__ + "/api/v1/";
 FileMedium.PUBLIC_PATH = __HOST_ADDRESS__ + "/uploads/img_";
 DataManager.onlineCallback = isOnline => {
     if (!isOnline) {
@@ -164,7 +166,7 @@ DataManager.onlineCallback = isOnline => {
 };
 
 Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
-    logging: ["error",],
+    logging: ["error", "warn"],
     synchronize: false,
     migrationsRun: true,
     migrations: [

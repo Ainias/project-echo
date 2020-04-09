@@ -15,8 +15,8 @@ export class NotificationsSettingsFragment extends AbstractFragment{
         let res = super.onViewLoaded();
 
         let notificationSettings = await Promise.all([NativeStoragePromise.getItem("send-notifications", "1"),
-            NativeStoragePromise.getItem("time-to-notify-base"),
-            NativeStoragePromise.getItem("time-to-notify-multiplier")]);
+            NativeStoragePromise.getItem("time-to-notify-base", "1"),
+            NativeStoragePromise.getItem("time-to-notify-multiplier", "86400")]);
 
         this._timeBeforeNotificationRow = this.findBy("#time-before-setting-row");
 
@@ -38,12 +38,23 @@ export class NotificationsSettingsFragment extends AbstractFragment{
             this._sendNotificationCheckbox.checked = false;
             this._timeBeforeNotificationRow.classList.add("hidden");
         }
+
+        let afterElement =this.findBy("#after");
+        let multiplierElement =this.findBy("#multiplier");
         if (notificationSettings[1]) {
-            this.findBy("#after").value = res[2];
+            afterElement.value = notificationSettings[1];
         }
         if (notificationSettings[2]) {
-            this.findBy("#multiplier").value = res[3];
+            multiplierElement.value = notificationSettings[2];
         }
+
+        afterElement.addEventListener("change", () => {
+            NativeStoragePromise.setItem("time-to-notify-base", parseInt(afterElement.value));
+        });
+        multiplierElement.addEventListener("change", () => {
+            NativeStoragePromise.setItem("time-to-notify-multiplier", parseInt(multiplierElement.value));
+        });
+
         return res;
     }
 }

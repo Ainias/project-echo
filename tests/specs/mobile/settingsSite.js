@@ -107,8 +107,6 @@ describe("settingsSite", () => {
         let val = await browser.execute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
-        console.log(val);
-        await browser.debug();
         expect(val).toEqual("0");
 
         let val2 = await browser.execute(() => {
