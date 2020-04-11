@@ -552,7 +552,7 @@ describe("edit event", () => {
         data = data[0];
         let repeatedEventId = data["repeatedEventId"];
 
-        data = await functions.queryDatabase("SELECT * FROM blocked_day WHERE repeatedEventId = "+ repeatedEventId);
+        data = await functions.queryDatabase("SELECT * FROM blocked_day WHERE repeatedEventId = "+ repeatedEventId + " AND eventId IS NULL");
         expect(data.length).toEqual(1);
         data = data[0];
         expect(data["day"].getTime()).toEqual(new Date(2019, 5, 26, 12).getTime());

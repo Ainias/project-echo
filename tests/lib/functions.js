@@ -11,11 +11,11 @@ async function login(email, password) {
     });
     await acceptCookies();
 
-    await browser.pause(2000);
+    await browser.pause(1000);
     await $("input[name=email]").setValue(email);
     await $("input[name=password]").setValue(password);
     await $("button=Login").click();
-    await browser.pause(3000);
+    await browser.pause(2000);
 }
 
 async function logout() {

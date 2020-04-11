@@ -61,10 +61,10 @@ exports.config = {
         './tests/specs/androidWeb/*.js',
         './tests/specs/shared/*.js',
     ],
-    // specs: [
-    //     './tests/specs/**/editEvent.js',
-        // './tests/specs/**/favoriteSite.js',
-    // ],
+    specs: [
+        // './tests/specs/**/editFsj.js',
+        './tests/specs/**/editEvent.js',
+    ],
 
 
     capabilities: [{
