@@ -261,7 +261,6 @@ export class EventHelper {
             from.setDate(from.getDate() + 1);
             between.setDate(between.getDate() + 1);
         }
-
         return events;
     }
 

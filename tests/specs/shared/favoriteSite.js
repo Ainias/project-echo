@@ -4,7 +4,7 @@ const $$ = find.multiple;
 const custom$ = find.oneCustom;
 const functions = require("../../lib/functions");
 
-describe("favorite site", () => {
+describe("favorite site 1", () => {
 
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000*90*browser.config.delayFactor;
 

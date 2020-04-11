@@ -19,6 +19,7 @@ async function login(email, password) {
 }
 
 async function logout() {
+    await $(".footer .icon.home").click();
     await $("span=Logout").click();
 }
 
@@ -47,13 +48,14 @@ async function setCurrentDate(date) {
         date = new Date(2019, 5, 26, 14, 30, 42);
     }
 
-    await browser.execute((date) => {
+    const time = date.getTime();
+    await browser.execute((time) => {
         const OldDate = window["Date"];
 
         class Date extends OldDate {
             constructor(...args) {
                 if (arguments.length === 0) {
-                    super(date.getTime());
+                    super(time);
                 } else {
                     super(...arguments)
                 }
@@ -61,7 +63,7 @@ async function setCurrentDate(date) {
         }
 
         window["Date"] = Date;
-    }, date);
+    }, time);
 }
 
 async function setFormValues(values, useSelector) {
@@ -71,11 +73,22 @@ async function setFormValues(values, useSelector) {
 
     let promise = Promise.resolve();
     Object.keys(values).forEach(selector => {
-        promise = promise.then(() => {
+        promise = promise.then(async () => {
+            let elem;
             if (useSelector) {
-                return $(selector).setValue(values[selector])
+                elem = $(selector)
             } else {
-                return $("[name=" + selector + "]").setValue(values[selector])
+                elem = $("[name=" + selector + "]");
+            }
+
+            if (await elem.isTag("select")) {
+                await elem.selectByAttribute("value", values[selector]);
+            } else if (await elem.getAttribute("type") === "checkbox" || await elem.getAttribute("type") === "radio") {
+                if (!await elem.isSelected()) {
+                    return elem.click();
+                }
+            } else {
+                return elem.setValue(values[selector]);
             }
         });
     });
@@ -137,8 +150,8 @@ async function acceptAlert() {
         await pause(1500);
         await browser.acceptAlert();
         await pause(500);
-	    // await browser.acceptAlert();
-	    // await pause(500);
+        // await browser.acceptAlert();
+        // await pause(500);
     } catch (e) {
         if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")) {
             expect(e.message).toEqual("error message");
@@ -147,10 +160,10 @@ async function acceptAlert() {
     }
 }
 
-async function compareFiles(originalPath, expectedPath){
+async function compareFiles(originalPath, expectedPath) {
     let filePromises = [
-        new Promise((res, rej) => fs.readFile(originalPath, (err, data) => err?rej(err):res(data))),
-        new Promise((res, rej) => fs.readFile(expectedPath, (err, data) => err?rej(err):res(data)))
+        new Promise((res, rej) => fs.readFile(originalPath, (err, data) => err ? rej(err) : res(data))),
+        new Promise((res, rej) => fs.readFile(expectedPath, (err, data) => err ? rej(err) : res(data)))
     ];
 
     let fileData = await Promise.all(filePromises);

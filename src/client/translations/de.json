@@ -123,5 +123,15 @@
   "contact text": "Du möchtest Kontakt mit uns aufnehmen? Kein Problem, nutze einfach das Kontaktformular oder sende uns eine E-Mail an <a href='mailto:{0}'>{0}</a>.\n    Egal, ob du uns eine E-Mail sendest oder das Kontaktformular benutzt, akzeptierst du unsere <a href=\"/?s=impressum\">Datenschutzbestimmung",
   "about us 1": "Wir sind Silas, Laura, Fabienne, Susanne und Jonas. (von links nach rechts) Was uns verbindet ist unser Glaube und die Lust gemeinsam diesen Glauben zu leben und Gott zu feiern. Gemeinschaft ist unsere Priorität und\n    Menschen in\n    unserem Umfeld glücklich und zufrieden zu sehen. Wir wollen alle Menschen zusammenbringen – egal ob Christ\n    oder\n    nicht-Christ, jung oder alt, arm oder reich, Frau oder Mann. So bunt zusammengewürfelt ist auch unsere\n    Truppe:\n    Silas\n    studiert Informatik an der RWTH, Laura ist seit 2 Jahren Projekt Managerin, Fabienne ist fast fertige\n    Lehrerin,\n    Susanne ist selbstständige Mediengrafikerin und studiert nebenbei und Jonas arbeitet als Polizist im Kölner\n    Westen. Wir besuchen die Köln City Church, die FEG Köln und die Gemeinde Köln West und\n    irgendwie gab es diesen einen Moment, da haben wir diese Idee gesponnen alle christlichen Events im Kölner\n    Umland in\n    einer App zu bündeln.",
   "about us 2": "Wir möchten mit unserem Projekt „ECHO“ dazu beitragen, dass Christen in Köln und im Kölner Umland schneller\n    und\n    einfacher christliche Events online finden können und somit unter dem Namen Gottes Gemeinschaft haben. Dass\n    unsere\n    Familie, Freunde, Kommilitonen und Bekannte Gott kennenlernen dürfen, liegt uns auf unseren Herzen. ECHO\n    gibt\n    einen\n    Überblick über christliche Events und bietet einen leichten Zugang für Kölner und Zugezogene.",
-  "das sind wir": "Das sind wir"
+  "das sind wir": "Das sind wir",
+  "wiederholen?": "Wiederholen?",
+  "repeat until": "Wiederholen bis",
+  "mo": "Mo",
+  "di": "Di",
+  "mi": "Mi",
+  "do": "Do",
+  "fr": "Fr",
+  "sa": "Sa",
+  "so": "So",
+  "": ""
 }

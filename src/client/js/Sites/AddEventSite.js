@@ -29,10 +29,8 @@ export class AddEventSite extends MenuFooterSite {
         this._churches = await Church.find();
 
         if (constructParameters["id"]) {
-
             if (constructParameters["isRepeatableEvent"]) {
                 let relations = RepeatedEvent.getRelations();
-                relations.push("originalEvent.images");
                 this._event = await RepeatedEvent.findById(constructParameters["id"], relations);
             } else {
                 let id = constructParameters["id"];
@@ -40,7 +38,6 @@ export class AddEventSite extends MenuFooterSite {
                     let parts = id.split("-");
                     if (parts.length === 4) {
                         let relations = RepeatedEvent.getRelations();
-                        relations.push("originalEvent.images");
                         let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), relations);
 
                         this._blockedDay = new Date(parts[1], parts[2] - 1, parts[3]);

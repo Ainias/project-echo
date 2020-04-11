@@ -47,6 +47,22 @@ class PromiseElement {
         return (await this.getPromise()).setValue(value);
     }
 
+    async getTagName(){
+        return (await this.getPromise()).getTagName();
+    }
+
+    async isTag(tag){
+        return (await this.getTagName() === tag);
+    }
+
+    async isSelected(){
+        return (await this.getPromise()).isSelected();
+    }
+
+    async selectByAttribute(attribute, value){
+        return (await this.getPromise()).selectByAttribute(attribute, value);
+    }
+
     async getValue(){
         return (await this.getPromise()).getValue();
     }
