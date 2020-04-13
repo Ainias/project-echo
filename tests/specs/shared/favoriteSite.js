@@ -88,15 +88,27 @@ describe("favorite site 1", () => {
         await $("#search-button").click();
 
         await functions.pause(3000);
-        let favorites = $$(".favorite:not(.is-favorite)");
 
-        await favorites.get(0).click();
-        await favorites.get(1).click();
-        await favorites.get(2).click();
-        await favorites.get(3).click();
-        await favorites.get(4).click();
-        await favorites.get(6).click();
-        await favorites.get(7).click();
+
+        let eventOverviews = $$(".event-overview");
+
+        let eventsForFavorites = [
+            "Termin 5",
+            "Termin 5.1",
+            "Termin 5.2",
+            "Termin 5.3",
+            "Termin 5.4",
+            "Termin later",
+            "Termin later 2",
+            "Termin 4",
+        ];
+
+        let length = await eventOverviews.getLength();
+        for(let i = 0; i < length; i++){
+            if (eventsForFavorites.indexOf(await eventOverviews.get(i).$(".name").getText()) !== -1){
+                await eventOverviews.get(i).$(".favorite").click();
+            }
+        }
 
         await functions.pause(1000);
         await $(".footer .icon.calendar").click();
@@ -109,14 +121,19 @@ describe("favorite site 1", () => {
 
         await $(".footer .icon.favorites").click();
         await functions.pause(1000);
-        expect(await $(".name=Termin 5").isExisting()).toBeTruthy();
-        expect(await $(".name=Termin 5.1").isExisting()).toBeTruthy();
-        expect(await $(".name=Termin 5.2").isExisting()).toBeTruthy();
-        expect(await $(".name=Termin 5.3").isExisting()).toBeTruthy();
-        expect(await $(".name=Termin 5.4").isExisting()).toBeTruthy();
-        expect(await $(".name=Termin later").isExisting()).toBeTruthy();
-        expect(await $(".name=Termin later 2").isExisting()).toBeTruthy();
-        expect(await $(".name=Termin 4").isExisting()).toBeTruthy();
+
+        for(let i = 0; i < eventsForFavorites.length; i++){
+            expect(await $(".name="+eventsForFavorites[i]).isExisting()).toBeTruthy();
+
+        }
+
+        // expect(await $(".name=Termin 5.1").isExisting()).toBeTruthy();
+        // expect(await $(".name=Termin 5.2").isExisting()).toBeTruthy();
+        // expect(await $(".name=Termin 5.3").isExisting()).toBeTruthy();
+        // expect(await $(".name=Termin 5.4").isExisting()).toBeTruthy();
+        // expect(await $(".name=Termin later").isExisting()).toBeTruthy();
+        // expect(await $(".name=Termin later 2").isExisting()).toBeTruthy();
+        // expect(await $(".name=Termin 4").isExisting()).toBeTruthy();
     });
 
     // fit("repeated Event favorites", async function () {

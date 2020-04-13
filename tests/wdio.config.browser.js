@@ -63,9 +63,8 @@ exports.config = {
     ],
     specs: [
         // './tests/specs/**/editFsj.js',
-        './tests/specs/**/editEvent.js',
+        './tests/specs/**/favoriteSite.js',
     ],
-
 
     capabilities: [{
         browserName: "chrome",
