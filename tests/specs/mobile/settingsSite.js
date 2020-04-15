@@ -48,7 +48,6 @@ describe("settingsSite", () => {
     });
 
     it("calendar selection", async function () {
-        await browser.debug();
         expect(await $("#system-calendar").getText()).toEqual("silas@silas.link");
         await $("#system-calendar").click();
 
@@ -62,14 +61,14 @@ describe("settingsSite", () => {
         expect(key).toEqual("8");
     });
 
-    fit("deactivate notifications", async function () {
+    it("deactivate notifications", async function () {
         await browser.execute(async () => {
             window["notifications"] = {};
             cordova.plugins.notification.local.schedule = (options, callback) => {
                 window["notifications"][options.id] = options;
                 callback();
             };
-            cordova.plugins.notification.local.clearAll = (callback) => {
+            cordova.plugins.notification.local.cancelAll = (callback) => {
                 window["notifications"] =  {};
                 callback();
             };

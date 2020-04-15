@@ -37,6 +37,6 @@ export class DeleteRepeatedEventController {
 
         // await this._doDeleteModel(model, modelIds);
 
-        return res.json({});
+        return res.json({success: true});
     }
 }

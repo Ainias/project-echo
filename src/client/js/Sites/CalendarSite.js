@@ -2,7 +2,6 @@ import {App, Translator} from "cordova-sites"
 import {Event} from "../../../shared/model/Event";
 import view from "../../html/Sites/calendarSite.html";
 import {FooterSite} from "./FooterSite";
-// import * as _typeorm from "typeorm";
 import {IsNull, LessThan} from "typeorm";
 import {MoreThanOrEqual} from "typeorm";
 import {EventSite} from "./EventSite";
@@ -15,11 +14,6 @@ import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
 import {Helper} from "js-helper"
 import {EventHelper} from "../Helper/EventHelper";
-
-// let typeorm = _typeorm;
-// if (typeorm.default) {
-//     typeorm = typeorm.default;
-// }
 
 export class CalendarSite extends FooterSite {
 

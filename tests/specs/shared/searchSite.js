@@ -21,6 +21,8 @@ describe("search site", () => {
 
     beforeEach(async function () {
         await browser.url(baseUrl);
+        await functions.deactivateTranslationLogging();
+        await functions.logErrors();
 
         await browser.execute((year, month, date, hour, minute, second) => {
             const OldDate = window["Date"];
@@ -44,6 +46,12 @@ describe("search site", () => {
         });
 
         await functions.acceptCookies();
+    });
+
+    afterEach(async function() {
+        let errors = await functions.getLoggedErrors();
+        expect(errors.length).toEqual(0);
+        expect(errors).toEqual([]);
     });
 
     it("search without parameters", async function () {
@@ -136,6 +144,8 @@ describe("search site", () => {
 
     it("search via url", async function () {
         await browser.url(baseUrl+"?q=Ter&types=konzert%2Chauskreis&churches=2&s=search");
+        await functions.deactivateTranslationLogging();
+        await functions.logErrors();
 
         await browser.execute((year, month, date, hour, minute, second) => {
             const OldDate = window["Date"];

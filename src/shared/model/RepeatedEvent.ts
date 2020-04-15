@@ -92,9 +92,9 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.originalEvent.getRegions();
     }
 
-    async delete(): Promise<any> {
-        return super.delete();
-    }
+    // async delete(): Promise<any> {
+    //     return super.delete();
+    // }
 }
 
 RepeatedEvent.ACCESS_MODIFY = "admin";

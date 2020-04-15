@@ -23,7 +23,6 @@ export class NotificationsSettingsFragment extends AbstractFragment{
         this._sendNotificationCheckbox = this.findBy("#send-notifications");
         this._sendNotificationCheckbox.addEventListener("change", async () => {
             if (this._sendNotificationCheckbox.checked) {
-                debugger;
                 this._timeBeforeNotificationRow.classList.remove("hidden");
                 await NativeStoragePromise.setItem("send-notifications", "1");
                 await EventHelper.updateNotificationsForFavorites();

@@ -10,10 +10,10 @@ exports.config = {
         './tests/specs/shared/*.js',
     ],
     specs: [
-        './tests/specs/**/favoriteSite2.js'
+        './tests/specs/**/searchSite.js',
     ],
 
-    delayFactor: 1,
+    delayFactor: 3,
 
     isMobile: true,
 
@@ -43,7 +43,7 @@ exports.config = {
 
     baseUrl: "",
 
-    waitforTimeout: 10000,
+    waitforTimeout: 10000*5,
 
     connectionRetryTimeout: 90000,
 

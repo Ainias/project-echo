@@ -58,64 +58,6 @@ describe("favorite site 2", () => {
 
     });
 
-    // it("show favorites", async function () {
-    //     await $(".footer .icon.favorites").click();
-    //     expect(await $(".no-events").isDisplayed()).toBeTruthy();
-    //
-    //     await $(".footer .icon.calendar").click();
-    //     await $(".day-number=29").click();
-    //     await $(".favorite").click();
-    //     await functions.acceptAlert();
-    //
-    //     expect(await $(".favorite.is-favorite").isExisting()).toBeTruthy();
-    //
-    //     await $(".footer .icon.favorites").click();
-    //     expect(await $(".name=Termin 5").isExisting()).toBeTruthy();
-    //     await $(".name=Termin 5").click();
-    //     await functions.pause(500);
-    //     await $(".favorite.is-favorite").click();
-    //     await functions.pause(1000);
-    //     expect(await $(".favorite.is-favorite").isExisting()).toBeFalsy();
-    //
-    //     await $(".footer .icon.favorites").click();
-    //     expect(await $(".no-events").isDisplayed()).toBeTruthy();
-    //
-    //     await $(".footer .icon.search").click();
-    //     await functions.pause(1000);
-    //     await $("#search-button").click();
-    //
-    //     await functions.pause(3000);
-    //     let favorites = $$(".favorite:not(.is-favorite)");
-    //
-    //     await favorites.get(0).click();
-    //     await favorites.get(1).click();
-    //     await favorites.get(2).click();
-    //     await favorites.get(3).click();
-    //     await favorites.get(4).click();
-    //     await favorites.get(6).click();
-    //     await favorites.get(7).click();
-    //
-    //     await functions.pause(1000);
-    //     await $(".footer .icon.calendar").click();
-    //     await $("#button-left").click();
-    //     await $(".day-number=29").click();
-    //     await functions.pause(2000);
-    //     await $(".favorite:not(.is-favorite)").click();
-    //
-    //     await functions.pause(1500);
-    //
-    //     await $(".footer .icon.favorites").click();
-    //     await functions.pause(1000);
-    //     expect(await $(".name=Termin 5").isExisting()).toBeTruthy();
-    //     expect(await $(".name=Termin 5.1").isExisting()).toBeTruthy();
-    //     expect(await $(".name=Termin 5.2").isExisting()).toBeTruthy();
-    //     expect(await $(".name=Termin 5.3").isExisting()).toBeTruthy();
-    //     expect(await $(".name=Termin 5.4").isExisting()).toBeTruthy();
-    //     expect(await $(".name=Termin later").isExisting()).toBeTruthy();
-    //     expect(await $(".name=Termin later 2").isExisting()).toBeTruthy();
-    //     expect(await $(".name=Termin 4").isExisting()).toBeTruthy();
-    // });
-
     it("repeated Event favorites", async function () {
         await $(".footer .icon.calendar").click();
         await functions.pause(500);
@@ -164,7 +106,6 @@ describe("favorite site 2", () => {
         eventOverviewContainer = $$("#event-container-future .event-overview-container").filterOne((async elem => {
             return (await elem.$(".day").getText()) === "Do 27.06."
         }));
-        // await browser.debug();
 
         expect(await eventOverviewContainer.$(".event-overview").isExisting()).toBeTruthy();
         await eventOverviewContainer.click();

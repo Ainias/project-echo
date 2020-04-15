@@ -54,17 +54,17 @@ exports.config = {
     ],
 
     delayFactor: 1,
+    hasAlertDialogs: false,
 
     // Where the files we are testing can be found.
     specs: [
         './tests/specs/web/*.js',
-        './tests/specs/androidWeb/*.js',
         './tests/specs/shared/*.js',
     ],
-    specs: [
-        // './tests/specs/**/editFsj.js',
-        './tests/specs/**/favoriteSite.js',
-    ],
+    // specs: [
+    //     './tests/specs/**/editEvent.js',
+    //     './tests/specs/**/searchSite.js',
+    // ],
 
     capabilities: [{
         browserName: "chrome",

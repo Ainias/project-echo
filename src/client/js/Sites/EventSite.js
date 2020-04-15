@@ -30,7 +30,7 @@ export class EventSite extends FooterSite {
         }
 
         let id = constructParameters["id"];
-        console.log("id", id);
+
 
         if (typeof id === "string" && id.startsWith("r")) {
             let parts = id.split("-");
@@ -40,7 +40,8 @@ export class EventSite extends FooterSite {
                 this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, new Date(parts[1], parts[2] - 1, parts[3]))
             }
         } else {
-            this._event = await Event.findById(constructParameters["id"], Event.getRelations());
+            let relations = Event.getRelations();
+            this._event = await Event.findById(constructParameters["id"], relations);
         }
 
         if (!this._event) {

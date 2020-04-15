@@ -6,7 +6,7 @@ import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/
 import {Helper} from "js-helper/dist/shared/Helper";
 import {JsonHelper} from "js-helper/dist/shared/JsonHelper";
 import {BaseModel} from "cordova-sites-database/dist/BaseModel";
-import { FileMedium } from "cordova-sites-easy-sync/dist/shared";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 
 export class Event extends AccessEasySyncModel {
     private names: {};
@@ -46,10 +46,11 @@ export class Event extends AccessEasySyncModel {
         this.isTemplate = false;
     }
 
-    static getRelations(){
+    static getRelations() {
         let relations = super.getRelations();
         relations.push("repeatedEvent.originalEvent");
         relations.push("repeatedEvent.originalEvent.images");
+        relations.push("repeatedEvent.originalEvent.organisers");
         return relations;
     }
 
@@ -99,11 +100,34 @@ export class Event extends AccessEasySyncModel {
         if (Helper.isNull(where)) {
             where = {};
         }
-        if (!Helper.isSet(where, "isTemplate") && typeof document === "object") {
-            where["isTemplate"] = false;
+        if (!Array.isArray(where)) {
+            where = [where];
         }
 
-        return this._database.findEntities(this, where, order, limit, offset, relations);
+        //Android saves boolean as strings (why ever?!?), so copy every condition and "or" them with both, string and boolean
+        let newWheres = [];
+        where.forEach(orCondition => {
+            //Check first, if it is client only. On server load all non-deleted for syncing purpose
+            if (!Helper.isSet(orCondition, "isTemplate") && typeof document === "object") {
+                orCondition["isTemplate"] = false;
+            }
+            else if (orCondition["isTemplate"] === "false"){
+                orCondition["isTemplate"] = false;
+            }
+            else if (orCondition["isTemplate"] === "true"){
+                orCondition["isTemplate"] = true;
+            }
+
+            newWheres.push(orCondition);
+
+            let newCondition = {};
+            Object.keys(orCondition).forEach(key => newCondition[key] = orCondition[key]);
+            newCondition["isTemplate"] = (newCondition["isTemplate"]?"true":"false");
+
+            newWheres.push(newCondition)
+        });
+
+        return this._database.findEntities(this, newWheres, order, limit, offset, relations);
     }
 
     static async findAndCount(where?, order?, limit?, offset?, relations?) {

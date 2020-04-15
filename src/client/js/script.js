@@ -76,6 +76,8 @@ App.addInitialization(async (app) => {
         StatusBar.overlaysWebView(true);
         StatusBar.backgroundColorByHexString('#33000000');
     }
+
+    window["missingTranslations"] = {};
     Translator.init({
         translations: {
             "de": translationGerman,
@@ -84,7 +86,13 @@ App.addInitialization(async (app) => {
         fallbackLanguage: "de",
         // markTranslations: true,
         markUntranslatedTranslations: true,
-        logMissingTranslations: true,
+        logMissingTranslations: (key, language) => {
+            window["missingTranslations"][language] = Helper.nonNull(window["missingTranslations"][language], []);
+            window["missingTranslations"][language].push(key);
+            if (window["shouldConsoleMissingTranslation"] !== false){
+                console.error("missing translation for language "+language+ " and key "+key);
+            }
+        },
     });
 
     //Setting Title

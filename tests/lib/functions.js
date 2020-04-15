@@ -15,7 +15,7 @@ async function login(email, password) {
     await $("input[name=email]").setValue(email);
     await $("input[name=password]").setValue(password);
     await $("button=Login").click();
-    await browser.pause(2000);
+    await browser.pause(3000);
 }
 
 async function logout() {
@@ -146,16 +146,18 @@ async function getBaseUrl() {
 }
 
 async function acceptAlert() {
-    try {
-        await pause(1500);
-        await browser.acceptAlert();
-        await pause(500);
-        // await browser.acceptAlert();
-        // await pause(500);
-    } catch (e) {
-        if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")) {
-            expect(e.message).toEqual("error message");
-            throw e;
+    if (browser.config.hasAlertDialogs !== false) {
+        try {
+            await pause(1500);
+            await browser.acceptAlert();
+            await pause(500);
+            // await browser.acceptAlert();
+            // await pause(500);
+        } catch (e) {
+            if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")) {
+                expect(e.message).toEqual("error message");
+                throw e;
+            }
         }
     }
 }
@@ -168,6 +170,30 @@ async function compareFiles(originalPath, expectedPath) {
 
     let fileData = await Promise.all(filePromises);
     expect(fileData[0]).toEqual(fileData[1]);
+}
+
+async function deactivateTranslationLogging() {
+    await browser.execute(() => {
+        window["shouldConsoleMissingTranslation"] = false;
+    });
+}
+
+async function logErrors() {
+    await browser.execute(() => {
+        window["loggedErrors"] = [];
+        window.addEventListener("error", event => {
+            window["loggedErrors"].push(event.message);
+        }, true);
+        window.onunhandledrejection = (e) => {
+            window["loggedErrors"].push(e.reason);
+        }
+    });
+}
+
+async function getLoggedErrors() {
+    return await browser.execute(() => {
+        return window["loggedErrors"];
+    });
 }
 
 module.exports = {
@@ -183,4 +209,7 @@ module.exports = {
     acceptAlert: acceptAlert,
     acceptCookies: acceptCookies,
     compareFiles: compareFiles,
+    deactivateTranslationLogging: deactivateTranslationLogging,
+    logErrors: logErrors,
+    getLoggedErrors: getLoggedErrors,
 };

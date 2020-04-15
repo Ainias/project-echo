@@ -44,7 +44,8 @@ export class EventHelper {
         }
         let repeatedEventQueryBuilder = queryBuilder.clone();
 
-        queryBuilder = queryBuilder.andWhere("Event.isTemplate = 0");
+        // isTemplate = 'false' is needed for android & iOS
+        queryBuilder = queryBuilder.andWhere("(Event.isTemplate = 0 or Event.isTemplate = 'false')");
         if (Helper.isNotNull(beginTime) && beginTime.trim() !== "") {
             queryBuilder = queryBuilder.andWhere("Event.endTime >= :beginTime", {beginTime: beginTime});
         }
@@ -55,7 +56,8 @@ export class EventHelper {
 
         let eventPromise = queryBuilder.getMany();
 
-        repeatedEventQueryBuilder = repeatedEventQueryBuilder.andWhere("Event.isTemplate = 1");
+        // isTemplate = 'true' is needed for android & iOS
+        repeatedEventQueryBuilder = repeatedEventQueryBuilder.andWhere("(Event.isTemplate = 1 OR Event.isTemplate = 'true')");
         if (Helper.isNotNull(beginTime) && beginTime.trim() !== "") {
             repeatedEventQueryBuilder = repeatedEventQueryBuilder.andWhere("(repeatedEvent.repeatUntil >= :beginTime OR repeatedEvent.repeatUntil IS NULL)", {beginTime: beginTime});
         }
@@ -158,14 +160,15 @@ export class EventHelper {
 
         Translator.getInstance().addDynamicTranslations(event.getDynamicTranslations());
 
-        let timeToNotify = new Date();
-
         let startTime = await event.getStartTime();
+
+        //IF event started already, cancel notification
         let now = new Date();
-        if (startTime.getTime() > now.getTime()){
+        if (startTime.getTime() < now.getTime()){
             return;
         }
 
+        let timeToNotify = new Date();
         timeToNotify.setTime(startTime.getTime() - (parseInt(timeInfos[1]) * parseInt(timeInfos[2]) * 1000));
 
         let timeFormat = "";
