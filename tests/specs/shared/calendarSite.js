@@ -4,7 +4,6 @@ const $$ = find.multiple;
 const functions = require("../../lib/functions.js");
 
 describe("calendar site", () => {
-    // jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;
     beforeAll(async () => {
@@ -13,6 +12,8 @@ describe("calendar site", () => {
         } else {
             baseUrl = await browser.getUrl();
         }
+
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 90 * 1000*browser.config.delayFactor;
 
         browser.setTimeout({
             implicit: 5000

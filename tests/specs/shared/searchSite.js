@@ -4,10 +4,11 @@ const $$ = find.multiple;
 const functions = require("../../lib/functions.js");
 
 describe("search site", () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 90 * 1000 * browser.config.delayFactor;
 
     let baseUrl = null;
     beforeAll(async () => {
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 90 * 1000 * browser.config.delayFactor;
+
         if (browser.config.baseUrl.trim() !== "") {
             baseUrl = browser.config.baseUrl;
         } else {
@@ -143,7 +144,7 @@ describe("search site", () => {
     });
 
     it("search via url", async function () {
-        await browser.url(baseUrl+"?q=Ter&types=konzert%2Chauskreis&churches=2&s=search");
+        await browser.url(baseUrl+"?q=Ter&types=konzert%2Chauskreis&churches=2&s=search&start=2019-05-26");
         await functions.deactivateTranslationLogging();
         await functions.logErrors();
 
@@ -155,7 +156,7 @@ describe("search site", () => {
                     if (arguments.length === 0) {
                         super(year, month - 1, date, hour, minute, second);
                     } else {
-                        super(...arguments)
+                        super(...arguments);
                     }
                 }
             }
@@ -165,7 +166,7 @@ describe("search site", () => {
 
         await browser.waitUntil(async () => {
             let element = $("#main-content");
-            return await element.isDisplayed()
+            return await element.isDisplayed();
         });
 
         expect(await $(".name=Termin later").isExisting()).toBeFalsy();

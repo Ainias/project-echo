@@ -196,6 +196,31 @@ async function getLoggedErrors() {
     });
 }
 
+async function asyncExecute(func, ...args){
+    // console.log(func+"");
+
+    let index = await browser.execute((funcString, args) => {
+        let func = eval(funcString);
+        let res = func(...args);
+        if (!window["testValIndex"]){
+            window["testValIndex"] = 0;
+        }
+        window["testValIndex"]++;
+        let index = window["testValIndex"];
+        Promise.resolve(res).then(r => window["test-res-"+index] = r);
+        return index;
+        // return args;
+    }, func+"", args);
+
+    // console.log(index);
+
+    //
+    await pause(1000);
+    return await browser.execute((i) => window["test-res-"+i], index);
+    // return index;
+}
+
+
 module.exports = {
     login: login,
     logout: logout,
@@ -212,4 +237,5 @@ module.exports = {
     deactivateTranslationLogging: deactivateTranslationLogging,
     logErrors: logErrors,
     getLoggedErrors: getLoggedErrors,
+    asyncExecute: asyncExecute,
 };

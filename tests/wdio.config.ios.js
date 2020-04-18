@@ -9,11 +9,14 @@ exports.config = {
      ],
     specs: [
        './tests/specs/**/settingsSite.js',
+       // './tests/specs/**/searchSite.js',
     ],
 
-    delayFactor: 3,
+    delayFactor: 6,
 
     isMobile: true,
+
+    calendarName: "echo",
 
     runner: "local",
 

@@ -4,7 +4,7 @@ const $$ = find.multiple;
 const functions = require("../../lib/functions");
 
 describe("settingsSite", () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000*browser.config.delayFactor;
 
     let baseUrl = null;
     beforeAll(async () => {
@@ -48,20 +48,42 @@ describe("settingsSite", () => {
     });
 
     it("calendar selection", async function () {
-        expect(await $("#system-calendar").getText()).toEqual("silas@silas.link");
+        await functions.acceptAlert();
+        expect(await $("#system-calendar").getText()).toEqual(browser.config.calendarName || "silas@silas.link");
         await $("#system-calendar").click();
 
-        await $$("[data-value]").get(4).click();
+        await browser.execute(() => {
+            window.plugins.calendar.listCalendars(options => {
+                window["test-calendarOptions"] = options;
+            });
+        });
+
+        await $("[data-value]=echo").click();
         await browser.pause(1000);
         expect(await $("#system-calendar").getText()).toEqual("echo");
 
-        let key = await browser.execute(() => {
-            return new Promise((r, rej) => NativeStorage.getItem("functional_system-calendar-id", r, r));
+        await browser.execute(async function() {
+            // NativeStorage.getItem("functional_system-calendar-id", done, done);
+            let res = await new Promise(r => NativeStorage.getItem("functional_system-calendar-id", r, r));
+            window["test-selectedCalendar"] = res;
         });
-        expect(key).toEqual("8");
+        await functions.pause(200);
+
+        let id = await browser.execute(() => {
+            return window["test-selectedCalendar"];
+        });
+        let options = await browser.execute(() => {
+            return window["test-calendarOptions"];
+        });
+
+        let selected = options.filter(o => o.id === id);
+
+        expect(selected[0].name).toEqual("echo");
     });
 
-    it("deactivate notifications", async function () {
+    fit("deactivate notifications", async function () {
+        await functions.acceptAlert();
+        await functions.pause(5000);
         await browser.execute(async () => {
             window["notifications"] = {};
             cordova.plugins.notification.local.schedule = (options, callback) => {
@@ -84,14 +106,13 @@ describe("settingsSite", () => {
                         title: "title",
                         text: "text",
                         trigger: {at: new Date(2020, 5, 26)}
-                    }, resolve);
-                }));
+                    }, resolve);                }));
             });
 
             await Promise.all(promises);
         });
 
-        await functions.acceptAlert();
+        await functions.pause(5000);
 
         // await browser.debug();
 
@@ -103,7 +124,7 @@ describe("settingsSite", () => {
 
         expect(await $("#time-before-setting-row").isDisplayed()).toBeFalsy();
 
-        let val = await browser.execute(() => {
+        let val = await functions.asyncExecute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
         expect(val).toEqual("0");
@@ -118,12 +139,12 @@ describe("settingsSite", () => {
 
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
-        let val3 = await browser.execute(() => {
+        let val3 = await functions.asyncExecute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
         expect(val3).toEqual("1");
 
-        await browser.pause(1000);
+        await functions.pause(1000);
         let val4 = await browser.execute(() => {
             return window["notifications"];
         });

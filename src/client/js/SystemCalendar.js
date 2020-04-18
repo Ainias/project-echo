@@ -63,7 +63,7 @@ export class SystemCalendar {
             if (device.platform === "browser") {
                 return resolve([]);
             }
-            window.plugins.calendar.listCalendars(resolve, reject)
+            window.plugins.calendar.listCalendars(resolve, reject);
         });
     }
 
