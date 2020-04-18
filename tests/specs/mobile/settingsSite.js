@@ -81,7 +81,7 @@ describe("settingsSite", () => {
         expect(selected[0].name).toEqual("echo");
     });
 
-    fit("deactivate notifications", async function () {
+    it("deactivate notifications", async function () {
         await functions.acceptAlert();
         await functions.pause(5000);
         await browser.execute(async () => {

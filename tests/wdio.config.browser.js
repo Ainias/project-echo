@@ -61,10 +61,12 @@ exports.config = {
         './tests/specs/web/*.js',
         './tests/specs/shared/*.js',
     ],
-    // specs: [
-    //     './tests/specs/**/editEvent.js',
-    //     './tests/specs/**/searchSite.js',
-    // ],
+    specs: [
+        './tests/specs/**/editChurch',
+        './tests/specs/**/favoriteSite2js',
+        './tests/specs/**/favoriteSite2.js',
+        './tests/specs/**/searchSite.js',
+    ],
 
     capabilities: [{
         browserName: "chrome",
