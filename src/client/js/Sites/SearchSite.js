@@ -120,10 +120,10 @@ export class SearchSite extends FooterSite {
         ViewHelper.removeAllChildren(this._filterOrganiserContainer);
 
         Object.values(Event.TYPES).forEach(type => {
-            let translation = Translator.translate(type).toLowerCase();
+            // let translation = Translator.translate(type).toLowerCase();
 
-            //TODO überprüfen, warum true ||
-            if (true || translation.indexOf(value.toLowerCase()) !== -1 || this._types.indexOf(type) !== -1) {
+            //IF sorgt dafür, dass nur Tags angezeigt werden, die mit searchString anfangen
+            // if (translation.indexOf(value.toLowerCase()) !== -1 || this._types.indexOf(type) !== -1) {
                 let tag = this._filterTagTemplate.cloneNode(true);
                 tag.appendChild(Translator.makePersistentTranslation(type));
                 tag.dataset["type"] = type;
@@ -142,15 +142,16 @@ export class SearchSite extends FooterSite {
                     }
                 });
                 this._filterEventContainer.appendChild(tag);
-            }
+            // }
         });
 
         this._possibleChurches.forEach(church => {
             Translator.addDynamicTranslations(church.getDynamicTranslations());
 
-            let translation = Translator.translate(church.getNameTranslation()).toLowerCase();
+            // let translation = Translator.translate(church.getNameTranslation()).toLowerCase();
 
-            if (true || translation.indexOf(value.toLowerCase()) !== -1 || this._churches.indexOf(church.id) !== -1) {
+            //IF sorgt dafür, dass nur Churches angezeigt werden, die mit searchString anfangen
+            // if (translation.indexOf(value.toLowerCase()) !== -1 || this._churches.indexOf(church.id) !== -1) {
                 let tag = this._filterTagTemplate.cloneNode(true);
                 tag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
                 tag.dataset["churchId"] = church.id;
@@ -171,7 +172,7 @@ export class SearchSite extends FooterSite {
                 });
 
                 this._filterOrganiserContainer.appendChild(tag);
-            }
+            // }
         })
     }
 }

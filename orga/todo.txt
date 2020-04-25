@@ -1,5 +1,6 @@
-- Ordentliches Titelbild
 - Entfernung messen und angeben
-- Schriftart
-- Gemeindeübersicht rechts ganz an den rand ohne scrollbalken
-- automatisierte Tests
+- Veranstaltern folgen
+- Background-synchronizing von Terminen
+- Wichtige Termine auf der Startseite anzeigen
+- Übersetzen
+- Regionensupport

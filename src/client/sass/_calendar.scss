@@ -7,7 +7,7 @@
 #calendar {
   position: relative;
   background: $navBackgroundWhite;
-  padding-top: 5rem;
+  padding-top: 3rem;
 
   stroke: $navColorWhite;
 
@@ -138,4 +138,14 @@
       }
     }
   }
+
+  #button-filter {
+    background-image: url("../img/icons/filter512.png");
+    background-size: contain;
+
+    &.active {
+      background-image: url("../img/icons/filterInvers512.png");
+    }
+  }
+
 }

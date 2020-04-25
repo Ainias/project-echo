@@ -1,19 +1,17 @@
 import {App, Translator} from "cordova-sites"
-import {Event} from "../../../shared/model/Event";
 import view from "../../html/Sites/calendarSite.html";
 import {FooterSite} from "./FooterSite";
-import {IsNull, LessThan} from "typeorm";
-import {MoreThanOrEqual} from "typeorm";
-import {EventSite} from "./EventSite";
 import {Scaler} from "../Scaler";
 import {Favorite} from "../Model/Favorite";
 import {DragHelper} from "../Helper/DragHelper";
 import {DateHelper} from "../Helper/DateHelper";
 import {ViewHelper} from "js-helper/dist/client";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
-import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
 import {Helper} from "js-helper"
 import {EventHelper} from "../Helper/EventHelper";
+import {FilterDialog} from "../Dialoges/FilterDialog";
+import {MenuAction} from "cordova-sites/dist/client/js/Context/Menu/MenuAction/MenuAction";
+import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 export class CalendarSite extends FooterSite {
 
@@ -22,6 +20,8 @@ export class CalendarSite extends FooterSite {
         this._date = new Date();
         this._footerFragment.setSelected(".icon.calendar");
         this._favourites = {};
+
+        this._filter = {};
 
         this._eventListFragment = new EventOverviewFragment(this);
         this._eventListFragment.setShowInPast(false);
@@ -39,6 +39,13 @@ export class CalendarSite extends FooterSite {
         favorites.forEach(fav => {
             this._favourites[fav.eventId] = true;
         });
+
+        if (Helper.isSet(constructParameters, "filter")) {
+            this._filter = constructParameters["filter"];
+        } else {
+            this._filter = await NativeStoragePromise.getItem("calendar-filter", {});
+        }
+
         return res;
     }
 
@@ -60,6 +67,30 @@ export class CalendarSite extends FooterSite {
             DateHelper.setMonth(this._date.getMonth() + 1, this._date);
             this.drawMonth(this._date);
         });
+
+        let filterButton = this.findBy("#button-filter");
+        filterButton.addEventListener("click", async () => {
+            let res = await new FilterDialog(this._filter.types, this._filter.churches).show();
+            if (Helper.isNotNull(res)) {
+                this._filter = res;
+            } else {
+                this._filter = {};
+            }
+
+            if (this._filter.types && this._filter.types.length > 0 || this._filter.churches && this._filter.churches.length > 0) {
+                filterButton.classList.add("active");
+            }
+            else {
+                filterButton.classList.remove("active");
+            }
+
+            await this.drawMonth(this._date);
+            await NativeStoragePromise.setItem("calendar-filter", this._filter);
+        });
+
+        if (this._filter.types && this._filter.types.length > 0 || this._filter.churches && this._filter.churches.length > 0) {
+            filterButton.classList.add("active");
+        }
 
         await DragHelper.makeDragToShow(this._eventOverviewContainer, (from) => {
             let maxTop = parseFloat(this._eventOverviewContainer.dataset["originalTop"]);
@@ -94,33 +125,7 @@ export class CalendarSite extends FooterSite {
         let firstDayOfNextMonth = new Date(firstDay);
         firstDayOfNextMonth.setMonth(firstDayOfNextMonth.getMonth() + 1);
 
-        //TODO filter nach region
-        let loadedEventsPromise = Event.find({
-            startTime: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
-            endTime: MoreThanOrEqual(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDay))
-        }, null, null, null, ["repeatedEvent", "repeatedEvent.originalEvent", "repeatedEvent.originalEvent.images"]);
-
-        let repeatedEvents = await RepeatedEvent.find([{
-            startDate: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
-            repeatUntil: MoreThanOrEqual(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDay)),
-        }, {
-            startDate: LessThan(DateHelper.strftime("%Y-%m-%d %H:%M:%S", firstDayOfNextMonth)),
-            repeatUntil: IsNull(),
-        }], null, null, null, RepeatedEvent.getRelations());
-
-        let lastDayOfMonth = new Date(firstDayOfNextMonth.getTime());
-        lastDayOfMonth.setDate(lastDayOfMonth.getDate() - 1);
-
-        let createdEvents = await Helper.asyncForEach(repeatedEvents, repeatedEvent => {
-            return EventHelper.generateEventFromRepeatedEvent(repeatedEvent, firstDay, lastDayOfMonth);
-        }, true);
-
-        let events = await loadedEventsPromise;
-        createdEvents.forEach(generatedEvents => {
-            events.push(...generatedEvents);
-        });
-
-        return events;
+        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d", firstDayOfNextMonth), this._filter.types, this._filter.churches);
     }
 
     async onStart(pauseArguments) {

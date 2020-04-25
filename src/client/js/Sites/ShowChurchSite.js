@@ -5,6 +5,7 @@ import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";
 import {ModifyChurchSite} from "./ModifyChurchSite";
+import {CalendarSite} from "./CalendarSite";
 
 export class ShowChurchSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {
@@ -74,7 +75,6 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
             placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject)?this._church.places[place]: place));
         });
 
-
         UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
             if (loggedIn && manager.hasAccess(Church.ACCESS_MODIFY)) {
                 this.findBy(".admin-panel").classList.remove("hidden");
@@ -98,6 +98,11 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
             }
         });
 
+        this.findBy("#view-calendar").addEventListener("click", () => {
+            this.startSite(CalendarSite, {
+                "filter": {"churches": [this._church.id]}
+            });
+        })
 
         return res;
     }
