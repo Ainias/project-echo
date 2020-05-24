@@ -2,13 +2,10 @@ import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
 import {App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction} from "cordova-sites";
 import {Helper} from "js-helper/dist/shared"
-import {EasySyncClientDb, SetupEasySync1000000000500, SyncJob} from "cordova-sites-easy-sync/dist/client";
+import {EasySyncClientDb, SetupEasySync1000000000500} from "cordova-sites-easy-sync/dist/client";
 
 import {WelcomeSite} from "./Sites/WelcomeSite";
 
-import {Event} from "../../shared/model/Event";
-import {Church} from "../../shared/model/Church";
-import {Region} from "../../shared/model/Region";
 import "./Model/Favorite"
 
 import {BaseDatabase} from "cordova-sites-database";
@@ -28,21 +25,16 @@ import "cordova-sites/dist/client/js/translationInit"
 import logo from "../img/logo.png";
 
 import {ModifyPostSite} from "./Sites/ModifyPostSite";
-import {Post} from "../../shared/model/Post";
 import {SetupSchema1000000000000} from "../../shared/model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/dist/shared/migrations/SetupUserManagement"
 import {SetupFavorite1000000000001} from "../../shared/model/migrations/client/SetupFavorite";
 import {FsjSchema1000000006000} from "../../shared/model/migrations/FsjSchema";
-import {Fsj} from "../../shared/model/Fsj";
 import {ModifyFsjSite} from "./Sites/ModifyFsjSite";
 import {ListFsjsSite} from "./Sites/ListFsjsSite";
 import {SystemCalendar} from "./SystemCalendar";
 import {FavoriteWithSystemCalendar1000000000002} from "../../shared/model/migrations/client/FavoriteWithSystemCalendar";
 import {SettingsSite} from "./Sites/SettingsSite";
-import {RepeatedEvent} from "../../shared/model/RepeatedEvent";
 import {AddRepeatedEvent1000000007000} from "../../shared/model/migrations/AddRepeatedEvent";
-import {BlockedDay} from "../../shared/model/BlockedDay";
-import {EventHelper} from "./Helper/EventHelper";
 import {FavoriteWithoutEventRelation1000000008000} from "../../shared/model/migrations/client/FavoriteWithoutEventRelation";
 import {ClearDatabaseJob} from "./ClearDatabase/ClearDatabaseJob";
 import {CookieConsentHelper} from "./CookieConsent/CookieConsentHelper";
@@ -54,11 +46,12 @@ import {ContactSite} from "./Sites/ContactSite";
 import * as typeorm from "typeorm";
 import {AboutUsSite} from "./Sites/AboutUsSite";
 
+import {Sync} from "./Sync";
+
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
 
 
-// BaseModel._databaseClass = EasySyncClientDb;
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 
 LoginSite.ADD_LOGIN_ACTION = false;
@@ -67,6 +60,10 @@ RegistrationSite.ADD_REGISTRATION_ACTION = false;
 App.setLogo(logo);
 
 App.addInitialization(async (app) => {
+
+    let obj = await NativeStoragePromise.getItem("background-counter-obj", []);
+    console.log("background obj: ", obj);
+    // await NativeStoragePromise.setItem("background-counter-obj", []);
 
     //add Bibelvers to html
     let vers = bibelverse[Math.floor(Math.random() * (bibelverse.length))];
@@ -138,16 +135,7 @@ App.addInitialization(async (app) => {
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
     // await SystemCalendar.createCalendar("echo");
 
-    //Todo an richtige stelle auslagern
-    let syncJob = new SyncJob();
-    await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium]).catch(e => console.error(e));
-    syncJob.getSyncPromise().then(async res => {
-        console.log("synched!", res);
-        await EventHelper.updateFavorites(res["BlockedDay"]);
-        await EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);
-        await EventHelper.deleteNotificationsForEvents(res["Event"]["deleted"]);
-    }).catch(e => console.error(e));
-
+    await Sync.sync(false);
     UserManager.getInstance().getMe().catch(e => console.error(e));
 
     try {

@@ -83,7 +83,7 @@ export class EventHelper {
         let events = [];
         await Helper.asyncForEach(repeatUntilEvents, async event => {
             if (event.repeatedEvent) {
-                events.push.apply(events, await EventHelper.generateEventFromRepeatedEvent(event.repeatedEvent, beginTime, endTime))
+                events.push.apply(events, await EventHelper.generateEventFromRepeatedEvent(event.repeatedEvent, beginTime, endTime, false, false))
             }
         });
         events.push.apply(events, await eventPromise);
@@ -164,7 +164,7 @@ export class EventHelper {
 
         //IF event started already, cancel notification
         let now = new Date();
-        if (startTime.getTime() < now.getTime()){
+        if (startTime.getTime() < now.getTime()) {
             return;
         }
 
@@ -196,8 +196,9 @@ export class EventHelper {
         }
     }
 
-    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents) {
+    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents, ignoreTime) {
         addDatabaseEvents = Helper.nonNull(addDatabaseEvents, false);
+        ignoreTime = Helper.nonNull(ignoreTime, true);
 
         if (repeatedEvent.repeatingStrategy !== 0) {
             return [];
@@ -211,7 +212,9 @@ export class EventHelper {
         to = new Date(to.getTime());
 
         from.setHours(0);
-        to.setHours(23);
+        if (ignoreTime) {
+            to.setHours(23);
+        }
 
         let between = new Date(from.getTime());
 
@@ -240,7 +243,7 @@ export class EventHelper {
         let duration = repeatedEvent.getEndTime().getTime() - repeatedEvent.getStartTime().getTime();
 
         let events = [];
-        while (from.getTime() < to.getTime()) {
+        while (from.getTime() < to.getTime() && (ignoreTime || between.getTime() <= to.getTime())) {
 
             let today = DateHelper.strftime("%Y-%m-%d", from);
 

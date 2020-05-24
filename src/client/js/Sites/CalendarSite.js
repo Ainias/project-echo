@@ -10,7 +10,6 @@ import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {Helper} from "js-helper"
 import {EventHelper} from "../Helper/EventHelper";
 import {FilterDialog} from "../Dialoges/FilterDialog";
-import {MenuAction} from "cordova-sites/dist/client/js/Context/Menu/MenuAction/MenuAction";
 import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 export class CalendarSite extends FooterSite {
@@ -41,7 +40,12 @@ export class CalendarSite extends FooterSite {
         });
 
         if (Helper.isSet(constructParameters, "filter")) {
-            this._filter = constructParameters["filter"];
+            if (typeof constructParameters["filter"] === "string") {
+                this._filter = JSON.parse(constructParameters["filter"]);
+            }
+            else {
+                this._filter = constructParameters["filter"];
+            }
         } else {
             this._filter = await NativeStoragePromise.getItem("calendar-filter", {});
         }
@@ -79,10 +83,11 @@ export class CalendarSite extends FooterSite {
 
             if (this._filter.types && this._filter.types.length > 0 || this._filter.churches && this._filter.churches.length > 0) {
                 filterButton.classList.add("active");
-            }
-            else {
+            } else {
                 filterButton.classList.remove("active");
             }
+
+            this.setParameter("filter", JSON.stringify(this._filter));
 
             await this.drawMonth(this._date);
             await NativeStoragePromise.setItem("calendar-filter", this._filter);
@@ -122,10 +127,11 @@ export class CalendarSite extends FooterSite {
         firstDay.setSeconds(0);
         firstDay.setMilliseconds(0);
 
-        let firstDayOfNextMonth = new Date(firstDay);
-        firstDayOfNextMonth.setMonth(firstDayOfNextMonth.getMonth() + 1);
+        let lastDay = new Date(firstDay);
+        lastDay.setMonth(lastDay.getMonth() + 1);
+        lastDay.setSeconds(-1);
 
-        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d", firstDayOfNextMonth), this._filter.types, this._filter.churches);
+        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d", lastDay), this._filter.types, this._filter.churches);
     }
 
     async onStart(pauseArguments) {
@@ -141,7 +147,6 @@ export class CalendarSite extends FooterSite {
         const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         let actualDayOfMonth = date.getDate();
-
         let events = await this.loadEventsForMonth(date);
 
         date = new Date(Helper.nonNull(date, new Date()));

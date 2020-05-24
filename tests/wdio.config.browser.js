@@ -58,15 +58,17 @@ exports.config = {
 
     // Where the files we are testing can be found.
     specs: [
-        './tests/specs/web/*.js',
         './tests/specs/shared/*.js',
+        // './tests/specs/web/*.js',
     ],
-    specs: [
-        './tests/specs/**/editChurch',
-        './tests/specs/**/favoriteSite2js',
-        './tests/specs/**/favoriteSite2.js',
-        './tests/specs/**/searchSite.js',
-    ],
+    // specs: [
+        // './tests/specs/**/editChurch.js',
+        // './tests/specs/**/editEvent.js',
+        // './tests/specs/**/editFsj.js',
+        // './tests/specs/**/calendarSite.js',
+        // './tests/specs/**/churchSite.js',
+        // './tests/specs/**/calendarSite.js',
+    // ],
 
     capabilities: [{
         browserName: "chrome",

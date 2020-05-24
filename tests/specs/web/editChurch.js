@@ -142,6 +142,7 @@ describe("edit church", () => {
             "place-name-1":"Köln bearbeitet"
         });
 
+        await functions.pause(1000);
         await $("button.button=Speichern").click();
 
         await functions.pause(2500);

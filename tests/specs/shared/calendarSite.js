@@ -74,29 +74,6 @@ describe("calendar site", () => {
         expect(await $(".name=Termin 5.2").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.3").isDisplayed()).toBeFalsy();
         expect(await $(".name=Termin 5.4").isDisplayed()).toBeFalsy();
-        // await functions.pause(20000);
-        // expect(await $(".place-container=place 1").isDisplayed()).toBeTruthy();
-
-        // let dragElem = await $("#event-overview-container").getPromise();
-        // await dragElem.dragAndDrop(await $("#month-name").getPromise(), 500);
-        // await functions.pause(15000);
-
-        // expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
-        // expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
-        // expect(await $(".name=Termin 5.2").isDisplayed()).toBeTruthy();
-        // expect(await $(".name=Termin 5.3").isDisplayed()).toBeTruthy();
-        // expect(await $(".name=Termin 5.4").isDisplayed()).toBeTruthy();
-
-        // dragElem = await $(".name=Termin 5").getPromise();
-        // await dragElem.dragAndDrop(await $(".day.cell.active").getPromise(), 1000);
-        // await functions.pause(500);
-
-        // expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
-        // expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
-        // expect(await $(".name=Termin 5.2").isDisplayed()).toBeFalsy();
-        // expect(await $(".name=Termin 5.3").isDisplayed()).toBeFalsy();
-        // expect(await $(".name=Termin 5.4").isDisplayed()).toBeFalsy();
-
     });
 
     it("browse calendar", async function () {
@@ -178,4 +155,48 @@ describe("calendar site", () => {
         expect(await $(".name=Template Termin").isDisplayed()).toBeTruthy();
     });
 
+    it("filter link tests", async function () {
+        await browser.url(baseUrl+"?date=2019-06-22&filter=%7B\"types\"%3A%5B\"konzert\"%2C\"gottesdienst\"%5D%2C\"churches\"%3A%5B%5D%7D&s=calendar");
+        await functions.deactivateTranslationLogging();
+        await functions.logErrors();
+        await functions.setCurrentDate();
+
+        await functions.pause(1000);
+        expect(await $("#month-name").getText()).toEqual("JUNI 2019");
+
+        await $(".day-number=11").click();
+        expect(await $(".day.cell.active").getText()).toEqual("11");
+        expect(await $(".name=Template Termin 2").isDisplayed()).toBeTruthy();
+
+        await $(".day-number=29").click();
+        expect(await $(".day.cell.active").getText()).toEqual("29");
+        expect(await $(".name=Termin Later").isDisplayed()).toBeFalsy();
+
+    });
+
+    it("filter test", async function () {
+        await functions.pause(1000);
+        expect(await $("#month-name").getText()).toEqual("MAI 2019");
+
+        await $("#button-right").click();
+        await functions.pause(2000);
+        expect(await $("#month-name").getText()).toEqual("JUNI 2019");
+
+        await $(".day-number=29").click();
+        expect(await $(".day.cell.active").getText()).toEqual("29");
+        expect(await $(".name=Termin later").isDisplayed()).toBeTruthy();
+
+        await $("#button-filter").click();
+        await $(".filter-tag=Konzert").click();
+        await $(".filter-tag=Gottesdienst").click();
+        await $(".button=Suchen").click();
+
+        await $(".day-number=11").click();
+        expect(await $(".day.cell.active").getText()).toEqual("11");
+        expect(await $(".name=Template Termin 2").isDisplayed()).toBeTruthy();
+
+        await $(".day-number=29").click();
+        expect(await $(".day.cell.active").getText()).toEqual("29");
+        expect(await $(".name=Termin Later").isDisplayed()).toBeFalsy();
+    });
 });

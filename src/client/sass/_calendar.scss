@@ -4,6 +4,15 @@
   }
 }
 
+#filter-icon-container {
+  text-align: right;
+  span {
+    display: inline-block;
+    margin-right: 0.7rem;
+  }
+  margin-bottom: 0.4rem;
+}
+
 #calendar {
   position: relative;
   background: $navBackgroundWhite;
@@ -142,6 +151,7 @@
   #button-filter {
     background-image: url("../img/icons/filter512.png");
     background-size: contain;
+    cursor: pointer;
 
     &.active {
       background-image: url("../img/icons/filterInvers512.png");
