@@ -13,6 +13,7 @@ const ifaces = os.networkInterfaces();
 const version = require("./package.json").version;
 
 let mode = (process.env.MODE || "development");
+
 // let mode = "production";
 
 function getIp() {
@@ -38,8 +39,8 @@ let moduleExports = {
             tls: 'empty'
         },
 
-    //Development oder production, wird oben durch Variable angegeben (damit später per IF überprüft)
-    mode: mode,
+        //Development oder production, wird oben durch Variable angegeben (damit später per IF überprüft)
+        mode: mode,
 
         //Beinhaltet den JS-Startpunkt und SCSS-Startpunkt
         entry: [
@@ -138,8 +139,8 @@ let moduleExports = {
             new webpack.DefinePlugin({
                 __HOST_ADDRESS__: "'" + (process.env.HOST_URI || ((process.env.HOST || ("http://" + getIp())) + ":" + (process.env.REQUEST_PORT || process.env.PORT || "3000"))) + "'",
                 __MAPS_API_KEY__: "'" + process.env.GOOGLE_MAPS_API_KEY + "'",
-                __VERSION__: "'"+version+"'",
-                __CONTACT_EMAIL__: "'"+process.env.CONTACT_EMAIL+"'",
+                __VERSION__: "'" + version + "'",
+                __CONTACT_EMAIL__: "'" + process.env.CONTACT_EMAIL + "'",
             })
         ],
 
@@ -218,7 +219,7 @@ let moduleExports = {
             ]
         }
     }
-;
+
 
 //Auslagerung von zeitintensiven Sachen in production only, damit Debugging schneller geht
 if (mode === "production") {

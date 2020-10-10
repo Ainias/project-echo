@@ -10,6 +10,9 @@ import {Toast} from "cordova-sites/dist/client/js/Toast/Toast";
 import {ModifyPostSite} from "./ModifyPostSite";
 import {DateHelper} from "js-helper";
 import {ViewHelper} from "js-helper/dist/client/ViewHelper";
+import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
+import {Favorite} from "../Model/Favorite";
+import {EventHelper} from "../Helper/EventHelper";
 
 export class WelcomeSite extends AbsoluteBarMenuSite {
 
@@ -18,6 +21,9 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         this._navbarFragment.setCanGoBack(false);
         this._footerFragment.setSelected(".icon.home");
         this._navbarFragment.setBackgroundImage(componentImg);
+
+        this._eventListFragment = new EventOverviewFragment(this);
+        this.addFragment("#favorite-list", this._eventListFragment);
     }
 
     async onViewLoaded() {
@@ -64,6 +70,34 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         this._checkRightsPanel();
         Translator.getInstance().updateTranslations(this._postContainer);
 
+
+        //Load events of next Week
+        let now = new Date();
+
+        let inOneWeek = new Date();
+        inOneWeek.setDate(now.getDate()+7);
+        inOneWeek.setHours(0);
+        inOneWeek.setMinutes(0);
+        inOneWeek.setSeconds(0);
+        inOneWeek.setMilliseconds(0);
+        // inOneWeek.setSeconds(-1);
+
+        let events = await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", now), DateHelper.strftime("%Y-%m-%d", inOneWeek));
+
+        //TODO show favorites instead of next Events?
+
+        // let favorites = await Favorite.find({
+        //     isFavorite: true,
+        // }, undefined, undefined, undefined);
+        // let events = await Favorite.getEvents(favorites);
+        //
+        // let now = new Date().getTime();
+        //
+        // const SHOW_MAX_FAVORITES = 5;
+        // events = events.filter(e => e.getEndTime().getTime() > now).sort((a,b) => a.getStartTime() - b.getStartTime())
+        //     .filter((e,i) => i < SHOW_MAX_FAVORITES);
+
+        this._eventListFragment.setEvents(events);
     }
 
     _checkRightsPanel() {

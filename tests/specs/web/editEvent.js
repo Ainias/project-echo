@@ -44,8 +44,8 @@ describe("edit event", () => {
 
         let editors = $$(".ck.ck-content");
 
-        await editors.get(0).setValue("Meine Beschreibung");
-        await editors.get(1).setValue("Meine Beschreibung");
+        await editors.get(0).setValue(" Meine Beschreibung");
+        await editors.get(1).setValue(" Meine Beschreibung");
 
         await functions.setFormValues({
             "name-de": "Neues Event",
@@ -123,8 +123,8 @@ describe("edit event", () => {
 
         let editors = $$(".ck.ck-content");
 
-        await editors.get(0).setValue("Meine Beschreibung");
-        await editors.get(1).setValue("Meine Beschreibung");
+        await editors.get(0).setValue(" Meine Beschreibung");
+        await editors.get(1).setValue(" Meine Beschreibung");
 
         await functions.setFormValues({
             "name-de": "Neues wiederholendes Event",
@@ -240,8 +240,8 @@ describe("edit event", () => {
             "church-2": "2",
         });
 
-        await editors.get(0).setValue("Meine bearbeitete Beschreibung");
-        await editors.get(1).setValue("Meine english Beschreibung");
+        await editors.get(0).setValue(" Meine bearbeitete Beschreibung");
+        await editors.get(1).setValue(" Meine english Beschreibung");
 
         await functions.setFormValues({
             "name-de": "Bearbeiteter Termin",
@@ -328,8 +328,8 @@ describe("edit event", () => {
             "church-2": "2",
         });
 
-        await editors.get(0).setValue("Meine bearbeitete Beschreibung wiederholend");
-        await editors.get(1).setValue("Meine english Beschreibung wiederholend");
+        await editors.get(0).setValue(" Meine bearbeitete Beschreibung wiederholend");
+        await editors.get(1).setValue(" Meine english Beschreibung wiederholend");
 
         await functions.setFormValues({
             "name-de": "Bearbeiteter Termin wiederholend",
@@ -428,8 +428,8 @@ describe("edit event", () => {
             "church-2": "2",
         });
 
-        await editors.get(0).setValue("Meine bearbeitete Beschreibung wiederholend");
-        await editors.get(1).setValue("Meine english Beschreibung wiederholend");
+        await editors.get(0).setValue(" Meine bearbeitete Beschreibung wiederholend");
+        await editors.get(1).setValue(" Meine english Beschreibung wiederholend");
 
         await functions.setFormValues({
             "name-de": "Bearbeiteter Termin wiederholend single",
@@ -558,5 +558,4 @@ describe("edit event", () => {
         expect(data["day"].getTime()).toEqual(new Date(2019, 5, 26, 12).getTime());
         expect(data["eventId"]).toBeNull();
     });
-
 });

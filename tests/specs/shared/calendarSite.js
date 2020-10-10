@@ -70,10 +70,10 @@ describe("calendar site", () => {
         expect(await $(".day.cell.active").getText()).toEqual("29");
 
         expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
-        expect(await $(".name=Termin 5.1").isDisplayed()).toEqual(!browser.config.isMobile);
-        expect(await $(".name=Termin 5.2").isDisplayed()).toBeFalsy();
-        expect(await $(".name=Termin 5.3").isDisplayed()).toBeFalsy();
-        expect(await $(".name=Termin 5.4").isDisplayed()).toBeFalsy();
+        expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
+        expect(await $(".name=Termin 5.2").isDisplayed()).toBeTrue();
+        expect(await $(".name=Termin 5.3").isDisplayed()).toBeTrue();
+        expect(await $(".name=Termin 5.4").isDisplayed()).toBeTrue();
     });
 
     it("browse calendar", async function () {

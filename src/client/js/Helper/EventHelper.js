@@ -10,7 +10,6 @@ import {DateHelper} from "js-helper";
 
 export class EventHelper {
     static async search(searchString, beginTime, endTime, types, organisers, regions) {
-
         let queryBuilder = await EasySyncClientDb.getInstance().createQueryBuilder(Event);
         queryBuilder = queryBuilder.leftJoinAndSelect("Event.repeatedEvent", "repeatedEvent");
         queryBuilder = queryBuilder.leftJoinAndSelect("repeatedEvent.originalEvent", "originalEvent");
@@ -51,7 +50,7 @@ export class EventHelper {
         }
 
         if (Helper.isNotNull(endTime) && endTime.trim() !== "") {
-            queryBuilder = queryBuilder.andWhere("Event.startTime <= :endTime", {endTime: endTime});
+            queryBuilder = queryBuilder.andWhere("Event.startTime < :endTime", {endTime: endTime});
         }
 
         let eventPromise = queryBuilder.getMany();
@@ -112,7 +111,7 @@ export class EventHelper {
 
         let notificationScheduler = NotificationScheduler.getInstance();
 
-        let favorites = await Favorite.find({event: {id: In(eventIds)}});
+        let favorites = await Favorite.find({eventId: In(eventIds)});
         let promises = [this.updateNotificationsForFavorites(favorites)];
 
         //Delete notifications for changed favorites
@@ -129,7 +128,7 @@ export class EventHelper {
     static async deleteNotificationsForEvents(eventIds) {
         let notificationScheduler = NotificationScheduler.getInstance();
 
-        let favorites = await Favorite.find({event: {id: In(eventIds)}});
+        let favorites = await Favorite.find({eventId: In(eventIds)});
         await Helper.asyncForEach(favorites, async f => await notificationScheduler.cancelNotification(f.id), true);
     }
 

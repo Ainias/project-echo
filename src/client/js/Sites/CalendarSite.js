@@ -129,9 +129,9 @@ export class CalendarSite extends FooterSite {
 
         let lastDay = new Date(firstDay);
         lastDay.setMonth(lastDay.getMonth() + 1);
-        lastDay.setSeconds(-1);
+        // lastDay.setSeconds(-1);
 
-        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d", lastDay), this._filter.types, this._filter.churches);
+        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d %H:%M:%S", lastDay), this._filter.types, this._filter.churches);
     }
 
     async onStart(pauseArguments) {
@@ -148,6 +148,8 @@ export class CalendarSite extends FooterSite {
 
         let actualDayOfMonth = date.getDate();
         let events = await this.loadEventsForMonth(date);
+
+        console.log("events", events);
 
         date = new Date(Helper.nonNull(date, new Date()));
         date.setDate(1);

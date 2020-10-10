@@ -151,7 +151,7 @@ App.addInitialization(async (app) => {
 
 //TODO anpassen
 SystemCalendar.NAME = "echo";
-SystemCalendar.WEBSITE = "echo.silas.link";
+SystemCalendar.WEBSITE = "echoapp.de";
 
 DataManager._basePath = __HOST_ADDRESS__ + "/api/v1/";
 FileMedium.PUBLIC_PATH = __HOST_ADDRESS__ + "/uploads/img_";
