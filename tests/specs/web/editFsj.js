@@ -4,7 +4,7 @@ const $$ = find.multiple;
 const functions = require("../../lib/functions");
 const path = require("path");
 
-describe("edit fsj", () => {
+xdescribe("edit fsj", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;

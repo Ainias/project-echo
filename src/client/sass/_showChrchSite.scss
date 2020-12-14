@@ -2,12 +2,39 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
-#description{
+
+#description {
   margin-bottom: 0.5rem;
 }
-#places-container{
+
+#places-container {
   margin-top: 1rem;
+
   .place {
     margin-bottom: 0.5rem;
+    width: 100%;
   }
+
+  @include breakpoint(medium) {
+    &[data-num-places='2'] {
+      > span {
+        display: inline-block;
+        width: calc(50% - 0.5rem);
+        padding-left: 0.5rem;
+
+        &:first-child {
+          padding-left: 0;
+        }
+
+        .place-google-maps.full-width {
+          margin: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.church-site #navbar-fragment .top-bar .background-img {
+  max-height: 50vh;
 }

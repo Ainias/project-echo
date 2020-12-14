@@ -4,7 +4,7 @@
     <description>
         Ein christlicher Terminkalender für Gemeinden rund un Köln.
     </description>
-    <author email="echo@silas.link" href="http://echoapp.">
+    <author email="echo@silas.link" href="http://echoapp.de">
         Project Echo Team
     </author>
     <content src="index.html" />
@@ -46,10 +46,8 @@
         <icon height="167" src="src/client/img/ios/167.png" width="167" />
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="^1" />
-    <plugin name="cordova-plugin-webpack" spec="^0.4.7" />
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.2" />
     <plugin name="cordova-plugin-file" spec="^6.0.2" />
-    <plugin name="cordova-sqlite-storage" spec="^2.3.0" />
     <plugin name="cordova-plugin-device" spec="^2.0.3" />
     <plugin name="cordova-sqlite-storage" spec="^3.2.0" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.3" />

@@ -166,5 +166,7 @@ export class EventOverviewFragment extends AbstractFragment {
         } else {
             this._pastSection.classList.add("hidden");
         }
+        Translator.getInstance().updateTranslations(this._eventContainer);
+        Translator.getInstance().updateTranslations(this._eventContainerPast);
     }
 }

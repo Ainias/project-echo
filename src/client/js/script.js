@@ -8,6 +8,9 @@ import {WelcomeSite} from "./Sites/WelcomeSite";
 
 import "./Model/Favorite"
 
+import "../img/flag_german.svg";
+import "../img/flag_usa.svg";
+
 import {BaseDatabase} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
@@ -47,6 +50,7 @@ import * as typeorm from "typeorm";
 import {AboutUsSite} from "./Sites/AboutUsSite";
 
 import {Sync} from "./Sync";
+import {DateHelper} from "js-helper";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -92,21 +96,38 @@ App.addInitialization(async (app) => {
         },
     });
 
+    DateHelper.setTranslationCallback(key => {
+        return Translator.makePersistentTranslation(key).outerHTML;
+    })
+
     //Setting Title
     NavbarFragment.title = "";
 
     //Creating Menu
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", CalendarSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", AboutUsSite, MenuAction.SHOW_FOR_LARGE));
-    NavbarFragment.defaultActions.push(new MenuAction("language", async () => {
+    // NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
+    NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", AboutUsSite));
+
+    const languageAction = new MenuAction("language", async () => {
         if (Translator.getInstance().getCurrentLanguage() === "en") {
             await Translator.getInstance().setLanguage("de");
         } else {
             await Translator.getInstance().setLanguage("en");
         }
-    }, MenuAction.SHOW_FOR_LARGE));
+    });
+    languageAction.setLiClass("language-action show-for-medium")
+    const languageActionMobile = new MenuAction("language", async () => {
+        if (Translator.getInstance().getCurrentLanguage() === "en") {
+            await Translator.getInstance().setLanguage("de");
+        } else {
+            await Translator.getInstance().setLanguage("en");
+        }
+    }, undefined, 1);
+    languageActionMobile.setLiClass("language-action-mobile hide-for-medium")
+
+    NavbarFragment.defaultActions.push(languageAction);
+    NavbarFragment.defaultActions.push(languageActionMobile);
 
     if (Helper.isMobileApp()) {
         NavbarFragment.defaultActions.push(new StartSiteMenuAction("settings", SettingsSite, MenuAction.SHOW_NEVER, 99000));

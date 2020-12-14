@@ -4,15 +4,6 @@
   }
 }
 
-#filter-icon-container {
-  text-align: right;
-  span {
-    display: inline-block;
-    margin-right: 0.7rem;
-  }
-  margin-bottom: 0.4rem;
-}
-
 #calendar {
   position: relative;
   background: $navBackgroundWhite;
@@ -148,13 +139,23 @@
     }
   }
 
-  #button-filter {
-    background-image: url("../img/icons/filter512.png");
-    background-size: contain;
-    cursor: pointer;
+  #filter-icon-container {
+    text-align: right;
 
-    &.active {
-      background-image: url("../img/icons/filterInvers512.png");
+    margin-bottom: 0.4rem;
+
+    #button-filter {
+      display: inline-block;
+      width: 14.28571%;
+      background-image: url("../img/icons/filter512.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+
+      &.active {
+        background-image: url("../img/icons/filterInvers512.png");
+      }
     }
   }
 

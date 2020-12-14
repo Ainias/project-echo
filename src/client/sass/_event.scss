@@ -52,7 +52,10 @@
   }
 }
 
-#event-image {
-  max-width: 200px;
-  max-height: 200px;
+#event-img{
+  //max-width: 200px;
+  //max-height: 200px;
+  max-height: 50vh;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
 }

@@ -40,6 +40,7 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
 
     async onViewLoaded() {
         let res = super.onViewLoaded();
+        this._view.classList.add("church-site");
 
         let translator = Translator.getInstance();
         translator.addDynamicTranslations(this._church.getDynamicTranslations());
@@ -74,6 +75,7 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         await Helper.asyncForEach(places, async place => {
             placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject)?this._church.places[place]: place));
         });
+        placesContainer.dataset["numPlaces"] = ""+places.length;
 
         UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
             if (loggedIn && manager.hasAccess(Church.ACCESS_MODIFY)) {

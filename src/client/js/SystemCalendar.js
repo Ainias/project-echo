@@ -68,7 +68,7 @@ export class SystemCalendar {
     }
 
     static async addEventToSystemCalendar(event) {
-        let fav = await Favorite.findOne({event: {id: event.id}});
+        let fav = await Favorite.findOne({eventId: event.id});
         if (!fav) {
             fav = new Favorite();
         }

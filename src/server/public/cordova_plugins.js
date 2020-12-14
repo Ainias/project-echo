@@ -41,6 +41,18 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-sqlite-storage/node_modules/cordova-sqlite-storage-dependencies/sql-asm-memory-growth.js",
+        "id": "cordova-sqlite-storage.sql",
+        "pluginId": "cordova-sqlite-storage",
+        "runs": true
+    },
+    {
+        "file": "plugins/cordova-sqlite-storage/src/browser/SQLiteProxy.js",
+        "id": "cordova-sqlite-storage.SQLiteProxy",
+        "pluginId": "cordova-sqlite-storage",
+        "runs": true
+    },
+    {
         "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
         "id": "cordova-plugin-statusbar.statusbar",
         "pluginId": "cordova-plugin-statusbar",
@@ -272,6 +284,24 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-plugin-local-notification/www/local-notification-core.js",
+        "id": "cordova-plugin-local-notification.LocalNotification.Core",
+        "pluginId": "cordova-plugin-local-notification",
+        "clobbers": [
+            "cordova.plugins.notification.local.core",
+            "plugin.notification.local.core"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-local-notification/www/local-notification-util.js",
+        "id": "cordova-plugin-local-notification.LocalNotification.Util",
+        "pluginId": "cordova-plugin-local-notification",
+        "merges": [
+            "cordova.plugins.notification.local.core",
+            "plugin.notification.local.core"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-background-fetch/www/BackgroundFetch.js",
         "id": "cordova-plugin-background-fetch.BackgroundFetch",
         "pluginId": "cordova-plugin-background-fetch",
@@ -283,17 +313,17 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-webpack": "0.4.7",
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-nativestorage": "2.3.2",
     "cordova-plugin-device": "2.0.3",
-    "cordova-sqlite-storage": "4.0.0",
+    "cordova-sqlite-storage": "5.1.0",
     "cordova-plugin-statusbar": "2.4.3",
     "cordova-plugin-calendar": "5.1.5",
     "cordova-plugin-file": "6.0.2",
     "cordova-plugin-badge": "0.8.8",
-    "cordova-plugin-local-notification": "0.9.0-beta.3",
-    "cordova-plugin-background-fetch": "6.0.5"
+    "cordova-plugin-local-notification": "0.9.0-beta.2",
+    "cordova-plugin-background-fetch": "6.1.1",
+    "cordova-plugin-webpack": "1.0.5"
 }
 // BOTTOM OF METADATA
 });

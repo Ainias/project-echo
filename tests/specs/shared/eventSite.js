@@ -53,7 +53,7 @@ describe("event site", () => {
 
         expect(await $("#event-name").getText()).toEqual("TERMIN 4");
         expect(await $("#event-time").getText()).toEqual("29. Apr ´19, 15:00 -\n" +
-            "02. May ´19, 10:00");
+            "02. Mai ´19, 10:00");
 
         expect(await $("#places-container").getText()).toEqual("place 1");
         expect(await $("#places-container").getText()).toEqual("place 1");
@@ -63,9 +63,7 @@ describe("event site", () => {
     });
 
     it("event site - favorites", async function () {
-
         await browser.url(baseUrl + "?id=4&s=event");
-
         await browser.waitUntil(async () => {
             let element = $("#main-content");
             return await element.isDisplayed()

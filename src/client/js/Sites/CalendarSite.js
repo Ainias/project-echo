@@ -9,7 +9,7 @@ import {ViewHelper} from "js-helper/dist/client";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {Helper} from "js-helper"
 import {EventHelper} from "../Helper/EventHelper";
-import {FilterDialog} from "../Dialoges/FilterDialog";
+import {FilterDialog} from "../Dialoges/FilterDialog.ts";
 import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 export class CalendarSite extends FooterSite {

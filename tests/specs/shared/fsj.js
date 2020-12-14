@@ -3,7 +3,7 @@ const $ = find.one;
 const $$ = find.multiple;
 const functions = require("../../lib/functions.js");
 
-describe("fsj suite", () => {
+xdescribe("fsj suite", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;

@@ -79,6 +79,12 @@ export class SearchSite extends FooterSite {
         this._searchInput.addEventListener("focus", () => {
             this._showFilter();
         });
+        this._searchInput.addEventListener("keydown", e => {
+            if (e.key === "Enter"){
+                this._search();
+                this._searchInput.blur();
+            }
+        })
 
         if (this._searchString.trim() !== "" || this._types.length >= 1 || this._churches.length >= 1) {
             await this._search();

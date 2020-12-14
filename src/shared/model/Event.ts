@@ -21,7 +21,7 @@ export class Event extends AccessEasySyncModel {
     private repeatedEvent: any;
     private isTemplate: boolean = false;
 
-    static readonly TYPES: any = {
+    static readonly TYPES: { [key: string]: string } = {
         GOTTESDIENST: "gottesdienst",
         KONZERT: "konzert",
         HAUSKREIS: "hauskreis",

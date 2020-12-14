@@ -227,11 +227,6 @@ export class AddEventSite extends MenuFooterSite {
         });
 
         this._form.addValidator(values => {
-
-            console.log(values);
-            // return {
-            //     "error": "the endpoint must be after the start"
-            // };
             let errors = {};
             if (values["start"].trim() === "") {
                 errors["error1"] = "required"

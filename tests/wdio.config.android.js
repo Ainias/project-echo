@@ -84,7 +84,7 @@ exports.config = {
         platformName: 'Android',
 
         // The version of the Android or iOS system
-        platformVersion: '9',
+        platformVersion: '10',
 
         orientation: "PORTRAIT",
 
