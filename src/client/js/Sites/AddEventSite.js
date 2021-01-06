@@ -1,5 +1,6 @@
-import {MenuFooterSite} from "./MenuFooterSite";
 import view from "../../html/Sites/addEventSite.html";
+
+import {MenuFooterSite} from "./MenuFooterSite";
 import {App, Form, Translator, Helper, Toast} from "cordova-sites";
 import {Church} from "../../../shared/model/Church";
 import {Event} from "../../../shared/model/Event";
@@ -164,6 +165,10 @@ export class AddEventSite extends MenuFooterSite {
             event.setEndTime(new Date(values["end"]));
             event.setType(values["type"]);
             event.setRegions(regions);
+            if (values["website"].trim() === ""){
+                values["website"] = null;
+            }
+            event.setWebsite(values["website"]);
 
             let eventId = event.id;
             let savePromise = event.save();
@@ -349,6 +354,7 @@ export class AddEventSite extends MenuFooterSite {
             values["type"] = this._event.getType();
             values["start"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.getStartTime());
             values["end"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.getEndTime());
+            values["website"] = this._event.getWebsite();
 
             let organisers = this._event.getOrganisers();
             if (Helper.isNotNull(organisers)) {

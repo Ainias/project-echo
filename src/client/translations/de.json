@@ -57,7 +57,7 @@
   "kirche erfolgreich gelöscht": "Die Kirche wurde erfolgreich gelöscht.",
   "cancel-button": "Abbrechen",
   "confirm-button": "OK",
-  "add church": "Neue Kirche",
+  "add church": "Neuer Veranstalter",
   "add post": "Neuer Post",
   "website url": "Website",
   "today": "Heute",
@@ -154,6 +154,8 @@
   "Oct": "Okt",
   "Nov": "Nov",
   "Dec": "Dez",
+
+  "website": "Webseite",
 
   "filter": "Filter"
 }

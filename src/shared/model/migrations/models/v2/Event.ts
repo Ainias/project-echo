@@ -19,7 +19,6 @@ export class Event extends AccessEasySyncModel {
     private places: any[];
     private regions: any;
     private repeatedEvent: any;
-    private website: string;
     private isTemplate: boolean = false;
 
     static readonly TYPES: { [key: string]: string } = {
@@ -44,7 +43,6 @@ export class Event extends AccessEasySyncModel {
         this.organisers = null;
         this.places = [];
         this.regions = null;
-        this.website = null;
         this.isTemplate = false;
     }
 
@@ -86,7 +84,6 @@ export class Event extends AccessEasySyncModel {
         columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
         columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
         columns["isTemplate"] = {type: BaseDatabase.TYPES.BOOLEAN, default: false};
-        columns["website"] = {type: BaseDatabase.TYPES.STRING, nullable: true};
         columns["type"] = {
             type: BaseDatabase.TYPES.STRING,
             default: Event.TYPES.GOTTESDIENST,
@@ -238,21 +235,6 @@ export class Event extends AccessEasySyncModel {
         }
     }
 
-    getWebsite(): {} {
-        if (Helper.isNull(this.website) && Helper.isNotNull(this.repeatedEvent)) {
-            return this.repeatedEvent.getWebsite();
-        }
-        return this.website;
-    }
-
-    setWebsite(value: string) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && this.repeatedEvent.getWebsite() === value) {
-            this.website = null;
-        } else {
-            this.website = value;
-        }
-    }
-
     getDescriptions(): {} {
         if (Helper.isNull(this.descriptions) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getDescriptions();
@@ -384,4 +366,3 @@ export class Event extends AccessEasySyncModel {
 
 Event.ACCESS_MODIFY = "admin";
 Event.SCHEMA_NAME = "Event";
-BaseDatabase.addModel(Event);

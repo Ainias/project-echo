@@ -31,7 +31,6 @@ export class EventSite extends FooterSite {
 
         let id = constructParameters["id"];
 
-
         if (typeof id === "string" && id.startsWith("r")) {
             let parts = id.split("-");
 
@@ -142,6 +141,23 @@ export class EventSite extends FooterSite {
 
                 tagPanel.appendChild(churchTag);
             });
+        }
+
+        //Website
+        const eventWebsiteElement = this.findBy("#event-website");
+        let website = this._event.getWebsite();
+        if (website){
+            eventWebsiteElement.href = website;
+            if (website.startsWith("http://")){
+                website = website.substring(7);
+            }
+            else if (website.startsWith("https://")){
+                website = website.substring(8);
+            }
+            eventWebsiteElement.innerText = website;
+        }
+        else {
+            eventWebsiteElement.remove();
         }
 
         this._checkRightsPanel();

@@ -60,6 +60,10 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.originalEvent.getNames();
     }
 
+    getWebsite(): {} {
+        return this.originalEvent.getWebsite();
+    }
+
     getDescriptions(): {} {
         return this.originalEvent.getDescriptions();
     }

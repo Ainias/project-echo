@@ -10,6 +10,16 @@
     flex-direction: column;
     justify-content: center;
   }
+
+  #event-website{
+    margin-bottom: 0.5rem;
+    display: block;
+    &::before{
+      padding-right: 0.2rem;
+      vertical-align: top;
+      content: url("../img/icons/arrowOrange.png");
+    }
+  }
 }
 
 .favorite {

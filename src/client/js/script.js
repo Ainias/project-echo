@@ -51,6 +51,7 @@ import {AboutUsSite} from "./Sites/AboutUsSite";
 
 import {Sync} from "./Sync";
 import {DateHelper} from "js-helper";
+import {EventWeblink1000000012000} from "../../shared/model/migrations/EventWeblink";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -197,6 +198,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         FavoriteWithoutEventRelation1000000008000,
         ImagesSchema1000000010000,
         ImagesSchemaDownload1000000011000,
+        EventWeblink1000000012000,
     ]
 });
 

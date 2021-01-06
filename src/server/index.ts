@@ -25,6 +25,7 @@ import {FsjSchema1000000006000} from "../shared/model/migrations/FsjSchema";
 import {AddRepeatedEvent1000000007000} from "../shared/model/migrations/AddRepeatedEvent";
 import {ImagesSchema1000000010000} from "../shared/model/migrations/ImagesSchema";
 import {ImagesSchemaDownload1000000011000} from "../shared/model/migrations/ImagesSchemaDownload";
+import {EventWeblink1000000012000} from "../shared/model/migrations/EventWeblink";
 
 const translationGerman = require("../client/translations/de");
 const  translationEnglish = require ("../client/translations/en");
@@ -52,6 +53,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
         AddRepeatedEvent1000000007000,
         ImagesSchema1000000010000,
         ImagesSchemaDownload1000000011000,
+        EventWeblink1000000012000,
     ],
 
     "logging": ["error", "warn"]

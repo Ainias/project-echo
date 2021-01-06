@@ -1,9 +1,6 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 import {MigrationHelper} from "js-helper/dist/shared/MigrationHelper";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
-import {Fsj} from "../Fsj";
-import {Church} from "../Church";
-import {Event} from "../Event";
 
 export class ImagesSchemaDownload1000000011000 implements MigrationInterface {
 
