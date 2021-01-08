@@ -15,7 +15,7 @@
     }
 
     &:not(:first-of-type) {
-      border-top: 1px solid #bcbbbb;
+      border-top: 1px solid $greyColor;
     }
   }
 
@@ -29,7 +29,7 @@
   }
 
   .day-line{
-    border-bottom: 1px solid #bcbbbb;
+    border-bottom: 1px solid $greyColor;
     line-height: 0.1em;
     margin: 10px 0 0;
     display: block;
@@ -42,9 +42,9 @@
 }
 
 #past-section{
-  color: #bcbbbb;
+  color: $greyColor;
   .day {
-    color: #bcbbbb;
+    color: $greyColor;
   }
   h2{
     font-size: 1.33rem;

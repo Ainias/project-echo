@@ -18,6 +18,7 @@ export class FilterDialog extends Dialog {
 
     constructor(types, churches) {
         super(Promise.all([ViewInflater.getInstance().load(view), Church.find()]).then(res => {
+
             let view = res[0];
             this._possibleChurches = res[1];
 
@@ -73,14 +74,14 @@ export class FilterDialog extends Dialog {
             tag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
             tag.dataset["churchId"] = String(church.id);
 
-            if (this._churches.indexOf(church.id + "") !== -1) {
+            if (this._churches.indexOf(church.id) !== -1) {
                 tag.classList.add("selected");
             }
 
             tag.addEventListener("click", () => {
-                let index = this._churches.indexOf(church.id + "");
+                let index = this._churches.indexOf(church.id);
                 if (index === -1) {
-                    this._churches.push(church.id + "");
+                    this._churches.push(church.id);
                     tag.classList.add("selected");
                 } else {
                     this._churches.splice(index, 1);
@@ -93,10 +94,31 @@ export class FilterDialog extends Dialog {
         Translator.getInstance().updateTranslations(this._filterOrganiserContainer);
     }
 
-    applyFilter(){
+    createModalDialogElement(): any {
+        const element = super.createModalDialogElement();
+
+        try {
+            let clearFilterButton = document.createElement("span");
+            clearFilterButton.classList.add("clearFilter");
+
+            console.log(element.querySelector(".title"));
+
+            element.querySelector(".title").parentNode.appendChild(clearFilterButton);
+            clearFilterButton.addEventListener("click", () => {
+                this._result = {};
+                this.close();
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        return element;
+    }
+
+    applyFilter() {
         this._result = {
             "types": this._types,
-            "churches":this._churches
+            "churches": this._churches
         };
         this.close();
     }

@@ -40,6 +40,19 @@
   }
 }
 
+.clearFilter {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: inline-block;
+  background: url("../img/icons/clearFilter512.png") no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  float: right;
+  margin-right: 0.3rem;
+  margin-top: 0.2rem;
+
+}
+
 #search-button {
   float: right;
   border-radius: 0.5rem;

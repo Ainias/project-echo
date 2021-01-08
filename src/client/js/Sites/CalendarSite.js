@@ -42,8 +42,8 @@ export class CalendarSite extends FooterSite {
         if (Helper.isSet(constructParameters, "filter")) {
             if (typeof constructParameters["filter"] === "string") {
                 this._filter = JSON.parse(constructParameters["filter"]);
-            }
-            else {
+                console.log("filter", this._filter);
+            } else {
                 this._filter = constructParameters["filter"];
             }
         } else {
@@ -75,10 +75,10 @@ export class CalendarSite extends FooterSite {
         let filterButton = this.findBy("#button-filter");
         filterButton.addEventListener("click", async () => {
             let res = await new FilterDialog(this._filter.types, this._filter.churches).show();
-            if (Helper.isNotNull(res)) {
-                this._filter = res;
-            } else {
+            if (res === false) {
                 this._filter = {};
+            } else if (Helper.isNotNull(res)) {
+                this._filter = res;
             }
 
             if (this._filter.types && this._filter.types.length > 0 || this._filter.churches && this._filter.churches.length > 0) {

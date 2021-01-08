@@ -10,6 +10,7 @@ $navBackgroundBlack: $navBackgroundWhite;
 $navBackgroundWithImage: rgba(1, 1, 1, 0.5);
 
 $highlightColor: #D56B52;
+$greyColor: #838383;
 
 $defaultThemeValues: (
         class: "",
@@ -28,7 +29,7 @@ $defaultThemeValues: (
         background: #fff,
         background-gradient: linear-gradient(#3b3b3b, #191919),
         highlight: #D56B52,
-        textColorOne: #bcbbbb,
+        textColorOne: $greyColor,
         colorOne: #F3F1F1,
         colorTwo: #3B3B3B,
         colorThree: #FFF,
@@ -54,7 +55,7 @@ $themes: (
                 background: #fff,
                 background-gradient: linear-gradient(#3b3b3b, #191919),
                 highlight: #D56B52,
-                textColorOne: #bcbbbb,
+                textColorOne: $greyColor,
                 colorOne: #F3F1F1,
                 colorTwo: #3B3B3B,
                 colorThree: #FFF,
