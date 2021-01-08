@@ -138,19 +138,19 @@ App.addInitialization(async (app) => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
 
-    NavbarFragment.defaultActions.push(new UserMenuAction("add event", "admin", () => {
+    NavbarFragment.defaultActions.push(new UserMenuAction("add event", "events", () => {
         app.startSite(AddEventSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
-    NavbarFragment.defaultActions.push(new UserMenuAction("add church", "admin", () => {
+    NavbarFragment.defaultActions.push(new UserMenuAction("add church", "organisers", () => {
         app.startSite(ModifyChurchSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
-    NavbarFragment.defaultActions.push(new UserMenuAction("add fsj", "admin", () => {
+    NavbarFragment.defaultActions.push(new UserMenuAction("add fsj", "fsjs", () => {
         app.startSite(ModifyFsjSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
-    NavbarFragment.defaultActions.push(new UserMenuAction("add post", "admin", () => {
+    NavbarFragment.defaultActions.push(new UserMenuAction("add post", "posts", () => {
         app.startSite(ModifyPostSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 

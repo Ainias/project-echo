@@ -38,7 +38,7 @@ describe("edit church", () => {
     it("new church", async function () {
         let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
 
-        await $("span=Neue Kirche").click();
+        await $("span=Neuer Veranstalter").click();
 
         let editors = $$(".ck.ck-content");
 

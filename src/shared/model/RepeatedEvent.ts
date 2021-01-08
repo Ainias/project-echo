@@ -101,7 +101,7 @@ export class RepeatedEvent extends AccessEasySyncModel {
     // }
 }
 
-RepeatedEvent.ACCESS_MODIFY = "admin";
+RepeatedEvent.ACCESS_MODIFY = "events";
 RepeatedEvent.SCHEMA_NAME = "RepeatedEvent";
 
 BaseDatabase.addModel(RepeatedEvent);

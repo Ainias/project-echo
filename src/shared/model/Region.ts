@@ -64,6 +64,6 @@ export class Region extends AccessEasySyncModel {
         return relations;
     }
 }
-Region.ACCESS_MODIFY = "admin";
+Region.ACCESS_MODIFY = "events";
 Region.SCHEMA_NAME="Region";
 BaseDatabase.addModel(Region);

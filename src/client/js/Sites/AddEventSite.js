@@ -22,7 +22,7 @@ import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 export class AddEventSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this.addDelegate(new UserSite(this, "admin"));
+        this.addDelegate(new UserSite(this, "events"));
     }
 
     async onConstruct(constructParameters) {

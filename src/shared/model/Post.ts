@@ -47,6 +47,6 @@ export class Post extends AccessEasySyncModel {
         return relations;
     }
 }
-Post.ACCESS_MODIFY = "admin";
+Post.ACCESS_MODIFY = "posts";
 Post.SCHEMA_NAME="Post";
 BaseDatabase.addModel(Post);

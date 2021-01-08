@@ -28,6 +28,14 @@ export class Data1000000005000 implements MigrationInterface {
             await queryRunner.query("INSERT INTO `access` VALUES " + "(5,'2019-06-04 16:51:17','2019-06-04 16:51:17',2,0,'loggedIn','for users, that are logged in');");
         if (Helper.isNull(accesses['6']))
             await queryRunner.query("INSERT INTO `access` VALUES " + "(6,'2019-06-04 16:51:17','2019-06-04 16:51:17',2,0,'admin','Access for admins');");
+        if (Helper.isNull(accesses['7']))
+            await queryRunner.query("INSERT INTO `access` VALUES (7,'2019-06-04 16:51:17','2019-06-04 16:51:17',2,0,'events','Add/Modify/Delete Events');");
+        if (Helper.isNull(accesses['8']))
+            await queryRunner.query("INSERT INTO `access` VALUES (8,'2019-06-04 16:51:17','2019-06-04 16:51:17',2,0,'organisers','Add/Modify/Delete Organisers');");
+        if (Helper.isNull(accesses['9']))
+            await queryRunner.query("INSERT INTO `access` VALUES (9,'2019-06-04 16:51:17','2019-06-04 16:51:17',2,0,'fsjs','Add/Modify/Delete FSJ');");
+        if (Helper.isNull(accesses['10']))
+            await queryRunner.query("INSERT INTO `access` VALUES (10,'2019-06-04 16:51:17','2019-06-04 16:51:17',2,0,'posts','Add/Modify/Delete Posts');");
     }
 
     async _insertRoles(queryRunner: QueryRunner) {
@@ -44,6 +52,8 @@ export class Data1000000005000 implements MigrationInterface {
             await queryRunner.query("INSERT INTO `role` VALUES " + "(4,'2019-06-04 16:51:17','2019-06-04 16:51:17',2,0,'memberRole','role for user that are online and logged in');");
         if (Helper.isNull(roles['5']))
             await queryRunner.query("INSERT INTO `role` VALUES " + "(5,'2019-06-04 16:51:18','2019-06-04 16:51:18',2,0,'Admin','Role for Admins (online, logged in and admin)');");
+        if (Helper.isNull(roles['6']))
+            await queryRunner.query("INSERT INTO `role` VALUES (6,'2019-06-04 16:51:18','2019-06-04 16:51:18',2,0,'Echo-Moderator','Role for Echo-Moderator (events and organisers)');");
     }
 
     async _insertRoleChildren(queryRunner: QueryRunner) {
@@ -76,6 +86,14 @@ export class Data1000000005000 implements MigrationInterface {
             await queryRunner.query("INSERT INTO `roleAccess` (roleId, accessId) VALUES " + "(4,5);");
         if (Helper.isNull(roleAccesses['5,6']))
             await queryRunner.query("INSERT INTO `roleAccess` (roleId, accessId) VALUES " + "(5,6)");
+        if (Helper.isNull(roleAccesses['6,7']))
+            await queryRunner.query("INSERT INTO `roleAccess` (roleId, accessId) VALUES (6,7)");
+        if (Helper.isNull(roleAccesses['6,8']))
+            await queryRunner.query("INSERT INTO `roleAccess` (roleId, accessId) VALUES (6,8)");
+        if (Helper.isNull(roleAccesses['6,9']))
+            await queryRunner.query("INSERT INTO `roleAccess` (roleId, accessId) VALUES (6,9)");
+        if (Helper.isNull(roleAccesses['6,10']))
+            await queryRunner.query("INSERT INTO `roleAccess` (roleId, accessId) VALUES (6,10)");
     }
 
     async _insertAdminUser(queryRunner: QueryRunner) {

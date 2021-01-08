@@ -32,7 +32,8 @@ exports.config = {
 
     bail: 0,
 
-    baseUrl: "http://127.0.0.1:3000",
+    // baseUrl: "http://127.0.0.1:3000",
+    baseUrl: "http://127.0.0.1:8000",
 
     waitforTimeout: 10000,
 
@@ -67,6 +68,7 @@ exports.config = {
         // './tests/specs/**/favoriteSite2.js',
         // './tests/specs/**/searchSite.js',
         // './tests/specs/**/editEvent.js',
+        // './tests/specs/**/editChurch.js',
     ],
 
     capabilities: [{

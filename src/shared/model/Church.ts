@@ -62,6 +62,6 @@ export class Church extends FsjChurchBaseObject {
     }
 }
 
-Church.ACCESS_MODIFY = "admin";
+Church.ACCESS_MODIFY = "organisers";
 Church.SCHEMA_NAME = "Church";
 BaseDatabase.addModel(Church);

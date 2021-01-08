@@ -13,7 +13,7 @@ import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 export class ModifyChurchSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this.addDelegate(new UserSite(this, "admin"));
+        this.addDelegate(new UserSite(this, "organisers"));
     }
 
     async onConstruct(constructParameters) {

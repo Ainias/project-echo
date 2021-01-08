@@ -11,7 +11,7 @@ import {Post} from "../../../shared/model/Post";
 export class ModifyPostSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this.addDelegate(new UserSite(this, "admin"));
+        this.addDelegate(new UserSite(this, "posts"));
     }
 
     async onConstruct(constructParameters) {

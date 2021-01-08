@@ -30,5 +30,5 @@ export class BlockedDay extends AccessEasySyncModel{
     }
 }
 
-BlockedDay.ACCESS_MODIFY = "admin";
+BlockedDay.ACCESS_MODIFY = "events";
 BaseDatabase.addModel(BlockedDay);

@@ -382,6 +382,6 @@ export class Event extends AccessEasySyncModel {
     }
 }
 
-Event.ACCESS_MODIFY = "admin";
+Event.ACCESS_MODIFY = "events";
 Event.SCHEMA_NAME = "Event";
 BaseDatabase.addModel(Event);

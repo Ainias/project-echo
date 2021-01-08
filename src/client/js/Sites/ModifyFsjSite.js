@@ -12,7 +12,7 @@ import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 export class ModifyFsjSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this.addDelegate(new UserSite(this, "admin"));
+        this.addDelegate(new UserSite(this, "fsjs"));
     }
 
     async onConstruct(constructParameters) {
