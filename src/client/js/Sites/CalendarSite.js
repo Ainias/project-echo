@@ -97,24 +97,44 @@ export class CalendarSite extends FooterSite {
             filterButton.classList.add("active");
         }
 
-        await DragHelper.makeDragToShow(this._eventOverviewContainer, (from) => {
-            let maxTop = parseFloat(this._eventOverviewContainer.dataset["originalTop"]);
-            if (from === maxTop) {
-                if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.75) {
-                    this._eventOverviewContainer.style.top = "0";
-                    this._eventOverviewContainer.classList.add("is-open");
-                } else {
-                    this._eventOverviewContainer.style.top = maxTop + "px";
-                }
-            } else {
-                if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.25) {
-                    this._eventOverviewContainer.style.top = "0";
-                } else {
-                    this._eventOverviewContainer.classList.remove("is-open");
-                    this._eventOverviewContainer.style.top = maxTop + "px";
-                }
-            }
+        this.findBy("#icon-big-small .makeBig").addEventListener("click", () => this._eventOverviewContainer.classList.add("is-open"));
+        // this.findBy("#icon-big-small .makeBig").addEventListener("click", () => this.findBy("#calendar").classList.add("is-open"));
+        this.findBy("#icon-big-small .makeSmall").addEventListener("click", () => this._eventOverviewContainer.classList.remove("is-open"));
+        // this.findBy("#icon-big-small .makeSmall").addEventListener("click", () => this.findBy("#calendar").classList.remove("is-open"));
+
+        // await DragHelper.makeDragToShow(this._eventOverviewContainer, (from) => {
+        //     let maxTop = parseFloat(this._eventOverviewContainer.dataset["originalTop"]);
+        //     if (from === maxTop) {
+        //         if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.75) {
+        //             this._eventOverviewContainer.style.top = "0";
+        //             this._eventOverviewContainer.classList.add("is-open");
+        //         } else {
+        //             this._eventOverviewContainer.style.top = maxTop + "px";
+        //         }
+        //     } else {
+        //         if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.25) {
+        //             this._eventOverviewContainer.style.top = "0";
+        //         } else {
+        //             this._eventOverviewContainer.classList.remove("is-open");
+        //             this._eventOverviewContainer.style.top = maxTop + "px";
+        //         }
+        //     }
+        // });
+
+        const resizeObserver = new ResizeObserver(entries => {
+            entries.forEach(entry => {
+
+                // let scaler = new Scaler();
+                // let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
+                //
+                // this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
+                // scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.70);
+                // console.log("resize observer", entry);
+            })
         });
+        resizeObserver.observe(this.findBy("#scale-container"));
+
+
 
         return super.onViewLoaded();
     }
@@ -148,8 +168,6 @@ export class CalendarSite extends FooterSite {
 
         let actualDayOfMonth = date.getDate();
         let events = await this.loadEventsForMonth(date);
-
-        console.log("events", events);
 
         date = new Date(Helper.nonNull(date, new Date()));
         date.setDate(1);
@@ -237,9 +255,12 @@ export class CalendarSite extends FooterSite {
 
         let scaler = new Scaler();
         let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
-        this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
 
-        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.70);
+        console.log("max height: ", maxHeight);
+
+        // this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
+
+        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.73);
 
         this.setParameter("date", DateHelper.strftime("%Y-%m-%d", date))
     }

@@ -1,3 +1,17 @@
+@keyframes openEventList {
+  1% {
+    position: initial;
+    //top: 75%;
+  }
+  1% {
+    position: absolute;
+    top: 75%;
+  }
+  100%{
+    top: 0;
+  }
+}
+
 #calendar.testing {
   .day, #month-name {
     user-select: initial;
@@ -110,10 +124,11 @@
   }
 
   #event-overview-container {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    //position: absolute;
+    //left: 0;
+    //right: 0;
+    //bottom: 0;
+    min-height: 15%;
     background-color: white;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
@@ -123,10 +138,69 @@
     padding-right: 1rem;
     overflow-y: hidden;
 
+    #icon-big-small {
+      //display: inline-block;
+      //width: 1.2rem;
+      height: 1.2rem;
+      margin-bottom: 0.2rem;
+      //background-size: contain;
+      //background: url("../img/icons/makeBig.png") no-repeat;
+      //text-align: right;
+      img {
+        float: right;
+        cursor: pointer;
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+
+      .makeSmall {
+        display: none;
+      }
+    }
+
+    //animation-name: openEventList;
+    //animation-duration: 0.5s;
+    //animation-fill-mode: none;
+    //animation-direction: reverse;
+
     &.is-open {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      //top: 0;
+
+      @each $breakpoint, $value in $margins {
+          @include breakpoint($breakpoint) {
+            margin-left: 2*$value;
+            margin-right: 2*$value;
+            margin-top: 2*$value;
+            width: calc(100vw - #{4*$value});
+            //max-width: calc(100% + #{4*$value});
+        }
+      }
+
+      transition: none;
+
       overflow-y: auto;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
+      //border-top-left-radius: 0;
+      //border-top-right-radius: 0;
+
+      animation-name: openEventList;
+      animation-duration: 0.5s;
+      animation-fill-mode: forwards;
+      animation-direction: initial;
+
+      #icon-big-small {
+        .makeSmall {
+          display: initial;
+        }
+
+        .makeBig {
+          display: none;
+        }
+      }
+
     }
 
     .day {
@@ -159,4 +233,20 @@
     }
   }
 
+  //&.is-open {
+  //  #scale-container {
+  //    display: none;
+  //  }
+  //  #event-overview-container{
+  //    #icon-big-small {
+  //      .makeSmall {
+  //        display: initial;
+  //      }
+  //
+  //      .makeBig {
+  //        display: none;
+  //      }
+  //    }
+  //  }
+  //}
 }
