@@ -175,7 +175,7 @@
             margin-left: 2*$value;
             margin-right: 2*$value;
             margin-top: 2*$value;
-            width: calc(100vw - #{4*$value});
+            width: calc(100% - #{4*$value});
             //max-width: calc(100% + #{4*$value});
         }
       }
