@@ -1,12 +1,25 @@
-import {AbstractFragment, Helper, Translator} from "cordova-sites";
-import view from "../../html/Fragments/eventOverviewFragment.html"
+import {DateHelper} from "js-helper/dist/shared/DateHelper";
+
+const view = require("../../html/Fragments/eventOverviewFragment.html");
+
+import {AbstractFragment, Translator} from "cordova-sites";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {EventSite} from "../Sites/EventSite";
 import {Favorite} from "../Model/Favorite";
 import {EventHelper} from "../Helper/EventHelper";
 import {ViewHelper} from "js-helper/dist/client";
+import {Helper} from "js-helper/dist/shared";
+import {Event} from "../../../shared/model/Event";
+import {Church} from "../../../shared/model/Church";
 
 export class EventOverviewFragment extends AbstractFragment {
+    private _events: Event[];
+    private _showInPast: boolean;
+    private _eventContainer: HTMLElement;
+    private _eventContainerPast: HTMLElement;
+    private _eventTemplate: HTMLElement;
+    private _eventOverviewTemplate: HTMLElement;
+    private _pastSection: HTMLElement;
 
     constructor(site) {
         super(site, view);
@@ -38,23 +51,21 @@ export class EventOverviewFragment extends AbstractFragment {
         this._eventTemplate.remove();
         this._eventOverviewTemplate.remove();
 
-        // await this._renderList();
-
         return res;
     }
 
     async _renderList() {
-        let currentYear = Helper.strftime("%y");
+        let currentYear = DateHelper.strftime("%y");
         let unsortedFavorites = {};
         this._events.forEach(event => {
             if (Helper.isNotNull(event)) {
                 //adding translations
                 Translator.addDynamicTranslations(event.getDynamicTranslations());
 
-                let yearSuffixStart = (Helper.strftime("%y", event.getStartTime()));
-                let yearSuffixEnd = (Helper.strftime("%y", event.getEndTime()));
-                let dayName = Helper.strftime("%a %d.%m.", event.getStartTime());
-                let endDay = Helper.strftime("%a %d.%m.", event.getEndTime());
+                let yearSuffixStart = (DateHelper.strftime("%y", event.getStartTime()));
+                let yearSuffixEnd = (DateHelper.strftime("%y", event.getEndTime()));
+                let dayName = DateHelper.strftime("%a %d.%m.", event.getStartTime());
+                let endDay = DateHelper.strftime("%a %d.%m.", event.getEndTime());
 
                 if (yearSuffixEnd !== yearSuffixStart) {
                     dayName += " " + yearSuffixStart + " - " + endDay + " " + yearSuffixEnd;
@@ -65,12 +76,12 @@ export class EventOverviewFragment extends AbstractFragment {
                     }
                 }
 
-                let sortingStartDay = Helper.strftime("%Y.%m.%d", event.getStartTime()) + "," + dayName + "," + Helper.strftime("%Y.%m.%d", event.getEndTime());
+                let sortingStartDay = DateHelper.strftime("%Y.%m.%d", event.getStartTime()) + "," + dayName + "," + DateHelper.strftime("%Y.%m.%d", event.getEndTime());
                 if (Helper.isNull(unsortedFavorites[sortingStartDay])) {
                     unsortedFavorites[sortingStartDay] = {};
                 }
 
-                let startTime = Helper.strftime("%H:%M", event.getStartTime());
+                let startTime = DateHelper.strftime("%H:%M", event.getStartTime());
                 if (Helper.isNull(unsortedFavorites[sortingStartDay][startTime])) {
                     unsortedFavorites[sortingStartDay][startTime] = [];
                 }
@@ -78,7 +89,7 @@ export class EventOverviewFragment extends AbstractFragment {
             }
         });
 
-        let sortedFavorites = {};
+        let sortedFavorites: { [key: string]: { [key: string]: Event[] } } = {};
         Object.keys(unsortedFavorites).sort().forEach(day => {
             sortedFavorites[day] = {};
             Object.keys(unsortedFavorites[day]).sort().forEach(time => {
@@ -91,7 +102,7 @@ export class EventOverviewFragment extends AbstractFragment {
             });
         });
 
-        let today = Helper.strftime("%Y.%m.%d");
+        let today = DateHelper.strftime("%Y.%m.%d");
 
         ViewHelper.removeAllChildren(this._eventContainer);
         ViewHelper.removeAllChildren(this._eventContainerPast);
@@ -101,23 +112,26 @@ export class EventOverviewFragment extends AbstractFragment {
         Object.keys(sortedFavorites).forEach(day => {
             let dayParts = day.split(",");
 
-            let dayContainer = this._eventTemplate.cloneNode(true);
+            let dayContainer = <HTMLElement>this._eventTemplate.cloneNode(true);
             dayContainer.querySelector(".day").innerHTML = dayParts[1];
 
             Object.keys(sortedFavorites[day]).forEach(time => {
                 sortedFavorites[day][time].forEach(event => {
-                    let eventElement = this._eventOverviewTemplate.cloneNode(true);
+                    let eventElement = <HTMLElement>this._eventOverviewTemplate.cloneNode(true);
                     eventElement.querySelector(".name").appendChild(translator.makePersistentTranslation(event.getNameTranslation()));
-                    eventElement.querySelector(".time").innerText = time;
+                    (eventElement.querySelector(".time") as HTMLElement).innerText = time;
 
                     let places = event.getPlaces();
-                    if (!Array.isArray(places)) {
-                        places = Object.keys(places);
+                    const placesIsArray = Array.isArray(places);
+                    let placesIndexes = places;
+                    if (!placesIsArray) {
+                        placesIndexes = Object.keys(places);
                     }
 
-                    if (places.length > 0) {
-                        ((places.length === 1) ?
-                            PlaceHelper.createPlace(places[0]) : PlaceHelper.createMultipleLocationsView()).then(view => eventElement.querySelector(".place-container").appendChild(view));
+                    if (placesIndexes.length > 0) {
+                        ((placesIndexes.length === 1) ?
+                            PlaceHelper.createPlace(placesIndexes[0], placesIsArray?places[0]:places[placesIndexes[0]], true)
+                            : PlaceHelper.createMultipleLocationsView()).then(view => eventElement.querySelector(".place-container").appendChild(view));
                     }
 
                     eventElement.addEventListener("click", () => {
@@ -143,6 +157,19 @@ export class EventOverviewFragment extends AbstractFragment {
                             favElem.classList.remove("is-favorite");
                         }
                     });
+
+                    const organisers: Church[] = event.getOrganisers();
+                    if (Array.isArray(organisers)) {
+                        const tagPanel = eventElement.querySelector(".tag-panel");
+                        organisers.forEach(organiser => {
+                            Translator.addDynamicTranslations(organiser.getDynamicTranslations());
+
+                            let organiserTagElement = document.createElement("span");
+                            organiserTagElement.classList.add("tag");
+                            organiserTagElement.appendChild(Translator.makePersistentTranslation(organiser.getNameTranslation()));
+                            tagPanel.appendChild(organiserTagElement);
+                        })
+                    }
 
                     dayContainer.appendChild(eventElement);
                 });

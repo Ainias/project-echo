@@ -82,7 +82,7 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         inOneWeek.setMilliseconds(0);
         // inOneWeek.setSeconds(-1);
 
-        let events = await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", now), DateHelper.strftime("%Y-%m-%d", inOneWeek));
+        let events = await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", now), DateHelper.strftime("%Y-%m-%d", inOneWeek), undefined, undefined, undefined, true);
 
         //TODO show favorites instead of next Events?
 

@@ -96,9 +96,20 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.originalEvent.getRegions();
     }
 
+    getOriginalEvent():Event{
+        return this.originalEvent;
+    }
+
     // async delete(): Promise<any> {
     //     return super.delete();
     // }
+    getRepeatUntil() {
+        return this.repeatUntil
+    }
+
+    getRepeatingArguments() {
+        return this.repeatingArguments;
+    }
 }
 
 RepeatedEvent.ACCESS_MODIFY = "events";

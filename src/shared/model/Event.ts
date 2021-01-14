@@ -7,6 +7,7 @@ import {Helper} from "js-helper/dist/shared/Helper";
 import {JsonHelper} from "js-helper/dist/shared/JsonHelper";
 import {BaseModel} from "cordova-sites-database/dist/BaseModel";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
+import {RepeatedEvent} from "./RepeatedEvent";
 
 export class Event extends AccessEasySyncModel {
     private names: {};
@@ -54,6 +55,10 @@ export class Event extends AccessEasySyncModel {
         relations.push("repeatedEvent.originalEvent.images");
         relations.push("repeatedEvent.originalEvent.organisers");
         return relations;
+    }
+
+    getRepeatedEvent(){
+        return this.repeatedEvent;
     }
 
     getNameTranslation() {
@@ -379,6 +384,10 @@ export class Event extends AccessEasySyncModel {
 
     setIsTemplate(template) {
         this.isTemplate = template;
+    }
+
+    setRepeatedEvent(repeatedEvent: RepeatedEvent) {
+        this.repeatedEvent = repeatedEvent;
     }
 }
 

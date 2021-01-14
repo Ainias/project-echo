@@ -5,6 +5,33 @@ import {RepeatedEvent} from "./RepeatedEvent";
 import {Event} from "./Event";
 
 export class BlockedDay extends AccessEasySyncModel{
+
+    private day: Date;
+    private repeatedEvent: RepeatedEvent;
+    private event: Event;
+
+    getEvent(){
+        return this.event;
+    }
+    setEvent(event:Event){
+        this.event = event;
+    }
+
+    getRepeatedEvent(){
+        return this.repeatedEvent;
+    }
+
+    setRepeatedEvent(repeatedEvent:RepeatedEvent){
+        this.repeatedEvent = repeatedEvent;
+    }
+
+    getDay(){
+        return this.day;
+    }
+    setDay(day: Date){
+        this.day = day;
+    }
+
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
         columns["day"] = BaseDatabase.TYPES.DATE;

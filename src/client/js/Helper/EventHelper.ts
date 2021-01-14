@@ -1,18 +1,24 @@
 import {EasySyncClientDb} from "cordova-sites-easy-sync/dist/client/EasySyncClientDb";
 import {Event} from "../../../shared/model/Event";
-import {Between, Brackets, In} from "typeorm";
+import {Between, Brackets, In, SelectQueryBuilder} from "typeorm";
 import {NotificationScheduler} from "../NotificationScheduler";
 import {Favorite} from "../Model/Favorite";
-import {Translator, Helper, NativeStoragePromise} from "cordova-sites/dist/client";
+import {Translator, NativeStoragePromise} from "cordova-sites/dist/client";
 import {SystemCalendar} from "../SystemCalendar";
 import {BlockedDay} from "../../../shared/model/BlockedDay";
 import {DateHelper} from "js-helper";
+import {Helper} from "js-helper/dist/shared";
 
 export class EventHelper {
-    static async search(searchString, beginTime, endTime, types, organisers, regions) {
-        let queryBuilder = await EasySyncClientDb.getInstance().createQueryBuilder(Event);
+    static async search(searchString?, beginTime?, endTime?, types?, organisers?, regions?, loadOrganisers?: boolean) {
+        let queryBuilder = <SelectQueryBuilder<Event>>await EasySyncClientDb.getInstance().createQueryBuilder(Event);
         queryBuilder = queryBuilder.leftJoinAndSelect("Event.repeatedEvent", "repeatedEvent");
         queryBuilder = queryBuilder.leftJoinAndSelect("repeatedEvent.originalEvent", "originalEvent");
+
+        if (Helper.nonNull(loadOrganisers, false)){
+            queryBuilder = queryBuilder.leftJoinAndSelect("Event.organisers", "organisers");
+            queryBuilder = queryBuilder.leftJoinAndSelect("originalEvent.organisers", "originalOrganisers");
+        }
 
         if (Helper.isNotNull(searchString) && searchString.trim() !== "") {
             searchString = "%" + searchString + "%";
@@ -172,21 +178,21 @@ export class EventHelper {
 
         let timeFormat = "";
         if (timeToNotify.getFullYear() !== startTime.getFullYear()) {
-            timeFormat = Helper.strftime("%a., %d.%m.%y, %H:%M", startTime, undefined, true);
+            timeFormat = DateHelper.strftime("%a., %d.%m.%y, %H:%M", startTime, undefined);
         } else if (timeToNotify.getMonth() !== startTime.getMonth()) {
-            timeFormat = Helper.strftime("%a., %d.%m, %H:%M", startTime, undefined, true);
+            timeFormat = DateHelper.strftime("%a., %d.%m, %H:%M", startTime, undefined);
         } else if (timeToNotify.getDate() === startTime.getDate()) {
-            timeFormat = Translator.translate("today") + Helper.strftime(", %H:%M", startTime);
+            timeFormat = Translator.translate("today") + DateHelper.strftime(", %H:%M", startTime);
         } else if (timeToNotify.getDate() + 1 === startTime.getDate()) {
-            timeFormat = Translator.getInstance().translate("tomorrow") + Helper.strftime(", %H:%M", startTime);
+            timeFormat = Translator.getInstance().translate("tomorrow") + DateHelper.strftime(", %H:%M", startTime);
         } else {
-            timeFormat = Helper.strftime("%a., %d.%m, %H:%M", startTime, undefined, false);
+            timeFormat = DateHelper.strftime("%a., %d.%m, %H:%M", startTime, undefined);
         }
 
         await notificationScheduler.schedule(id, Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
     }
 
-    static async generateSingleEventFromRepeatedEvent(repeatedEvent, day, addDatabaseEvents) {
+    static async generateSingleEventFromRepeatedEvent(repeatedEvent, day, addDatabaseEvents?: boolean) {
         let events = await this.generateEventFromRepeatedEvent(repeatedEvent, day, day, addDatabaseEvents);
         if (events.length === 1) {
             return events[0];
@@ -195,7 +201,7 @@ export class EventHelper {
         }
     }
 
-    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents, ignoreTime) {
+    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents?:boolean, ignoreTime?:boolean) {
         addDatabaseEvents = Helper.nonNull(addDatabaseEvents, false);
         ignoreTime = Helper.nonNull(ignoreTime, true);
 
@@ -248,8 +254,9 @@ export class EventHelper {
 
             if (blockedDays.indexOf(today) === -1 && weekdays.indexOf(from.getDay()) !== -1) {
                 let event = new Event();
+                // @ts-ignore
                 event.id = "r" + repeatedEvent.id + "-" + DateHelper.strftime("%Y-%m-%d", between);
-                event.repeatedEvent = repeatedEvent;
+                event.setRepeatedEvent(repeatedEvent);
                 event.setStartTime(new Date(between.getTime()));
 
                 event.setEndTime(new Date(between.getTime() + duration));

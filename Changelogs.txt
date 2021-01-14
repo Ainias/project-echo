@@ -1,0 +1,3 @@
+- Tags für Eventlisten
+- Orte sind optional
+- Orte können Links sein => müssen mit https://, http:// oder www. anfangen

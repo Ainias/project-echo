@@ -3,7 +3,6 @@ import view from "../../html/Sites/calendarSite.html";
 import {FooterSite} from "./FooterSite";
 import {Scaler} from "../Scaler";
 import {Favorite} from "../Model/Favorite";
-import {DragHelper} from "../Helper/DragHelper";
 import {DateHelper} from "../Helper/DateHelper";
 import {ViewHelper} from "js-helper/dist/client";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
@@ -151,7 +150,7 @@ export class CalendarSite extends FooterSite {
         lastDay.setMonth(lastDay.getMonth() + 1);
         // lastDay.setSeconds(-1);
 
-        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d %H:%M:%S", lastDay), this._filter.types, this._filter.churches);
+        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d %H:%M:%S", lastDay), this._filter.types, this._filter.churches, undefined,  true);
     }
 
     async onStart(pauseArguments) {

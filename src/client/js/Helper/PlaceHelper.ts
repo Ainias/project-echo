@@ -1,18 +1,34 @@
 import {Helper, Translator, ViewInflater} from "cordova-sites";
 
-import placeView from "../../html/place.html"
+const placeView = require("../../html/place.html");
 import {CookieConsentHelper} from "../CookieConsent/CookieConsentHelper";
 
 export class PlaceHelper {
-    static async createPlace(placeName, placeQuery) {
-        placeQuery = Helper.nonNull(placeQuery, false);
-        let view = await ViewInflater.getInstance().load(placeView);
-        view.querySelector(".place-name").innerText = placeName;
+    // @ts-ignore
+    private static API_KEY: string = __MAPS_API_KEY__;
 
-        if (placeQuery === false) {
-            view.querySelector(".place").classList.add("small")
+    static isURL(possibleUrl) {
+        return (typeof possibleUrl === "string") && (possibleUrl.startsWith("https://") || possibleUrl.startsWith("http://") || possibleUrl.startsWith("www."));
+    }
+
+    static async createPlace(placeName, placeQuery, small?) {
+        small = Helper.nonNull(small, false);
+        let view = await ViewInflater.getInstance().load(placeView);
+
+        if (this.isURL(placeQuery)) {
+            const a = document.createElement("a");
+            a.href = placeQuery;
+            a.innerText = placeName;
+            a.target="_blank";
+            view.querySelector(".place-name").appendChild(a);
+            view.querySelector(".place").classList.add("url")
         } else {
-            await this.buildGoogleMaps(view, placeQuery);
+            view.querySelector(".place-name").innerText = placeName;
+            if (small === true) {
+                view.querySelector(".place").classList.add("small")
+            } else {
+                await this.buildGoogleMaps(view, placeQuery);
+            }
         }
 
         return view;
@@ -43,12 +59,10 @@ export class PlaceHelper {
                 iframe.src = this._buildMapsLink(placeQuery);
                 iframe.classList.remove("hidden");
                 policyNotice.classList.add("hidden");
-                if (view.querySelector(".accept-third-party-cookies").checked){
+                if (view.querySelector(".accept-third-party-cookies").checked) {
                     CookieConsentHelper.addConsent("thirdParty");
                 }
             });
         }
     }
 }
-
-PlaceHelper.API_KEY = __MAPS_API_KEY__;

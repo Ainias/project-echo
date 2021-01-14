@@ -17,13 +17,16 @@ export class ChurchListFragment extends FsjChurchBaseListFragment {
         let churchElem = super.renderElement(church);
 
         let places = church.places;
-        if (!Array.isArray(places)) {
-            places = Object.keys(places);
+        const placesIsArray =Array.isArray(places);
+        let placesIndexes = places;
+        if (!placesIndexes) {
+            placesIndexes = Object.keys(places);
         }
 
-        if (places.length > 0) {
-            ((places.length === 1) ?
-                PlaceHelper.createPlace(places[0]) : PlaceHelper.createMultipleLocationsView()).then(view => churchElem.querySelector(".place-container").appendChild(view));
+        if (placesIndexes.length > 0) {
+            ((placesIndexes.length === 1) ?
+                PlaceHelper.createPlace(placesIndexes[0], placesIsArray?places[0]:places[placesIndexes[0]], true)
+                : PlaceHelper.createMultipleLocationsView()).then(view => churchElem.querySelector(".place-container").appendChild(view));
         }
         return churchElem;
     }

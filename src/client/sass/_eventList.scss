@@ -1,4 +1,4 @@
-#favorites-heading{
+#favorites-heading {
   padding-top: 5rem;
   padding-bottom: 1rem;
 }
@@ -12,6 +12,40 @@
     .time, .name {
       font-size: 1.33em;
       display: block;
+      @include breakpoint(small down) {
+        font-size: 1rem;
+      }
+    }
+
+    .tag-panel {
+      padding-left: 0.2rem;
+      margin-right: 0;
+    }
+
+    @include breakpoint(smedium down) {
+      .flex-container {
+        display: block;
+
+        .name, .tag-panel {
+          display: block;
+          width: 100%;
+          padding-left: 0;
+        }
+
+        .tag-panel {
+          min-height: 0;
+
+          &:not(:empty) {
+            min-height: 1.5rem;
+          }
+
+          .tag {
+            padding: 0.1rem;
+            font-size: 0.65rem;
+            margin-right: 0.1rem;
+          }
+        }
+      }
     }
 
     &:not(:first-of-type) {
@@ -28,25 +62,31 @@
     align-items: center;
   }
 
-  .day-line{
+  .day-line {
     border-bottom: 1px solid $greyColor;
     line-height: 0.1em;
     margin: 10px 0 0;
     display: block;
-    .day  {
+
+    .day {
       background: white;
       padding-right: 10px;
-      color: $highlightColor
+      color: $highlightColor;
+      @include breakpoint(small down) {
+        font-size: 0.9rem;
+      }
     }
   }
 }
 
-#past-section{
+#past-section {
   color: $greyColor;
+
   .day {
     color: $greyColor;
   }
-  h2{
+
+  h2 {
     font-size: 1.33rem;
     margin-top: 2rem;
     margin-bottom: 1rem;

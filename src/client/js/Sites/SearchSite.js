@@ -112,7 +112,7 @@ export class SearchSite extends FooterSite {
         });
 
         //TODO check if really all events found (or better to say, that all data is loaded!)
-        let events = await EventHelper.search(this._searchString, this._start, this._end, this._types, this._churches);
+        let events = await EventHelper.search(this._searchString, this._start, this._end, this._types, this._churches, undefined, true);
         await this._eventListFragment.setEvents(events);
 
         this._searchFilter.classList.add("hidden");

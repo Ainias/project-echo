@@ -1,4 +1,4 @@
-import view from "../../html/Sites/addEventSite.html";
+const view = require("../../html/Sites/addEventSite.html");
 
 import {MenuFooterSite} from "./MenuFooterSite";
 import {App, Form, Translator, Helper, Toast} from "cordova-sites";
@@ -20,6 +20,18 @@ import {CalendarSite} from "./CalendarSite";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 
 export class AddEventSite extends MenuFooterSite {
+    private _churches: Church[];
+    private _event: Event | RepeatedEvent;
+    private _blockedDay: Date;
+    private _placeNumber: number;
+    private _placesContainer: HTMLElement;
+    private _placesLineTemplate: HTMLElement;
+    private _placePreview: HTMLIFrameElement;
+    private _form: Form;
+    private _repeatableSectionElement: HTMLElement;
+    private _repeatableCheckbox: HTMLInputElement;
+
+
     constructor(siteManager) {
         super(siteManager, view);
         this.addDelegate(new UserSite(this, "events"));
@@ -41,7 +53,7 @@ export class AddEventSite extends MenuFooterSite {
                         let relations = RepeatedEvent.getRelations();
                         let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), relations);
 
-                        this._blockedDay = new Date(parts[1], parts[2] - 1, parts[3]);
+                        this._blockedDay = new Date(parseInt(parts[1]), parseInt(parts[2]) - 1, parseInt(parts[3]));
                         this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, this._blockedDay);
                         this._event.id = null;
                     }
@@ -138,7 +150,7 @@ export class AddEventSite extends MenuFooterSite {
             let event;
             if (this._event) {
                 if (this._event instanceof RepeatedEvent) {
-                    event = this._event.originalEvent;
+                    event = this._event.getOriginalEvent();
                 } else {
                     event = this._event;
                 }
@@ -165,7 +177,7 @@ export class AddEventSite extends MenuFooterSite {
             event.setEndTime(new Date(values["end"]));
             event.setType(values["type"]);
             event.setRegions(regions);
-            if (values["website"].trim() === ""){
+            if (values["website"].trim() === "") {
                 values["website"] = null;
             }
             event.setWebsite(values["website"]);
@@ -174,16 +186,16 @@ export class AddEventSite extends MenuFooterSite {
             let savePromise = event.save();
             if (Helper.isNotNull(event.repeatedEvent) && eventId === null) {
                 let blockedDay = new BlockedDay();
-                blockedDay.day = this._blockedDay;
-                blockedDay.day.setHours(12);
-                blockedDay.repeatedEvent = event.repeatedEvent;
-                blockedDay.event = event;
+                blockedDay.setDay(this._blockedDay);
+                this._blockedDay.setHours(12);
+                blockedDay.setRepeatedEvent(event.repeatedEvent);
+                blockedDay.setEvent(event);
                 event.repeatedEvent.blockedDays.push(blockedDay);
                 await savePromise;
                 await blockedDay.save();
             }
             await savePromise;
-            eventId = event.id;
+            // eventId = event.id;
 
             if (values["repeatable"]) {
                 let repeatedEvent = null;
@@ -287,15 +299,15 @@ export class AddEventSite extends MenuFooterSite {
 
     addPlaceLine() {
         this._placeNumber++;
-        let newLine = this._placesLineTemplate.cloneNode(true);
+        let newLine = <HTMLElement>this._placesLineTemplate.cloneNode(true);
 
-        let placeNameElem = newLine.querySelector(".place-name");
+        let placeNameElem = <HTMLInputElement>newLine.querySelector(".place-name");
         placeNameElem.name = "place-name-" + this._placeNumber;
 
-        let placeQueryElem = newLine.querySelector(".place-query");
+        let placeQueryElem = <HTMLInputElement>newLine.querySelector(".place-query");
         placeQueryElem.name = "place-query-" + this._placeNumber;
 
-        placeNameElem.addEventListener("keyup", e => {
+        placeNameElem.addEventListener("input", e => {
             placeQueryElem.placeholder = placeNameElem.value;
             updatePreview();
         });
@@ -304,7 +316,6 @@ export class AddEventSite extends MenuFooterSite {
             placeQueryElem.placeholder = placeNameElem.value;
             updatePreview();
         });
-
 
         let updateTimeout = null;
         let updatePreview = () => {
@@ -338,7 +349,7 @@ export class AddEventSite extends MenuFooterSite {
     }
 
     async setFormValuesFromEvent() {
-        if (this._event instanceof Event || this._event instanceof RepeatedEvent) {
+        if (this._event instanceof Event || (this._event instanceof RepeatedEvent)) {
 
             let values = {};
 
@@ -367,7 +378,7 @@ export class AddEventSite extends MenuFooterSite {
             this.findBy("input[type='hidden'][name='image-before']").value = this._event.getImages()[0];
             this.findBy("input[type='file'][name='image']").removeAttribute("required");
 
-            let places = this._event.getPlaces();
+            let places: any = this._event.getPlaces();
             if (Array.isArray(places)) {
                 places = Helper.arrayToObject(places, place => place);
             }
@@ -380,29 +391,32 @@ export class AddEventSite extends MenuFooterSite {
                 if (placeName !== places[placeName]) {
                     values["place-query-" + (i + 1)] = places[placeName];
                 } else {
-                    let queryElem = this.findBy("[name='place-query-" + (i + 1) + "']");
+                    let queryElem = <HTMLInputElement>this.findBy("[name='place-query-" + (i + 1) + "']");
                     queryElem.placeholder = placeName;
-                    delete queryElem.removeAttribute("data-translation-placeholder");
+                    queryElem.removeAttribute("data-translation-placeholder");
                 }
             });
+            if (Object.keys(places).length === 0){
+                this.findBy(".remove-place")?.dispatchEvent(new MouseEvent("click"));
+            }
 
             if (this._event instanceof RepeatedEvent) {
                 this._repeatableCheckbox.checked = true;
-                this._repeatableCheckbox.setAttribute("readonly", true);
-                this._repeatableCheckbox.setAttribute("disabled", true);
+                this._repeatableCheckbox.setAttribute("readonly", "true");
+                this._repeatableCheckbox.setAttribute("disabled", "true");
                 this._repeatableSectionElement.classList.remove("hidden");
 
-                if (Helper.isNotNull(this._event.repeatUntil)) {
-                    values["repeat-until"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.repeatUntil)
+                if (Helper.isNotNull(this._event.getRepeatUntil())) {
+                    values["repeat-until"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.getRepeatUntil())
                 }
 
-                let repeatingArguments = this._event.repeatingArguments.split(",");
+                let repeatingArguments = this._event.getRepeatingArguments().split(",");
                 repeatingArguments.forEach(weekday => {
                     values["repeat-" + weekday] = weekday;
                 });
-            } else if (this._event.repeatedEvent) {
-                this._repeatableCheckbox.setAttribute("readonly", true);
-                this._repeatableCheckbox.setAttribute("disabled", true);
+            } else if (this._event.getRepeatedEvent()) {
+                this._repeatableCheckbox.setAttribute("readonly", "true");
+                this._repeatableCheckbox.setAttribute("disabled", "true");
             }
 
             await this._form.setValues(values);
