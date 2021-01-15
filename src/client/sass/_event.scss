@@ -32,6 +32,7 @@
 
   &.is-favorite {
     background-image: url("../img/icons/favorites-small-selected.svg");
+    background-size: contain;
   }
 }
 
