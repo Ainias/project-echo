@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Pfad_3" data-name="Pfad 3" d="M0-7.83H10.26V5.622H0Z" transform="translate(-0.65 7.237)" fill="#838383"/>
+    </clipPath>
+    <clipPath id="clip-Ort">
+      <rect width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="Ort" clip-path="url(#clip-Ort)">
+    <rect width="24" height="24" fill="#fff"/>
+    <g id="Gruppe_3" data-name="Gruppe 3" transform="translate(7.65 6.458)">
+      <g id="Gruppe_2" data-name="Gruppe 2" transform="translate(0 0)" clip-path="url(#clip-path)">
+        <g id="Gruppe_1" data-name="Gruppe 1" transform="translate(0.195 0.195)">
+          <path id="Pfad_2" data-name="Pfad 2" d="M1.548,2.126A1.612,1.612,0,1,1,3.161.513,1.613,1.613,0,0,1,1.548,2.126m0-3.767A2.153,2.153,0,1,0,3.7.513,2.154,2.154,0,0,0,1.548-1.641m0,8.875S-2.223,3.738-2.223.513a3.77,3.77,0,0,1,7.539,0c0,3.225-3.768,6.721-3.768,6.721m0-11.025A4.309,4.309,0,0,0-2.76.513c0,3.493,4.308,7.528,4.308,7.528S5.858,4.007,5.858.513a4.309,4.309,0,0,0-4.31-4.3" transform="translate(2.76 3.79)" fill="#838383" stroke="#838383" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" fill-rule="evenodd"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

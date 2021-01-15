@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Pfad_11" data-name="Pfad 11" d="M0-22.58H22.58V0H0Z" fill="#d56b52"/>
+    </clipPath>
+    <clipPath id="clip-Kalender2">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Kalender2" clip-path="url(#clip-Kalender2)">
+    <rect width="32" height="32" fill="#fff"/>
+    <g id="Gruppe_220" data-name="Gruppe 220" transform="translate(5 27.581)">
+      <g id="Gruppe_28" data-name="Gruppe 28" clip-path="url(#clip-path)">
+        <g id="Gruppe_26" data-name="Gruppe 26" transform="translate(21.33 -15.301)">
+          <path id="Pfad_9" data-name="Pfad 9" d="M0,0H-20.08V-3.01a1.008,1.008,0,0,1,1.01-1.01h2v1.51a.51.51,0,0,0,.51.5.507.507,0,0,0,.5-.5V-4.02H-4.02v1.51a.507.507,0,0,0,.5.5.51.51,0,0,0,.51-.5V-4.02h2A1.007,1.007,0,0,1,0-3.01ZM0,13.042a1,1,0,0,1-1.01,1.005H-19.07a1.006,1.006,0,0,1-1.01-1.005V1H0ZM-1.01-5.02h-2V-6.529a.5.5,0,0,0-.51-.5.5.5,0,0,0-.5.5V-5.02H-16.06V-6.529a.5.5,0,0,0-.5-.5.5.5,0,0,0-.51.5V-5.02h-2a2.011,2.011,0,0,0-2.01,2.01V13.042a2.01,2.01,0,0,0,2.01,2.009H-1.01A2.01,2.01,0,0,0,1,13.042V-3.01A2.011,2.011,0,0,0-1.01-5.02" fill="#d56b52" fill-rule="evenodd"/>
+        </g>
+        <g id="Gruppe_27" data-name="Gruppe 27" transform="translate(21.33 -15.301)">
+          <path id="Pfad_10" data-name="Pfad 10" d="M0,0H-20.08V-3.01a1.008,1.008,0,0,1,1.01-1.01h2v1.51a.51.51,0,0,0,.51.5.507.507,0,0,0,.5-.5V-4.02H-4.02v1.51a.507.507,0,0,0,.5.5.51.51,0,0,0,.51-.5V-4.02h2A1.007,1.007,0,0,1,0-3.01ZM0,13.042a1,1,0,0,1-1.01,1.005H-19.07a1.006,1.006,0,0,1-1.01-1.005V1H0ZM-1.01-5.02h-2V-6.529a.5.5,0,0,0-.51-.5.5.5,0,0,0-.5.5V-5.02H-16.06V-6.529a.5.5,0,0,0-.5-.5.5.5,0,0,0-.51.5V-5.02h-2a2.011,2.011,0,0,0-2.01,2.01V13.042a2.01,2.01,0,0,0,2.01,2.009H-1.01A2.01,2.01,0,0,0,1,13.042V-3.01A2.011,2.011,0,0,0-1.01-5.02" fill="#d56b52" stroke="#d56b52" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

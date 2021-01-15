@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Pfad_27" data-name="Pfad 27" d="M0-10.92H21.96V0H0Z" fill="#d56b52"/>
+    </clipPath>
+    <clipPath id="clip-PfeilOrange">
+      <rect width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="PfeilOrange" clip-path="url(#clip-PfeilOrange)">
+    <rect width="24" height="24" fill="#fff"/>
+    <g id="Gruppe_56" data-name="Gruppe 56" transform="translate(1 17.92)">
+      <g id="Gruppe_55" data-name="Gruppe 55" clip-path="url(#clip-path)">
+        <g id="Gruppe_54" data-name="Gruppe 54" transform="translate(21.81 -5.81)">
+          <path id="Pfad_26" data-name="Pfad 26" d="M0,0-4.99-4.96a.491.491,0,0,0-.35-.15.5.5,0,0,0-.5.5.511.511,0,0,0,.15.35L-1.55-.15H-21.31a.5.5,0,0,0-.5.5.5.5,0,0,0,.5.5H-1.55L-5.69,4.96a.509.509,0,0,0-.15.35.5.5,0,0,0,.5.5.491.491,0,0,0,.35-.15L0,.7A.493.493,0,0,0,.15.35.491.491,0,0,0,0,0" fill="#d56b52" fill-rule="evenodd"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

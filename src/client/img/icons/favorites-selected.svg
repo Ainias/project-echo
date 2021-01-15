@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Pfad_17" data-name="Pfad 17" d="M0-22.58H22.58V0H0Z" fill="#d56b52"/>
+    </clipPath>
+    <clipPath id="clip-Favouriten2">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Favouriten2" clip-path="url(#clip-Favouriten2)">
+    <rect width="32" height="32" fill="#fff"/>
+    <g id="Gruppe_221" data-name="Gruppe 221" transform="translate(5 27.581)">
+      <g id="Gruppe_34" data-name="Gruppe 34" transform="translate(8.28 -14.3)">
+        <path id="Pfad_15" data-name="Pfad 15" d="M0,0H-8.03l6.521,5.021L-4.52,14.05,3.01,8.53l7.529,5.52L7.529,5.021,14.05,0H6.02L3.01-8.03ZM-.551,5.331l.222-.671L-.89,4.22-5.08,1H.689L.94.351,3.01-5.17,5.081.351,5.331,1H11.1L6.91,4.22l-.56.44,2.24,6.72L3.6,7.72l-.59-.43-.59.43-4.99,3.66Z" fill="#d56b52"/>
+      </g>
+      <g id="Gruppe_36" data-name="Gruppe 36" clip-path="url(#clip-path)">
+        <g id="Gruppe_35" data-name="Gruppe 35" transform="translate(16.87 -2.92)">
+          <path id="Pfad_16" data-name="Pfad 16" d="M0,0-4.99-3.66l-.59-.43-.59.43L-11.16,0l2.019-6.05.221-.67-.56-.44-4.19-3.22H-7.9l.25-.649,2.07-5.521,2.07,5.521.25.649H2.51L-1.68-7.16l-.56.44ZM5.46-11.38H-2.57l-3.01-8.03-3.01,8.03h-8.03l6.52,5.021L-13.11,2.67l7.53-5.52L1.949,2.67l-3.01-9.029Z" fill="#d56b52" stroke="#d56b52" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

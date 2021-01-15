@@ -17,21 +17,21 @@
     &::before{
       padding-right: 0.2rem;
       vertical-align: top;
-      content: url("../img/icons/arrowOrange.png");
+      content: url("../img/icons/arrowOrange.svg");
     }
   }
 }
 
 .favorite {
   cursor: pointer;
-  background-image: url("../img/icons/favorites-small.png");
+  background-image: url("../img/icons/favorites-small.svg");
   background-repeat: no-repeat;
   display: inline-block;
   width: 24px;
   min-height: 24px;
 
   &.is-favorite {
-    background-image: url("../img/icons/favorites-small-selected.png");
+    background-image: url("../img/icons/favorites-small-selected.svg");
   }
 }
 

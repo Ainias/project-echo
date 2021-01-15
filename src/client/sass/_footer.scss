@@ -14,27 +14,27 @@
     height: 32px;
 
     &.home {
-      background-image: url("../img/icons/home.png");
+      background-image: url("../img/icons/home.svg");
       &.selected {
-        background-image: url("../img/icons/home-selected.png");
+        background-image: url("../img/icons/home-selected.svg");
       }
     }
     &.calendar{
-      background-image: url("../img/icons/calendar.png");
+      background-image: url("../img/icons/calendar.svg");
       &.selected {
-        background-image: url("../img/icons/calendar-selected.png");
+        background-image: url("../img/icons/calendar-selected.svg");
       }
     }
     &.search{
-      background-image: url("../img/icons/search.png");
+      background-image: url("../img/icons/search.svg");
       &.selected {
-        background-image: url("../img/icons/search-selected.png");
+        background-image: url("../img/icons/search-selected.svg");
       }
     }
     &.favorites{
-      background-image: url("../img/icons/favorites.png");
+      background-image: url("../img/icons/favorites.svg");
       &.selected {
-        background-image: url("../img/icons/favorites-selected.png");
+        background-image: url("../img/icons/favorites-selected.svg");
       }
     }
   }
