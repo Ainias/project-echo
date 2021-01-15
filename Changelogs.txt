@@ -1,3 +1,6 @@
 - Tags für Eventlisten
 - Orte sind optional
 - Orte können Links sein => müssen mit https://, http:// oder www. anfangen
+- Icons ausgetauscht
+- Instagram-Link hinzugefügt (man braucht den kompletten link)
+- Links werden "abgebrochen"
