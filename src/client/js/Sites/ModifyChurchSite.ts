@@ -1,5 +1,7 @@
 import {MenuFooterSite} from "./MenuFooterSite";
-import view from "../../html/Sites/modifyChurchSite.html";
+
+const view = require("../../html/Sites/modifyChurchSite.html");
+
 import {App, Form, Helper, Translator} from "cordova-sites";
 import {Church} from "../../../shared/model/Church";
 import {UserSite} from "cordova-sites-user-management/dist/client/js/Context/UserSite";
@@ -11,6 +13,15 @@ import {ShowChurchSite} from "./ShowChurchSite";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 
 export class ModifyChurchSite extends MenuFooterSite {
+
+    private _church: Church;
+    private _placeNumber: number;
+    private _placesContainer: HTMLElement;
+    private _placesLineTemplate: HTMLElement;
+    private _placePreview: HTMLIFrameElement;
+    private _form: Form;
+
+
     constructor(siteManager) {
         super(siteManager, view);
         this.addDelegate(new UserSite(this, "organisers"));
@@ -52,7 +63,7 @@ export class ModifyChurchSite extends MenuFooterSite {
         this._form = new Form(this.findBy("#modify-church-form"), async values => {
             let names = {};
             let descriptions = {};
-            let imageSrc = (!Helper.imageUrlIsEmpty(values["image"])?values["image"]: values["image-before"]);
+            let imageSrc = (!Helper.imageUrlIsEmpty(values["image"]) ? values["image"] : values["image-before"]);
             let places = {};
             let regions = [await Region.findById(1)];
 
@@ -80,10 +91,9 @@ export class ModifyChurchSite extends MenuFooterSite {
             }
 
             let img = null;
-            if (church.images && church.images.length >= 0){
+            if (church.images && church.images.length >= 0) {
                 img = church.images[0];
-            }
-            else {
+            } else {
                 img = new FileMedium();
             }
 
@@ -96,6 +106,11 @@ export class ModifyChurchSite extends MenuFooterSite {
             church.places = places;
             church.website = values["website-url"];
             church.regions = regions;
+
+            if (values["instagram"] && values["instagram"].trim() === "") {
+                values["instagram"] = null;
+            }
+            church.setInstagram(values["instagram"]);
 
             await church.save();
 
@@ -121,12 +136,12 @@ export class ModifyChurchSite extends MenuFooterSite {
 
     addPlaceLine() {
         this._placeNumber++;
-        let newLine = this._placesLineTemplate.cloneNode(true);
+        let newLine = <HTMLElement>this._placesLineTemplate.cloneNode(true);
 
-        let placeNameElem = newLine.querySelector(".place-name");
+        let placeNameElem = <HTMLInputElement>newLine.querySelector(".place-name");
         placeNameElem.name = "place-name-" + this._placeNumber;
 
-        let placeQueryElem = newLine.querySelector(".place-query");
+        let placeQueryElem = <HTMLInputElement>newLine.querySelector(".place-query");
         placeQueryElem.name = "place-query-" + this._placeNumber;
 
         placeNameElem.addEventListener("keyup", e => {
@@ -172,29 +187,29 @@ export class ModifyChurchSite extends MenuFooterSite {
     }
 
     async setFormValuesFromChurch() {
-        if (Helper.isNull(this._church) || !this._church instanceof Church) {
+        if (Helper.isNull(this._church) || !(this._church instanceof Church)) {
             return;
         }
 
         let values = {};
 
-        let names = this._church.names;
+        let names = this._church.getNames();
         Object.keys(names).forEach(lang => {
             values["name-" + lang] = names[lang];
         });
 
-        let descriptions = this._church.descriptions;
+        let descriptions = this._church.getDescriptions();
         Object.keys(descriptions).forEach(lang => {
             values["description-" + lang] = descriptions[lang];
         });
 
-        values["website-url"] = this._church.website;
+        values["website-url"] = this._church.getWebsite();
 
-        this.findBy("#event-image").src = this._church.images[0];
-        this.findBy("input[type='hidden'][name='image-before']").value = this._church.images[0];
+        this.findBy("#event-image").src = this._church.getImages()[0];
+        this.findBy("input[type='hidden'][name='image-before']").value = this._church.getImages()[0];
         this.findBy("input[type='file'][name='image']").removeAttribute("required");
 
-        let places = this._church.places;
+        let places: any = this._church.places;
         if (Array.isArray(places)) {
             places = Helper.arrayToObject(places, place => place);
         }
@@ -209,9 +224,12 @@ export class ModifyChurchSite extends MenuFooterSite {
             } else {
                 let queryElem = this.findBy("[name='place-query-" + (i + 1) + "']");
                 queryElem.placeholder = placeName;
-                delete queryElem.removeAttribute("data-translation-placeholder");
+                queryElem.removeAttribute("data-translation-placeholder");
             }
         });
+        if (this._church.getInstagram()) {
+            values["instagram"] = this._church.getInstagram();
+        }
 
         await this._form.setValues(values);
     }

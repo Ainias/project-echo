@@ -7,7 +7,7 @@ import {UserManager} from "cordova-sites-user-management/dist/client/js/UserMana
 export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this._footerFragment.setSelected(".icon.home");
+        this.footerFragment.setSelected(".icon.home");
     }
 
     /**

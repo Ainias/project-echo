@@ -26,6 +26,7 @@ import {AddRepeatedEvent1000000007000} from "../shared/model/migrations/AddRepea
 import {ImagesSchema1000000010000} from "../shared/model/migrations/ImagesSchema";
 import {ImagesSchemaDownload1000000011000} from "../shared/model/migrations/ImagesSchemaDownload";
 import {EventWeblink1000000012000} from "../shared/model/migrations/EventWeblink";
+import {ChurchInstalink1000000013000} from "../shared/model/migrations/ChurchInstalink";
 
 const translationGerman = require("../client/translations/de");
 const  translationEnglish = require ("../client/translations/en");
@@ -54,6 +55,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
         ImagesSchema1000000010000,
         ImagesSchemaDownload1000000011000,
         EventWeblink1000000012000,
+        ChurchInstalink1000000013000,
     ],
 
     "logging": ["error", "warn"]

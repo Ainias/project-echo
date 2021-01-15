@@ -19,9 +19,18 @@ export class PlaceHelper {
             const a = document.createElement("a");
             a.href = placeQuery;
             a.innerText = placeName;
-            a.target="_blank";
-            view.querySelector(".place-name").appendChild(a);
-            view.querySelector(".place").classList.add("url")
+            a.target = "_blank";
+            a.classList.add("link")
+            a.classList.add("without-arrow")
+
+            if (small) {
+                a.classList.add("grow");
+                view.querySelector(".place-name").replaceWith(a);
+            } else {
+                view.querySelector(".place-name").appendChild(a);
+                // view.querySelector(".place").classList.add("url")
+            }
+
         } else {
             view.querySelector(".place-name").innerText = placeName;
             if (small === true) {

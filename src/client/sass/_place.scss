@@ -11,6 +11,10 @@
     display: none;
   }
 
+  .place-name a {
+    white-space: initial;
+  }
+
   .non-third-party-cookies-accepted-message{
     padding: 2rem 0.7rem;
     text-align: center;

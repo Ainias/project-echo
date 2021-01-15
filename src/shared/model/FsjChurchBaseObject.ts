@@ -23,6 +23,22 @@ export class FsjChurchBaseObject extends AccessEasySyncModel {
         return columns;
     }
 
+    getNames() {
+        return this.names;
+    }
+
+    getDescriptions() {
+        return this.descriptions;
+    }
+
+    getWebsite() {
+        return this.website;
+    }
+
+    getImages(){
+        return this.images;
+    }
+
     getNameTranslation() {
         return (<typeof EasySyncBaseModel>this.constructor).getSchemaName()+"-name-" + this.id;
     }

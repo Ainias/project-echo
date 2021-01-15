@@ -6,39 +6,20 @@ import { FileMedium } from "cordova-sites-easy-sync/dist/shared";
 
 export class Church extends FsjChurchBaseObject {
     public places: any[];
+    private instagram: string;
 
     constructor() {
         super();
         this.places = [];
+        this.instagram = "";
     }
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
         columns["places"] = BaseDatabase.TYPES.MY_JSON;
+        columns["instagram"] = {type: BaseDatabase.TYPES.STRING, nullable: true};
         return columns;
     }
-
-    // getNameTranslation() {
-    //     return "church-name-" + this.id;
-    // }
-    //
-    // getDescriptionTranslation() {
-    //     return "church-description-" + this.id;
-    // }
-    //
-    // getDynamicTranslations() {
-    //     let translations = {};
-    //     Object.keys(this.names).forEach(language => {
-    //         translations[language] = translations[language] || {};
-    //         translations[language][this.getNameTranslation()] = this.names[language];
-    //     });
-    //
-    //     Object.keys(this.descriptions).forEach(language => {
-    //         translations[language] = translations[language] || {};
-    //         translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
-    //     });
-    //     return translations;
-    // }
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
@@ -59,6 +40,13 @@ export class Church extends FsjChurchBaseObject {
             sync: true
         };
         return relations;
+    }
+
+    getInstagram(){
+        return this.instagram;
+    }
+    setInstagram(instagram:string){
+        this.instagram = instagram;
     }
 }
 

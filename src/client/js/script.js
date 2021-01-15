@@ -52,6 +52,7 @@ import {AboutUsSite} from "./Sites/AboutUsSite";
 import {Sync} from "./Sync";
 import {DateHelper} from "js-helper";
 import {EventWeblink1000000012000} from "../../shared/model/migrations/EventWeblink";
+import {ChurchInstalink1000000013000} from "../../shared/model/migrations/ChurchInstalink";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -66,8 +67,8 @@ App.setLogo(logo);
 
 App.addInitialization(async (app) => {
 
-    let obj = await NativeStoragePromise.getItem("background-counter-obj", []);
-    console.log("background obj: ", obj);
+    // let obj = await NativeStoragePromise.getItem("background-counter-obj", []);
+    // console.log("background obj: ", obj);
     // await NativeStoragePromise.setItem("background-counter-obj", []);
 
     //add Bibelvers to html
@@ -199,6 +200,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         ImagesSchema1000000010000,
         ImagesSchemaDownload1000000011000,
         EventWeblink1000000012000,
+        ChurchInstalink1000000013000,
     ]
 });
 

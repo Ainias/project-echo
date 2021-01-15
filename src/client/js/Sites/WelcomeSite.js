@@ -19,7 +19,7 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {
         super(siteManager, view);
         this._navbarFragment.setCanGoBack(false);
-        this._footerFragment.setSelected(".icon.home");
+        this.footerFragment.setSelected(".icon.home");
         this._navbarFragment.setBackgroundImage(componentImg);
 
         this._eventListFragment = new EventOverviewFragment(this);

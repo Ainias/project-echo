@@ -1,4 +1,5 @@
-import view from "../../html/Sites/showChurchSite.html"
+const view = require("../../html/Sites/showChurchSite.html");
+
 import {App, ConfirmDialog, Helper, Toast, Translator} from "cordova-sites/dist/client";
 import {Church} from "../../../shared/model/Church";
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
@@ -8,9 +9,11 @@ import {ModifyChurchSite} from "./ModifyChurchSite";
 import {CalendarSite} from "./CalendarSite";
 
 export class ShowChurchSite extends AbsoluteBarMenuSite {
+    private _church: Church;
+
     constructor(siteManager) {
         super(siteManager, view);
-        this._footerFragment.setSelected(".icon.home");
+        this.footerFragment.setSelected(".icon.home");
     }
 
     async onConstruct(constructParameters) {
@@ -30,9 +33,9 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         }
 
         //Image
-        let images = this._church.images;
+        let images = this._church.getImages();
         if (images.length > 0) {
-            this._navbarFragment.setBackgroundImage(images[0]);
+            this.getNavbarFragment().setBackgroundImage(images[0]);
         }
 
         return res;
@@ -54,12 +57,23 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         //link
         let link = this.findBy("#website");
 
-        let href = this._church.website;
+        let href = this._church.getWebsite();
         if (!href.startsWith("http") && !href.startsWith("//")) {
             href = "https://" + href;
         }
         link.href = href;
-        link.appendChild(document.createTextNode(this._church.website));
+        link.appendChild(document.createTextNode(this._church.getWebsite()));
+
+        let instagramLink = this._church.getInstagram();
+        if (instagramLink) {
+            if (!instagramLink.startsWith("http") && !instagramLink.startsWith("//")) {
+                instagramLink = "https://" + instagramLink;
+            }
+            const instagramElement = this.findBy("#instagram-link");
+            instagramElement.href = instagramLink;
+            instagramElement.classList.remove("hidden");
+        }
+
 
         //places
         let placesContainer = this.findBy("#places-container");
@@ -67,15 +81,15 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         let places = this._church.places;
         let placesAreObject = false;
 
-        if (!Array.isArray(places)){
+        if (!Array.isArray(places)) {
             places = Object.keys(places);
             placesAreObject = true;
         }
 
         await Helper.asyncForEach(places, async place => {
-            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject)?this._church.places[place]: place));
+            placesContainer.appendChild(await PlaceHelper.createPlace(place, (placesAreObject) ? this._church.places[place] : place));
         });
-        placesContainer.dataset["numPlaces"] = ""+places.length;
+        placesContainer.dataset["numPlaces"] = "" + places.length;
 
         UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
             if (loggedIn && manager.hasAccess(Church.ACCESS_MODIFY)) {

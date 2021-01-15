@@ -23,7 +23,7 @@
     }
 
     @include breakpoint(smedium down) {
-      .flex-container {
+      > .flex-container {
         display: block;
 
         .name, .tag-panel {
