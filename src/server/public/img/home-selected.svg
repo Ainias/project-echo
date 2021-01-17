@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Pfad_20" data-name="Pfad 20" d="M0-22.58H24.58V0H0Z" fill="#d56b52"/>
+    </clipPath>
+    <clipPath id="clip-Home2">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Home2" clip-path="url(#clip-Home2)">
+    <rect width="32" height="32" fill="#fff"/>
+    <g id="Gruppe_218" data-name="Gruppe 218" transform="translate(4 27.58)">
+      <g id="Gruppe_40" data-name="Gruppe 40" clip-path="url(#clip-path)">
+        <g id="Gruppe_38" data-name="Gruppe 38" transform="translate(9.28 -1.238)">
+          <path id="Pfad_18" data-name="Pfad 18" d="M0,0H-5.016V-12.852l8.026-7.03,8.025,7.03V-.031H6.02V-8.542a.507.507,0,0,0-.5-.51H.5a.507.507,0,0,0-.5.51ZM5.018-.012H1v-8.03H5.018ZM14.9-10.4,3.365-20.941a.511.511,0,0,0-.355-.151.511.511,0,0,0-.356.151L-8.883-10.4a.478.478,0,0,0-.147.349.5.5,0,0,0,.5.5A.47.47,0,0,0-8.174-9.7l2.154-2.151V.488a.5.5,0,0,0,.5.5H11.537a.5.5,0,0,0,.5-.5v-12.34L14.193-9.7a.47.47,0,0,0,.355.149.5.5,0,0,0,.5-.5A.479.479,0,0,0,14.9-10.4" fill="#d56b52" fill-rule="evenodd"/>
+        </g>
+        <g id="Gruppe_39" data-name="Gruppe 39" transform="translate(9.28 -1.238)">
+          <path id="Pfad_19" data-name="Pfad 19" d="M0,0H-5.016V-12.852l8.026-7.03,8.025,7.03V-.031H6.02V-8.542a.507.507,0,0,0-.5-.51H.5a.507.507,0,0,0-.5.51ZM5.018-.012H1v-8.03H5.018ZM14.9-10.4,3.365-20.941a.511.511,0,0,0-.355-.151.511.511,0,0,0-.356.151L-8.883-10.4a.478.478,0,0,0-.147.349.5.5,0,0,0,.5.5A.47.47,0,0,0-8.174-9.7l2.154-2.151V.488a.5.5,0,0,0,.5.5H11.537a.5.5,0,0,0,.5-.5v-12.34L14.193-9.7a.47.47,0,0,0,.355.149.5.5,0,0,0,.5-.5A.479.479,0,0,0,14.9-10.4" fill="#d56b52" stroke="#d56b52" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
