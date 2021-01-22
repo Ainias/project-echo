@@ -55,7 +55,6 @@ describe("calendar site", () => {
     });
 
     it("termin tests", async function () {
-
         await browser.execute(() => {
             let article = document.getElementById("calendar");
             article.classList.add("testing");
@@ -69,11 +68,11 @@ describe("calendar site", () => {
         await $(".day-number=29").click();
         expect(await $(".day.cell.active").getText()).toEqual("29");
 
-        expect(await $(".name=Termin 5").isDisplayed()).toBeTruthy();
-        expect(await $(".name=Termin 5.1").isDisplayed()).toBeTruthy();
-        expect(await $(".name=Termin 5.2").isDisplayed()).toBeTrue();
-        expect(await $(".name=Termin 5.3").isDisplayed()).toBeTrue();
-        expect(await $(".name=Termin 5.4").isDisplayed()).toBeTrue();
+        expect(await $(".name=Termin 5").isExisting()).toBeTruthy();
+        expect(await $(".name=Termin 5.1").isExisting()).toBeTruthy();
+        expect(await $(".name=Termin 5.2").isExisting()).toBeTruthy();
+        expect(await $(".name=Termin 5.3").isExisting()).toBeTrue();
+        expect(await $(".name=Termin 5.4").isExisting()).toBeTrue();
     });
 
     it("browse calendar", async function () {

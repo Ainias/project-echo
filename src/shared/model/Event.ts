@@ -243,7 +243,7 @@ export class Event extends AccessEasySyncModel {
         }
     }
 
-    getWebsite(): {} {
+    getWebsite(): string {
         if (Helper.isNull(this.website) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getWebsite();
         }

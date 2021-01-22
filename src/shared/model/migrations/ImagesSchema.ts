@@ -13,13 +13,15 @@ export class ImagesSchema1000000010000 implements MigrationInterface {
             await queryRunner.query("ALTER TABLE fsj ENGINE=InnoDB;");
         }
 
-        let table = MigrationHelper.createTableFromModelClass(FileMedium);
-        table.columns.forEach(column => {
-            if (column.name === "src") {
-                column.type = MigrationHelper.isServer() ? "MEDIUMTEXT" : "TEXT";
-            }
-        });
-        await queryRunner.createTable(table);
+        if (!await queryRunner.hasTable("file_medium")) {
+            let table = MigrationHelper.createTableFromModelClass(FileMedium);
+            table.columns.forEach(column => {
+                if (column.name === "src") {
+                    column.type = MigrationHelper.isServer() ? "MEDIUMTEXT" : "TEXT";
+                }
+            });
+            await queryRunner.createTable(table);
+        }
 
         let fsjManyToManyTable = MigrationHelper.createManyToManyTable("fsj", "fileMedium");
         fsjManyToManyTable.name = "fsjImages";

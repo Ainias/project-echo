@@ -4,6 +4,7 @@ import {Region} from "../../../shared/model/Region";
 import {MenuFooterSite} from "./MenuFooterSite";
 import {ChurchListFragment} from "../Fragments/ChurchListFragment";
 import {WelcomeSite} from "./WelcomeSite";
+import {Church} from "../../../shared/model/Church";
 
 export class ListChurchesSite extends MenuFooterSite {
     constructor(siteManager) {
@@ -26,6 +27,8 @@ export class ListChurchesSite extends MenuFooterSite {
         } else {
             regions = await Region.find(undefined, undefined, undefined, undefined, Region.getRelations());
         }
+
+        console.log("churches", regions, await Church.find());
 
         let churches = {};
         regions.forEach(region => {

@@ -2,7 +2,7 @@ import {FooterSite} from "./FooterSite";
 import {App, ButtonChooseDialog, ConfirmDialog, Toast, Translator} from "cordova-sites";
 import {Event} from "../../../shared/model/Event";
 
-import view from "../../html/Sites/eventSite.html";
+const view = require("../../html/Sites/eventSite.html");
 import {Favorite} from "../Model/Favorite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {UserManager} from "cordova-sites-user-management/dist/client";
@@ -15,9 +15,12 @@ import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
 import {BlockedDay} from "../../../shared/model/BlockedDay";
 
 export class EventSite extends FooterSite {
+    private _event: Event;
+    private _isFavorite: boolean;
+
     constructor(siteManager) {
         super(siteManager, view);
-        this._footerFragment.setSelected(".icon.calendar");
+        this.getFooterFragment().setSelected(".icon.calendar");
     }
 
     async onConstruct(constructParameters) {
@@ -36,7 +39,8 @@ export class EventSite extends FooterSite {
 
             if (parts.length === 4) {
                 let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1),RepeatedEvent.getRelations());
-                this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent, new Date(parts[1], parts[2] - 1, parts[3]))
+                this._event = await EventHelper.generateSingleEventFromRepeatedEvent(repeatedEvent,
+                    new Date(parseInt(parts[1]), parseInt(parts[2]) - 1, parseInt(parts[3])));
             }
         } else {
             let relations = Event.getRelations();
@@ -48,7 +52,7 @@ export class EventSite extends FooterSite {
             this.finish();
             return;
         }
-        this._isFavortite = (await Favorite.findOne({eventId: this._event.getId(), isFavorite: true}) !== null);
+        this._isFavorite = (await Favorite.findOne({eventId: this._event.getId(), isFavorite: true}) !== null);
 
         return res;
     }
@@ -101,12 +105,13 @@ export class EventSite extends FooterSite {
 
         //favorite
         let favElem = this.findBy("#favorite .favorite");
-        if (this._isFavortite) {
+        if (this._isFavorite) {
             favElem.classList.add("is-favorite");
         }
 
         favElem.addEventListener("click", async (e) => {
             e.stopPropagation();
+            this.showLoadingSymbol();
 
             let isFavorite = await EventHelper.toggleFavorite(this._event);
             if (isFavorite) {
@@ -114,7 +119,8 @@ export class EventSite extends FooterSite {
             } else {
                 favElem.classList.remove("is-favorite");
             }
-            this._isFavortite = isFavorite;
+            this._isFavorite = isFavorite;
+            this.removeLoadingSymbol();
         });
 
         let tagPanel = this.findBy("#tag-panel");
@@ -176,7 +182,7 @@ export class EventSite extends FooterSite {
         this.findBy("#delete-event").addEventListener("click", async () => {
             if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
 
-                if (Helper.isNotNull(this._event.repeatedEvent)) {
+                if (Helper.isNotNull(this._event.getRepeatedEvent())) {
                     let editSeries = await new ButtonChooseDialog("", "delete event or event series", {
                         "0": "event",
                         "1": "series",
@@ -184,18 +190,19 @@ export class EventSite extends FooterSite {
                     }).show();
                     if (editSeries === "1") {
                         this.showLoadingSymbol();
-                        this._event.repeatedEvent.delete();
+                        this._event.getRepeatedEvent().delete();
                         new Toast("eventserie wurde erfolgreich gelöscht").show();
                         this.finish();
                         this.removeLoadingSymbol();
                     } else if (editSeries === "0") {
                         this.showLoadingSymbol();
-                        if (this._event.id.startsWith("r")) {
+                        // @ts-ignore
+                        if (typeof this._event.id === "string" && this._event.id.startsWith("r")) {
                             let blockedDay = new BlockedDay();
-                            blockedDay.day = this._event.startTime;
-                            blockedDay.day.setHours(12);
-                            blockedDay.repeatedEvent = this._event.repeatedEvent;
-                            this._event.repeatedEvent.blockedDays.push(blockedDay);
+                            blockedDay.setDay(this._event.getStartTime());
+                            blockedDay.getDay().setHours(12);
+                            blockedDay.setRepeatedEvent(this._event.getRepeatedEvent());
+                            this._event.getRepeatedEvent().blockedDays.push(blockedDay);
                             await blockedDay.save();
                             new Toast("event wurde erfolgreich gelöscht").show();
                             this.finish();
@@ -218,7 +225,7 @@ export class EventSite extends FooterSite {
         this.findBy("#modify-event").addEventListener("click", async () => {
             if (UserManager.getInstance().hasAccess(Event.ACCESS_MODIFY)) {
 
-                if (Helper.isNotNull(this._event.repeatedEvent)) {
+                if (Helper.isNotNull(this._event.getRepeatedEvent())) {
                     let editSeries = await new ButtonChooseDialog("", "edit event or event series", {
                         "1": "event",
                         "2": "series"
@@ -226,7 +233,7 @@ export class EventSite extends FooterSite {
 
                     if (editSeries === "2") {
                         this.finishAndStartSite(AddEventSite, {
-                            id: this._event.repeatedEvent.id,
+                            id: this._event.getRepeatedEvent().id,
                             isRepeatableEvent: true
                         });
                     } else if (editSeries === "1") {

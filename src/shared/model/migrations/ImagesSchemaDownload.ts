@@ -9,11 +9,13 @@ export class ImagesSchemaDownload1000000011000 implements MigrationInterface {
             await queryRunner.query("SET foreign_key_checks=0;");
             await MigrationHelper.updateModel(queryRunner, FileMedium);
             await queryRunner.query("SET foreign_key_checks=1;");
-
         } else {
-            await queryRunner.query("PRAGMA foreign_keys = OFF");
+            console.log("ImagesSchemaDownload 1")
+            await queryRunner.query("PRAGMA foreign_keys=0;");
+            console.log(await queryRunner.query("PRAGMA foreign_keys"));
             await MigrationHelper.updateModel(queryRunner, FileMedium);
             await queryRunner.query("PRAGMA foreign_keys = ON");
+            console.log("ImagesSchemaDownload 2")
         }
     }
 

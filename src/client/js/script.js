@@ -67,6 +67,8 @@ App.setLogo(logo);
 
 App.addInitialization(async (app) => {
 
+    // DataManager._assetBasePath = (cordova.device !== "browser"?cordova.file.applicationDirectory:"");
+
     // let obj = await NativeStoragePromise.getItem("background-counter-obj", []);
     // console.log("background obj: ", obj);
     // await NativeStoragePromise.setItem("background-counter-obj", []);
@@ -136,7 +138,7 @@ App.addInitialization(async (app) => {
     }
 
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("contact", ContactSite, MenuAction.SHOW_NEVER));
-    NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
+    // NavbarFragment.defaultActions.push(new StartSiteMenuAction("privacy policy", ImpressumSite, MenuAction.SHOW_NEVER));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add event", "events", () => {
@@ -212,7 +214,7 @@ EasySyncClientDb.errorListener = async (e) => {
     return new Promise(resolve => {
         setTimeout(() => {
             resolve(window.location.reload(true));
-        }, 200);
+        }, 300);
     });
 };
 

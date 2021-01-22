@@ -41,8 +41,6 @@ export class SetupFavorite1000000000001 implements MigrationInterface {
         return await queryRunner.createTable(churchTable, true)
     }
 
-
-
     down(queryRunner: QueryRunner): Promise<any> {
         return undefined;
     }

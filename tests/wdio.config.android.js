@@ -6,8 +6,15 @@ exports.config = {
     // Where the files we are testing can be found.
     specs: [
         './tests/specs/mobile/*.js',
-        './tests/specs/androidWeb/*.js',
         './tests/specs/shared/*.js',
+
+        // './tests/specs/**/settingsSite.js',
+        // './tests/specs/**/calendarSite.js',
+        // './tests/specs/**/eventSite.js',
+        // './tests/specs/**/favoriteSite.js',
+        // './tests/specs/**/favoriteSite2.js',
+        // './tests/specs/**/searchSite.js',
+
     ],
     // specs: [
     //     './tests/specs/**/settingsSite.js',
@@ -49,6 +56,8 @@ exports.config = {
 
     connectionRetryCount: 3,
 
+    calendarName: "https://ecloud.global/remote.php/dav/calendars/ainias@e.email/personal/",
+
     // The reporter is what formats your test results on the command line. 'spec' lists
     // the names of the tests with a tick or X next to them. See
     // https://www.npmjs.com/search?q=wdio-reporter for a full list of reporters.
@@ -57,12 +66,18 @@ exports.config = {
     // Use the Appium plugin for Webdriver. Without this, we would need to run appium
     // separately on the command line.
     services: [
-        'appium'
+        ['appium', {
+            args: {
+                chromedriverExecutable: path.join(__dirname, "misc/chromedriver"),
+                // "chromedriver_autodownload": true
+            }
+        }]
     ],
 
     appium: {
         args: {
             chromedriverExecutable: path.join(__dirname, "misc/chromedriver"),
+            // "chromedriver_autodownload": true
         }
     },
 

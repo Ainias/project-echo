@@ -18,15 +18,19 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
 
     constructor(siteManager) {
         super(siteManager, view);
+
         this._navbarFragment.setCanGoBack(false);
         this.footerFragment.setSelected(".icon.home");
         this._navbarFragment.setBackgroundImage(componentImg);
 
         this._eventListFragment = new EventOverviewFragment(this);
         this.addFragment("#favorite-list", this._eventListFragment);
+
+        console.log("welcome site 2");
     }
 
     async onViewLoaded() {
+        console.log("welcome site 3");
         let res = super.onViewLoaded();
 
         this._postTemplate = this.findBy("#post-template");
@@ -38,6 +42,8 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
     }
 
     async onStart(pauseArguments) {
+        console.log("welcome site 4");
+
         this._posts = await Post.find(undefined, {
             priority: "DESC",
             createdAt: "ASC"

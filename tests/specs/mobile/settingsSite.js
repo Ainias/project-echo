@@ -4,7 +4,7 @@ const $$ = find.multiple;
 const functions = require("../../lib/functions");
 
 describe("settingsSite", () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000*browser.config.delayFactor;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000 * browser.config.delayFactor;
 
     let baseUrl = null;
     beforeAll(async () => {
@@ -49,12 +49,13 @@ describe("settingsSite", () => {
 
     it("calendar selection", async function () {
         await functions.acceptAlert();
-        expect(await $("#system-calendar").getText()).toEqual(browser.config.calendarName || "silas@silas.link");
+
+        expect(await $("#system-calendar").getText()).toEqual(browser.config.calendarName);
         await $("#system-calendar").click();
 
-        await browser.execute(() => {
+        const options = await browser.executeAsync((done) => {
             window.plugins.calendar.listCalendars(options => {
-                window["test-calendarOptions"] = options;
+                done(options);
             });
         });
 
@@ -62,20 +63,11 @@ describe("settingsSite", () => {
         await browser.pause(1000);
         expect(await $("#system-calendar").getText()).toEqual("echo");
 
-        await browser.execute(async function() {
-            // NativeStorage.getItem("functional_system-calendar-id", done, done);
-            let res = await new Promise(r => NativeStorage.getItem("functional_system-calendar-id", r, r));
-            window["test-selectedCalendar"] = res;
+        const id = await browser.executeAsync(function (done) {
+            new Promise(r => NativeStorage.getItem("functional_system-calendar-id", r, r)).then(res => {
+                done(res)
+            });
         });
-        await functions.pause(200);
-
-        let id = await browser.execute(() => {
-            return window["test-selectedCalendar"];
-        });
-        let options = await browser.execute(() => {
-            return window["test-calendarOptions"];
-        });
-
         let selected = options.filter(o => o.id === id);
 
         expect(selected[0].name).toEqual("echo");
@@ -84,35 +76,37 @@ describe("settingsSite", () => {
     it("deactivate notifications", async function () {
         await functions.acceptAlert();
         await functions.pause(5000);
-        await browser.execute(async () => {
+        await browser.execute((done) => {
             window["notifications"] = {};
             cordova.plugins.notification.local.schedule = (options, callback) => {
                 window["notifications"][options.id] = options;
                 callback();
             };
             cordova.plugins.notification.local.cancelAll = (callback) => {
-                window["notifications"] =  {};
+                window["notifications"] = {};
                 callback();
             };
 
-            await queryDb("INSERT INTO favorite (eventId, isFavorite) VALUES (16, 1), (6,1);");
-            let data = await queryDb("SELECT * FROM favorite;")
-            let promises = [];
+            queryDb("INSERT INTO favorite (eventId, isFavorite) VALUES (16, 1), (6,1);").then(() => {
+                queryDb("SELECT * FROM favorite;").then(data => {
+                    let promises = [];
+                    data.forEach(fav => {
+                        promises.push(new Promise(resolve => {
+                            cordova.plugins.notification.local.schedule({
+                                id: fav.id,
+                                title: "title",
+                                text: "text",
+                                trigger: {at: new Date(2020, 5, 26)}
+                            }, resolve);
+                        }));
+                    });
 
-            data.forEach(fav => {
-                promises.push(new Promise(resolve => {
-                    cordova.plugins.notification.local.schedule({
-                        id: fav.id,
-                        title: "title",
-                        text: "text",
-                        trigger: {at: new Date(2020, 5, 26)}
-                    }, resolve);                }));
+                    Promise.all(promises).then(() => done());
+                });
             });
-
-            await Promise.all(promises);
         });
 
-        await functions.pause(5000);
+        // await functions.pause(5000);
 
         // await browser.debug();
 
@@ -120,7 +114,7 @@ describe("settingsSite", () => {
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
         await $("#send-notifications+span.slider").click();
-        await functions.pause(1500);
+        // await functions.pause(1500);
 
         expect(await $("#time-before-setting-row").isDisplayed()).toBeFalsy();
 

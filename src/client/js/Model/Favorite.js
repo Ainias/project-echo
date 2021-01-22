@@ -91,6 +91,7 @@ export class Favorite extends BaseModel {
         if (fav instanceof Favorite) {
             fav.isFavorite = !fav.isFavorite;
             await fav.save();
+            console.log((await this.findOne({"eventId": eventId})).isFavorite);
         } else {
             fav = new Favorite();
             fav.eventId = eventId;

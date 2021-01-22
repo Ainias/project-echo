@@ -13,6 +13,7 @@ const ifaces = os.networkInterfaces();
 const version = require("./package.json").version;
 
 let mode = (process.env.MODE || "development");
+
 // let mode = "production";
 
 function getIp() {
@@ -234,9 +235,7 @@ let moduleExports = {
                         options: {
                             name: "[name].[ext]",
                             outputPath: 'img',
-                            publicPath: function (url, resourcePath, context) {
-                                return "/img/" + url;
-                            },
+                            publicPath: "./img/"
                         }
                     },
                 ],
@@ -249,7 +248,7 @@ let moduleExports = {
                         loader: 'file-loader',
                         options: {
                             name: '[name].css',
-                            outputPath: 'css',
+                            // outputPath: 'css',
                             // publicPath: '/css'
                         }
                     },
