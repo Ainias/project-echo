@@ -155,7 +155,7 @@ async function acceptAlert() {
             // await pause(500);
         } catch (e) {
             console.log("-------------ERROR----------------", e.message);
-            if (e.message !== "An attempt was made to operate on a modal dialog when one was not open." && !e.message.startsWith("no such alert")) {
+            if (e.message !== "An attempt was made to operate on a modal dialog when one was not open" && !e.message.startsWith("no such alert")) {
                 expect(e.message).toEqual("error message");
                 // throw e;
             }

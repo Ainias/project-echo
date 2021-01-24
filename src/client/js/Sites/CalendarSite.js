@@ -120,20 +120,21 @@ export class CalendarSite extends FooterSite {
         //     }
         // });
 
-        const resizeObserver = new ResizeObserver(entries => {
-            entries.forEach(entry => {
 
-                // let scaler = new Scaler();
-                // let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
-                //
-                // this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
-                // scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.70);
-                // console.log("resize observer", entry);
-            })
-        });
-        resizeObserver.observe(this.findBy("#scale-container"));
-
-
+        // if ('ResizeObserver' in window){
+        // const resizeObserver = new ResizeObserver(entries => {
+        //     entries.forEach(entry => {
+        //
+        //         // let scaler = new Scaler();
+        //         // let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
+        //         //
+        //         // this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
+        //         // scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.70);
+        //         // console.log("resize observer", entry);
+        //     }
+        // });
+        // resizeObserver.observe(this.findBy("#scale-container"));
+        // }
 
         return super.onViewLoaded();
     }

@@ -4,12 +4,16 @@ exports.config = {
 
     // Where the files we are testing can be found.
      specs: [
-         './tests/specs/mobile/*.js',
-         './tests/specs/shared/*.js',
-     ],
-    specs: [
-       './tests/specs/**/settingsSite.js',
+         // './tests/specs/mobile/*.js',
+         // './tests/specs/shared/*.js',
        // './tests/specs/**/searchSite.js',
+         // './tests/specs/**/posts.js',
+
+         // './tests/specs/**/settingsSite.js',
+         './tests/specs/**/favoriteSite2.js',
+         // './tests/specs/**/favoriteSite.js',
+         // './tests/specs/**/churchS.js',
+         // './tests/specs/**/calendarSite.js'
     ],
 
     delayFactor: 6,
