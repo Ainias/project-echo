@@ -76,13 +76,13 @@ export class EventHelper {
         if (Helper.isNull(beginTime) || beginTime.trim() === "") {
             beginTime = new Date();
         } else {
-            beginTime = new Date(Date.parse(beginTime));
+            beginTime = new Date(Date.parse(beginTime.replace(" ", "T")));
         }
 
         if (Helper.isNull(endTime) || endTime.trim() === "") {
             endTime = new Date(beginTime.getTime() + 1000 * 60 * 60 * 24 * 7);
         } else {
-            endTime = new Date(Date.parse(endTime));
+            endTime = new Date(Date.parse(endTime.replace(" ", "T")));
         }
 
         let events = [];

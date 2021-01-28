@@ -84,12 +84,12 @@ describe("calendar site", () => {
         expect(await $(".day.cell.active").getText()).toEqual("31");
 
         await $("#button-right").click();
-        await functions.pause(500);
+        await functions.pause(2000);
         expect(await $("#month-name").getText()).toEqual("JUNI 2019");
         expect(await $(".day.cell.active").getText()).toEqual("30");
 
         await $("#button-left").click();
-        await functions.pause(500);
+        await functions.pause(2000);
         expect(await $("#month-name").getText()).toEqual("MAI 2019");
         expect(await $(".day.cell.active").getText()).toEqual("30");
 
@@ -98,7 +98,7 @@ describe("calendar site", () => {
         expect(await $(".day.cell.active").getText()).toEqual("31");
 
         await $("#button-left").click();
-        await functions.pause(500);
+        await functions.pause(2000);
         expect(await $("#month-name").getText()).toEqual("APRIL 2019");
         expect(await $(".day.cell.active").getText()).toEqual("30");
     });
@@ -190,11 +190,14 @@ describe("calendar site", () => {
         await $(".filter-tag=Gottesdienst").click();
         await $(".button=Suchen").click();
 
+        await functions.pause(1000);
         await $(".day-number=11").click();
+        await functions.pause(1000);
         expect(await $(".day.cell.active").getText()).toEqual("11");
         expect(await $(".name=Template Termin 2").isDisplayed()).toBeTruthy();
 
         await $(".day-number=29").click();
+        await functions.pause(1000);
         expect(await $(".day.cell.active").getText()).toEqual("29");
         expect(await $(".name=Termin Later").isDisplayed()).toBeFalsy();
     });

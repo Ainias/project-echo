@@ -15,7 +15,8 @@ describe("settingsSite", () => {
         }
 
         browser.setTimeout({
-            implicit: 5000
+            implicit: 5000,
+            script:10000
         });
     });
 
@@ -49,6 +50,7 @@ describe("settingsSite", () => {
 
     it("calendar selection", async function () {
         await functions.acceptAlert();
+        await functions.acceptAlert();
 
         expect(await $("#system-calendar").getText()).toEqual(browser.config.calendarName);
         await $("#system-calendar").click();
@@ -73,10 +75,12 @@ describe("settingsSite", () => {
         expect(selected[0].name).toEqual("echo");
     });
 
-    it("deactivate notifications", async function () {
+    fit("deactivate notifications", async function () {
         await functions.acceptAlert();
-        await functions.pause(5000);
-        await browser.execute((done) => {
+        await functions.acceptAlert();
+        await functions.pause(1000);
+
+        await browser.executeAsync((done) => {
             window["notifications"] = {};
             cordova.plugins.notification.local.schedule = (options, callback) => {
                 window["notifications"][options.id] = options;
@@ -105,16 +109,12 @@ describe("settingsSite", () => {
                 });
             });
         });
-
-        // await functions.pause(5000);
-
-        // await browser.debug();
+        await functions.pause(5000);
 
         expect(await $("#send-notifications").getValue()).toEqual("1");
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
         await $("#send-notifications+span.slider").click();
-        // await functions.pause(1500);
 
         expect(await $("#time-before-setting-row").isDisplayed()).toBeFalsy();
 
