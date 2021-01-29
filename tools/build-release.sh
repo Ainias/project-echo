@@ -10,10 +10,14 @@ npm run "cordova browser prepare"
 rm -rf src/server/public
 mv platforms/browser/www src/server/public
 
-cp tools/signing/echo.jks platforms/android/
-cp tools/signing/release-signing.properties platforms/android/
+echo "copying signing..."
+cp tools/signing/echo.jks platforms/android/app/
+cp tools/signing/release-signing.properties platforms/android/app/
 
+export ORG_GRADLE_PROJECT_cdvReleaseSigningPropertiesFile=release-signing.properties
 npm run "cordova release android"
+
+#cordova build android --release
 mv platforms/android/app/build/outputs/apk/release/app-release.apk src/server/public/echo.apk
 
 git add src/server/public/ -v
