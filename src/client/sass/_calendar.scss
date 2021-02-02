@@ -7,7 +7,7 @@
     position: absolute;
     top: 75%;
   }
-  100%{
+  100% {
     top: 0;
   }
 }
@@ -18,235 +18,254 @@
   }
 }
 
-#calendar {
-  position: relative;
-  background: $navBackgroundWhite;
-  padding-top: 3rem;
+#calendar-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+#calendar-scroll-container {
+  height: 100%;
+  overflow-y: scroll;
+  //overflow-x: initial;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-  stroke: $navColorWhite;
+  //@each $breakpoint, $value in $margins {
+  //  @include breakpoint($breakpoint) {
+  //    padding-left: 2*$value;
+  //    padding-right: 2*$value;
+  //  }
+  //}
 
-  @each $breakpoint, $value in $margins {
-    @include breakpoint($breakpoint) {
-      padding-left: 2*$value;
-      padding-right: 2*$value;
-    }
-  }
-
-  #scale-container {
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  #button-left, #button-right, .day {
-    cursor: pointer;
-    user-select: none;
-  }
-
-  #month-navigation {
-    margin-bottom: 2rem;
-
-    #button-left, #button-right {
-      text-align: center;
-      width: 14.28571%;
-      display: inline-block;
-
-      svg {
-        height: 100%;
-        width: 0.5rem;
-        vertical-align: bottom;
-      }
-    }
-
-    #month-name {
-      width: 71.4286%;
-      display: inline-block;
-      text-transform: uppercase;
-      font-size: 1.2rem;
-    }
-  }
-
-  .day-header {
-    text-transform: uppercase;
-    color: #9d9e9c;
-    text-align: center;
-    margin-bottom: 1.3rem;
-    user-select: none;
-  }
-
-  .day, #month-name {
-    color: $navColorWhite;
-    text-align: center;
-    user-select: none;
-  }
-
-  .day {
+  #calendar {
+    height: calc(100% + 1px);
     position: relative;
+    background: $navBackgroundWhite;
+    padding-top: 3rem;
 
-    &::before {
-      content: "";
-      display: block;
-      padding-top: 100%;
+    stroke: $navColorWhite;
+
+    @each $breakpoint, $value in $margins {
+      @include breakpoint($breakpoint) {
+        padding-left: 2*$value;
+        padding-right: 2*$value;
+      }
     }
 
-    .day-number-container {
-      $padding: 10%;
-      position: absolute;
-      top: $padding;
-      bottom: $padding;
-      left: $padding;
-      right: $padding;
-      display: flex;
-      justify-content: center;
+    #scale-container {
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #button-left, #button-right, .day {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #month-navigation {
+      margin-bottom: 2rem;
+
+      #button-left, #button-right {
+        text-align: center;
+        width: 14.28571%;
+        display: inline-block;
+
+        svg {
+          height: 100%;
+          width: 0.5rem;
+          vertical-align: bottom;
+        }
+      }
+
+      #month-name {
+        width: 71.4286%;
+        display: inline-block;
+        text-transform: uppercase;
+        font-size: 1.2rem;
+      }
+    }
+
+    .day-header {
+      text-transform: uppercase;
+      color: #9d9e9c;
       text-align: center;
-      border-radius: 100%;
+      margin-bottom: 1.3rem;
+      user-select: none;
+    }
 
-      transition: none;
+    .day, #month-name {
+      color: $navColorWhite;
+      text-align: center;
+      user-select: none;
+    }
 
-      .day-number {
+    .day {
+      position: relative;
+
+      &::before {
+        content: "";
+        display: block;
+        padding-top: 100%;
+      }
+
+      .day-number-container {
+        $padding: 10%;
+        position: absolute;
+        top: $padding;
+        bottom: $padding;
+        left: $padding;
+        right: $padding;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        border-radius: 100%;
+
         transition: none;
-        margin: auto;
+
+        .day-number {
+          transition: none;
+          margin: auto;
+        }
+      }
+
+      &.today .day-number-container {
+        background: $highlightColor;
+      }
+
+      &.has-event .day-number-container {
+        border: 1px solid #fff;
+      }
+
+      &.active .day-number-container {
+        color: #000;
+        background: #fff;
       }
     }
 
-    &.today .day-number-container {
-      background: $highlightColor;
-    }
+    #event-overview-container {
+      //position: absolute;
+      //left: 0;
+      //right: 0;
+      //bottom: 0;
+      min-height: 15%;
+      background-color: white;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      //padding-top: 1rem;
+      padding-top: 0.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      overflow-y: hidden;
 
-    &.has-event .day-number-container {
-      border: 1px solid #fff;
-    }
-
-    &.active .day-number-container {
-      color: #000;
-      background: #fff;
-    }
-  }
-
-  #event-overview-container {
-    //position: absolute;
-    //left: 0;
-    //right: 0;
-    //bottom: 0;
-    min-height: 15%;
-    background-color: white;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    //padding-top: 1rem;
-    padding-top: 0.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    overflow-y: hidden;
-
-    #icon-big-small {
-      //display: inline-block;
-      //width: 1.2rem;
-      height: 1.2rem;
-      margin-bottom: 0.2rem;
-      //background-size: contain;
-      //background: url("../img/icons/makeBig.png") no-repeat;
-      //text-align: right;
-      img {
-        float: right;
-        cursor: pointer;
-        width: 1.2rem;
+      #icon-big-small {
+        //display: inline-block;
+        //width: 1.2rem;
         height: 1.2rem;
+        margin-bottom: 0.2rem;
+        //background-size: contain;
+        //background: url("../img/icons/makeBig.png") no-repeat;
+        //text-align: right;
+        img {
+          float: right;
+          cursor: pointer;
+          width: 1.2rem;
+          height: 1.2rem;
+        }
+
+        .makeSmall {
+          display: none;
+        }
       }
 
-      .makeSmall {
-        display: none;
-      }
-    }
+      //animation-name: openEventList;
+      //animation-duration: 0.5s;
+      //animation-fill-mode: none;
+      //animation-direction: reverse;
 
-    //animation-name: openEventList;
-    //animation-duration: 0.5s;
-    //animation-fill-mode: none;
-    //animation-direction: reverse;
+      &.is-open {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        //top: 0;
 
-    &.is-open {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      //top: 0;
-
-      @each $breakpoint, $value in $margins {
+        @each $breakpoint, $value in $margins {
           @include breakpoint($breakpoint) {
             margin-left: 2*$value;
             margin-right: 2*$value;
             margin-top: 2*$value;
             width: calc(100% - #{4*$value});
             //max-width: calc(100% + #{4*$value});
+          }
         }
+
+        transition: none;
+
+        overflow-y: auto;
+        //border-top-left-radius: 0;
+        //border-top-right-radius: 0;
+
+        animation-name: openEventList;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+        animation-direction: initial;
+
+        #icon-big-small {
+          .makeSmall {
+            display: initial;
+          }
+
+          .makeBig {
+            display: none;
+          }
+        }
+
       }
 
-      transition: none;
+      .day {
+        color: $highlightColor;
 
-      overflow-y: auto;
-      //border-top-left-radius: 0;
-      //border-top-right-radius: 0;
-
-      animation-name: openEventList;
-      animation-duration: 0.5s;
-      animation-fill-mode: forwards;
-      animation-direction: initial;
-
-      #icon-big-small {
-        .makeSmall {
+        &::before {
           display: initial;
-        }
-
-        .makeBig {
-          display: none;
+          content: initial;
         }
       }
-
     }
 
-    .day {
-      color: $highlightColor;
+    #filter-icon-container {
+      text-align: right;
 
-      &::before {
-        display: initial;
-        content: initial;
+      margin-bottom: 0.4rem;
+
+      #button-filter {
+        display: inline-block;
+        width: 14.28571%;
+        background-image: url("../img/icons/filter512.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+
+        &.active {
+          background-image: url("../img/icons/filterInvers512.png");
+        }
       }
     }
+
+    //&.is-open {
+    //  #scale-container {
+    //    display: none;
+    //  }
+    //  #event-overview-container{
+    //    #icon-big-small {
+    //      .makeSmall {
+    //        display: initial;
+    //      }
+    //
+    //      .makeBig {
+    //        display: none;
+    //      }
+    //    }
+    //  }
+    //}
   }
-
-  #filter-icon-container {
-    text-align: right;
-
-    margin-bottom: 0.4rem;
-
-    #button-filter {
-      display: inline-block;
-      width: 14.28571%;
-      background-image: url("../img/icons/filter512.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      cursor: pointer;
-
-      &.active {
-        background-image: url("../img/icons/filterInvers512.png");
-      }
-    }
-  }
-
-  //&.is-open {
-  //  #scale-container {
-  //    display: none;
-  //  }
-  //  #event-overview-container{
-  //    #icon-big-small {
-  //      .makeSmall {
-  //        display: initial;
-  //      }
-  //
-  //      .makeBig {
-  //        display: none;
-  //      }
-  //    }
-  //  }
-  //}
 }

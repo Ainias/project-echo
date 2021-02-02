@@ -201,4 +201,20 @@ describe("calendar site", () => {
         expect(await $(".day.cell.active").getText()).toEqual("29");
         expect(await $(".name=Termin Later").isDisplayed()).toBeFalsy();
     });
+
+    it("event list open close test", async function () {
+        await browser.execute(() => {
+            let article = document.getElementById("calendar");
+            article.classList.add("testing");
+        });
+
+        await functions.pause(3000);
+        expect(await $("#event-overview-container.is-open").isExisting()).toBeFalse()
+
+        await $("#event-overview-container .makeBig").click();
+        expect(await $("#event-overview-container.is-open").isExisting()).toBeTrue()
+        await $("#event-overview-container .makeSmall").click();
+        expect(await $("#event-overview-container.is-open").isExisting()).toBeFalse()
+    });
+
 });

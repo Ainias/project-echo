@@ -36,10 +36,17 @@
   }
 }
 
-#responsive-menu .navbar-menu.hidden-menu {
+nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
+  //background: green !important;
   .language-action-mobile{
     img {
       display: inline-block;
+    }
+  }
+  @include breakpoint(small down) {
+    padding-top: 0;
+    li a {
+      white-space: initial;
     }
   }
 }

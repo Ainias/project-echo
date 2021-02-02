@@ -80,7 +80,7 @@ export class EventHelper {
         }
 
         if (Helper.isNull(endTime) || endTime.trim() === "") {
-            endTime = new Date(beginTime.getTime() + 1000 * 60 * 60 * 24 * 7);
+            endTime = new Date(beginTime.getTime() + 1000 * 60 * 60 * 24 * 30);
         } else {
             endTime = new Date(Date.parse(endTime.replace(" ", "T")));
         }

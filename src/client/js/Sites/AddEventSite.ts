@@ -136,7 +136,7 @@ export class AddEventSite extends MenuFooterSite {
                     names[valName.split("-")[1]] = values[valName];
                 }
                 if (valName.startsWith("description-")) {
-                    descriptions[valName.split("-")[1]] = values[valName];
+                    descriptions[valName.split("-")[1]] = values[valName].replace(/&nbsp;/g, " ");
                 }
                 if (valName.startsWith("place-name-")) {
                     let val = values["place-query-" + valName.substring(11)];
@@ -360,7 +360,7 @@ export class AddEventSite extends MenuFooterSite {
 
             let descriptions = this._event.getDescriptions();
             Object.keys(descriptions).forEach(lang => {
-                values["description-" + lang] = descriptions[lang];
+                values["description-" + lang] = descriptions[lang].replace(/&nbsp;/g, " ");
             });
             values["type"] = this._event.getType();
             values["start"] = DateHelper.strftime("%Y-%m-%d %H:%M", this._event.getStartTime());

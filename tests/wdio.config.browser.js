@@ -3,6 +3,7 @@ const functions = require("./lib/functions");
 const find = require("./lib/PromiseSelector");
 const $ = find.one;
 const $$ = find.multiple;
+const path = require("path");
 
 exports.config = {
 
@@ -32,8 +33,8 @@ exports.config = {
 
     bail: 0,
 
-    baseUrl: "http://127.0.0.1:3000",
-    // baseUrl: "http://127.0.0.1:8001",
+    // baseUrl: "http://127.0.0.1:3000",
+    baseUrl: "http://127.0.0.1:8000",
 
     waitforTimeout: 10000,
 
@@ -48,9 +49,16 @@ exports.config = {
 
     // Use the Appium plugin for Webdriver. Without this, we would need to run appium
     // separately on the command line.
+
+
     services: [
         // 'appium'
-        'selenium-standalone',
+        ['selenium-standalone',{
+        args: {
+            // "chrome": {version: "87.0.4280.88"}
+            chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
+        }
+        }]
         // [Service.service,{}]
     ],
 
@@ -73,6 +81,7 @@ exports.config = {
 
     capabilities: [{
         browserName: "chrome",
+        // browserName: "brave",
         // browserName: "firefox",
         maxInstances: 1,
         // maxInstances: 1,

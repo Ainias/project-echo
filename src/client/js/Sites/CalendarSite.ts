@@ -1,5 +1,6 @@
 import {App, Translator} from "cordova-sites"
-import view from "../../html/Sites/calendarSite.html";
+
+const view = require("../../html/Sites/calendarSite.html");
 import {FooterSite} from "./FooterSite";
 import {Scaler} from "../Scaler";
 import {Favorite} from "../Model/Favorite";
@@ -8,16 +9,26 @@ import {ViewHelper} from "js-helper/dist/client";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {Helper} from "js-helper"
 import {EventHelper} from "../Helper/EventHelper";
-import {FilterDialog} from "../Dialoges/FilterDialog.ts";
+import {FilterDialog} from "../Dialoges/FilterDialog";
 import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
 
 export class CalendarSite extends FooterSite {
+    private _date: Date;
+    private favorites: { [id: number]: boolean };
+    private _filter: any;
+    private _eventListFragment: EventOverviewFragment;
+    private _dayTemplate: HTMLElement;
+    private _dayContainer: HTMLElement;
+    private _eventOverviewContainer: HTMLElement;
+    private _eventOverview: HTMLElement;
+    private _monthNameElement: HTMLElement;
+    private scrollContainer: HTMLElement;
 
     constructor(siteManager) {
         super(siteManager, view);
         this._date = new Date();
-        this._footerFragment.setSelected(".icon.calendar");
-        this._favourites = {};
+        this.getFooterFragment().setSelected(".icon.calendar");
+        this.favorites = {};
 
         this._filter = {};
 
@@ -35,13 +46,12 @@ export class CalendarSite extends FooterSite {
 
         let favorites = await Favorite.find();
         favorites.forEach(fav => {
-            this._favourites[fav.eventId] = true;
+            this.favorites[fav.eventId] = true;
         });
 
         if (Helper.isSet(constructParameters, "filter")) {
             if (typeof constructParameters["filter"] === "string") {
                 this._filter = JSON.parse(constructParameters["filter"]);
-                console.log("filter", this._filter);
             } else {
                 this._filter = constructParameters["filter"];
             }
@@ -61,7 +71,7 @@ export class CalendarSite extends FooterSite {
         this._eventOverviewContainer = this.findBy("#event-overview-container");
         this._eventOverview = this.findBy("#event-overview");
 
-        this._monthName = this.findBy("#month-name");
+        this._monthNameElement = this.findBy("#month-name");
         this.findBy("#button-left").addEventListener("click", () => {
             DateHelper.setMonth(this._date.getMonth() - 1, this._date);
             this.drawMonth(this._date);
@@ -96,10 +106,17 @@ export class CalendarSite extends FooterSite {
             filterButton.classList.add("active");
         }
 
-        this.findBy("#icon-big-small .makeBig").addEventListener("click", () => this._eventOverviewContainer.classList.add("is-open"));
-        // this.findBy("#icon-big-small .makeBig").addEventListener("click", () => this.findBy("#calendar").classList.add("is-open"));
-        this.findBy("#icon-big-small .makeSmall").addEventListener("click", () => this._eventOverviewContainer.classList.remove("is-open"));
-        // this.findBy("#icon-big-small .makeSmall").addEventListener("click", () => this.findBy("#calendar").classList.remove("is-open"));
+        this.findBy("#icon-big-small .makeBig").addEventListener("click", () => this.openEventList());
+        this.findBy("#icon-big-small .makeSmall").addEventListener("click", () => this.closeEventList());
+
+        this.scrollContainer = this.findBy("#calendar-scroll-container");
+        this.scrollContainer.addEventListener("scroll", e => {
+            if (this.scrollContainer.scrollTop > 0) {
+                this.openEventList();
+            } else {
+                this.closeEventList();
+            }
+        });
 
         // await DragHelper.makeDragToShow(this._eventOverviewContainer, (from) => {
         //     let maxTop = parseFloat(this._eventOverviewContainer.dataset["originalTop"]);
@@ -139,6 +156,16 @@ export class CalendarSite extends FooterSite {
         return super.onViewLoaded();
     }
 
+    openEventList() {
+        this._eventOverviewContainer.classList.add("is-open")
+        this.scrollContainer.scroll(0, 1);
+    }
+
+    closeEventList() {
+        this._eventOverviewContainer.classList.remove("is-open")
+        this.scrollContainer.scroll(0, 0);
+    }
+
     async loadEventsForMonth(date) {
         let firstDay = new Date(date);
         firstDay.setDate(1);
@@ -151,7 +178,7 @@ export class CalendarSite extends FooterSite {
         lastDay.setMonth(lastDay.getMonth() + 1);
         // lastDay.setSeconds(-1);
 
-        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d %H:%M:%S", lastDay), this._filter.types, this._filter.churches, undefined,  true);
+        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d %H:%M:%S", lastDay), this._filter.types, this._filter.churches, undefined, true);
     }
 
     async onStart(pauseArguments) {
@@ -198,19 +225,19 @@ export class CalendarSite extends FooterSite {
             }
         });
 
-        ViewHelper.removeAllChildren(this._monthName);
-        this._monthName.appendChild(Translator.makePersistentTranslation(MONTH_NAMES[date.getMonth()]));
-        this._monthName.appendChild(document.createTextNode(" " + date.getFullYear()));
+        ViewHelper.removeAllChildren(this._monthNameElement);
+        this._monthNameElement.appendChild(Translator.makePersistentTranslation(MONTH_NAMES[date.getMonth()]));
+        this._monthNameElement.appendChild(document.createTextNode(" " + date.getFullYear()));
 
         ViewHelper.removeAllChildren(this._dayContainer);
         for (let i = 0; i < offset; i++) {
-            let day = this._dayTemplate.cloneNode(true);
+            let day = <HTMLElement>this._dayTemplate.cloneNode(true);
             day.classList.add("oldMonth");
             this._dayContainer.appendChild(day);
         }
         for (let i = 0; i < numberDays; i++) {
-            let day = this._dayTemplate.cloneNode(true);
-            day.querySelector(".day-number").innerText = i + 1;
+            let day = <HTMLElement>this._dayTemplate.cloneNode(true);
+            (day.querySelector(".day-number") as HTMLElement).innerText = (i + 1).toString();
 
             if (isCurrentMonth && now.getDate() === i + 1) {
                 day.classList.add("today");
@@ -246,7 +273,7 @@ export class CalendarSite extends FooterSite {
         }
 
         for (let i = offset + numberDays; i < 37; i++) {
-            let day = this._dayTemplate.cloneNode(true);
+            let day = <HTMLElement>this._dayTemplate.cloneNode(true);
             day.classList.add("nextMonth");
             this._dayContainer.appendChild(day);
         }
@@ -256,11 +283,7 @@ export class CalendarSite extends FooterSite {
         let scaler = new Scaler();
         let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
 
-        console.log("max height: ", maxHeight);
-
-        // this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
-
-        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.73);
+        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), parseFloat(maxHeight) * 0.73);
 
         this.setParameter("date", DateHelper.strftime("%Y-%m-%d", date))
     }
