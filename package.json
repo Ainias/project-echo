@@ -40,7 +40,7 @@
     "express": "^4.17.1",
     "flatpickr": "^4.6.6",
     "foundation-sites": "^6.6.3",
-    "js-helper": "git+https://github.com/Ainias/js-helper.git#0.6.1",
+    "js-helper": "git+https://github.com/Ainias/js-helper.git#0.6.3",
     "jsonwebtoken": "^8.5.1",
     "localforage": "^1.9.0",
     "mysql": "^2.18.1",
