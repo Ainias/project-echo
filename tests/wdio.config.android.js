@@ -68,18 +68,22 @@ exports.config = {
     services: [
         ['appium', {
             args: {
-                chromedriverExecutable: path.join(__dirname, "misc/chromedriver"),
-                // "chromedriver_autodownload": true
+                // chromedriverExecutable: path.join(__dirname, "misc/android/chromedriver_android_7"),
+                chromedriverExecutable: path.join(__dirname, "misc/android/chromedriver"),
+                // "allowInsecure": "chromedriver_autodownload",
+                // "chromedriverExecutableDir": path.join(__dirname, "misc", "android"),
+                // "chromedriverChromeMappingFile": path.join(__dirname, "misc", "android", "drivers.json"),
             }
         }]
     ],
 
-    appium: {
-        args: {
-            chromedriverExecutable: path.join(__dirname, "misc/chromedriver"),
-            // "chromedriver_autodownload": true
-        }
-    },
+    // appium: {
+    //     args: {
+    //         // chromedriverExecutable: path.join(__dirname, "misc/chromedriver"),
+    //
+    //
+    //     }
+    // },
 
     // 4723 is the default port for Appium
     port: 4723,
@@ -99,7 +103,7 @@ exports.config = {
         platformName: 'Android',
 
         // The version of the Android or iOS system
-        platformVersion: '10',
+        platformVersion: '8',
 
         orientation: "PORTRAIT",
 

@@ -19,6 +19,16 @@ export class Sync {
     static async sync(awaitFullSync){
         let syncJob = new SyncJob();
 
+        // const threeMonthsAgo = new Date();
+        // threeMonthsAgo.setUTCDate(1);
+        // threeMonthsAgo.setUTCMonth(threeMonthsAgo.getUTCMonth()-3);
+        // threeMonthsAgo.setUTCHours(0);
+        // threeMonthsAgo.setUTCMinutes(0);
+        // threeMonthsAgo.setUTCSeconds(0);
+        // threeMonthsAgo.setUTCMilliseconds(0);
+        //
+        // console.log(threeMonthsAgo);
+
         await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium]).catch(e => console.error(e));
         let p = syncJob.getSyncPromise().then(async res => {
             await EventHelper.updateFavorites(res["BlockedDay"]);
