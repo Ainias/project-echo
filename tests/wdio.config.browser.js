@@ -53,11 +53,17 @@ exports.config = {
 
     services: [
         // 'appium'
-        ['selenium-standalone',{
-        args: {
-            // "chrome": {version: "87.0.4280.88"}
-            chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
-        }
+        ['selenium-standalone', {
+            args: {
+                // "chrome": {version: "87.0.4280.88"}
+                // chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
+                drivers: {chrome: '88.0.4324.96'}
+            },
+            installArgs: {
+                // "chrome": {version: "87.0.4280.88"}
+                // chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
+                drivers: {chrome: '88.0.4324.96'}
+            }
         }]
         // [Service.service,{}]
     ],

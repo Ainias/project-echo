@@ -29,7 +29,7 @@ export class Sync {
         //
         // console.log(threeMonthsAgo);
 
-        await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium]).catch(e => console.error(e));
+        await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium], false).catch(e => console.error(e));
         let p = syncJob.getSyncPromise().then(async res => {
             await EventHelper.updateFavorites(res["BlockedDay"]);
             await EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);

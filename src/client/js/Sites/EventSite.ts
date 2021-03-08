@@ -66,7 +66,8 @@ export class EventSite extends FooterSite {
         this.findBy("#event-name").appendChild(translator.makePersistentTranslation(this._event.getNameTranslation()));
         this.findBy("#event-description").appendChild(translator.makePersistentTranslation(this._event.getDescriptionTranslation()));
         if (this._event.getImages().length > 0) {
-            this.findBy("#event-img").src = this._event.getImages()[0];
+            await this._event.getImages()[0].isDownloadedState();
+            this.findBy("#event-img").src = this._event.getImages()[0].getUrl();
         }
 
         //time

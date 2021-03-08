@@ -5,14 +5,14 @@ exports.config = {
 
     // Where the files we are testing can be found.
     specs: [
-        './tests/specs/mobile/*.js',
-        './tests/specs/shared/*.js',
+        // './tests/specs/mobile/*.js',
+        // './tests/specs/shared/*.js',
 
         // './tests/specs/**/settingsSite.js',
         // './tests/specs/**/calendarSite.js',
         // './tests/specs/**/eventSite.js',
         // './tests/specs/**/favoriteSite.js',
-        // './tests/specs/**/favoriteSite2.js',
+        './tests/specs/**/favoriteSite2.js',
         // './tests/specs/**/searchSite.js',
 
     ],
@@ -69,8 +69,8 @@ exports.config = {
         ['appium', {
             args: {
                 // chromedriverExecutable: path.join(__dirname, "misc/android/chromedriver_android_7"),
-                chromedriverExecutable: path.join(__dirname, "misc/android/chromedriver"),
-                // "allowInsecure": "chromedriver_autodownload",
+                // chromedriverExecutable: path.join(__dirname, "misc/chromedriver"),
+                "allowInsecure": "chromedriver_autodownload",
                 // "chromedriverExecutableDir": path.join(__dirname, "misc", "android"),
                 // "chromedriverChromeMappingFile": path.join(__dirname, "misc", "android", "drivers.json"),
             }
@@ -103,7 +103,7 @@ exports.config = {
         platformName: 'Android',
 
         // The version of the Android or iOS system
-        platformVersion: '8',
+        platformVersion: '10',
 
         orientation: "PORTRAIT",
 
