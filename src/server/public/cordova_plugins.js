@@ -323,7 +323,8 @@ module.exports.metadata =
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-local-notification": "0.9.0-beta.2",
     "cordova-plugin-background-fetch": "6.1.1",
-    "cordova-plugin-webpack": "1.0.5"
+    "cordova-plugin-webpack": "1.0.5",
+    "cordova-plugin-wkwebview-file-xhr": "3.0.0"
 }
 // BOTTOM OF METADATA
 });
