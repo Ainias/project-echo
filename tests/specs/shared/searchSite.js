@@ -52,6 +52,10 @@ describe("search site", () => {
     afterEach(async function() {
         let errors = await functions.getLoggedErrors();
         expect(errors.length).toEqual(0);
+        if (errors.length > 0){
+            console.log(errors);
+            errors.forEach(err => console.error(err));
+        }
         expect(errors).toEqual([]);
     });
 

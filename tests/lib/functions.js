@@ -81,7 +81,8 @@ async function setFormValues(values, useSelector) {
                 elem = $("[name=" + selector + "]");
             }
 
-            if (await elem.isTag("select")) {
+            if (await elem.isTag("select") || await elem.isTag("SELECT")) {
+                // await browser.debug();
                 await elem.selectByAttribute("value", values[selector]);
             } else if (await elem.getAttribute("type") === "checkbox" || await elem.getAttribute("type") === "radio") {
                 if (!await elem.isSelected()) {

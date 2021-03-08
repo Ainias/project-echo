@@ -18,6 +18,8 @@ export class FavoritesSite extends FooterSite {
         let favorites = await Favorite.find({isFavorite: true}, undefined, undefined, undefined);
         let events = await Favorite.getEvents(favorites);
 
+        console.log("favorites", favorites, events);
+
         this._eventListFragment.setEvents(events);
 
         return res;

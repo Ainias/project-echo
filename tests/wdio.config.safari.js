@@ -58,15 +58,24 @@ exports.config = {
     // Where the files we are testing can be found.
     // specs: ['./tests/specs/**/*.js'],
     specs: [
-        // './tests/specs/**/*.js',
-        './tests/specs/**/calendarSite.js',
-        // './tests/specs/**/editChurch.js'
+        // './tests/specs/web/*.js',
+        // './tests/specs/shared/*.js',
+
+        // './tests/specs/**/editChurch.js',
+        // './tests/specs/**/editEvent.js',
+
+        './tests/specs/**/searchSite.js',
+        './tests/specs/**/favoriteSite2.js',
+        './tests/specs/**/favoriteSite.js',
+        './tests/specs/**/eventSite.js',
+        './tests/specs/**/churchSite.js',
+        // './tests/specs/**/calendarSite.js',
     ],
 
     capabilities: [{
         browserName: "safari",
         // browserName: "firefox",
-        baseUrl: "http://127.0.0.1:8000",
+//        baseUrl: "http://127.0.0.1:8000",
         maxInstances: 1,
         // "safari.options": { technologyPreview: true }
 

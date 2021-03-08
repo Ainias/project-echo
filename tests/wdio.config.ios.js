@@ -6,14 +6,18 @@ exports.config = {
      specs: [
          // './tests/specs/mobile/*.js',
          // './tests/specs/shared/*.js',
-       // './tests/specs/**/searchSite.js',
+
+         './tests/specs/**/settingsSite.js',
+         // './tests/specs/**/searchSite.js',
+         // './tests/specs/**/favoriteSite.js',
+
          // './tests/specs/**/posts.js',
 // './tests/specs/**/favoriteSite2.js',
 
-         // './tests/specs/**/favoriteSite.js',
+
          // './tests/specs/**/churchSite.js',
-         // './tests/specs/**/calendarSite.js'
-         './tests/specs/**/settingsSite.js',
+         // './tests/specs/**/calendarSite.js',
+
      ],
 
     delayFactor: 6,
@@ -85,7 +89,8 @@ exports.config = {
         // For Android, Appium uses the first device it finds using "adb devices". So, this
         // string simply needs to be non-empty.
         // For iOS, this must exactly match the device name as seen in Xcode.
-         deviceName: 'iPhone 11 Pro Max',
+         deviceName: 'iPhone 8' +
+             '',
         //deviceName: 'any',
 
         // 'Android' or 'iOS'

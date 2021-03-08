@@ -61,12 +61,12 @@ describe("calendar site", () => {
         });
 
         await functions.pause(3000);
-        expect(await $("#month-name").getText()).toEqual("MAI 2019");
-        expect(await $(".day.cell.active").getText()).toEqual("26");
-        expect(await $("#event-overview-container").getText()).toEqual("Keine Events vorhanden");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("MAI 2019");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("26");
+        expect((await $("#event-overview-container #event-container-future").getText()).trim()).toEqual("Keine Events vorhanden");
 
         await $(".day-number=29").click();
-        expect(await $(".day.cell.active").getText()).toEqual("29");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("29");
 
         expect(await $(".name=Termin 5").isExisting()).toBeTruthy();
         expect(await $(".name=Termin 5.1").isExisting()).toBeTruthy();
@@ -77,41 +77,41 @@ describe("calendar site", () => {
 
     it("browse calendar", async function () {
         await functions.pause(3000);
-        expect(await $("#month-name").getText()).toEqual("MAI 2019");
-        expect(await $(".day.cell.active").getText()).toEqual("26");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("MAI 2019");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("26");
 
         await $(".day-number=31").click();
-        expect(await $(".day.cell.active").getText()).toEqual("31");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("31");
 
         await $("#button-right").click();
         await functions.pause(2000);
-        expect(await $("#month-name").getText()).toEqual("JUNI 2019");
-        expect(await $(".day.cell.active").getText()).toEqual("30");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("JUNI 2019");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("30");
 
         await $("#button-left").click();
         await functions.pause(2000);
-        expect(await $("#month-name").getText()).toEqual("MAI 2019");
-        expect(await $(".day.cell.active").getText()).toEqual("30");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("MAI 2019");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("30");
 
         await $(".day-number=31").click();
         await functions.pause(500);
-        expect(await $(".day.cell.active").getText()).toEqual("31");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("31");
 
         await $("#button-left").click();
         await functions.pause(2000);
-        expect(await $("#month-name").getText()).toEqual("APRIL 2019");
-        expect(await $(".day.cell.active").getText()).toEqual("30");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("APRIL 2019");
+        expect((await $(".day.cell.active").getText()).trim()).toEqual("30");
     });
 
     it("repeated events displayed", async function () {
         await functions.pause(1000);
-        expect(await $("#month-name").getText()).toEqual("MAI 2019");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("MAI 2019");
 
         await $("#button-right").click();
         await functions.pause(2000);
         await $("#button-right").click();
         await functions.pause(2000);
-        expect(await $("#month-name").getText()).toEqual("JULI 2019");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("JULI 2019");
 
         await $(".day-number=2").click();
         expect(await $(".day.cell.active").getText()).toEqual("2");
@@ -161,7 +161,7 @@ describe("calendar site", () => {
         await functions.setCurrentDate();
 
         await functions.pause(1000);
-        expect(await $("#month-name").getText()).toEqual("JUNI 2019");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("JUNI 2019");
 
         await $(".day-number=11").click();
         expect(await $(".day.cell.active").getText()).toEqual("11");
@@ -175,11 +175,11 @@ describe("calendar site", () => {
 
     it("filter test", async function () {
         await functions.pause(1000);
-        expect(await $("#month-name").getText()).toEqual("MAI 2019");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("MAI 2019");
 
         await $("#button-right").click();
         await functions.pause(2000);
-        expect(await $("#month-name").getText()).toEqual("JUNI 2019");
+        expect((await $("#month-name").getText()).toUpperCase()).toEqual("JUNI 2019");
 
         await $(".day-number=29").click();
         expect(await $(".day.cell.active").getText()).toEqual("29");
@@ -212,8 +212,12 @@ describe("calendar site", () => {
         expect(await $("#event-overview-container.is-open").isExisting()).toBeFalse()
 
         await $("#event-overview-container .makeBig").click();
+        await functions.pause(3000);
+
         expect(await $("#event-overview-container.is-open").isExisting()).toBeTrue()
         await $("#event-overview-container .makeSmall").click();
+        await functions.pause(3000);
+
         expect(await $("#event-overview-container.is-open").isExisting()).toBeFalse()
     });
 

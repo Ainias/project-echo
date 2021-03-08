@@ -31,7 +31,6 @@ export class AddEventSite extends MenuFooterSite {
     private _repeatableSectionElement: HTMLElement;
     private _repeatableCheckbox: HTMLInputElement;
 
-
     constructor(siteManager) {
         super(siteManager, view);
         this.addDelegate(new UserSite(this, "events"));
@@ -182,6 +181,7 @@ export class AddEventSite extends MenuFooterSite {
             }
             event.setWebsite(values["website"]);
 
+            debugger;
             let eventId = event.id;
             let savePromise = event.save();
             if (Helper.isNotNull(event.repeatedEvent) && eventId === null) {
@@ -289,7 +289,7 @@ export class AddEventSite extends MenuFooterSite {
 
         flatpickr(this.findBy(".date-time", true), {
             enableTime: true,
-            dateFormat: "Y-m-d H:i",
+            dateFormat: "Y-m-dTH:i",
             time_24hr: true,
             locale: German
         });

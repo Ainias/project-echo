@@ -124,7 +124,6 @@ describe("favorite site 1", () => {
 
         for(let i = 0; i < eventsForFavorites.length; i++){
             expect(await $(".name="+eventsForFavorites[i]).isExisting()).toBeTruthy();
-
         }
 
         // expect(await $(".name=Termin 5.1").isExisting()).toBeTruthy();

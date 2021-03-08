@@ -21,7 +21,6 @@ export class ModifyChurchSite extends MenuFooterSite {
     private _placePreview: HTMLIFrameElement;
     private _form: Form;
 
-
     constructor(siteManager) {
         super(siteManager, view);
         this.addDelegate(new UserSite(this, "organisers"));
@@ -72,7 +71,7 @@ export class ModifyChurchSite extends MenuFooterSite {
                     names[valName.split("-")[1]] = values[valName];
                 }
                 if (valName.startsWith("description-")) {
-                    descriptions[valName.split("-")[1]] = values[valName];
+                    descriptions[valName.split("-")[1]] = values[valName].replace(/&nbsp;/g, " ");
                 }
                 if (valName.startsWith("place-name-")) {
                     let val = values["place-query-" + valName.substring(11)];

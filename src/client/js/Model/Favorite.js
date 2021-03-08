@@ -32,7 +32,7 @@ export class Favorite extends BaseModel {
                 repeatedEventIds[parts[0]] = Helper.nonNull(repeatedEventIds[parts[0]], []);
                 repeatedEventIds[parts[0]].push(index);
             } else {
-                eventIds[fav.eventId] = index;
+                eventIds[parseInt(fav.eventId)] = index;
             }
         });
 

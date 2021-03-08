@@ -36,7 +36,7 @@ class PromiseElement {
     }
 
     async getText(){
-        return (await this.getPromise()).getText();
+        return (await (await this.getPromise()).getText()).trim();
     }
 
     async getAttribute(attr){

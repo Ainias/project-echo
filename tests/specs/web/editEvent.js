@@ -21,6 +21,7 @@ describe("edit event", () => {
     });
 
     beforeEach(async function () {
+        await browser.setWindowSize(1600, 900);
 
         await functions.setCurrentDate();
         await functions.login("echo@silas.link", "123456");
@@ -37,15 +38,15 @@ describe("edit event", () => {
         await functions.logout();
     });
 
-    it("new event", async function () {
+    fit("new event", async function () {
         let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
 
         await $("span=Neuer Termin").click();
 
         let editors = $$(".ck.ck-content");
 
-        await editors.get(0).setValue(" Meine Beschreibung");
-        await editors.get(1).setValue(" Meine Beschreibung");
+        await editors.get(0).setValue("Meine Beschreibung");
+        await editors.get(1).setValue("Meine Beschreibung");
 
         await functions.setFormValues({
             "name-de": "Neues Event",
@@ -59,17 +60,25 @@ describe("edit event", () => {
             // "end": "2020-04-09 14:30",
         });
 
+        // await browser.debug();
+
         await $("input[name=start]").click();
         await functions.pause(200);
         await $$(".flatpickr-day=16").get(0).click();
         await $(".flatpickr-hour").setValue(11);
         await $(".flatpickr-minute").setValue(10);
 
+
+        await functions.pause(2000);
         await $("input[name=end]").click();
+        // await browser.debug();
         await functions.pause(200);
         await $$(".flatpickr-day=16").get(1).click();
+        // await browser.debug();
         await $$(".flatpickr-hour").get(1).setValue(13);
         await $$(".flatpickr-minute").get(1).setValue(59);
+
+        // await browser.debug();
 
         await $("#add-place").click();
         await $("#add-place").click();
