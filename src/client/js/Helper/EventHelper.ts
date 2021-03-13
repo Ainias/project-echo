@@ -190,7 +190,7 @@ export class EventHelper {
             timeFormat = DateHelper.strftime("%a., %d.%m, %H:%M", startTime, undefined);
         }
 
-        await notificationScheduler.schedule(id, Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
+        await notificationScheduler.schedule(id, event.getId(), Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
     }
 
     static async generateSingleEventFromRepeatedEvent(repeatedEvent, day, addDatabaseEvents?: boolean) {

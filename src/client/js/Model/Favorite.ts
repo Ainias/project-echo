@@ -1,11 +1,13 @@
 import {BaseDatabase, BaseModel} from "cordova-sites-database";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
 import {Event} from "../../../shared/model/Event";
 import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
 import {EventHelper} from "../Helper/EventHelper";
 import {Helper} from "js-helper/dist/shared/Helper";
 
 export class Favorite extends BaseModel {
+    private isFavorite: boolean;
+    private systemCalendarId: string;
+    private eventId: string;
 
     constructor() {
         super();
@@ -65,7 +67,7 @@ export class Favorite extends BaseModel {
         return Object.values(events);
     }
 
-    async getEvent() {
+    async getEvent(): Promise<Event> {
         if (this.eventId.startsWith("r")) {
             let parts = this.eventId.substr(1).split("-");
             let repeatedEvent = await RepeatedEvent.findById(parts[0]);
@@ -91,7 +93,6 @@ export class Favorite extends BaseModel {
         if (fav instanceof Favorite) {
             fav.isFavorite = !fav.isFavorite;
             await fav.save();
-            console.log((await this.findOne({"eventId": eventId})).isFavorite);
         } else {
             fav = new Favorite();
             fav.eventId = eventId;

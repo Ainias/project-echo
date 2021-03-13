@@ -1,6 +1,10 @@
 import {Singleton} from "cordova-sites/dist/client/js/Singleton";
 import {App} from "cordova-sites/dist/client/js/App";
 import {EventSite} from "./Sites/EventSite";
+import {Favorite} from "./Model/Favorite";
+
+declare var cordova;
+declare var device;
 
 export class NotificationScheduler extends Singleton {
 
@@ -31,7 +35,7 @@ export class NotificationScheduler extends Singleton {
         return true;
     }
 
-    async schedule(id, title, text, at) {
+    async schedule(id, eventId, title, text, at) {
         if (!this._canNotify()) {
             return;
         }
@@ -41,8 +45,8 @@ export class NotificationScheduler extends Singleton {
         }
 
         let now = new Date();
-        if (at.getTime() <= now.getTime()){
-            at.setTime(now.getTime()+1000*60);
+        if (at.getTime() <= now.getTime()) {
+            at.setTime(now.getTime() + 1000 * 60);
         }
 
         return new Promise(resolve => {
@@ -50,13 +54,14 @@ export class NotificationScheduler extends Singleton {
                 id: id,
                 title: title,
                 text: text,
-                trigger: {at: at}
+                trigger: {at: at},
+                data: eventId
             }, resolve);
         });
     }
 
-    async cancelAllNotifications(){
-        if (!this._canNotify()){
+    async cancelAllNotifications() {
+        if (!this._canNotify()) {
             return;
         }
         return new Promise(resolve => {
@@ -65,7 +70,7 @@ export class NotificationScheduler extends Singleton {
     }
 
     async cancelNotification(id) {
-        if (!this._canNotify()){
+        if (!this._canNotify()) {
             return;
         }
         return new Promise(resolve => {
@@ -77,10 +82,11 @@ export class NotificationScheduler extends Singleton {
         if (!this._canNotify()) {
             return;
         }
+
         cordova.plugins.notification.local.on("click", e => {
-            app.startSite(EventSite, {"id": e.id});
+            app.startSite(EventSite, {"id": e.data});
             App.setStartParam("s", "event");
-            App.setStartParam("id", e.id);
+            App.setStartParam("id", e.data);
         });
     }
 }
