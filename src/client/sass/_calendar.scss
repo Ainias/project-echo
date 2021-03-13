@@ -18,6 +18,10 @@
   }
 }
 
+.calendar-site #footer-fragment .footer{
+  margin-top: 0;
+}
+
 #calendar-scroll-container::-webkit-scrollbar {
   display: none;
 }
@@ -155,6 +159,11 @@
       padding-left: 1rem;
       padding-right: 1rem;
       overflow-y: hidden;
+
+      #event-overview-inner-container{
+        height: calc(100% - 1rem);
+        overflow: hidden;
+      }
 
       #icon-big-small {
         //display: inline-block;

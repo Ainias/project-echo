@@ -15,6 +15,8 @@ const version = require("./package.json").version;
 let mode = (process.env.MODE || "development");
 // let mode = "production";
 
+let isDevelop = mode === "development";
+
 function getIp() {
     let ip = null;
     Object.keys(ifaces).some(function (ifname) {
@@ -134,6 +136,7 @@ let moduleExports = {
             __MAPS_API_KEY__: "'" + process.env.GOOGLE_MAPS_API_KEY + "'",
             __VERSION__: "'" + version + "'",
             __CONTACT_EMAIL__: "'" + process.env.CONTACT_EMAIL + "'",
+            __IS_DEVELOP__: isDevelop?"true":"false",
         }),
 
         // new WorkboxPlugin.GenerateSW({

@@ -161,5 +161,11 @@
   "die nachricht wurde gesendet!": "Die Nachricht wurde gesendet!",
 
   "filter": "Filter",
-  "change user": "User bearbeiten"
+  "change user": "User bearbeiten",
+
+  "insert favorites to calendar": "Favoriten dem Systemkalender hinzufügen?",
+  "insert favorites": "Favoriten einfügen?",
+  "should favorites inserted to system calendar": "Sollen Favoriten dem Systemkalender hinzugefügt werden?",
+  "no": "Nein",
+  "Yes": "Ja"
 }

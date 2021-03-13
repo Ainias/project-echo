@@ -9,6 +9,11 @@
   }
 
   .top-bar {
+
+    &.with-image{
+      margin-bottom: 1rem;
+    }
+
     #responsive-menu-toggle {
       z-index: 10000;
     }

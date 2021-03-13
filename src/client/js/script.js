@@ -90,7 +90,7 @@ App.addInitialization(async (app) => {
         },
         fallbackLanguage: "de",
         // markTranslations: true,
-        markUntranslatedTranslations: true,
+        markUntranslatedTranslations: __IS_DEVELOP__,
         logMissingTranslations: (key, language) => {
             window["missingTranslations"][language] = Helper.nonNull(window["missingTranslations"][language], []);
             window["missingTranslations"][language].push(key);

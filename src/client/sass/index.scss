@@ -83,6 +83,10 @@ html, body {
   flex: 1;
 }
 
+.text-justify {
+  hyphens: auto;
+}
+
 .loader {
   left: 50%;
   top: 50%;
@@ -192,6 +196,7 @@ a.hidden-link {
 }
 
 #main-content-container {
+  //margin-bottom: 1rem;
   overflow: auto;
   width: 100%;
 
@@ -226,7 +231,6 @@ a.link {
   overflow: hidden;
 
 
-
   &:not(.without-arrow)::before {
     padding-right: 0.2rem;
     vertical-align: top;
@@ -259,6 +263,7 @@ a.link {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */

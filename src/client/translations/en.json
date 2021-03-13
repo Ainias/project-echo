@@ -155,5 +155,11 @@
 
   "website": "Website",
 
-  "filter": "Filter"
+  "filter": "Filter",
+
+  "insert favorites to calendar": "Insert favorites into the system calendar?",
+  "insert favorites": "Insert Favorites?",
+  "should favorites inserted to system calendar": "Should favorites inserted into the system calendar?",
+  "no": "No",
+  "Yes": "Yes"
 }

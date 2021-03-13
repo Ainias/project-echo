@@ -63,6 +63,10 @@ export class CalendarSite extends FooterSite {
     }
 
     async onViewLoaded() {
+        let res = super.onViewLoaded();
+
+        this._view.classList.add("calendar-site")
+
         this._dayTemplate = this.findBy("#day-template");
         this._dayContainer = this.findBy("#day-container");
         this._dayTemplate.removeAttribute("id");
@@ -118,42 +122,7 @@ export class CalendarSite extends FooterSite {
             }
         });
 
-        // await DragHelper.makeDragToShow(this._eventOverviewContainer, (from) => {
-        //     let maxTop = parseFloat(this._eventOverviewContainer.dataset["originalTop"]);
-        //     if (from === maxTop) {
-        //         if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.75) {
-        //             this._eventOverviewContainer.style.top = "0";
-        //             this._eventOverviewContainer.classList.add("is-open");
-        //         } else {
-        //             this._eventOverviewContainer.style.top = maxTop + "px";
-        //         }
-        //     } else {
-        //         if (window.getComputedStyle(this._eventOverviewContainer).getPropertyValue("top").replace("px", "") < maxTop * 0.25) {
-        //             this._eventOverviewContainer.style.top = "0";
-        //         } else {
-        //             this._eventOverviewContainer.classList.remove("is-open");
-        //             this._eventOverviewContainer.style.top = maxTop + "px";
-        //         }
-        //     }
-        // });
-
-
-        // if ('ResizeObserver' in window){
-        // const resizeObserver = new ResizeObserver(entries => {
-        //     entries.forEach(entry => {
-        //
-        //         // let scaler = new Scaler();
-        //         // let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
-        //         //
-        //         // this._eventOverviewContainer.style.top = (maxHeight * 0.85) + "px";
-        //         // scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), maxHeight * 0.70);
-        //         // console.log("resize observer", entry);
-        //     }
-        // });
-        // resizeObserver.observe(this.findBy("#scale-container"));
-        // }
-
-        return super.onViewLoaded();
+        return res;
     }
 
     openEventList() {

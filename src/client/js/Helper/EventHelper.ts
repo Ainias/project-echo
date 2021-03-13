@@ -15,7 +15,7 @@ export class EventHelper {
         queryBuilder = queryBuilder.leftJoinAndSelect("Event.repeatedEvent", "repeatedEvent");
         queryBuilder = queryBuilder.leftJoinAndSelect("repeatedEvent.originalEvent", "originalEvent");
 
-        if (Helper.nonNull(loadOrganisers, false)){
+        if (Helper.nonNull(loadOrganisers, false)) {
             queryBuilder = queryBuilder.leftJoinAndSelect("Event.organisers", "organisers");
             queryBuilder = queryBuilder.leftJoinAndSelect("originalEvent.organisers", "originalOrganisers");
         }
@@ -101,7 +101,8 @@ export class EventHelper {
         if (fav.isFavorite) {
             await Promise.all([
                 EventHelper.setNotificationFor(fav.id, event).catch(console.error),
-                SystemCalendar.addEventToSystemCalendar(event).catch(console.error)]);
+                SystemCalendar.addEventToSystemCalendar(event).catch(console.error)
+            ]);
             return true;
         } else {
             let notificationScheduler = NotificationScheduler.getInstance();
@@ -201,7 +202,7 @@ export class EventHelper {
         }
     }
 
-    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents?:boolean, ignoreTime?:boolean) {
+    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents?: boolean, ignoreTime?: boolean) {
         addDatabaseEvents = Helper.nonNull(addDatabaseEvents, false);
         ignoreTime = Helper.nonNull(ignoreTime, true);
 
