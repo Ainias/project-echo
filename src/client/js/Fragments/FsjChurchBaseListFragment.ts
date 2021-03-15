@@ -1,18 +1,19 @@
 import {AlphabeticListFragment, Translator} from "cordova-sites";
 import {Helper} from "js-helper/dist/shared"
 
-import defaultView from "../../html/Fragments/fsjChurchBaseListFragment.html";
+const defaultView = require("../../html/Fragments/fsjChurchBaseListFragment.html");
 
 export class FsjChurchBaseListFragment extends AlphabeticListFragment {
+    private template: HTMLElement;
 
     constructor(site, view) {
         super(site, Helper.nonNull(view, defaultView));
     }
 
     async onViewLoaded() {
-        this._template = this.findBy(".info-template");
-        this._template.remove();
-        this._template.classList.remove("info-template");
+        this.template = this.findBy(".info-template");
+        this.template.remove();
+        this.template.classList.remove("info-template");
 
         return super.onViewLoaded();
     }
@@ -22,7 +23,7 @@ export class FsjChurchBaseListFragment extends AlphabeticListFragment {
      */
     renderElement(obj) {
         Translator.getInstance().addDynamicTranslations(obj.getDynamicTranslations());
-        let infoElement = this._template.cloneNode(true);
+        let infoElement = <HTMLElement>this.template.cloneNode(true);
         infoElement.querySelector(".name").appendChild(Translator.makePersistentTranslation(obj.getNameTranslation()));
 
         infoElement.addEventListener("click", () => {

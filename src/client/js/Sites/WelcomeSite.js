@@ -23,8 +23,8 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         this.footerFragment.setSelected(".icon.home");
         this._navbarFragment.setBackgroundImage(componentImg);
 
-        this._eventListFragment = new EventOverviewFragment(this);
-        this.addFragment("#favorite-list", this._eventListFragment);
+        // this._eventListFragment = new EventOverviewFragment(this);
+        // this.addFragment("#favorite-list", this._eventListFragment);
 
         console.log("welcome site 2");
     }

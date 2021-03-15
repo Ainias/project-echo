@@ -1,5 +1,6 @@
 import {FooterSite} from "./FooterSite";
-import view from "../../html/Sites/searchSite.html";
+
+const view = require("../../html/Sites/searchSite.html");
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {App, Helper as SitesHelper, Translator, ViewInflater} from "cordova-sites";
 import {EventHelper} from "../Helper/EventHelper";
@@ -7,13 +8,29 @@ import {Helper} from "js-helper/dist/shared";
 import {Church} from "../../../shared/model/Church";
 import {Event} from "../../../shared/model/Event";
 import {ViewHelper} from "js-helper/dist/client/ViewHelper";
+import {DateHelper} from "js-helper";
 
 export class SearchSite extends FooterSite {
+    private eventListFragment: EventOverviewFragment;
+    private _searchString: string;
+    private _start: string;
+    private _end: string;
+    private _types: any[];
+    private _churches: any[];
+    private _possibleChurches: Church[];
+
+    private _searchFilter: HTMLElement;
+    private _searchResults: HTMLElement;
+    private _filterTagTemplate: HTMLElement;
+    private _filterEventContainer: HTMLElement;
+    private _filterOrganiserContainer: HTMLElement;
+    private _searchInput: HTMLInputElement;
+
     constructor(siteManager) {
         super(siteManager, view);
-        this._eventListFragment = new EventOverviewFragment(this);
-        this.addFragment("#event-list", this._eventListFragment);
-        this._footerFragment.setSelected(".icon.search");
+        this.eventListFragment = new EventOverviewFragment(this);
+        this.addFragment("#event-list", this.eventListFragment);
+        this.getFooterFragment().setSelected(".icon.search");
     }
 
     async onConstruct(constructParameters) {
@@ -24,7 +41,7 @@ export class SearchSite extends FooterSite {
             this._searchString = constructParameters["q"];
         }
 
-        this._start = SitesHelper.strftime("%Y-%m-%d");
+        this._start = DateHelper.strftime("%Y-%m-%d");
         if (Helper.isSet(constructParameters, "start")) {
             this._start = constructParameters["start"];
         }
@@ -80,7 +97,7 @@ export class SearchSite extends FooterSite {
             this._showFilter();
         });
         this._searchInput.addEventListener("keydown", e => {
-            if (e.key === "Enter"){
+            if (e.key === "Enter") {
                 this._search();
                 this._searchInput.blur();
             }
@@ -113,7 +130,7 @@ export class SearchSite extends FooterSite {
 
         //TODO check if really all events found (or better to say, that all data is loaded!)
         let events = await EventHelper.search(this._searchString, this._start, this._end, this._types, this._churches, undefined, true);
-        await this._eventListFragment.setEvents(events);
+        await this.eventListFragment.setEvents(events);
 
         this._searchFilter.classList.add("hidden");
         this._searchResults.classList.remove("hidden");
@@ -130,24 +147,24 @@ export class SearchSite extends FooterSite {
 
             //IF sorgt dafür, dass nur Tags angezeigt werden, die mit searchString anfangen
             // if (translation.indexOf(value.toLowerCase()) !== -1 || this._types.indexOf(type) !== -1) {
-                let tag = this._filterTagTemplate.cloneNode(true);
-                tag.appendChild(Translator.makePersistentTranslation(type));
-                tag.dataset["type"] = type;
+            let tag = <HTMLElement>this._filterTagTemplate.cloneNode(true);
+            tag.appendChild(Translator.makePersistentTranslation(type));
+            tag.dataset["type"] = type;
 
-                if (this._types.indexOf(type) !== -1) {
+            if (this._types.indexOf(type) !== -1) {
+                tag.classList.add("selected");
+            }
+            tag.addEventListener("click", () => {
+                let index = this._types.indexOf(type);
+                if (index === -1) {
+                    this._types.push(type);
                     tag.classList.add("selected");
+                } else {
+                    this._types.splice(index, 1);
+                    tag.classList.remove("selected");
                 }
-                tag.addEventListener("click", () => {
-                    let index = this._types.indexOf(type);
-                    if (index === -1) {
-                        this._types.push(type);
-                        tag.classList.add("selected");
-                    } else {
-                        this._types.splice(index, 1);
-                        tag.classList.remove("selected");
-                    }
-                });
-                this._filterEventContainer.appendChild(tag);
+            });
+            this._filterEventContainer.appendChild(tag);
             // }
         });
 
@@ -158,26 +175,26 @@ export class SearchSite extends FooterSite {
 
             //IF sorgt dafür, dass nur Churches angezeigt werden, die mit searchString anfangen
             // if (translation.indexOf(value.toLowerCase()) !== -1 || this._churches.indexOf(church.id) !== -1) {
-                let tag = this._filterTagTemplate.cloneNode(true);
-                tag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
-                tag.dataset["churchId"] = church.id;
+            let tag = <HTMLElement>this._filterTagTemplate.cloneNode(true);
+            tag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
+            tag.dataset["churchId"] = church.id.toString();
 
-                if (this._churches.indexOf(church.id + "") !== -1) {
+            if (this._churches.indexOf(church.id + "") !== -1) {
+                tag.classList.add("selected");
+            }
+
+            tag.addEventListener("click", () => {
+                let index = this._churches.indexOf(church.id + "");
+                if (index === -1) {
+                    this._churches.push(church.id + "");
                     tag.classList.add("selected");
+                } else {
+                    this._churches.splice(index, 1);
+                    tag.classList.remove("selected");
                 }
+            });
 
-                tag.addEventListener("click", () => {
-                    let index = this._churches.indexOf(church.id + "");
-                    if (index === -1) {
-                        this._churches.push(church.id + "");
-                        tag.classList.add("selected");
-                    } else {
-                        this._churches.splice(index, 1);
-                        tag.classList.remove("selected");
-                    }
-                });
-
-                this._filterOrganiserContainer.appendChild(tag);
+            this._filterOrganiserContainer.appendChild(tag);
             // }
         })
     }

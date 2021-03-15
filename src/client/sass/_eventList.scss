@@ -9,6 +9,14 @@
     padding-bottom: 0.5rem;
     cursor: pointer;
 
+    .column-time {
+      margin-right: 1rem;
+    }
+
+    .column-name{
+      overflow: hidden;
+    }
+
     .time, .name {
       font-size: 1.33em;
       display: block;

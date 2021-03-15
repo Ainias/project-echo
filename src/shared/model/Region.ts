@@ -5,7 +5,7 @@ import {Event} from "./Event";
 import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
 
 export class Region extends AccessEasySyncModel {
-    private churches: any;
+    private churches: Church[];
     private name: any;
     private events: any;
 

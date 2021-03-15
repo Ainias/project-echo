@@ -160,7 +160,7 @@ App.addInitialization(async (app) => {
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
     // await SystemCalendar.createCalendar("echo");
 
-    await Sync.sync(false);
+    await Sync.getInstance().sync(false);
     UserManager.getInstance().getMe().catch(e => console.error(e));
 
     try {
