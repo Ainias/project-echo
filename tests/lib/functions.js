@@ -164,6 +164,16 @@ async function acceptAlert() {
     }
 }
 
+async function acceptInsertFavorites() {
+    if (browser.config.hasAlertDialogs !== false) {
+        try {
+            await $(".modal-button-container .button.right [data-translation=yes]").click();
+        } catch (e) {
+
+        }
+    }
+}
+
 async function compareFiles(originalPath, expectedPath) {
     let filePromises = [
         new Promise((res, rej) => fs.readFile(originalPath, (err, data) => err ? rej(err) : res(data))),
@@ -234,6 +244,7 @@ module.exports = {
     getBaseUrl: getBaseUrl,
     pause: pause,
     acceptAlert: acceptAlert,
+    acceptInsertFavorites: acceptInsertFavorites,
     acceptCookies: acceptCookies,
     compareFiles: compareFiles,
     deactivateTranslationLogging: deactivateTranslationLogging,

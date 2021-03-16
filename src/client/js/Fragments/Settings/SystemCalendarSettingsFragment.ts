@@ -30,7 +30,7 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
 
         let insertFavorites = await NativeStoragePromise.getItem("insert-favorites", "1");
 
-        this.insertFavoritesCheckbox = this.findBy("#send-notifications");
+        this.insertFavoritesCheckbox = this.findBy("#insert-favorites");
         this.insertFavoritesCheckbox.addEventListener("change", async () => {
             if (this.insertFavoritesCheckbox.checked) {
                 systemCalendarLine.classList.remove("hidden");

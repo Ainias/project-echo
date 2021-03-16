@@ -52,6 +52,7 @@ describe("settingsSite", () => {
         await functions.acceptAlert();
         await functions.acceptAlert();
 
+        await functions.acceptInsertFavorites();
         expect(await $("#system-calendar").getText()).toEqual(browser.config.calendarName);
         await $("#system-calendar").click();
 
@@ -63,6 +64,7 @@ describe("settingsSite", () => {
 
         await $("[data-value]=echo").click();
         await browser.pause(1000);
+
         expect(await $("#system-calendar").getText()).toEqual("echo");
 
         const id = await browser.executeAsync(function (done) {
@@ -77,7 +79,7 @@ describe("settingsSite", () => {
 
     it("deactivate notifications", async function () {
         await functions.acceptAlert();
-        await functions.acceptAlert();
+        // await functions.acceptAlert();
         await functions.pause(1000);
 
         await browser.executeAsync((done) => {
@@ -111,6 +113,7 @@ describe("settingsSite", () => {
         });
         await functions.pause(5000);
 
+        await functions.acceptInsertFavorites()
         expect(await $("#send-notifications").getValue()).toEqual("1");
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
@@ -118,6 +121,7 @@ describe("settingsSite", () => {
 
         expect(await $("#time-before-setting-row").isDisplayed()).toBeFalsy();
 
+        await functions.pause(500);
         let val = await functions.asyncExecute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });

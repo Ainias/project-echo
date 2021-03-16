@@ -71,6 +71,8 @@ describe("favorite site 2", () => {
         await functions.acceptAlert();
         await functions.pause(1000);
 
+        await functions.acceptInsertFavorites();
+
         expect(await $(".favorite.is-favorite").isExisting()).toBeTruthy();
         await $(".footer .icon.favorites").click();
         await functions.pause(1000);

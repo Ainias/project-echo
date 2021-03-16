@@ -78,6 +78,7 @@ describe("event site", () => {
         await functions.acceptAlert();
         await functions.pause(1000);
 
+        await functions.acceptInsertFavorites();
         await functions.pause(1000);
         expect(await favElem.getAttribute("class")).toEqual("favorite is-favorite");
 
