@@ -22,7 +22,7 @@ export class Sync extends Singleton {
 
     async sync(awaitFullSync?) {
         if (this.syncInProgress !== null) {
-            return await this.syncInProgress;
+            return this.syncInProgress;
         }
         this.syncInProgress = new Promise<any>(async resolve => {
             let syncJob = new SyncJob();
@@ -39,6 +39,7 @@ export class Sync extends Singleton {
             this.syncInProgress = null;
             resolve(undefined);
         });
+        return this.syncInProgress;
     }
 
     static initializeBackgroundFetch() {

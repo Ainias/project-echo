@@ -67,7 +67,14 @@ export class SearchSite extends FooterSite {
             }
         }
 
-        this._possibleChurches = await Church.find();
+        this._possibleChurches = (await Church.find()).sort((a, b) => {
+            Translator.getInstance().addDynamicTranslations(a.getDynamicTranslations());
+            Translator.getInstance().addDynamicTranslations(b.getDynamicTranslations());
+
+            const transA = Translator.getInstance().translate(a.getNameTranslation());
+            const transB = Translator.getInstance().translate(b.getNameTranslation());
+            return transA.toLowerCase().localeCompare(transB.toLowerCase());
+        });
         return res;
     }
 
@@ -142,60 +149,72 @@ export class SearchSite extends FooterSite {
         ViewHelper.removeAllChildren(this._filterEventContainer);
         ViewHelper.removeAllChildren(this._filterOrganiserContainer);
 
-        Object.values(Event.TYPES).forEach(type => {
-            // let translation = Translator.translate(type).toLowerCase();
+        Object.values(Event.TYPES).sort((a, b) => {
+            const transA = Translator.getInstance().translate(a);
+            const transB = Translator.getInstance().translate(b);
+            return transA.toLowerCase().localeCompare(transB.toLowerCase());
+        }).forEach(type => {
+                //IF sorgt dafür, dass nur Tags angezeigt werden, die mit searchString anfangen
+                let translation = Translator.translate(type).toLowerCase();
+                if (translation.indexOf(value.toLowerCase()) !== -1) { //|| this._types.indexOf(type) !== -1) {
+                    let tag = <HTMLElement>this._filterTagTemplate.cloneNode(true);
+                    tag.appendChild(Translator.makePersistentTranslation(type));
+                    tag.dataset["type"] = type;
 
-            //IF sorgt dafür, dass nur Tags angezeigt werden, die mit searchString anfangen
-            // if (translation.indexOf(value.toLowerCase()) !== -1 || this._types.indexOf(type) !== -1) {
-            let tag = <HTMLElement>this._filterTagTemplate.cloneNode(true);
-            tag.appendChild(Translator.makePersistentTranslation(type));
-            tag.dataset["type"] = type;
-
-            if (this._types.indexOf(type) !== -1) {
-                tag.classList.add("selected");
-            }
-            tag.addEventListener("click", () => {
-                let index = this._types.indexOf(type);
-                if (index === -1) {
-                    this._types.push(type);
-                    tag.classList.add("selected");
-                } else {
-                    this._types.splice(index, 1);
-                    tag.classList.remove("selected");
+                    if (this._types.indexOf(type) !== -1) {
+                        tag.classList.add("selected");
+                    }
+                    tag.addEventListener("click", () => {
+                        let index = this._types.indexOf(type);
+                        if (index === -1) {
+                            this._types = [type];
+                            // this._types.push(type);
+                            tag.classList.add("selected");
+                        } else {
+                            this._types = [];
+                            // this._types.splice(index, 1);
+                            tag.classList.remove("selected");
+                        }
+                        this._churches = [];
+                        this._search();
+                    });
+                    this._filterEventContainer.appendChild(tag);
                 }
-            });
-            this._filterEventContainer.appendChild(tag);
-            // }
-        });
+            }
+        );
 
         this._possibleChurches.forEach(church => {
             Translator.addDynamicTranslations(church.getDynamicTranslations());
 
-            // let translation = Translator.translate(church.getNameTranslation()).toLowerCase();
+            let translation = Translator.translate(church.getNameTranslation()).toLowerCase();
 
             //IF sorgt dafür, dass nur Churches angezeigt werden, die mit searchString anfangen
-            // if (translation.indexOf(value.toLowerCase()) !== -1 || this._churches.indexOf(church.id) !== -1) {
-            let tag = <HTMLElement>this._filterTagTemplate.cloneNode(true);
-            tag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
-            tag.dataset["churchId"] = church.id.toString();
+            if (translation.indexOf(value.toLowerCase()) !== -1) { // || this._churches.indexOf(church.id) !== -1) {
+                let tag = <HTMLElement>this._filterTagTemplate.cloneNode(true);
+                tag.appendChild(Translator.makePersistentTranslation(church.getNameTranslation()));
+                tag.dataset["churchId"] = church.id.toString();
 
-            if (this._churches.indexOf(church.id + "") !== -1) {
-                tag.classList.add("selected");
-            }
-
-            tag.addEventListener("click", () => {
-                let index = this._churches.indexOf(church.id + "");
-                if (index === -1) {
-                    this._churches.push(church.id + "");
+                if (this._churches.indexOf(church.id + "") !== -1) {
                     tag.classList.add("selected");
-                } else {
-                    this._churches.splice(index, 1);
-                    tag.classList.remove("selected");
                 }
-            });
 
-            this._filterOrganiserContainer.appendChild(tag);
-            // }
+                tag.addEventListener("click", () => {
+                    let index = this._churches.indexOf(church.id + "");
+                    if (index === -1) {
+                        this._churches = [church.id.toString()];
+                        // this._churches.push(church.id + "");
+                        tag.classList.add("selected");
+                    } else {
+                        // this._churches.splice(index, 1);
+                        this._churches = [];
+                        tag.classList.remove("selected");
+                    }
+                    this._types = [];
+                    this._search();
+                });
+
+                this._filterOrganiserContainer.appendChild(tag);
+            }
         })
     }
 }

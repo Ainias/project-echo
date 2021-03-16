@@ -107,8 +107,36 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.repeatUntil
     }
 
+    setRepeatUntil(repeatUntil){
+        this.repeatUntil = repeatUntil;
+    }
+
+    getStartDate(){
+        return this.startDate;
+    }
+
+    setStartDate(startDate){
+        this.startDate = startDate;
+    }
+
     getRepeatingArguments() {
         return this.repeatingArguments;
+    }
+
+    setRepeatingArguments(repeatingArguments){
+        this.repeatingArguments = repeatingArguments;
+    }
+
+    getRepeatingStrategy(){
+        return this.repeatingStrategy;
+    }
+
+    setRepeatingStrategy(strategy){
+        this.repeatingStrategy = strategy;
+    }
+
+    setOriginalEvent(event: Event){
+        this.originalEvent = event;
     }
 }
 

@@ -7,6 +7,7 @@ import {Event} from "../../../shared/model/Event";
 import {Translator} from "cordova-sites";
 import {Helper} from "js-helper/dist/shared/Helper";
 import {Church} from "../../../shared/model/Church";
+import {JsonHelper} from "js-helper/dist/shared/JsonHelper";
 
 export class FilterDialog extends Dialog {
     private _filterEventContainer: HTMLElement;
@@ -20,7 +21,14 @@ export class FilterDialog extends Dialog {
         super(Promise.all([ViewInflater.getInstance().load(view), Church.find()]).then(res => {
 
             let view = res[0];
-            this._possibleChurches = res[1];
+            this._possibleChurches = res[1].sort((a, b) => {
+                Translator.getInstance().addDynamicTranslations(a.getDynamicTranslations());
+                Translator.getInstance().addDynamicTranslations(b.getDynamicTranslations());
+
+                const transA = Translator.getInstance().translate(a.getNameTranslation());
+                const transB = Translator.getInstance().translate(b.getNameTranslation());
+                return transA.toLowerCase().localeCompare(transB.toLowerCase());
+            });
 
             this._types = Helper.nonNull(types, []);
             this._churches = Helper.nonNull(churches, []);
@@ -45,7 +53,11 @@ export class FilterDialog extends Dialog {
         ViewHelper.removeAllChildren(this._filterEventContainer);
         ViewHelper.removeAllChildren(this._filterOrganiserContainer);
 
-        Object.values(Event.TYPES).forEach(type => {
+        Object.values(Event.TYPES).sort((a, b) => {
+            const transA = Translator.getInstance().translate(a);
+            const transB = Translator.getInstance().translate(b);
+            return transA.toLowerCase().localeCompare(transB.toLowerCase());
+        }).forEach(type => {
             let tag = <HTMLElement>this._filterTagTemplate.cloneNode(true);
             tag.appendChild(Translator.makePersistentTranslation(type));
             tag.dataset["type"] = type;
@@ -94,26 +106,24 @@ export class FilterDialog extends Dialog {
         Translator.getInstance().updateTranslations(this._filterOrganiserContainer);
     }
 
-    createModalDialogElement(): any {
-        const element = super.createModalDialogElement();
-
-        try {
-            let clearFilterButton = document.createElement("span");
-            clearFilterButton.classList.add("clearFilter");
-
-            console.log(element.querySelector(".title"));
-
-            element.querySelector(".title").parentNode.appendChild(clearFilterButton);
-            clearFilterButton.addEventListener("click", () => {
-                this._result = {};
-                this.close();
-            });
-        } catch (e) {
-            console.error(e);
-        }
-
-        return element;
-    }
+    // createModalDialogElement(): any {
+    //     const element = super.createModalDialogElement();
+    //
+    //     try {
+    //         let clearFilterButton = document.createElement("span");
+    //         clearFilterButton.classList.add("clearFilter");
+    //
+    //         element.querySelector(".title").parentNode.appendChild(clearFilterButton);
+    //         clearFilterButton.addEventListener("click", () => {
+    //             this._result = {};
+    //             this.close();
+    //         });
+    //     } catch (e) {
+    //         console.error(e);
+    //     }
+    //
+    //     return element;
+    // }
 
     applyFilter() {
         this._result = {

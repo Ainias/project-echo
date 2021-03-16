@@ -42,8 +42,8 @@ describe("edit church", () => {
 
         let editors = $$(".ck.ck-content");
 
-        await editors.get(0).setValue("Meine Beschreibung");
-        await editors.get(1).setValue("Meine Beschreibung");
+        await editors.get(0).setValue(" Meine Beschreibung");
+        await editors.get(1).setValue(" Meine Beschreibung");
 
         await functions.setFormValues({
             "name-de":"Neue Kirche",
@@ -131,8 +131,8 @@ describe("edit church", () => {
 
         editors = $$(".ck.ck-content");
 
-        await editors.get(0).setValue("Meine bearbeitete Beschreibung");
-        await editors.get(1).setValue("Meine english Beschreibung");
+        await editors.get(0).setValue(" Meine bearbeitete Beschreibung");
+        await editors.get(1).setValue(" Meine english Beschreibung");
 
         await functions.setFormValues({
             "name-de":"Bearbeitete Kirche",

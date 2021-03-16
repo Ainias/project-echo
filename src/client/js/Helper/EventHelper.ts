@@ -8,6 +8,7 @@ import {SystemCalendar} from "../SystemCalendar";
 import {BlockedDay} from "../../../shared/model/BlockedDay";
 import {DateHelper} from "js-helper";
 import {Helper} from "js-helper/dist/shared";
+import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
 
 export class EventHelper {
     static async search(searchString?, beginTime?, endTime?, types?, organisers?, regions?, loadOrganisers?: boolean) {
@@ -193,7 +194,22 @@ export class EventHelper {
         await notificationScheduler.schedule(id, event.getId(), Translator.translate(event.getNameTranslation()), timeFormat, timeToNotify);
     }
 
-    static async generateSingleEventFromRepeatedEvent(repeatedEvent, day, addDatabaseEvents?: boolean) {
+    static async generateNextSingleEventFromRepeatedEvent(repeatedEvent: RepeatedEvent, addDatabaseEvents?: boolean) {
+
+        const maxTime = Math.max(new Date().getTime(), repeatedEvent.getStartDate().getTime());
+        const startTime = new Date(maxTime);
+        const endTime = new Date(maxTime);
+        endTime.setDate(endTime.getDate()+7);
+
+        let events = await this.generateEventFromRepeatedEvent(repeatedEvent, startTime, endTime, addDatabaseEvents);
+        if (events.length >= 1) {
+            return events[0];
+        } else {
+            return null;
+        }
+    }
+
+    static async generateSingleEventFromRepeatedEvent(repeatedEvent: RepeatedEvent, day, addDatabaseEvents?: boolean) {
         let events = await this.generateEventFromRepeatedEvent(repeatedEvent, day, day, addDatabaseEvents);
         if (events.length === 1) {
             return events[0];
@@ -202,16 +218,16 @@ export class EventHelper {
         }
     }
 
-    static async generateEventFromRepeatedEvent(repeatedEvent, from, to, addDatabaseEvents?: boolean, ignoreTime?: boolean) {
+    static async generateEventFromRepeatedEvent(repeatedEvent: RepeatedEvent, from, to, addDatabaseEvents?: boolean, ignoreTime?: boolean) {
         addDatabaseEvents = Helper.nonNull(addDatabaseEvents, false);
         ignoreTime = Helper.nonNull(ignoreTime, true);
 
-        if (repeatedEvent.repeatingStrategy !== 0) {
+        if (repeatedEvent.getRepeatingStrategy() !== 0) {
             return [];
         }
 
-        if (from.getTime() < repeatedEvent.startDate.getTime()) {
-            from = repeatedEvent.startDate;
+        if (from.getTime() < repeatedEvent.getStartDate().getTime()) {
+            from = repeatedEvent.getStartDate();
         }
 
         from = new Date(from.getTime());
@@ -235,7 +251,7 @@ export class EventHelper {
         let indexedBlockedDaysObjects = Helper.arrayToObject(blockedDaysObjects, blockedDay => DateHelper.strftime("%Y-%m-%d", blockedDay.day));
         let blockedDays = Object.keys(indexedBlockedDaysObjects);
 
-        let weekdaysString = repeatedEvent.repeatingArguments.split(",");
+        let weekdaysString = repeatedEvent.getRepeatingArguments().split(",");
         let weekdays = [];
         weekdaysString.forEach(weekday => {
             weekdays.push(parseInt(weekday))

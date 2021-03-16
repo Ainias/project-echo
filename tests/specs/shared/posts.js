@@ -49,6 +49,7 @@ describe("post suite", () => {
     it("check posts", async function () {
         await functions.pause(1000);
         let posts = $$(".post");
+
         expect(await posts.get(0).$(".date").getText()).toEqual("05.04.19");
         expect(await posts.get(1).$(".date").getText()).toEqual("04.04.20");
         expect(await posts.get(2).$(".date").getText()).toEqual("05.04.20");

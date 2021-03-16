@@ -38,15 +38,15 @@ describe("edit event", () => {
         await functions.logout();
     });
 
-    fit("new event", async function () {
+    it("new event", async function () {
         let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
 
         await $("span=Neuer Termin").click();
 
         let editors = $$(".ck.ck-content");
 
-        await editors.get(0).setValue("Meine Beschreibung");
-        await editors.get(1).setValue("Meine Beschreibung");
+        await editors.get(0).setValue(" Meine Beschreibung");
+        await editors.get(1).setValue(" Meine Beschreibung");
 
         await functions.setFormValues({
             "name-de": "Neues Event",
@@ -182,7 +182,7 @@ describe("edit event", () => {
 
         await $("button.button=Speichern").click();
 
-        expect(await $("span.name=Neues wiederholendes Event").isDisplayed()).toBeTruthy();
+        expect(await $("#event-name=Neues wiederholendes Event").isDisplayed()).toBeTruthy();
 
         let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Neues wiederholendes Event%New repeating Event%' LIMIT 1");
         data = data[0];
@@ -230,7 +230,7 @@ describe("edit event", () => {
 
         await $(".footer .icon.calendar").click();
         await $(".day-number=5").click();
-        await $("span.name=Termin zum bearbeiten").click();
+        await $("div.name=Termin zum bearbeiten").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
 
@@ -277,8 +277,7 @@ describe("edit event", () => {
 
         await $("button.button=Speichern").click();
 
-        await functions.pause(25000);
-        expect(await $("h1#name=Bearbeiteter Termin").isDisplayed()).toBeTruthy();
+        expect(await $("#event-name=Bearbeiteter Termin").isDisplayed()).toBeTruthy();
 
         let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin%Edited Event%' LIMIT 1");
 
@@ -316,7 +315,7 @@ describe("edit event", () => {
 
         await $(".footer .icon.calendar").click();
         await $(".day-number=10").click();
-        await $("span.name=Termin zum bearbeiten wiederholend").click();
+        await $(".name=Termin zum bearbeiten wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
 
@@ -364,10 +363,7 @@ describe("edit event", () => {
         await $$(".flatpickr-minute").get(1).setValue(59);
 
         await $("button.button=Speichern").click();
-
-        await functions.pause(250);
-        await $(".day-number=24").click();
-        expect(await $("span.name=Bearbeiteter Termin wiederholend").isDisplayed()).toBeTruthy();
+        expect(await $("#event-name=Bearbeiteter Termin wiederholend").isDisplayed()).toBeTruthy();
 
         let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin wiederholend%Edited Event wiederholend%' LIMIT 1");
 
@@ -416,7 +412,7 @@ describe("edit event", () => {
 
         await $(".footer .icon.calendar").click();
         await $(".day-number=19").click();
-        await $("span.name=Termin zum bearbeiten single wiederholend").click();
+        await $(".name=Termin zum bearbeiten single wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
 
@@ -514,7 +510,7 @@ describe("edit event", () => {
     it("delete normal event", async function () {
         await $(".footer .icon.calendar").click();
         await $(".day-number=11").click();
-        await $("span.name=Termin zum löschen").click();
+        await $(".name=Termin zum löschen").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
 
@@ -531,7 +527,7 @@ describe("edit event", () => {
     it("delete repeated event", async function () {
         await $(".footer .icon.calendar").click();
         await $(".day-number=15").click();
-        await $("span.name=Termin zum löschen wiederholend").click();
+        await $(".name=Termin zum löschen wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
 
@@ -548,7 +544,7 @@ describe("edit event", () => {
     it("delete repeated single event", async function () {
         await $(".footer .icon.calendar").click();
         await $(".day-number=26").click();
-        await $("span.name=Termin zum bearbeiten single wiederholend").click();
+        await $(".name=Termin zum bearbeiten single wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
 

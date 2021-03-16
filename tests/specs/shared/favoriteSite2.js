@@ -108,19 +108,13 @@ describe("favorite site 2", () => {
             return (await elem.$(".day").getText()) === "Do 27.06."
         }));
 
-        console.log("test 3");
-
         expect(await eventOverviewContainer.$(".event-overview").isExisting()).toBeTruthy();
         await eventOverviewContainer.click();
         await $(".favorite.is-favorite").click();
 
-        console.log("test 4");
-
         // await browser.debug();
         await functions.pause(3000);
         expect(await $(".favorite.is-favorite").isExisting()).toBeFalsy();
-
-        console.log("test 5");
 
         await $(".footer .icon.favorites").click();
         await functions.pause(1000);

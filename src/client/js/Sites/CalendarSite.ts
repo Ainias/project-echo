@@ -88,10 +88,10 @@ export class CalendarSite extends FooterSite {
         let filterButton = this.findBy("#button-filter");
         filterButton.addEventListener("click", async () => {
             let res = await new FilterDialog(this._filter.types, this._filter.churches).show();
-            if (res === false) {
-                this._filter = {};
-            } else if (Helper.isNotNull(res)) {
+            if (Helper.isNotNull(res)) {
                 this._filter = res;
+            } else {
+                this._filter = {};
             }
 
             if (this._filter.types && this._filter.types.length > 0 || this._filter.churches && this._filter.churches.length > 0) {

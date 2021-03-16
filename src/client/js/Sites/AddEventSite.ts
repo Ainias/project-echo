@@ -181,7 +181,6 @@ export class AddEventSite extends MenuFooterSite {
             }
             event.setWebsite(values["website"]);
 
-            debugger;
             let eventId = event.id;
             let savePromise = event.save();
             if (Helper.isNotNull(event.repeatedEvent) && eventId === null) {
@@ -198,7 +197,7 @@ export class AddEventSite extends MenuFooterSite {
             // eventId = event.id;
 
             if (values["repeatable"]) {
-                let repeatedEvent = null;
+                let repeatedEvent: RepeatedEvent = null;
                 if (this._event instanceof RepeatedEvent) {
                     repeatedEvent = this._event;
                 } else {
@@ -206,17 +205,17 @@ export class AddEventSite extends MenuFooterSite {
                     this._event = repeatedEvent;
                 }
 
-                repeatedEvent.startDate = new Date(values["start"]);
+                repeatedEvent.setStartDate(new Date(values["start"]));
 
-                repeatedEvent.originalEvent = event;
+                repeatedEvent.setOriginalEvent(event);
                 event.repeatedEvent = repeatedEvent;
                 event.setIsTemplate(true);
 
                 let repeatUntil = new Date(values["repeat-until"]);
                 if (isNaN(repeatUntil.getTime())) {
-                    repeatedEvent.repeatUntil = null;
+                    repeatedEvent.setRepeatUntil(null);
                 } else {
-                    repeatedEvent.repeatUntil = repeatUntil;
+                    repeatedEvent.setRepeatUntil(repeatUntil);
                 }
 
                 let repeatedDays = [];
@@ -228,13 +227,16 @@ export class AddEventSite extends MenuFooterSite {
                     }
                 });
 
-                repeatedEvent.repeatingArguments = repeatedDays.join(",");
+                repeatedEvent.setRepeatingArguments(repeatedDays.join(","));
                 await repeatedEvent.save();
                 await event.save()
             }
 
             if (this._event instanceof RepeatedEvent) {
-                this.finishAndStartSite(CalendarSite);
+                const nextEvent = await EventHelper.generateNextSingleEventFromRepeatedEvent(this._event);
+                this.finishAndStartSite(EventSite, {
+                    id: nextEvent.getId()
+                });
             } else {
                 this.finishAndStartSite(EventSite, {
                     id: event.id
@@ -396,7 +398,7 @@ export class AddEventSite extends MenuFooterSite {
                     queryElem.removeAttribute("data-translation-placeholder");
                 }
             });
-            if (Object.keys(places).length === 0){
+            if (Object.keys(places).length === 0) {
                 this.findBy(".remove-place")?.dispatchEvent(new MouseEvent("click"));
             }
 

@@ -30,6 +30,7 @@
 @import "ckeditor";
 @import "post";
 @import "settingsDialog";
+@import "impressum";
 
 @keyframes rotate {
   from {
@@ -73,6 +74,10 @@ html, body {
   height: 100%;
   width: 100%;
   //display: inline-block;
+}
+
+.linebreak-pre{
+  white-space: pre-line;
 }
 
 .right {

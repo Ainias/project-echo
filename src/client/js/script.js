@@ -53,6 +53,7 @@ import {Sync} from "./Sync";
 import {DateHelper} from "js-helper";
 import {EventWeblink1000000012000} from "../../shared/model/migrations/EventWeblink";
 import {ChurchInstalink1000000013000} from "../../shared/model/migrations/ChurchInstalink";
+import {Post} from "../../shared/model/Post";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -95,7 +96,7 @@ App.addInitialization(async (app) => {
             window["missingTranslations"][language] = Helper.nonNull(window["missingTranslations"][language], []);
             window["missingTranslations"][language].push(key);
             if (window["shouldConsoleMissingTranslation"] !== false){
-                console.error("missing translation for language "+language+ " and key "+key);
+                console.error("missing translation for language >"+language+ "< and key >"+key+"<");
             }
         },
     });
