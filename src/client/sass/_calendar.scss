@@ -1,6 +1,7 @@
 @keyframes openEventList {
-  1% {
-    position: initial;
+  0% {
+    position: absolute;
+    //top: 75%;
     //top: 75%;
   }
   1% {
@@ -190,12 +191,13 @@
       //animation-fill-mode: none;
       //animation-direction: reverse;
 
+      top: 75%;
       &.is-open {
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        //top: 0;
+        top: 0;
 
         @each $breakpoint, $value in $margins {
           @include breakpoint($breakpoint) {
@@ -207,16 +209,16 @@
           }
         }
 
-        transition: none;
+        transition: top 0.5s;
 
         overflow-y: auto;
         //border-top-left-radius: 0;
         //border-top-right-radius: 0;
 
-        animation-name: openEventList;
-        animation-duration: 0.5s;
-        animation-fill-mode: forwards;
-        animation-direction: initial;
+        //animation-name: openEventList;
+        //animation-duration: 0.5s;
+        //animation-fill-mode: forwards;
+        //animation-direction: initial;
 
         #icon-big-small {
           .makeSmall {

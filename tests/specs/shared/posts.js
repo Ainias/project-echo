@@ -46,7 +46,7 @@ describe("post suite", () => {
         await functions.acceptCookies();
     });
 
-    it("check posts", async function () {
+    xit("check posts", async function () {
         await functions.pause(1000);
         let posts = $$(".post");
 

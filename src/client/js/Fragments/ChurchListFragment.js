@@ -33,6 +33,6 @@ export class ChurchListFragment extends FsjChurchBaseListFragment {
 
 
     infoElemClicked(id) {
-        this.getSite().finishAndStartSite(ShowChurchSite, {"id": id});
+        this.getSite().startSite(ShowChurchSite, {"id": id});
     }
 }

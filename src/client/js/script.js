@@ -154,9 +154,9 @@ App.addInitialization(async (app) => {
         app.startSite(ModifyFsjSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
-    NavbarFragment.defaultActions.push(new UserMenuAction("add post", "posts", () => {
-        app.startSite(ModifyPostSite);
-    }, MenuAction.SHOW_FOR_MEDIUM));
+    // NavbarFragment.defaultActions.push(new UserMenuAction("add post", "posts", () => {
+    //     app.startSite(ModifyPostSite);
+    // }, MenuAction.SHOW_FOR_MEDIUM));
 
     DataManager.setHeader("Accept-Language", "de-DE,dias;q=0.5");
     // await SystemCalendar.createCalendar("echo");

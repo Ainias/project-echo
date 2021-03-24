@@ -21,10 +21,17 @@ export class EventOverviewFragment extends AbstractFragment {
     private _eventOverviewTemplate: HTMLElement;
     private _pastSection: HTMLElement;
 
+    private showMaxEvents: number = 0;
+
     constructor(site) {
         super(site, view);
         this._events = [];
         this._showInPast = true;
+    }
+
+    setShowMaxEvents(maxEvents) {
+        this.showMaxEvents = maxEvents;
+        this._viewLoadedPromise.then(() => this._renderList());
     }
 
     setShowInPast(showInPast) {
@@ -109,14 +116,17 @@ export class EventOverviewFragment extends AbstractFragment {
 
         let hasEventsInPast = false;
         let translator = Translator.getInstance();
-        Object.keys(sortedFavorites).forEach(day => {
+
+        let numEvents = 0;
+
+        Object.keys(sortedFavorites).some(day => {
             let dayParts = day.split(",");
 
             let dayContainer = <HTMLElement>this._eventTemplate.cloneNode(true);
             dayContainer.querySelector(".day").innerHTML = dayParts[1];
 
-            Object.keys(sortedFavorites[day]).forEach(time => {
-                sortedFavorites[day][time].forEach(event => {
+            const res = Object.keys(sortedFavorites[day]).some(time => {
+                return sortedFavorites[day][time].some(event => {
                     let eventElement = <HTMLElement>this._eventOverviewTemplate.cloneNode(true);
                     eventElement.querySelector(".name").appendChild(translator.makePersistentTranslation(event.getNameTranslation()));
                     (eventElement.querySelector(".time") as HTMLElement).innerText = time;
@@ -130,7 +140,7 @@ export class EventOverviewFragment extends AbstractFragment {
 
                     if (placesIndexes.length > 0) {
                         ((placesIndexes.length === 1) ?
-                            PlaceHelper.createPlace(placesIndexes[0], placesIsArray?places[0]:places[placesIndexes[0]], true)
+                            PlaceHelper.createPlace(placesIndexes[0], placesIsArray ? places[0] : places[placesIndexes[0]], true)
                             : PlaceHelper.createMultipleLocationsView()).then(view => eventElement.querySelector(".place-container").appendChild(view));
                     }
 
@@ -172,6 +182,10 @@ export class EventOverviewFragment extends AbstractFragment {
                     }
 
                     dayContainer.appendChild(eventElement);
+                    numEvents++;
+                    if (this.showMaxEvents > 0 && numEvents >= this.showMaxEvents){
+                        return true;
+                    }
                 });
             });
 
@@ -181,6 +195,7 @@ export class EventOverviewFragment extends AbstractFragment {
             } else {
                 this._eventContainer.appendChild(dayContainer);
             }
+            return res;
         });
         if (Object.keys(sortedFavorites).length === 0) {
             let elem = document.createElement("div");
