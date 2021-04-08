@@ -16,6 +16,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="https://www.google.com/maps/embed/v1/*" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="Fullscreen" value="true" />
     <preference name="Orientation" value="portrait" />
