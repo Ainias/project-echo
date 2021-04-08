@@ -115,12 +115,16 @@ export class CalendarSite extends FooterSite {
 
         this.scrollContainer = this.findBy("#calendar-scroll-container");
         this.scrollContainer.addEventListener("scroll", e => {
+            console.log("scrolling", this.scrollContainer.scrollTop);
             if (this.scrollContainer.scrollTop > 0) {
                 this.openEventList();
             } else {
                 this.closeEventList();
             }
         });
+        setInterval(() => {
+            console.log("scroll top", this.scrollContainer.scrollTop);
+        }, 2000);
 
         return res;
     }

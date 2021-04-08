@@ -9,12 +9,12 @@ exports.config = {
 
          './tests/specs/**/settingsSite.js',
          // './tests/specs/**/searchSite.js',
-         // './tests/specs/**/favoriteSite.js',
+         // './tests/specs/**/listChurch.js',
+        // './tests/specs/**/favoriteSite2.js',
+        // './tests/specs/**/eventSite.js',
 
          // './tests/specs/**/posts.js',
-// './tests/specs/**/favoriteSite2.js',
-
-
+         // './tests/specs/**/favoriteSite.js',
          // './tests/specs/**/churchSite.js',
          // './tests/specs/**/calendarSite.js',
 
@@ -89,15 +89,15 @@ exports.config = {
         // For Android, Appium uses the first device it finds using "adb devices". So, this
         // string simply needs to be non-empty.
         // For iOS, this must exactly match the device name as seen in Xcode.
-         deviceName: 'iPhone 8' +
-             '',
+         deviceName: 'iPhone 11',
         //deviceName: 'any',
 
         // 'Android' or 'iOS'
         platformName: 'iOS',
 
         // The version of the Android or iOS system
-        platformVersion: '13.3',
+        // platformVersion: '13.3',
+        platformVersion: '14.2',
         //platformVersion: '12.4',
 
         orientation: "PORTRAIT",

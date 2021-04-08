@@ -77,9 +77,10 @@ describe("settingsSite", () => {
         expect(selected[0].name).toEqual("echo");
     });
 
-    it("deactivate notifications", async function () {
+    fit("deactivate notifications", async function () {
+        await functions.acceptInsertFavorites()
         await functions.acceptAlert();
-        // await functions.acceptAlert();
+        await functions.acceptAlert();
         await functions.pause(1000);
 
         await browser.executeAsync((done) => {
@@ -111,17 +112,16 @@ describe("settingsSite", () => {
                 });
             });
         });
-        await functions.pause(5000);
-
-        await functions.acceptInsertFavorites()
+        await functions.pause(8000);
         expect(await $("#send-notifications").getValue()).toEqual("1");
-        expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
+        expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
         await $("#send-notifications+span.slider").click();
 
         expect(await $("#time-before-setting-row").isDisplayed()).toBeFalsy();
 
         await functions.pause(500);
+
         let val = await functions.asyncExecute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
@@ -130,19 +130,20 @@ describe("settingsSite", () => {
         let val2 = await browser.execute(() => {
             return window["notifications"];
         });
+
         expect(val2).toEqual({});
-
         await $("#send-notifications+span.slider").click();
-        await functions.pause(1500);
 
+        await functions.pause(1500);
         expect(await $("#time-before-setting-row").isDisplayed()).toBeTruthy();
 
         let val3 = await functions.asyncExecute(() => {
             return new Promise((r, rej) => NativeStorage.getItem("functional_send-notifications", r, r));
         });
-        expect(val3).toEqual("1");
 
+        expect(val3).toEqual("1");
         await functions.pause(2500);
+
         let val4 = await browser.execute(() => {
             return window["notifications"];
         });

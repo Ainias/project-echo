@@ -41,7 +41,7 @@
   //}
 
   #calendar {
-    height: calc(100% + 1px);
+    height: calc(100% + 2px); //iPhone braucht mindestens +2
     position: relative;
     background: $navBackgroundWhite;
     padding-top: 3rem;
