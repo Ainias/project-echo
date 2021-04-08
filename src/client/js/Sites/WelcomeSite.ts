@@ -12,7 +12,6 @@ import {ModifyPostSite} from "./ModifyPostSite";
 import {DateHelper} from "js-helper";
 import {ViewHelper} from "js-helper/dist/client/ViewHelper";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
-import {Favorite} from "../Model/Favorite";
 import {EventHelper} from "../Helper/EventHelper";
 
 export class WelcomeSite extends AbsoluteBarMenuSite {
@@ -41,6 +40,10 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         this._postTemplate.removeAttribute("id");
 
         this._postContainer = this.findBy("#post-container");
+
+        const spoiler = this.findBy(".text-spoiler");
+        spoiler.addEventListener("click", () => spoiler.classList.toggle("open"));
+
         return res;
     }
 

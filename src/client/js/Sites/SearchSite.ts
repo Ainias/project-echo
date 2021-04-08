@@ -150,6 +150,13 @@ export class SearchSite extends FooterSite {
         ViewHelper.removeAllChildren(this._filterOrganiserContainer);
 
         Object.values(Event.TYPES).sort((a, b) => {
+            if (a === Event.TYPES.SONSTIGES){
+                return 1;
+            }
+            else if (b === Event.TYPES.SONSTIGES){
+                return -1;
+            }
+
             const transA = Translator.getInstance().translate(a);
             const transB = Translator.getInstance().translate(b);
             return transA.toLowerCase().localeCompare(transB.toLowerCase());

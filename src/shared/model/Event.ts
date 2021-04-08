@@ -23,13 +23,13 @@ export class Event extends AccessEasySyncModel {
     private website: string;
     private isTemplate: boolean = false;
 
-    static readonly TYPES: { [key: string]: string } = {
+    static readonly TYPES = {
         GOTTESDIENST: "gottesdienst",
         KONZERT: "konzert",
-        HAUSKREIS: "hauskreis",
+        // HAUSKREIS: "hauskreis",
         KONFERENZ: "konferenz",
-        GEBETSKREIS: "gebetskreis",
-        SPORT: "sport",
+        // GEBETSKREIS: "gebetskreis",
+        // SPORT: "sport",
         JUGENDKREIS: "jugendkreis",
         STUDENTENKREIS: "studentenkreis",
         SONSTIGES: "sonstiges",

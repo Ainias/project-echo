@@ -57,9 +57,35 @@
   }
 }
 
-.welcome-paragraph{
+.welcome-paragraph {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid #e5e5e5;
+}
+
+.text-spoiler {
+  max-height: 80px;
+  overflow: hidden;
+  position: relative;
+  transition: none;
+
+  .text-spoiler-curtain {
+    position: absolute;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &.open {
+    transition: max-height 3s;
+    max-height: 5000px;
+
+    .text-spoiler-curtain {
+      display: none;
+    }
+  }
 }
 
 html, body {
@@ -81,7 +107,7 @@ html, body {
   //display: inline-block;
 }
 
-.linebreak-pre{
+.linebreak-pre {
   white-space: pre-line;
 }
 

@@ -1,6 +1,7 @@
 import {MenuFooterSite} from "./MenuFooterSite";
 
-import view from "../../html/Sites/contactSite.html"
+const view  = require("../../html/Sites/contactSite.html")
+
 import {App} from "cordova-sites/dist/client/js/App";
 import {Form} from "cordova-sites/dist/client/js/Form";
 import {DataManager} from "cordova-sites/dist/client/js/DataManager";
@@ -15,10 +16,10 @@ export class ContactSite extends MenuFooterSite {
     onViewLoaded() {
         let res = super.onViewLoaded();
 
+        // @ts-ignore
         this.findBy("#contactText").appendChild(Translator.makePersistentTranslation("contact text", [__CONTACT_EMAIL__]))
 
         new Form(this.findBy("#contact-form"), async values => {
-
             let result = await DataManager.send("contact", values);
             if (result.success) {
                 new Toast("Die Nachricht wurde gesendet!").show();
