@@ -17,7 +17,6 @@ import {Singleton} from "cordova-sites/dist/client/js/Singleton";
 
 export class Sync extends Singleton {
 
-
     private syncInProgress: Promise<any> = null;
 
     async sync(awaitFullSync?) {

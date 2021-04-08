@@ -199,6 +199,10 @@
         bottom: 0;
         top: 0;
 
+        #event-overview-inner-container{
+          height: initial;
+        }
+
         @each $breakpoint, $value in $margins {
           @include breakpoint($breakpoint) {
             margin-left: 2*$value;
