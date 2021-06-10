@@ -3,7 +3,7 @@ import {MenuFooterSite} from "./MenuFooterSite";
 const view  = require("../../html/Sites/contactSite.html")
 
 import {App} from "cordova-sites/dist/client/js/App";
-import {Form} from "cordova-sites/dist/client/js/Form";
+import {Form} from "cordova-sites/dist/client";
 import {DataManager} from "cordova-sites/dist/client/js/DataManager";
 import {Toast} from "cordova-sites/dist/client/js/Toast/Toast";
 import {Translator} from "cordova-sites/dist/client/js/Translator";

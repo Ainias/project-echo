@@ -1,5 +1,5 @@
 const view = require("../../html/Sites/welcomeSite.html");
-const componentImg = require("../../img/component.jpg").default;
+const componentImg = require("../../img/component.jpg");
 
 import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
 import {Post} from "../../../shared/model/Post";
@@ -25,6 +25,7 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
 
         this.getNavbarFragment().setCanGoBack(false);
         this.footerFragment.setSelected(".icon.home");
+        console.log("img", componentImg);
         this.getNavbarFragment().setBackgroundImage(componentImg);
 
         this._eventListFragment = new EventOverviewFragment(this);
@@ -53,10 +54,7 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
             createdAt: "ASC"
         });
 
-
         this._posts = [];
-
-
         ViewHelper.removeAllChildren(this._postContainer);
 
         this._posts.forEach(post => {

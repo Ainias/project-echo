@@ -106,7 +106,7 @@ export class AddEventSite extends MenuFooterSite {
 
         let typeSelect = this.findBy("[name=type]");
         Object.values(Event.TYPES).forEach(type => {
-            let optionElem = Translator.makePersistentTranslation(type, undefined, "option");
+            let optionElem = <HTMLOptionElement>Translator.makePersistentTranslation(type, undefined, "option");
             optionElem.value = type;
             typeSelect.appendChild(optionElem);
         });

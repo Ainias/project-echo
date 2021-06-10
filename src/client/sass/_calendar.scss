@@ -19,13 +19,14 @@
   }
 }
 
-.calendar-site #footer-fragment .footer{
+.calendar-site #footer-fragment .footer {
   margin-top: 0;
 }
 
 #calendar-scroll-container::-webkit-scrollbar {
   display: none;
 }
+
 #calendar-scroll-container {
   height: 100%;
   overflow-y: scroll;
@@ -73,6 +74,11 @@
         text-align: center;
         width: 14.28571%;
         display: inline-block;
+        transition: none;
+
+        &.hidden {
+          opacity: 0;
+        }
 
         svg {
           height: 100%;
@@ -161,7 +167,7 @@
       padding-right: 1rem;
       overflow-y: hidden;
 
-      #event-overview-inner-container{
+      #event-overview-inner-container {
         height: calc(100% - 1rem);
         overflow: hidden;
       }
@@ -192,6 +198,7 @@
       //animation-direction: reverse;
 
       top: 75%;
+
       &.is-open {
         position: absolute;
         left: 0;
@@ -199,7 +206,7 @@
         bottom: 0;
         top: 0;
 
-        #event-overview-inner-container{
+        #event-overview-inner-container {
           height: initial;
         }
 

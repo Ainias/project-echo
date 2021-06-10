@@ -83,8 +83,8 @@ exports.config = {
         // './tests/specs/**/posts.js',
         // './tests/specs/**/searchSite.js',
         // './tests/specs/**/churchSite.js',
-        // './tests/specs/**/listChurch.js',
         // './tests/specs/**/editEvent.js',
+        // './tests/specs/**/listChurch.js',
         // './tests/specs/**/editChurch.js',
     ],
 

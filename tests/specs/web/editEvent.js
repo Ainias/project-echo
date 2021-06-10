@@ -125,7 +125,7 @@ describe("edit event", () => {
         await $(".footer .icon.home").click();
     });
 
-    it("new repeated event", async function () {
+    fit("new repeated event", async function () {
         let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
 
         await $("span=Neuer Termin").click();
@@ -142,7 +142,7 @@ describe("edit event", () => {
             "place-name-1": "Aachen",
             "church-2": "2",
             "church-5": "5",
-            "type": "sport",
+            "type": "sonstiges",
         });
 
         await $("input[name=start]").click();
@@ -188,7 +188,7 @@ describe("edit event", () => {
         data = data[0];
 
         expect(data["names"]).toEqual("{\"de\":\"Neues wiederholendes Event\",\"en\":\"New repeating Event\"}");
-        expect(data["type"]).toEqual("sport");
+        expect(data["type"]).toEqual("sonstiges");
         expect(data["startTime"].getTime()).toEqual(new Date(2019, 5, 16, 11, 10).getTime());
         expect(data["endTime"].getTime()).toEqual(new Date(2019, 5, 16, 13, 59).getTime());
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");

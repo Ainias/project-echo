@@ -2,7 +2,7 @@ import {Dialog} from "cordova-sites/dist/client/js/Dialog/Dialog";
 
 import view from "../../html/Dialoges/cookieDialog.html"
 import {ViewInflater} from "cordova-sites/dist/client/js/ViewInflater";
-import {Form} from "cordova-sites/dist/client/js/Form";
+import {Form} from "cordova-sites/dist/client/";
 
 export class CookieDialog extends Dialog{
 

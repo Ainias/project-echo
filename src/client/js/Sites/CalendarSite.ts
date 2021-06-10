@@ -23,6 +23,7 @@ export class CalendarSite extends FooterSite {
     private _eventOverview: HTMLElement;
     private _monthNameElement: HTMLElement;
     private scrollContainer: HTMLElement;
+    private buttonLeft: HTMLElement;
 
     constructor(siteManager) {
         super(siteManager, view);
@@ -76,7 +77,8 @@ export class CalendarSite extends FooterSite {
         this._eventOverview = this.findBy("#event-overview");
 
         this._monthNameElement = this.findBy("#month-name");
-        this.findBy("#button-left").addEventListener("click", () => {
+        this.buttonLeft = this.findBy("#button-left");
+        this.buttonLeft.addEventListener("click", () => {
             DateHelper.setMonth(this._date.getMonth() - 1, this._date);
             this.drawMonth(this._date);
         });
@@ -115,16 +117,15 @@ export class CalendarSite extends FooterSite {
 
         this.scrollContainer = this.findBy("#calendar-scroll-container");
         this.scrollContainer.addEventListener("scroll", e => {
-            console.log("scrolling", this.scrollContainer.scrollTop);
             if (this.scrollContainer.scrollTop > 0) {
                 this.openEventList();
             } else {
                 this.closeEventList();
             }
         });
-        setInterval(() => {
-            console.log("scroll top", this.scrollContainer.scrollTop);
-        }, 2000);
+        // setInterval(() => {
+        //     console.log("scroll top", this.scrollContainer.scrollTop);
+        // }, 2000);
 
         return res;
     }
@@ -166,20 +167,35 @@ export class CalendarSite extends FooterSite {
     async drawMonth(date) {
         const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+        const minDate = new Date();
+        minDate.setDate(1);
+        DateHelper.setMonth(minDate.getMonth() - 2, minDate);
+        if (minDate.getTime() > date.getTime()) {
+            date.setFullYear(minDate.getFullYear());
+            DateHelper.setMonth(minDate.getMonth(), date);
+        }
+
+        if (minDate.getMonth() === date.getMonth() && minDate.getFullYear() === date.getFullYear()) {
+            this.buttonLeft.classList.add("hidden");
+        } else {
+            this.buttonLeft.classList.remove("hidden");
+        }
+
         let actualDayOfMonth = date.getDate();
-        let events = await this.loadEventsForMonth(date);
+
 
         date = new Date(Helper.nonNull(date, new Date()));
         date.setDate(1);
 
-        let month = date.getMonth();
         let now = new Date();
+        let month = date.getMonth();
         let isCurrentMonth = (now.getFullYear() === date.getFullYear() && now.getMonth() === month);
 
         let offset = (date.getDay() + 6) % 7;
         let numberDays = DateHelper.getNumberDaysOfMonth(date);
 
         let eventDays = {};
+        let events = await this.loadEventsForMonth(date);
         events.forEach(event => {
             let firstDayOfEvent = event.getStartTime().getDate();
             let lastDayOfEvent = event.getEndTime().getDate();
