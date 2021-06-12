@@ -3,7 +3,7 @@
   "display": "standalone",
   "name": "Echo",
   "short_name": "Echo",
-  "version": "de.echoapp",
+  "version": "test.de.echoapp",
   "description": "Ein christlicher Terminkalender für Gemeinden rund un Köln.",
   "author": "Project Echo Team",
   "icons": [],

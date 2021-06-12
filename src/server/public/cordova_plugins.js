@@ -316,7 +316,7 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-nativestorage": "2.3.2",
     "cordova-plugin-device": "2.0.3",
-    "cordova-sqlite-storage": "5.1.0",
+    "cordova-sqlite-storage": "6.0.0",
     "cordova-plugin-statusbar": "2.4.3",
     "cordova-plugin-calendar": "5.1.5",
     "cordova-plugin-file": "6.0.2",
