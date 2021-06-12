@@ -14,7 +14,7 @@ import "../img/flag_usa.svg";
 import {BaseDatabase} from "cordova-sites-database";
 import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
 import {ListChurchesSite} from "./Sites/ListChurchesSite";
-import {AddEventSite} from "./Sites/AddEventSite";
+import {ModifyEventSite} from "./Sites/ModifyEventSite";
 import {UserManager, LoginSite, RegistrationSite, UserMenuAction} from "cordova-sites-user-management/dist/client";
 import {CalendarSite} from "./Sites/CalendarSite";
 import {ModifyChurchSite} from "./Sites/ModifyChurchSite";
@@ -54,6 +54,9 @@ import {DateHelper} from "js-helper";
 import {EventWeblink1000000012000} from "../../shared/model/migrations/EventWeblink";
 import {ChurchInstalink1000000013000} from "../../shared/model/migrations/ChurchInstalink";
 import {Post} from "../../shared/model/Post";
+import {EventHelper} from "./Helper/EventHelper";
+
+import {DateHelper as MyDateHelper} from "./Helper/DateHelper";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -67,6 +70,12 @@ RegistrationSite.ADD_REGISTRATION_ACTION = false;
 App.setLogo(logo);
 
 App.addInitialization(async (app) => {
+
+    // const deleteDate = new Date();
+    // MyDateHelper.setMonth(deleteDate, deleteDate.getMonth() - 2);
+    // deleteDate.setDate(-1);
+    //
+    // EventHelper.deleteEventsOlderThan(deleteDate);
 
     // DataManager._assetBasePath = (cordova.device !== "browser"?cordova.file.applicationDirectory:"");
 
@@ -95,8 +104,8 @@ App.addInitialization(async (app) => {
         logMissingTranslations: (key, language) => {
             window["missingTranslations"][language] = Helper.nonNull(window["missingTranslations"][language], []);
             window["missingTranslations"][language].push(key);
-            if (window["shouldConsoleMissingTranslation"] !== false){
-                console.error("missing translation for language >"+language+ "< and key >"+key+"<");
+            if (window["shouldConsoleMissingTranslation"] !== false) {
+                console.error("missing translation for language >" + language + "< and key >" + key + "<");
             }
         },
     });
@@ -143,7 +152,7 @@ App.addInitialization(async (app) => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("imprint", ImpressumSite, MenuAction.SHOW_NEVER));
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add event", "events", () => {
-        app.startSite(AddEventSite);
+        app.startSite(ModifyEventSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add church", "organisers", () => {

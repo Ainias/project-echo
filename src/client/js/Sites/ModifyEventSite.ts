@@ -19,7 +19,7 @@ import {BlockedDay} from "../../../shared/model/BlockedDay";
 import {CalendarSite} from "./CalendarSite";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 
-export class AddEventSite extends MenuFooterSite {
+export class ModifyEventSite extends MenuFooterSite {
     private _churches: Church[];
     private _event: Event | RepeatedEvent;
     private _blockedDay: Date;
@@ -112,6 +112,7 @@ export class AddEventSite extends MenuFooterSite {
         });
 
         this._form = new Form(this.findBy("#add-event-form"), async values => {
+
             this.showLoadingSymbol()
             let names = {};
             let descriptions = {};
@@ -196,7 +197,7 @@ export class AddEventSite extends MenuFooterSite {
             await savePromise;
             // eventId = event.id;
 
-            if (values["repeatable"]) {
+            if (values["repeatable"] || this._event instanceof RepeatedEvent) {
                 let repeatedEvent: RepeatedEvent = null;
                 if (this._event instanceof RepeatedEvent) {
                     repeatedEvent = this._event;
@@ -231,6 +232,7 @@ export class AddEventSite extends MenuFooterSite {
                 await repeatedEvent.save();
                 await event.save()
             }
+
 
             if (this._event instanceof RepeatedEvent) {
                 const nextEvent = await EventHelper.generateNextSingleEventFromRepeatedEvent(this._event);
@@ -427,5 +429,5 @@ export class AddEventSite extends MenuFooterSite {
 }
 
 App.addInitialization((app) => {
-    app.addDeepLink("addEvent", AddEventSite);
+    app.addDeepLink("addEvent", ModifyEventSite);
 });

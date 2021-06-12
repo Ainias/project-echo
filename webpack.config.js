@@ -296,7 +296,6 @@ if (mode === "production") {
             presets: ['@babel/preset-env'],
             inputSourceMap: "inline",
             sourceMaps: true
-
         }
     });
 

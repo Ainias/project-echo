@@ -1,6 +1,6 @@
 import {EasySyncClientDb} from "cordova-sites-easy-sync/dist/client/EasySyncClientDb";
 import {Event} from "../../../shared/model/Event";
-import {Between, Brackets, In, SelectQueryBuilder} from "typeorm";
+import {Between, Brackets, DeleteQueryBuilder, In, LessThan, SelectQueryBuilder} from "typeorm";
 import {NotificationScheduler} from "../NotificationScheduler";
 import {Favorite} from "../Model/Favorite";
 import {Translator, NativeStoragePromise} from "cordova-sites/dist/client";
@@ -9,6 +9,7 @@ import {BlockedDay} from "../../../shared/model/BlockedDay";
 import {DateHelper} from "js-helper";
 import {Helper} from "js-helper/dist/shared";
 import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 
 export class EventHelper {
     static async search(searchString?, beginTime?, endTime?, types?, organisers?, regions?, loadOrganisers?: boolean) {
@@ -199,7 +200,7 @@ export class EventHelper {
         const maxTime = Math.max(new Date().getTime(), repeatedEvent.getStartDate().getTime());
         const startTime = new Date(maxTime);
         const endTime = new Date(maxTime);
-        endTime.setDate(endTime.getDate()+7);
+        endTime.setDate(endTime.getDate() + 7);
 
         let events = await this.generateEventFromRepeatedEvent(repeatedEvent, startTime, endTime, addDatabaseEvents);
         if (events.length >= 1) {
@@ -329,5 +330,25 @@ export class EventHelper {
             Favorite.saveMany(saveFavs),
             EasySyncClientDb.getInstance().deleteEntity(deleteFavIds, Favorite)
         ]);
+    }
+
+    static async deleteEventsOlderThan(date: Date) {
+        const events = <Event[]>await Event.find({
+            isTemplate: false,
+            endTime: LessThan(date.toString())
+        }, null, null, null, ["images"]);
+
+        const images = [];
+        events.forEach(e => {
+            images.push(...e.getImages());
+        });
+
+        await FileMedium.deleteMany(images);
+        await Event.deleteMany(events);
+
+        console.log("events", await Event.find({
+            isTemplate: false,
+            endTime: LessThan(date.toString())
+        }, null, null, null, ["images"]));
     }
 }

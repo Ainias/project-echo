@@ -8,6 +8,7 @@ import {JsonHelper} from "js-helper/dist/shared/JsonHelper";
 import {BaseModel} from "cordova-sites-database/dist/BaseModel";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 import {RepeatedEvent} from "./RepeatedEvent";
+import {ClientFileMedium} from "cordova-sites-easy-sync";
 
 export class Event extends AccessEasySyncModel {
     private names: {};
@@ -318,7 +319,7 @@ export class Event extends AccessEasySyncModel {
         }
     }
 
-    getImages(): any[] {
+    getImages(): FileMedium[]|ClientFileMedium[] {
         if (Helper.isNull(this.images) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getImages();
         }

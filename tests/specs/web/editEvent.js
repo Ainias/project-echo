@@ -125,7 +125,7 @@ describe("edit event", () => {
         await $(".footer .icon.home").click();
     });
 
-    fit("new repeated event", async function () {
+    it("new repeated event", async function () {
         let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
 
         await $("span=Neuer Termin").click();

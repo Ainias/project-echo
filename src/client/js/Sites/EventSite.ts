@@ -6,13 +6,14 @@ const view = require("../../html/Sites/eventSite.html");
 import {Favorite} from "../Model/Favorite";
 import {PlaceHelper} from "../Helper/PlaceHelper";
 import {UserManager} from "cordova-sites-user-management/dist/client";
-import {AddEventSite} from "./AddEventSite";
+import {ModifyEventSite} from "./ModifyEventSite";
 import {EventHelper} from "../Helper/EventHelper";
 import {SearchSite} from "./SearchSite";
 import {Helper} from "js-helper";
 import {DateHelper} from "js-helper/dist/shared/DateHelper";
 import {RepeatedEvent} from "../../../shared/model/RepeatedEvent";
 import {BlockedDay} from "../../../shared/model/BlockedDay";
+import {ClientFileMedium} from "cordova-sites-easy-sync";
 
 export class EventSite extends FooterSite {
     private _event: Event;
@@ -66,7 +67,7 @@ export class EventSite extends FooterSite {
         this.findBy("#event-name").appendChild(translator.makePersistentTranslation(this._event.getNameTranslation()));
         this.findBy("#event-description").appendChild(translator.makePersistentTranslation(this._event.getDescriptionTranslation()));
         if (this._event.getImages().length > 0) {
-            await this._event.getImages()[0].isDownloadedState();
+            await (<ClientFileMedium>this._event.getImages()[0]).isDownloadedState();
             this.findBy("#event-img").src = this._event.getImages()[0].getUrl();
         }
 
@@ -233,16 +234,16 @@ export class EventSite extends FooterSite {
                     }).show();
 
                     if (editSeries === "2") {
-                        this.finishAndStartSite(AddEventSite, {
+                        this.finishAndStartSite(ModifyEventSite, {
                             id: this._event.getRepeatedEvent().id,
                             isRepeatableEvent: true
                         });
                     } else if (editSeries === "1") {
-                        this.finishAndStartSite(AddEventSite, {id: this._event.getId()});
+                        this.finishAndStartSite(ModifyEventSite, {id: this._event.getId()});
                     }
 
                 } else {
-                    this.finishAndStartSite(AddEventSite, {id: this._event.getId()});
+                    this.finishAndStartSite(ModifyEventSite, {id: this._event.getId()});
                 }
             }
         });

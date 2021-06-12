@@ -61,7 +61,7 @@ describe("church site", () => {
 
         let linkElem = $("#website");
         expect(await linkElem.getText()).toEqual("www.citychurch.koeln");
-        expect(await linkElem.getAttribute("href")).toEqual("https://www.citychurch.koeln");
+        expect((await linkElem.getAttribute("href")).startsWith("https://www.citychurch.koeln")).toBeTruthy();
 
         let places = $$("#places-container .place");
         expect(await places.getLength()).toEqual(3);
