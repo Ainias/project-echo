@@ -70,7 +70,7 @@ RegistrationSite.ADD_REGISTRATION_ACTION = false;
 
 App.setLogo(logo);
 
-MatomoHelper.start("matomo.echoapp.de", __MATOMO_ID__, "m");
+MatomoHelper.start("https://matomo.echoapp.de", __MATOMO_ID__, "m");
 App.addInitialization(async (app) => {
 
     // const deleteDate = new Date();
