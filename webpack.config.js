@@ -135,6 +135,7 @@ let moduleExports = {
             __VERSION__: "'" + version + "'",
             __CONTACT_EMAIL__: "'" + process.env.CONTACT_EMAIL + "'",
             __IS_DEVELOP__: isDevelop ? "true" : "false",
+            __MATOMO_ID__: process.env.MATOMO_ID,
         }),
 
         // new WorkboxPlugin.GenerateSW({

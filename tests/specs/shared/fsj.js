@@ -17,6 +17,7 @@ xdescribe("fsj suite", () => {
         browser.setTimeout({
             implicit: 5000
         });
+        await functions.mockMatomo();
     });
 
     beforeEach(async function () {

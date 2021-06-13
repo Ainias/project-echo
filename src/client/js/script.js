@@ -57,6 +57,7 @@ import {Post} from "../../shared/model/Post";
 import {EventHelper} from "./Helper/EventHelper";
 
 import {DateHelper as MyDateHelper} from "./Helper/DateHelper";
+import {MatomoHelper} from "js-helper/dist/client/MatomoHelper";
 
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
@@ -69,6 +70,7 @@ RegistrationSite.ADD_REGISTRATION_ACTION = false;
 
 App.setLogo(logo);
 
+MatomoHelper.start("matomo.echoapp.de", __MATOMO_ID__, "m");
 App.addInitialization(async (app) => {
 
     // const deleteDate = new Date();

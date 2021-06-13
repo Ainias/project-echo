@@ -1,5 +1,5 @@
 import {FooterSite} from "./FooterSite";
-import {App, ButtonChooseDialog, ConfirmDialog, Toast, Translator} from "cordova-sites";
+import {App, ButtonChooseDialog, ConfirmDialog, MatomoDelegateSite, Toast, Translator} from "cordova-sites";
 import {Event} from "../../../shared/model/Event";
 
 const view = require("../../html/Sites/eventSite.html");

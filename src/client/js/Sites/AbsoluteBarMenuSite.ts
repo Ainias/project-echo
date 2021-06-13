@@ -1,9 +1,10 @@
-import {MenuSite} from "cordova-sites";
+import {MatomoDelegateSite, MenuSite} from "cordova-sites";
 
 const menuTemplate = require('../../html/Sites/absoluteBarMenuSiteTemplate.html');
 import {FooterFragment} from "../Fragments/FooterFragment";
+import {MyMenuSite} from "./MyMenuSite";
 
-export class AbsoluteBarMenuSite extends MenuSite {
+export class AbsoluteBarMenuSite extends MyMenuSite {
     public footerFragment: FooterFragment;
 
     constructor(siteManager, view) {

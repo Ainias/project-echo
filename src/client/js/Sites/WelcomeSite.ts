@@ -25,7 +25,6 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
 
         this.getNavbarFragment().setCanGoBack(false);
         this.footerFragment.setSelected(".icon.home");
-        console.log("img", componentImg);
         this.getNavbarFragment().setBackgroundImage(componentImg);
 
         this._eventListFragment = new EventOverviewFragment(this);

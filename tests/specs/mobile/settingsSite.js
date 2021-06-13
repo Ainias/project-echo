@@ -18,6 +18,7 @@ describe("settingsSite", () => {
             implicit: 5000,
             script:10000
         });
+        await functions.mockMatomo();
     });
 
     beforeEach(async function () {

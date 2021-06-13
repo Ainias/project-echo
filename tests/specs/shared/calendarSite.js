@@ -13,11 +13,13 @@ describe("calendar site", () => {
             baseUrl = await browser.getUrl();
         }
 
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 90 * 1000*browser.config.delayFactor;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 90 * 1000 * browser.config.delayFactor;
 
         browser.setTimeout({
             implicit: 5000
         });
+
+        await functions.mockMatomo();
     });
 
     beforeEach(async function () {
@@ -155,7 +157,8 @@ describe("calendar site", () => {
     });
 
     it("filter link tests", async function () {
-        await browser.url(baseUrl+"?date=2019-06-22&filter=%7B\"types\"%3A%5B\"konzert\"%2C\"gottesdienst\"%5D%2C\"churches\"%3A%5B%5D%7D&s=calendar");
+        await browser.url(baseUrl + "?date=2019-06-22&filter=%7B\"types\"%3A%5B\"konzert\"%2C\"gottesdienst\"%5D%2C\"churches\"%3A%5B%5D%7D&s=calendar");
+
         await functions.deactivateTranslationLogging();
         await functions.logErrors();
         await functions.setCurrentDate();

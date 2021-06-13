@@ -232,6 +232,11 @@ async function asyncExecute(func, ...args){
     // return index;
 }
 
+async function mockMatomo(){
+    const mock = await browser.mock("https://matomo.echoapp.de/m.js");
+    mock.respond('./tests/misc/matomoMock.js');
+}
+
 
 module.exports = {
     login: login,
@@ -251,4 +256,5 @@ module.exports = {
     logErrors: logErrors,
     getLoggedErrors: getLoggedErrors,
     asyncExecute: asyncExecute,
+    mockMatomo: mockMatomo,
 };
