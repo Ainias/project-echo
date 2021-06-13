@@ -234,6 +234,7 @@ async function asyncExecute(func, ...args) {
 
 async function mockMatomo() {
     if (!browser.config.isMobile) {
+        //Mock funktioniert nur im Browser
         const mock = await browser.mock("https://matomo.echoapp.de/m.js");
         mock.respond('./tests/misc/matomoMock.js');
     }
