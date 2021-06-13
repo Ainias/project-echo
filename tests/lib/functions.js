@@ -208,33 +208,35 @@ async function getLoggedErrors() {
     });
 }
 
-async function asyncExecute(func, ...args){
+async function asyncExecute(func, ...args) {
     // console.log(func+"");
 
     let index = await browser.execute((funcString, args) => {
         let func = eval(funcString);
         let res = func(...args);
-        if (!window["testValIndex"]){
+        if (!window["testValIndex"]) {
             window["testValIndex"] = 0;
         }
         window["testValIndex"]++;
         let index = window["testValIndex"];
-        Promise.resolve(res).then(r => window["test-res-"+index] = r);
+        Promise.resolve(res).then(r => window["test-res-" + index] = r);
         return index;
         // return args;
-    }, func+"", args);
+    }, func + "", args);
 
     // console.log(index);
 
     //
     await pause(1000);
-    return await browser.execute((i) => window["test-res-"+i], index);
+    return await browser.execute((i) => window["test-res-" + i], index);
     // return index;
 }
 
-async function mockMatomo(){
-    const mock = await browser.mock("https://matomo.echoapp.de/m.js");
-    mock.respond('./tests/misc/matomoMock.js');
+async function mockMatomo() {
+    if (!browser.config.isMobile) {
+        const mock = await browser.mock("https://matomo.echoapp.de/m.js");
+        mock.respond('./tests/misc/matomoMock.js');
+    }
 }
 
 
