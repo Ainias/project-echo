@@ -1,6 +1,14 @@
 const Service = require("./setup");
 
+const now = new Date();
+
 exports.config = {
+
+    startDate: now,
+    year: now.getFullYear().toString().substr(2),
+    fullYear: now.getFullYear(),
+    month: now.getMonth(),
+    day: now.getDate(),
 
     // Where the files we are testing can be found.
      specs: [

@@ -1,11 +1,14 @@
 const Service = require("./setup");
-const functions = require("./lib/functions");
-const find = require("./lib/PromiseSelector");
-const $ = find.one;
-const $$ = find.multiple;
-const path = require("path");
+
+const now = new Date();
 
 exports.config = {
+
+    startDate: now,
+    year: now.getFullYear().toString().substr(2),
+    fullYear: now.getFullYear(),
+    month: now.getMonth(),
+    day: now.getDate(),
 
     isMobile: false,
 
@@ -34,8 +37,8 @@ exports.config = {
     bail: 0,
 
     // baseUrl: "http://127.0.0.1:3000",
-    // baseUrl: "http://127.0.0.1:8000",
-    baseUrl: "http://127.0.0.1:8001",
+    baseUrl: "http://127.0.0.1:8000",
+    // baseUrl: "http://127.0.0.1:8001",
 
     waitforTimeout: 10000,
 
@@ -77,14 +80,13 @@ exports.config = {
         './tests/specs/shared/*.js',
         './tests/specs/web/*.js',
 
+        // './tests/specs/**/editEvent.js',
         // './tests/specs/**/calendarSite.js',
-        // './tests/specs/**/eventSite.js',
-        // './tests/specs/**/favoriteSite.js',
         // './tests/specs/**/favoriteSite2.js',
-        // './tests/specs/**/posts.js',
+        // './tests/specs/**/favoriteSite.js',
+        // './tests/specs/**/eventSite.js',
         // './tests/specs/**/searchSite.js',
         // './tests/specs/**/churchSite.js',
-        // './tests/specs/**/editEvent.js',
         // './tests/specs/**/listChurch.js',
         // './tests/specs/**/editChurch.js',
     ],

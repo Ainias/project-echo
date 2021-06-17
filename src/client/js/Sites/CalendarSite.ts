@@ -167,19 +167,19 @@ export class CalendarSite extends FooterSite {
     async drawMonth(date) {
         const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        // const minDate = new Date();
-        // minDate.setDate(1);
-        // DateHelper.setMonth(minDate.getMonth() - 2, minDate);
-        // if (minDate.getTime() > date.getTime()) {
-        //     date.setFullYear(minDate.getFullYear());
-        //     DateHelper.setMonth(minDate.getMonth(), date);
-        // }
-        //
-        // if (minDate.getMonth() === date.getMonth() && minDate.getFullYear() === date.getFullYear()) {
-        //     this.buttonLeft.classList.add("hidden");
-        // } else {
-        //     this.buttonLeft.classList.remove("hidden");
-        // }
+        const minDate = new Date();
+        minDate.setDate(1);
+        DateHelper.setMonth(minDate.getMonth() - 2, minDate);
+        if (minDate.getTime() > date.getTime()) {
+            date.setFullYear(minDate.getFullYear());
+            DateHelper.setMonth(minDate.getMonth(), date);
+        }
+
+        if (minDate.getMonth() === date.getMonth() && minDate.getFullYear() === date.getFullYear()) {
+            this.buttonLeft.classList.add("hidden");
+        } else {
+            this.buttonLeft.classList.remove("hidden");
+        }
 
         let actualDayOfMonth = date.getDate();
 

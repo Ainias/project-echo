@@ -335,7 +335,7 @@ export class EventHelper {
     static async deleteEventsOlderThan(date: Date) {
         const events = <Event[]>await Event.find({
             isTemplate: false,
-            endTime: LessThan(date.toString())
+            endTime: LessThan(DateHelper.strftime(DateHelper.FORMAT.ISO_TIME, date))
         }, null, null, null, ["images"]);
 
         const images = [];
@@ -345,10 +345,5 @@ export class EventHelper {
 
         await FileMedium.deleteMany(images);
         await Event.deleteMany(events);
-
-        console.log("events", await Event.find({
-            isTemplate: false,
-            endTime: LessThan(date.toString())
-        }, null, null, null, ["images"]));
     }
 }

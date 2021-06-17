@@ -24,9 +24,7 @@ describe("edit event", () => {
     beforeEach(async function () {
         await browser.setWindowSize(1600, 900);
 
-        await functions.setCurrentDate();
         await functions.login("echo@silas.link", "123456");
-        await functions.setCurrentDate();
         await browser.pause(1000);
 
         await browser.waitUntil(async () => {
@@ -98,8 +96,8 @@ describe("edit event", () => {
 
         expect(data["names"]).toEqual("{\"de\":\"Neues Event\",\"en\":\"New Event\"}");
         expect(data["type"]).toEqual("konzert");
-        expect(data["startTime"].getTime()).toEqual(new Date(2019, 5, 16, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(2019, 5, 16, 13, 59).getTime());
+        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime());
+        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime());
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");
         expect(data["places"]).toEqual("{\"Köln\":\"Köln\",\"Aachen\":\"Aachen\",\"Remscheid City\":\"Remscheid City\"}");
         expect(data["isTemplate"]).toEqual(0);
@@ -190,8 +188,8 @@ describe("edit event", () => {
 
         expect(data["names"]).toEqual("{\"de\":\"Neues wiederholendes Event\",\"en\":\"New repeating Event\"}");
         expect(data["type"]).toEqual("sonstiges");
-        expect(data["startTime"].getTime()).toEqual(new Date(2019, 5, 16, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(2019, 5, 16, 13, 59).getTime());
+        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime());
+        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime());
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");
         expect(data["places"]).toEqual("{\"Aachen\":\"Aachen\",\"Remscheid City\":\"Remscheid City\"}");
         expect(data["isTemplate"]).toEqual(1);
@@ -220,7 +218,7 @@ describe("edit event", () => {
         data = data[0];
 
         expect(data["repeatingStrategy"]).toEqual(0);
-        expect(data["repeatUntil"].getTime()).toEqual(new Date(2019, 5, 25, 23, 58).getTime());
+        expect(data["repeatUntil"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 25, 23, 58).getTime());
         expect(data["repeatingArguments"]).toEqual("2,3,6");
 
         await $(".footer .icon.home").click();
@@ -288,8 +286,8 @@ describe("edit event", () => {
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete BeschreibungMy Description</p>\",\"en\":\"<p>Meine english Beschreibung</p>\"}");
         expect(data["places"]).toEqual("{\"bearbeitet\":\"bearbeitet\"}");
         expect(data["type"]).toEqual("konzert");
-        expect(data["startTime"].getTime()).toEqual(new Date(2019, 5, 18, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(2019, 5, 18, 13, 59).getTime());
+        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 18, 11, 10).getTime());
+        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 18, 13, 59).getTime());
         expect(data["isTemplate"]).toEqual(0);
 
         let id = data["id"];
@@ -314,8 +312,11 @@ describe("edit event", () => {
     it("edit repeating event", async function () {
         let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
 
+        const day = new Date(browser.config.fullYear, browser.config.month, 20);
+        const dayNumber = 21-day.getDay()
+
         await $(".footer .icon.calendar").click();
-        await $(".day-number=10").click();
+        await $(".day-number="+dayNumber.toString()).click();
         await $(".name=Termin zum bearbeiten wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
@@ -374,8 +375,8 @@ describe("edit event", () => {
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
         expect(data["places"]).toEqual("{\"bearbeitet wiederholend\":\"bearbeitet wiederholend\"}");
         expect(data["type"]).toEqual("konferenz");
-        expect(data["startTime"].getTime()).toEqual(new Date(2019, 5, 19, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(2019, 5, 19, 13, 59).getTime());
+        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime());
+        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 13, 59).getTime());
         expect(data["isTemplate"]).toEqual(1);
 
         let id = data["id"];
@@ -411,8 +412,11 @@ describe("edit event", () => {
     it("edit repeating single event", async function () {
         let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
 
+        const day = new Date(browser.config.fullYear, browser.config.month, 20);
+        const dayNumber = 23-day.getDay()
+
         await $(".footer .icon.calendar").click();
-        await $(".day-number=19").click();
+        await $(".day-number="+dayNumber.toString()).click();
         await $(".name=Termin zum bearbeiten single wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
@@ -474,8 +478,8 @@ describe("edit event", () => {
         expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
         expect(data["places"]).toEqual("{\"bearbeitet wiederholend\":\"bearbeitet wiederholend\"}");
         expect(data["type"]).toEqual("konferenz");
-        expect(data["startTime"].getTime()).toEqual(new Date(2019, 5, 19, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(2019, 5, 19, 13, 59).getTime());
+        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime());
+        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 13, 59).getTime());
         expect(data["isTemplate"]).toEqual(0);
 
         let id = data["id"];
@@ -526,8 +530,11 @@ describe("edit event", () => {
     });
 
     it("delete repeated event", async function () {
+        const day = new Date(browser.config.fullYear, browser.config.month, 20);
+        const dayNumber = 26-day.getDay()
+
         await $(".footer .icon.calendar").click();
-        await $(".day-number=15").click();
+        await $(".day-number="+dayNumber.toString()).click();
         await $(".name=Termin zum löschen wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
@@ -543,8 +550,11 @@ describe("edit event", () => {
     });
 
     it("delete repeated single event", async function () {
+        const day = new Date(browser.config.fullYear, browser.config.month, 13);
+        const dayNumber = 16-day.getDay()
+
         await $(".footer .icon.calendar").click();
-        await $(".day-number=26").click();
+        await $(".day-number="+dayNumber.toString()).click();
         await $(".name=Termin zum bearbeiten single wiederholend").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
@@ -561,7 +571,7 @@ describe("edit event", () => {
         data = await functions.queryDatabase("SELECT * FROM blocked_day WHERE repeatedEventId = "+ repeatedEventId + " AND eventId IS NULL");
         expect(data.length).toEqual(1);
         data = data[0];
-        expect(data["day"].getTime()).toEqual(new Date(2019, 5, 26, 12).getTime());
+        expect(data["day"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, dayNumber, 12).getTime());
         expect(data["eventId"]).toBeNull();
     });
 });

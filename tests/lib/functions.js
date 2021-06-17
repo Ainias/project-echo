@@ -240,6 +240,58 @@ async function mockMatomo() {
     }
 }
 
+function monthName(monthIndex) {
+    const monthNames = [
+        "Jan",
+        "Feb",
+        "Mär",
+        "Apr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez",
+    ];
+
+    return monthNames[monthIndex];
+}
+
+function monthFullName(monthIndex) {
+    const monthNames = [
+        "Januar",
+        "Februar",
+        "März",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember",
+    ];
+
+    return monthNames[monthIndex].toUpperCase();
+}
+
+function dayName(dayIndex) {
+    const dayNames = [
+        "So",
+        "Mo",
+        "Di",
+        "Mi",
+        "Do",
+        "Fr",
+        "Sa",
+    ];
+
+    return dayNames[dayIndex];
+}
+
 
 module.exports = {
     login: login,
@@ -260,4 +312,7 @@ module.exports = {
     getLoggedErrors: getLoggedErrors,
     asyncExecute: asyncExecute,
     mockMatomo: mockMatomo,
+    monthName: monthName,
+    monthFullName: monthFullName,
+    dayName: dayName,
 };

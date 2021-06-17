@@ -1,9 +1,41 @@
+UNLOCK
+TABLES;
+
 DROP
 DATABASE IF EXISTS silas_test_echo;
 CREATE
 DATABASE silas_test_echo;
 USE
 silas_test_echo;
+
+SET
+@DAY=DAY(NOW());
+SET
+@MONTH=MONTH(NOW());
+SET
+@YEAR=YEAR(NOW());
+SET
+@TODAY=DATE(NOW());
+
+DROP FUNCTION IF EXISTS _TODAY;
+CREATE FUNCTION _TODAY(timePart varchar (8))
+    RETURNS VARCHAR(20)
+    RETURN STR_TO_DATE(CONCAT(@YEAR, '-', @MONTH, '-', @DAY, ' ', timePart), '%Y-%m-%d %H:%i:%s');
+
+DROP FUNCTION IF EXISTS _DAY;
+CREATE FUNCTION _DAY(dayPart int, timePart varchar (8))
+    RETURNS VARCHAR(20)
+    RETURN STR_TO_DATE(CONCAT(@YEAR, '-', @MONTH, '-', dayPart, ' ', timePart), '%Y-%m-%d %H:%i:%s');
+
+DROP FUNCTION IF EXISTS _MONTH;
+CREATE FUNCTION _MONTH(monthPart int, dayPart int, timePart varchar (8))
+    RETURNS VARCHAR(20)
+    RETURN STR_TO_DATE(CONCAT(@YEAR, '-', monthPart, '-', dayPart, ' ', timePart), '%Y-%m-%d %H:%i:%s');
+
+DROP FUNCTION IF EXISTS _YEAR;
+CREATE FUNCTION _YEAR(yearPart int, monthPart int, dayPart int, timePart varchar (8))
+    RETURNS VARCHAR(20)
+    RETURN STR_TO_DATE(CONCAT(yearPart, '-', monthPart, '-', dayPart, ' ', timePart), '%Y-%m-%d %H:%i:%s');
 
 -- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
 --
@@ -105,9 +137,8 @@ TABLES `blocked_day` WRITE;
 /*!40000 ALTER TABLE `blocked_day`
     DISABLE KEYS */;
 INSERT INTO `blocked_day`
-VALUES (1, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, '2019-07-23 00:00:00', 1, NULL),
-       (2, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, '2019-07-16 00:00:00', 1, 14),
-       (3, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, '2019-06-25 00:00:00', 2, 16);
+VALUES (1, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, _MONTH(@MONTH+2, 18-((WEEKDAY(_MONTH(@MONTH+2, 18, '00:00:00'))+1)%7)+2, '00:00:00'), 1, NULL),
+       (2, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 26, '00:00:00'))+1)%7)+2, '00:00:00'), 1, 14);
 /*!40000 ALTER TABLE `blocked_day`
     ENABLE KEYS */;
 UNLOCK
@@ -404,61 +435,96 @@ TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event`
     DISABLE KEYS */;
 INSERT INTO `event`
-VALUES (2, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin 1\"}',
+VALUES (4, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Event Site Test 2\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"Köln City Church Headquarter\\nWaltherstraße 51\\nLESKAN Park, Halle 10\\n51069 Köln, Dellbrück\"]',
-        '2019-03-25 12:45:00', '2019-03-25 12:45:00', 0, 'gottesdienst', NULL),
-       (4, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin 3\"}',
-        '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', '2019-04-06 10:00:00', '2019-04-06 12:00:00', 0, 'gottesdienst', NULL),
-       (5, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 3, 0, '{\"de\":\"Termin 4\",\"en\":\"Event 4\"}',
+        '[\"place 1\"]',
+        _MONTH (@MONTH - 1, 6, '10:00:00'), _MONTH (@MONTH - 1, 6, '12:00:00'), 0, 'gottesdienst', NULL),
+       (5, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 3, 0, '{\"de\":\"Event Site Test 1\",\"en\":\"Event 4\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\",\"en\":\"English dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '{\"place 1\":\"place 1\"}', '2019-04-29 15:00:00', '2019-05-02 10:00:00', 0, 'gottesdienst', NULL),
-       (6, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 3, 0, '{\"de\":\"Termin 5\",\"en\":\"Event 5\"}',
+        '{\"place 1\":\"place 1\"}',
+        _MONTH (@MONTH - 1, 29, '15:00:00'), _DAY (2, '10:00:00'), 0, 'gottesdienst', NULL),
+       (6, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 3, 0, '{\"de\":\"Search Test 1\",\"en\":\"Event 5\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\",\"en\":\"English ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '{\"place 1\":\"place 1\"}', '2019-05-29 10:00:00', '2019-05-29 10:00:00', 0, 'gottesdienst', NULL),
-       (7, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin 5.1\"}',
+        '{\"place 1\":\"place 1\"}',
+        _DAY (29, '10:00:00'), _DAY (29, '10:00:00'), 0, 'gottesdienst', NULL),
+       (7, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 2\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', '2019-05-29 10:00:00', '2019-05-29 10:00:00', 0, 'gottesdienst', NULL),
-       (8, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin 5.2\"}',
+        '[\"place 1\"]',
+        _DAY (29, '10:00:00'), _DAY (29, '10:00:00'), 0, 'gottesdienst', NULL),
+       (8, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 3\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', '2019-05-29 10:00:00', '2019-05-29 10:00:00', 0, 'gottesdienst', NULL),
-       (9, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin 5.3\"}',
+        '[\"place 1\"]',
+        _MONTH (@MONTH, 29, '10:00:00'), _MONTH (@MONTH, 29, '10:00:00'), 0, 'gottesdienst', NULL),
+       (9, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 4\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', '2019-05-29 10:00:00', '2019-05-29 10:00:00', 0, 'gottesdienst', NULL),
-       (10, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin 5.4\"}',
+        '[\"place 1\"]', _DAY (29, '10:00:00'), _DAY (29, '12:00:00'), 0, 'gottesdienst', NULL),
+       (10, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 5\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', '2019-05-29 10:00:00', '2019-05-29 10:00:00', 0, 'gottesdienst', NULL),
-       (11, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin later\"}',
+        '[\"place 1\"]',
+        _DAY (29, '10:00:00'), _DAY (29, '12:00:00'), 0, 'gottesdienst', NULL),
+       (11, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 6\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', '2019-06-29 10:00:00', '2019-06-29 12:00:00', 0, 'konzert', NULL),
-       (12, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin later 2\"}',
+        '[\"place 1\"]', _MONTH (@MONTH + 1, 29, '10:00:00'), _MONTH (@MONTH + 1, 29, '12:00:00'), 0, 'konzert',
+        NULL),
+       (12, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 7\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', '2019-06-29 10:00:00', '2019-06-29 12:00:00', 0, 'hauskreis', NULL),
-       (13, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Template Termin\"}',
-        '{\"de\":\"My Description\"}', '[\"place 1\"]', '2019-07-29 10:00:00', '2019-07-29 12:00:00', 1, 'hauskreis',
+        '[\"place 1\"]', _MONTH (@MONTH + 1, 29, '10:00:00'), _MONTH (@MONTH + 1, 29, '12:00:00'), 0, 'hauskreis',
+        NULL),
+       (13, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 1\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _MONTH (@MONTH + 2, 29, '10:00:00'), _MONTH (@MONTH + 2, 29, '12:00:00'), 1, 'hauskreis',
         1),
-       (14, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Template Termin\"}',
-        '{\"de\":\"My changed Description\"}', '[\"place 2\"]', '2019-07-17 10:00:00', '2019-07-17 12:00:00', 0,
+       (14, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 1.1\"}',
+        '{\"de\":\"My changed Description\"}', '[\"place 2\"]',
+        _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 28, '10:00:00'))+1)%7), '10:00:00'),
+        _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 28, '12:00:00'))+1)%7), '10:00:00'), 0,
         'hauskreis', 1),
-       (15, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Template Termin 2\"}',
-        '{\"de\":\"My Description\"}', '[\"place 1\"]', '2018-06-29 11:00:00', '2018-06-29 12:00:00', 1, 'konzert', 2),
-       (16, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, NULL, NULL, NULL, '2019-06-27 11:00:00',
-        '2019-06-27 12:00:00', 0, NULL, 2),
+       (15, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 2\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _YEAR(@YEAR-1, @MONTH+1, 29, '11:00:00'), _YEAR(@YEAR-1, @MONTH+1, 29, '12:00:00'), 1, 'konzert', 2),
+       (16, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 3\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _YEAR(@YEAR, @MONTH+1, 28, '11:00:00'), _YEAR(@YEAR, @MONTH+1, 28, '12:00:00'), 0, 'sonstiges', null),
+       (22, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 4\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _YEAR(@YEAR, @MONTH+1, 20, '11:00:00'), _YEAR(@YEAR, @MONTH+1, 20, '12:00:00'), 0, 'konzert', null),
        (17, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin zum bearbeiten\"}',
-        '{\"de\":\"My Description\"}', '[\"place 1\"]', '2019-06-05 11:00:00', '2019-06-05 12:00:00', 0, 'sport', NULL),
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _DAY ( 5, '11:00:00'), _DAY ( 5, '12:00:00'), 0, 'sport', NULL),
        (18, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin zum bearbeiten wiederholend\"}',
-        '{\"de\":\"My Description\"}', '[\"place 1\"]', '2019-06-05 11:00:00', '2019-06-05 12:00:00', 1, 'sport', 3),
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _MONTH (@MONTH, 5, '11:00:00'), _MONTH (@MONTH, 5, '12:00:00'), 1, 'sport', 3),
        (19, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin zum löschen\"}',
-        '{\"de\":\"My Description\"}', '[\"place 1\"]', '2019-06-11 10:00:00', '2019-06-11 12:00:00', 0, 'sport',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _MONTH (@MONTH, 11, '10:00:00'), _MONTH (@MONTH, 11, '12:00:00'), 0, 'sport',
         NULL),
        (20, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Termin zum löschen wiederholend\"}',
-        '{\"de\":\"My Description\"}', '[\"place 1\"]', '2019-06-11 11:00:00', '2019-06-11 12:00:00', 1, 'sport',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _MONTH (@MONTH, 11, '11:00:00'), _MONTH (@MONTH, 11, '12:00:00'), 1, 'sport',
         4),
        (21, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0,
         '{\"de\":\"Termin zum bearbeiten single wiederholend\"}',
-        '{\"de\":\"My Description\"}', '[\"place 1\"]', '2019-06-11 11:00:00', '2019-06-11 12:00:00', 1, 'sport',
-        5);
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _MONTH (@MONTH, 11, '11:00:00'), _MONTH (@MONTH, 11, '12:00:00'), 1, 'sport',
+        5),
+       (23, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Favorites 1 Test 1\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _MONTH (@MONTH - 1, 11, '10:00:00'), _MONTH (@MONTH - 1, 11, '12:00:00'), 0, 'sport',
+        NULL),
+       (24, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Favorites 2 Test 1\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _MONTH (@MONTH, 11, '10:00:00'), _MONTH (@MONTH, 11, '12:00:00'), 1, 'sport',
+        6),
+       (25, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 5\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _DAY(10, '11:00:00'), _DAY(10, '12:00:00'), 0, 'konzert', null),
+       (26, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 6\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _DAY(10, '11:00:00'), _DAY(10, '12:00:00'), 0, 'konzert', null),
+       (27, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 7\"}',
+        '{\"de\":\"My Description\"}', '[\"place 1\"]',
+        _DAY(10, '11:00:00'), _DAY(10, '12:00:00'), 0, 'konzert', null);
+
 /*!40000 ALTER TABLE `event`
     ENABLE KEYS */;
 UNLOCK
@@ -546,8 +612,7 @@ TABLES `eventRegion` WRITE;
 /*!40000 ALTER TABLE `eventRegion`
     DISABLE KEYS */;
 INSERT INTO `eventRegion`
-VALUES (1, 2),
-       (1, 4),
+VALUES (1, 4),
        (1, 5),
        (1, 6),
        (1, 7),
@@ -558,11 +623,18 @@ VALUES (1, 2),
        (1, 12),
        (1, 13),
        (1, 15),
+       (1, 16),
        (1, 17),
        (1, 18),
        (1, 19),
        (1, 20),
-       (1, 21);
+       (1, 21),
+       (1, 22),
+       (1, 23),
+       (1, 24),
+       (1, 25),
+       (1, 26),
+       (1, 27);
 /*!40000 ALTER TABLE `eventRegion`
     ENABLE KEYS */;
 UNLOCK
@@ -1020,11 +1092,12 @@ TABLES `repeated_event` WRITE;
 /*!40000 ALTER TABLE `repeated_event`
     DISABLE KEYS */;
 INSERT INTO `repeated_event`
-VALUES (1, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, '2019-07-05 00:00:00', 0, '2,4', 13),
-       (2, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, '2019-06-05 00:00:00', 0, '2', 15),
-       (3, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, '2019-06-05 00:00:00', 0, '1,5', 18),
-       (4, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, '2019-06-05 00:00:00', 0, '1,5,6', 20),
-       (5, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, '2019-06-05 00:00:00', 0, '3', 21);
+VALUES (1, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, _MONTH(@MONTH+2, 10, '00:00:00'), 0, '2,4', 13),
+       (2, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, _MONTH(@MONTH+1, 5, '00:00:00'), 0, '2', 15),
+       (3, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, _MONTH(@MONTH, 5, '00:00:00'), 0, '1,5', 18),
+       (4, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, _MONTH(@MONTH, 5, '00:00:00'), 0, '1,5,6', 20),
+       (5, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, _MONTH(@MONTH, 5, '00:00:00'), 0, '3', 21),
+       (6, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, NULL, _MONTH(@MONTH, 5, '00:00:00'), 0, '0', 24);
 /*!40000 ALTER TABLE `repeated_event`
     ENABLE KEYS */;
 UNLOCK
@@ -1265,7 +1338,8 @@ TABLES `userRole` WRITE;
 /*!40000 ALTER TABLE `userRole`
     DISABLE KEYS */;
 INSERT INTO `userRole`
-VALUES (1, 5), (1,6);
+VALUES (1, 5),
+       (1, 6);
 /*!40000 ALTER TABLE `userRole`
     ENABLE KEYS */;
 UNLOCK

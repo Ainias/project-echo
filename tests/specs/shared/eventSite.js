@@ -18,23 +18,6 @@ describe("event site", () => {
 
     beforeEach(async function () {
         await browser.url(baseUrl);
-
-        await browser.execute((year, month, date, hour, minute, second) => {
-            const OldDate = window["Date"];
-
-            class Date extends OldDate {
-                constructor(...args) {
-                    if (arguments.length === 0) {
-                        super(year, month - 1, date, hour, minute, second);
-                    } else {
-                        super(...arguments);
-                    }
-                }
-            }
-
-            window["Date"] = Date;
-        }, 2019, 5, 26, 14, 30, 42);
-
         await functions.acceptCookies();
 
         await browser.waitUntil(async () => {
@@ -52,9 +35,9 @@ describe("event site", () => {
             return await element.isDisplayed();
         });
 
-        expect(await $("#event-name").getText()).toEqual("TERMIN 4");
-        expect(await $("#event-time").getText()).toEqual("29. Apr ´19, 15:00 -\n" +
-            "02. Mai ´19, 10:00");
+        expect(await $("#event-name").getText()).toEqual("EVENT SITE TEST 1");
+        expect(await $("#event-time").getText()).toEqual("29. "+functions.monthName(browser.config.month-1)+" ´"+browser.config.year+", 15:00 -\n" +
+            "02. "+functions.monthName(browser.config.month)+" ´"+browser.config.year+", 10:00");
 
         expect(await $("#places-container").getText()).toEqual("place 1");
         expect(await $("#places-container").getText()).toEqual("place 1");

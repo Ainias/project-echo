@@ -73,11 +73,13 @@ App.setLogo(logo);
 MatomoHelper.start("https://matomo.echoapp.de", __MATOMO_ID__, "m");
 App.addInitialization(async (app) => {
 
-    // const deleteDate = new Date();
-    // MyDateHelper.setMonth(deleteDate, deleteDate.getMonth() - 2);
-    // deleteDate.setDate(-1);
-    //
-    // EventHelper.deleteEventsOlderThan(deleteDate);
+    const deleteDate = new Date();
+    MyDateHelper.setMonth(deleteDate.getMonth() - 2,1, deleteDate);
+    console.log("Date", deleteDate)
+    deleteDate.setDate(-1);
+
+    console.log("deleteOlder than", deleteDate);
+    EventHelper.deleteEventsOlderThan(deleteDate);
 
     // DataManager._assetBasePath = (cordova.device !== "browser"?cordova.file.applicationDirectory:"");
 

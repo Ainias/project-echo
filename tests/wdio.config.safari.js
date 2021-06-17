@@ -1,10 +1,15 @@
 const Service = require("./setup");
-const functions = require("./lib/functions");
 const find = require("./lib/PromiseSelector");
-const $ = find.one;
-const $$ = find.multiple;
+
+const now = new Date();
 
 exports.config = {
+
+    startDate: now,
+    year: now.getFullYear().toString().substr(2),
+    fullYear: now.getFullYear(),
+    month: now.getMonth(),
+    day: now.getDate(),
 
     isMobile: false,
 
