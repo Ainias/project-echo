@@ -7,6 +7,7 @@ import {EasySyncClientDb, SetupEasySync1000000000500} from "cordova-sites-easy-s
 import {WelcomeSite} from "./Sites/WelcomeSite";
 
 import "./Model/Favorite"
+import "./Sites/QrSite"
 
 import "../img/flag_german.svg";
 import "../img/flag_usa.svg";
