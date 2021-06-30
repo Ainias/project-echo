@@ -1,0 +1,63 @@
+#echo-introduction{
+  .text-section{
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    //min-height: 50vh;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    @include breakpoint("medium"){
+      //min-height: 100vh;
+      margin-top: 6rem;
+      margin-bottom: 6rem;
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+  }
+  #ueberall-erhaeltlich{
+    h1, h2, h3{
+      text-align: center;
+    }
+
+    .link-tree{
+      width: 100%;
+      padding: 1rem;
+
+      @include breakpoint("medium"){
+        display: flex;
+        justify-content: center;
+      }
+
+      a {
+        display: block;
+        margin: 0.2rem;
+        min-width: 8rem;
+
+        img {
+          width: 1rem;
+          margin-right: 0.3rem;
+        }
+      }
+    }
+  }
+  #trailer {
+    .video-container{
+      width: 100%;
+      object-fit: contain;
+      video {
+        width: 100%;
+      }
+    }
+  }
+
+  #vision{
+    background: url("../img/logo.png") no-repeat center;
+    background-size: contain;
+    filter: grayscale(70%) brightness(170%);
+  }
+}

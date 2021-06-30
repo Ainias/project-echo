@@ -41,7 +41,7 @@ export class RepeatedEvent extends AccessEasySyncModel {
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
+        let relations = AccessEasySyncModel.getRelationDefinitions();
         relations["originalEvent"] = {
             target: Event.getSchemaName(),
             type: "one-to-one",

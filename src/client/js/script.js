@@ -8,6 +8,7 @@ import {WelcomeSite} from "./Sites/WelcomeSite";
 
 import "./Model/Favorite"
 import "./Sites/QrSite"
+import "./Sites/EchoIntroductionSite"
 
 import "../img/flag_german.svg";
 import "../img/flag_usa.svg";
