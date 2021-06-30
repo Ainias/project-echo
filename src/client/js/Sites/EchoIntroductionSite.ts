@@ -26,7 +26,7 @@ export class EchoIntroductionSite extends MyMenuSite{
         Object.keys(menuItems).forEach(selector => {
             const menuAction = new MenuAction(menuItems[selector], () => {
                 this.find(selector).scrollIntoView({behavior: "smooth"});
-            }, MenuAction.SHOW_ALWAYS);
+            }, MenuAction.SHOW_FOR_MEDIUM);
             navbar.addAction(menuAction);
         });
 
