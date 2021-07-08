@@ -1,0 +1,141 @@
+import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
+import {BaseDatabase} from "cordova-sites-database";
+
+export class Podcast extends AccessEasySyncModel {
+
+    private titles: { de: string, en: string };
+    private descriptions: { de: string, en: string };
+    private spotifyLink: string;
+    private youtubeLink: string;
+    private duration: number;
+    private releaseCircles: { de: string, en: string };
+
+    constructor() {
+        super();
+        this.titles = {"de":null, "en": null};
+        this.descriptions = {"de":null, "en": null};
+        this.releaseCircles = {"de":null, "en": null};
+        this.spotifyLink = null;
+        this.youtubeLink = null;
+    }
+
+    getTitleTranslation() {
+        return "podcasts-title-" + this.id;
+    }
+    getDescriptionTranslation() {
+        return "podcasts-description-" + this.id;
+    }
+    getReleaseCircleTranslation() {
+        return "podcasts-release-circle-" + this.id;
+    }
+
+    getDynamicTranslations() {
+        let translations = {};
+        Object.keys(this.titles).forEach(language => {
+            translations[language] = translations[language] || {};
+            translations[language][this.getTitleTranslation()] = this.titles[language];
+        });
+        Object.keys(this.descriptions).forEach(language => {
+            translations[language] = translations[language] || {};
+            translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
+        });
+        Object.keys(this.releaseCircles).forEach(language => {
+            translations[language] = translations[language] || {};
+            translations[language][this.getReleaseCircleTranslation()] = this.releaseCircles[language];
+        });
+
+        return translations;
+    }
+
+    static getColumnDefinitions() {
+        let columns = super.getColumnDefinitions();
+        return {
+            ...columns,
+            titles: BaseDatabase.TYPES.MY_JSON,
+            descriptions: BaseDatabase.TYPES.MY_JSON,
+            spotifyLink: {
+                type: BaseDatabase.TYPES.TEXT,
+                nullable: true
+            },
+            youtubeLink: {
+                type: BaseDatabase.TYPES.TEXT,
+                nullable: true
+            },
+            duration: {
+                type: BaseDatabase.TYPES.INTEGER,
+                nullable: true
+            },
+            releaseCircles: {
+                type: BaseDatabase.TYPES.MY_JSON,
+                nullable: true
+            }
+        }
+    }
+
+    setTitles(titles: {de: string, en: string}){
+        this.titles = titles;
+    }
+
+    getTitles(){
+        return this.titles;
+    }
+
+    setDescriptions(descriptions: {de: string, en: string}){
+        this.descriptions = descriptions;
+    }
+
+    getDescriptions(){
+        return this.descriptions;
+    }
+
+    setSpotifyLink(link: string){
+        this.spotifyLink = link;
+    }
+
+    getSpotifyLink(){
+        return this.spotifyLink;
+    }
+
+    setYoutubeLink(link: string){
+        this.youtubeLink = link;
+    }
+
+    getYoutubeLink(){
+        return this.youtubeLink;
+    }
+
+    setDuration(duration: number){
+        this.duration = duration;
+    }
+
+    getDuration(){
+        return this.duration;
+    }
+
+    setReleaseCircles(releaseCircle: { de: string, en: string }){
+        this.releaseCircles = releaseCircle;
+    }
+
+    getReleaseCircles(){
+        return this.releaseCircles;
+    }
+
+    // static getRelationDefinitions() {
+    //     let relations = EasySyncBaseModel.getRelationDefinitions();
+    //     relations["regions"] = {
+    //         target: Region.getSchemaName(),
+    //         type: "many-to-many",
+    //         joinTable: {
+    //             name: "postRegion"
+    //         },
+    //         sync: true
+    //     };
+    //     return relations;
+    // }
+
+}
+
+Podcast.ACCESS_MODIFY = "podcasts";
+Podcast.SCHEMA_NAME = "Podcast";
+BaseDatabase.addModel(Podcast);
+

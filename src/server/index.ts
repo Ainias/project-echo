@@ -14,6 +14,7 @@ import "../shared/model/Event";
 import "../shared/model/Post";
 import "../shared/model/Fsj";
 import "../shared/model/RepeatedEvent"
+import "../shared/model/Podcast"
 import {ServerFileMedium} from "cordova-sites-easy-sync/dist/server";
 
 import {ServerTranslator} from "cordova-sites/dist/server";
@@ -27,6 +28,7 @@ import {ImagesSchema1000000010000} from "../shared/model/migrations/ImagesSchema
 import {ImagesSchemaDownload1000000011000} from "../shared/model/migrations/ImagesSchemaDownload";
 import {EventWeblink1000000012000} from "../shared/model/migrations/EventWeblink";
 import {ChurchInstalink1000000013000} from "../shared/model/migrations/ChurchInstalink";
+import {AddPodcasts1000000014000} from "../shared/model/migrations/AddPodcasts";
 
 const translationGerman = require("../client/translations/de");
 const  translationEnglish = require ("../client/translations/en");
@@ -56,6 +58,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
         ImagesSchemaDownload1000000011000,
         EventWeblink1000000012000,
         ChurchInstalink1000000013000,
+        AddPodcasts1000000014000,
     ],
 
     "logging": ["error", "warn"]

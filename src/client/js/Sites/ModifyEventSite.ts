@@ -16,7 +16,6 @@ import {German} from "flatpickr/dist/l10n/de";
 import {DateHelper} from "js-helper/dist/shared/DateHelper";
 import {EventHelper} from "../Helper/EventHelper";
 import {BlockedDay} from "../../../shared/model/BlockedDay";
-import {CalendarSite} from "./CalendarSite";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 
 export class ModifyEventSite extends MenuFooterSite {
@@ -38,7 +37,7 @@ export class ModifyEventSite extends MenuFooterSite {
 
     async onConstruct(constructParameters) {
         let res = super.onConstruct(constructParameters);
-        this._churches = await Church.find();
+        this._churches = <Church[]>await Church.find();
 
         if (constructParameters["id"]) {
             if (constructParameters["isRepeatableEvent"]) {

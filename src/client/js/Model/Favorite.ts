@@ -100,6 +100,18 @@ export class Favorite extends BaseModel {
         }
         return fav;
     }
+
+    getEventId() {
+        return this.eventId;
+    }
+
+    getIsFavorite() {
+        return this.isFavorite;
+    }
+
+    setEventId(id: string) {
+        this.eventId = id;
+    }
 }
 
 BaseDatabase.addModel(Favorite);

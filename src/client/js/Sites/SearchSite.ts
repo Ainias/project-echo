@@ -67,7 +67,7 @@ export class SearchSite extends FooterSite {
             }
         }
 
-        this._possibleChurches = (await Church.find()).sort((a, b) => {
+        this._possibleChurches = (<Church[]>await Church.find()).sort((a, b) => {
             Translator.getInstance().addDynamicTranslations(a.getDynamicTranslations());
             Translator.getInstance().addDynamicTranslations(b.getDynamicTranslations());
 
@@ -150,10 +150,9 @@ export class SearchSite extends FooterSite {
         ViewHelper.removeAllChildren(this._filterOrganiserContainer);
 
         Object.values(Event.TYPES).sort((a, b) => {
-            if (a === Event.TYPES.SONSTIGES){
+            if (a === Event.TYPES.SONSTIGES) {
                 return 1;
-            }
-            else if (b === Event.TYPES.SONSTIGES){
+            } else if (b === Event.TYPES.SONSTIGES) {
                 return -1;
             }
 

@@ -48,7 +48,7 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
     }
 
     async onStart(pauseArguments) {
-        this._posts = await Post.find(undefined, {
+        this._posts = <Post[]>await Post.find(undefined, {
             priority: "DESC",
             createdAt: "ASC"
         });

@@ -60,7 +60,14 @@ import {EventHelper} from "./Helper/EventHelper";
 
 import {DateHelper as MyDateHelper} from "./Helper/DateHelper";
 import {MatomoHelper} from "js-helper/dist/client/MatomoHelper";
+import {AddPodcasts1000000014000} from "../../shared/model/migrations/AddPodcasts";
+import {ModifyPodcastSite} from "./Sites/ModifyPodcastSite";
 
+import CKEditor from "@ckeditor/ckeditor5-build-classic";
+import {ListPodcastsSite} from "./Sites/ListPodcastsSite";
+import {Podcast} from "../../shared/model/Podcast";
+
+window["CKEditor"] = CKEditor;
 window["JSObject"] = Object;
 window["version"] = __VERSION__;
 
@@ -76,7 +83,7 @@ MatomoHelper.start("https://matomo.echoapp.de", __MATOMO_ID__, "m");
 App.addInitialization(async (app) => {
 
     const deleteDate = new Date();
-    MyDateHelper.setMonth(deleteDate.getMonth() - 2,1, deleteDate);
+    MyDateHelper.setMonth(deleteDate.getMonth() - 2, 1, deleteDate);
     console.log("Date", deleteDate)
     deleteDate.setDate(-1);
 
@@ -127,6 +134,12 @@ App.addInitialization(async (app) => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("events", CalendarSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
     // NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
+
+    if (await Podcast.count() > 0) {
+        console.log(await Podcast.count())
+        NavbarFragment.defaultActions.push(new StartSiteMenuAction("podcasts", ListPodcastsSite));
+    }
+
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", AboutUsSite));
 
     const languageAction = new MenuAction("language", async () => {
@@ -167,6 +180,10 @@ App.addInitialization(async (app) => {
 
     NavbarFragment.defaultActions.push(new UserMenuAction("add fsj", "fsjs", () => {
         app.startSite(ModifyFsjSite);
+    }, MenuAction.SHOW_FOR_MEDIUM));
+
+    NavbarFragment.defaultActions.push(new UserMenuAction("add podcast", "podcasts", () => {
+        app.startSite(ModifyPodcastSite);
     }, MenuAction.SHOW_FOR_MEDIUM));
 
     // NavbarFragment.defaultActions.push(new UserMenuAction("add post", "posts", () => {
@@ -219,6 +236,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
         ImagesSchemaDownload1000000011000,
         EventWeblink1000000012000,
         ChurchInstalink1000000013000,
+        AddPodcasts1000000014000,
     ]
 });
 

@@ -21,7 +21,7 @@ export class FilterDialog extends Dialog {
         super(Promise.all([ViewInflater.getInstance().load(view), Church.find()]).then(res => {
 
             let view = res[0];
-            this._possibleChurches = res[1].sort((a, b) => {
+            this._possibleChurches = (<Church[]>res[1]).sort((a, b) => {
                 Translator.getInstance().addDynamicTranslations(a.getDynamicTranslations());
                 Translator.getInstance().addDynamicTranslations(b.getDynamicTranslations());
 

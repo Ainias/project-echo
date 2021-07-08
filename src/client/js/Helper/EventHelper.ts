@@ -1,6 +1,6 @@
 import {EasySyncClientDb} from "cordova-sites-easy-sync/dist/client/EasySyncClientDb";
 import {Event} from "../../../shared/model/Event";
-import {Between, Brackets, DeleteQueryBuilder, In, LessThan, SelectQueryBuilder} from "typeorm";
+import {Between, Brackets, In, LessThan, SelectQueryBuilder} from "typeorm";
 import {NotificationScheduler} from "../NotificationScheduler";
 import {Favorite} from "../Model/Favorite";
 import {Translator, NativeStoragePromise} from "cordova-sites/dist/client";
@@ -120,15 +120,15 @@ export class EventHelper {
 
         let notificationScheduler = NotificationScheduler.getInstance();
 
-        let favorites = await Favorite.find({eventId: In(eventIds)});
+        let favorites = <Favorite[]>await Favorite.find({eventId: In(eventIds)});
         let promises = [this.updateNotificationsForFavorites(favorites)];
 
         //Delete notifications for changed favorites
-        favorites = Helper.arrayToObject(favorites, f => f.eventId);
+        const indexedFavorites = Helper.arrayToObject(favorites, f => f.getEventId());
 
         events.forEach(event => {
-            if (Helper.isNotNull(favorites[event.id]) && favorites[event.id].isFavorite === false) {
-                promises.push(notificationScheduler.cancelNotification(favorites[event.id].id));
+            if (Helper.isNotNull(indexedFavorites[event.id]) && indexedFavorites[event.id].getIsFavorite() === false) {
+                promises.push(notificationScheduler.cancelNotification(indexedFavorites[event.id].id));
             }
         });
         await Promise.all(promises);
@@ -179,7 +179,7 @@ export class EventHelper {
         let timeToNotify = new Date();
         timeToNotify.setTime(startTime.getTime() - (parseInt(timeInfos[1]) * parseInt(timeInfos[2]) * 1000));
 
-        let timeFormat = "";
+        let timeFormat;
         if (timeToNotify.getFullYear() !== startTime.getFullYear()) {
             timeFormat = DateHelper.strftime("%a., %d.%m.%y, %H:%M", startTime, undefined);
         } else if (timeToNotify.getMonth() !== startTime.getMonth()) {
@@ -244,12 +244,12 @@ export class EventHelper {
         let fromString = DateHelper.strftime("%Y-%m-%d", from);
         let toString = DateHelper.strftime("%Y-%m-%d %H:%M", to);
 
-        let blockedDaysObjects = await BlockedDay.find({
+        let blockedDaysObjects = <BlockedDay[]>await BlockedDay.find({
             repeatedEvent: {id: repeatedEvent.id},
             day: Between(fromString, toString)
         }, null, null, null, BlockedDay.getRelations());
 
-        let indexedBlockedDaysObjects = Helper.arrayToObject(blockedDaysObjects, blockedDay => DateHelper.strftime("%Y-%m-%d", blockedDay.day));
+        let indexedBlockedDaysObjects = Helper.arrayToObject(blockedDaysObjects, blockedDay => DateHelper.strftime("%Y-%m-%d", blockedDay.getDay()));
         let blockedDays = Object.keys(indexedBlockedDaysObjects);
 
         let weekdaysString = repeatedEvent.getRepeatingArguments().split(",");
@@ -283,9 +283,9 @@ export class EventHelper {
 
                 events.push(event);
             } else if (addDatabaseEvents && blockedDays.indexOf(today) !== -1) {
-                if (indexedBlockedDaysObjects[today].event !== null) {
-                    indexedBlockedDaysObjects[today].event.repeatedEvent = repeatedEvent;
-                    events.push(indexedBlockedDaysObjects[today].event);
+                if (indexedBlockedDaysObjects[today].getEvent() !== null) {
+                    indexedBlockedDaysObjects[today].getEvent().setRepeatedEvent(repeatedEvent);
+                    events.push(indexedBlockedDaysObjects[today].getEvent());
                 }
             }
             from.setDate(from.getDate() + 1);
@@ -302,14 +302,14 @@ export class EventHelper {
             blockedDayIds.push(blockedDay);
         });
 
-        let changedBlockedDays = await BlockedDay.findByIds(blockedDayIds, BlockedDay.getRelations());
+        let changedBlockedDays = <BlockedDay[]>await BlockedDay.findByIds(blockedDayIds, BlockedDay.getRelations());
 
         let favEventIds = {};
         changedBlockedDays.forEach(blockedDay => {
-            favEventIds["r" + blockedDay.repeatedEvent.id + "-" + DateHelper.strftime("%Y-%m-%d", blockedDay.day)] = blockedDay;
+            favEventIds["r" + blockedDay.getRepeatedEvent().id + "-" + DateHelper.strftime("%Y-%m-%d", blockedDay.getDay())] = blockedDay;
         });
 
-        let favorites = await Favorite.find({
+        let favorites = <Favorite[]>await Favorite.find({
             eventId: In(Object.keys(favEventIds))
         });
 
@@ -317,9 +317,9 @@ export class EventHelper {
         let saveFavs = [];
 
         favorites.forEach(fav => {
-            let blockedDay = favEventIds[fav.eventId];
+            let blockedDay = favEventIds[fav.getEventId()];
             if (blockedDay.event) {
-                fav.eventId = blockedDay.event.id;
+                fav.setEventId(blockedDay.event.id);
                 saveFavs.push(fav);
             } else {
                 deleteFavIds.push(fav.id);

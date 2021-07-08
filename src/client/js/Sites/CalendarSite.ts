@@ -45,9 +45,9 @@ export class CalendarSite extends FooterSite {
             this._date = new Date(constructParameters["date"]);
         }
 
-        let favorites = await Favorite.find();
+        let favorites = <Favorite[]>await Favorite.find();
         favorites.forEach(fav => {
-            this.favorites[fav.eventId] = true;
+            this.favorites[fav.getEventId()] = true;
         });
 
         if (Helper.isSet(constructParameters, "filter")) {
@@ -116,7 +116,7 @@ export class CalendarSite extends FooterSite {
         this.findBy("#icon-big-small .makeSmall").addEventListener("click", () => this.closeEventList());
 
         this.scrollContainer = this.findBy("#calendar-scroll-container");
-        this.scrollContainer.addEventListener("scroll", e => {
+        this.scrollContainer.addEventListener("scroll", () => {
             if (this.scrollContainer.scrollTop > 0) {
                 this.openEventList();
             } else {
