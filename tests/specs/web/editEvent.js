@@ -515,6 +515,7 @@ describe("edit event", () => {
     it("delete normal event", async function () {
         await $(".footer .icon.calendar").click();
         await $(".day-number=11").click();
+        await $("#event-overview-container .makeBig").click();
         await $(".name=Termin zum löschen").click();
 
         expect(await $(".admin-panel").isDisplayed()).toBeTruthy();

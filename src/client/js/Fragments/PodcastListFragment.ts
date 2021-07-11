@@ -1,5 +1,6 @@
 import {AlphabeticListFragment, Translator} from "cordova-sites";
 import {Podcast} from "../../../shared/model/Podcast";
+import {PodcastDetailSite} from "../Sites/PodcastDetailSite";
 
 const view = require("../../html/Fragments/podcastListFragment.html");
 
@@ -20,7 +21,13 @@ export class PodcastListFragment extends AlphabeticListFragment {
 
     renderElement(podcast: Podcast) {
         Translator.getInstance().addDynamicTranslations(podcast.getDynamicTranslations());
-        let infoElement = <HTMLElement>this.podcastTemplate.cloneNode(true);
+        const infoElement = <HTMLElement>this.podcastTemplate.cloneNode(true);
+
+        const images = podcast.getImages();
+
+        console.log("images", images);
+
+        (<HTMLImageElement>infoElement.querySelector(".podcast-image")).src = (images && images[0]) ? images[0].getUrl() : "";
         infoElement.querySelector(".name").appendChild(Translator.makePersistentTranslation(podcast.getTitleTranslation()));
 
         infoElement.addEventListener("click", () => {
@@ -29,8 +36,8 @@ export class PodcastListFragment extends AlphabeticListFragment {
         return infoElement;
     }
 
-    infoElemClicked(id){
-        console.log("podcast clicked!", id);
-        // this.getSite().startSite()
+    infoElemClicked(id) {
+        // console.log("podcast clicked!", id);
+        this.getSite().startSite(PodcastDetailSite, {id});
     }
 }

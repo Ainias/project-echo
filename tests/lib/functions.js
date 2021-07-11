@@ -1,6 +1,7 @@
 const find = require("../lib/PromiseSelector");
 const $ = find.one;
 const fs = require("fs");
+const sharp = require("sharp");
 
 async function login(email, password) {
     await browser.url(await getBaseUrl() + "?s=login");
@@ -176,7 +177,8 @@ async function acceptInsertFavorites() {
 
 async function compareFiles(originalPath, expectedPath) {
     let filePromises = [
-        new Promise((res, rej) => fs.readFile(originalPath, (err, data) => err ? rej(err) : res(data))),
+        new Promise((res, rej) => fs.readFile(originalPath, (err, data) => err ? rej(err) : res(data)))
+            .then(fileData => sharp(fileData).resize({width: 800, withoutEnlargement: true}).toBuffer()),
         new Promise((res, rej) => fs.readFile(expectedPath, (err, data) => err ? rej(err) : res(data)))
     ];
 

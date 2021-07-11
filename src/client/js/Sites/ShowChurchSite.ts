@@ -24,7 +24,6 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
             this.finish();
         }
 
-        /** @var {Church} */
         this._church = await Church.findById(parseInt(constructParameters["id"]), Church.getRelations());
 
         if (Helper.isNull(this._church)) {

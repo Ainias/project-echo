@@ -1,5 +1,7 @@
 import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
 import {BaseDatabase} from "cordova-sites-database";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 
 export class Podcast extends AccessEasySyncModel {
 
@@ -56,6 +58,21 @@ export class Podcast extends AccessEasySyncModel {
             releaseCircles: {
                 type: BaseDatabase.TYPES.MY_JSON,
                 nullable: true
+            }
+        }
+    }
+
+    static getRelationDefinitions() {
+        let relations = EasySyncBaseModel.getRelationDefinitions();
+        return {
+            ...relations,
+            images: {
+                target: FileMedium.getSchemaName(),
+                type: "many-to-many",
+                joinTable: {
+                    name: "podcastImages"
+                },
+                sync: true
             }
         }
     }

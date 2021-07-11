@@ -165,5 +165,21 @@
 
   "willkommen": "Welcome",
   "willkommenstext": "Our mission is to connect people in Cologne and promote exchange between churches.",
-  "News": "News"
+  "News": "News",
+
+  "spotify": "Spotify",
+  "Youtube": "Youtube",
+
+  "podcast-duration": "~ {0} minutes",
+  "podcastoverview": "Podcasts",
+  "here you can find all our listed podcasts.": "Here you can find all our listed podcasts.",
+  "podcasts": "Podcasts",
+  "add podcast": "New Podcast",
+  "no podcast found": "No Podcast found",
+
+  "spotify url": "Spotify URL",
+  "youtube url": "Youtube URL",
+  "release circle de": "Release Circle (DE)",
+  "release circle en": "Release Circle (EN)",
+  "duration in minutes (per episode)": "Duration in minutes (per episode)"
 }

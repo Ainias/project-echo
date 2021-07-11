@@ -1,10 +1,13 @@
 import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
 import {BaseDatabase} from "cordova-sites-database";
+import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
+import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
 
 export class Podcast extends AccessEasySyncModel {
 
     private titles: { de: string, en: string };
     private descriptions: { de: string, en: string };
+    private images: FileMedium[];
     private spotifyLink: string;
     private youtubeLink: string;
     private duration: number;
@@ -12,9 +15,9 @@ export class Podcast extends AccessEasySyncModel {
 
     constructor() {
         super();
-        this.titles = {"de":null, "en": null};
-        this.descriptions = {"de":null, "en": null};
-        this.releaseCircles = {"de":null, "en": null};
+        this.titles = {"de": null, "en": null};
+        this.descriptions = {"de": null, "en": null};
+        this.releaseCircles = {"de": null, "en": null};
         this.spotifyLink = null;
         this.youtubeLink = null;
     }
@@ -22,9 +25,11 @@ export class Podcast extends AccessEasySyncModel {
     getTitleTranslation() {
         return "podcasts-title-" + this.id;
     }
+
     getDescriptionTranslation() {
         return "podcasts-description-" + this.id;
     }
+
     getReleaseCircleTranslation() {
         return "podcasts-release-circle-" + this.id;
     }
@@ -39,9 +44,11 @@ export class Podcast extends AccessEasySyncModel {
             translations[language] = translations[language] || {};
             translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
         });
-        Object.keys(this.releaseCircles).forEach(language => {
+
+        const releaseCircles = {de: "", en: "", ...this.releaseCircles};
+        Object.keys(releaseCircles).forEach(language => {
             translations[language] = translations[language] || {};
-            translations[language][this.getReleaseCircleTranslation()] = this.releaseCircles[language];
+            translations[language][this.getReleaseCircleTranslation()] = releaseCircles[language];
         });
 
         return translations;
@@ -72,51 +79,74 @@ export class Podcast extends AccessEasySyncModel {
         }
     }
 
-    setTitles(titles: {de: string, en: string}){
+    static getRelationDefinitions() {
+        let relations = EasySyncBaseModel.getRelationDefinitions();
+        return {
+            ...relations,
+            images: {
+                target: FileMedium.getSchemaName(),
+                type: "many-to-many",
+                joinTable: {
+                    name: "podcastImages"
+                },
+                sync: true
+            }
+        }
+    }
+
+    getImages() {
+        return this.images;
+    }
+
+    setImages(images: FileMedium[]) {
+        this.images = images;
+    }
+
+    setTitles(titles: { de: string, en: string }) {
         this.titles = titles;
     }
 
-    getTitles(){
+    getTitles() {
         return this.titles;
     }
 
-    setDescriptions(descriptions: {de: string, en: string}){
+    setDescriptions(descriptions: { de: string, en: string }) {
         this.descriptions = descriptions;
     }
 
-    getDescriptions(){
+    getDescriptions() {
         return this.descriptions;
     }
 
-    setSpotifyLink(link: string){
+    setSpotifyLink(link: string) {
         this.spotifyLink = link;
     }
 
-    getSpotifyLink(){
+    getSpotifyLink() {
         return this.spotifyLink;
     }
 
-    setYoutubeLink(link: string){
+    setYoutubeLink(link: string) {
         this.youtubeLink = link;
     }
 
-    getYoutubeLink(){
+    getYoutubeLink() {
         return this.youtubeLink;
     }
 
-    setDuration(duration: number){
+    setDuration(duration: number) {
         this.duration = duration;
     }
 
-    getDuration(){
+    getDuration() {
         return this.duration;
     }
 
-    setReleaseCircles(releaseCircle: { de: string, en: string }){
+    setReleaseCircles(releaseCircle: { de: string, en: string }) {
         this.releaseCircles = releaseCircle;
     }
 
-    getReleaseCircles(){
+    getReleaseCircles() {
         return this.releaseCircles;
     }
 

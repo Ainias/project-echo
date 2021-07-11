@@ -1,5 +1,5 @@
 import {MenuFooterSite} from "./MenuFooterSite";
-import {Helper, Translator} from "cordova-sites";
+import {App, Helper, Translator} from "cordova-sites";
 import {WelcomeSite} from "./WelcomeSite";
 import {PodcastListFragment} from "../Fragments/PodcastListFragment";
 import {Podcast} from "../../../shared/model/Podcast";
@@ -20,7 +20,7 @@ export class ListPodcastsSite extends MenuFooterSite {
     async onConstruct(constructParameters) {
         const res = super.onConstruct(constructParameters);
 
-        const podcasts = <Podcast[]>await Podcast.find();
+        const podcasts = <Podcast[]>await Podcast.find(undefined, undefined, undefined, undefined, Podcast.getRelations());
 
         const currentLang = Translator.getInstance().getCurrentLanguage();
         const fallbackLanguage = Translator.getInstance().getFallbackLanguage();
@@ -51,3 +51,7 @@ export class ListPodcastsSite extends MenuFooterSite {
         this.finishAndStartSite(WelcomeSite);
     }
 }
+
+App.addInitialization((app) => {
+    app.addDeepLink("podcasts", ListPodcastsSite);
+});

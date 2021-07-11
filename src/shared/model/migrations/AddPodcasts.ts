@@ -12,6 +12,10 @@ export class AddPodcasts1000000014000 implements MigrationInterface {
         let podcastTable = MigrationHelper.createTableFromModelClass(Podcast);
         await queryRunner.createTable(podcastTable);
 
+        const podcastImagesTable = MigrationHelper.createManyToManyTable("podcast", "fileMedium");
+        podcastImagesTable.name = "podcastImages";
+        await queryRunner.createTable(podcastImagesTable);
+
         if (MigrationHelper.isServer()) {
             let accesses = await queryRunner.query("SELECT * FROM access");
             accesses = Helper.arrayToObject(accesses, obj => obj["id"]);

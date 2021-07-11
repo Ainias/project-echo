@@ -1,7 +1,8 @@
 import "dotenv/config";
-import {EasySyncServerDb, EasySyncController} from "cordova-sites-easy-sync/dist/server";
+import {EasySyncController, EasySyncServerDb, ServerFileMedium} from "cordova-sites-easy-sync/dist/server";
 
 import * as path from "path";
+import * as sharp from "sharp";
 
 import * as express from 'express';
 import {routes} from './routes';
@@ -15,7 +16,6 @@ import "../shared/model/Post";
 import "../shared/model/Fsj";
 import "../shared/model/RepeatedEvent"
 import "../shared/model/Podcast"
-import {ServerFileMedium} from "cordova-sites-easy-sync/dist/server";
 
 import {ServerTranslator} from "cordova-sites/dist/server";
 import {Translator} from "cordova-sites/dist/shared";
@@ -31,10 +31,10 @@ import {ChurchInstalink1000000013000} from "../shared/model/migrations/ChurchIns
 import {AddPodcasts1000000014000} from "../shared/model/migrations/AddPodcasts";
 
 const translationGerman = require("../client/translations/de");
-const  translationEnglish = require ("../client/translations/en");
+const translationEnglish = require("../client/translations/en");
 
 EasySyncController.MAX_MODELS_PER_RUN = 100;
-ServerFileMedium.SAVE_PATH = __dirname+"/uploads/img_";
+ServerFileMedium.SAVE_PATH = __dirname + "/uploads/img_";
 
 const port = process.env.PORT || 3000;
 process.env.JWT_SECRET = process.env.JWT_SECRET || "bjlsdgjw4tuiopmk24fl450wcui3fz,ogf";
@@ -71,6 +71,11 @@ UserManager.REGISTRATION_IS_ACTIVATED = false;
 UserManager.LOGIN_NEED_TO_BE_ACTIVATED = false;
 
 UserManager.REGISTRATION_DEFAULT_ROLE_IDS = [4];
+
+//Downscaling von Images
+ServerFileMedium.createDownscalePipe = () => {
+    return sharp().resize({width: 800, withoutEnlargement: true});
+}
 
 const app = express();
 

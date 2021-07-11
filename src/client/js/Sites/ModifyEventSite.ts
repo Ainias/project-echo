@@ -377,7 +377,7 @@ export class ModifyEventSite extends MenuFooterSite {
                 });
             }
 
-            this.findBy("#event-image").src = this._event.getImages()[0];
+            this.findBy("#event-image").src = this._event.getImages()[0].getUrl();
             this.findBy("input[type='hidden'][name='image-before']").value = this._event.getImages()[0];
             this.findBy("input[type='file'][name='image']").removeAttribute("required");
 

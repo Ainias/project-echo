@@ -184,5 +184,21 @@
   "home": "Home",
   "stores": "Stores",
   "Trailer": "Trailer",
-  "vision": "Vision"
+  "vision": "Vision",
+
+  "spotify": "Spotify",
+  "Youtube": "Youtube",
+
+  "podcast-duration": "~ {0} Minuten",
+  "podcastoverview": "Podcasts",
+  "here you can find all our listed podcasts.": "Hier kannst du alle Podcasts, die über diese App geteilt werden.",
+  "podcasts": "Podcasts",
+  "add podcast": "Neuer Podcast",
+  "no podcast found": "Kein Podcast gefunden",
+
+  "spotify url": "Spotify URL",
+  "youtube url": "Youtube URL",
+  "release circle de": "Veröffentlichungs-Zeit (DE)",
+  "release circle en": "Veröffentlichungs-Zeit (EN)",
+  "duration in minutes (per episode)": "Dauer in Minuten (pro Episode)"
 }

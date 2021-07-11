@@ -138,7 +138,7 @@ describe("calendar site", () => {
             if (date.getDay() === 2) {
                 await $(".day-number=" + i).click();
                 expect(await $(".day.cell.active").getText()).toEqual(i.toString());
-                expect(await $(".name=Calendar Test 2").isDisplayed()).toBeTruthy();
+                expect(await $(".name=Calendar Test 2").isDisplayed()).toEqual(i >= 5);
             }
         }
     });
