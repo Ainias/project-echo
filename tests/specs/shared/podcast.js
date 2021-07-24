@@ -52,6 +52,7 @@ describe("podcast suite", () => {
         expect(await $("#description").getText()).toEqual("Deutsche Beschreibung mit Fett!");
 
         if (browser.config.isMobile) {
+            expect(await $$(".release-circle").getLength()).toEqual(2);
             expect(await $$(".release-circle").get(1).getText()).toEqual("Sonntags");
             expect(await $$(".duration").get(1).getText()).toEqual("~ 25 Minuten");
         } else {
@@ -59,7 +60,7 @@ describe("podcast suite", () => {
             expect(await $$(".duration").get(0).getText()).toEqual("~ 25 Minuten");
         }
 
-        expect(await $("#spotify-link").getAttribute("href")).toEqual("https://my-website.de");
+        expect((await $("#spotify-link").getAttribute("href")).startsWith("https://my-website.de")).toBeTruthy();
         expect(await $("#youtube-link").getAttribute("href")).toEqual(null);
     });
 });

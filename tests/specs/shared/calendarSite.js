@@ -61,34 +61,6 @@ describe("calendar site", () => {
         expect(await $(".name=Calendar Test 7").isExisting()).toBeTruthy();
     });
 
-    // xit("browse calendar", async function () {
-    //     await functions.pause(3000);
-    //     expect((await $("#month-name").getText()).toUpperCase()).toEqual("MAI 2019");
-    //     expect((await $(".day.cell.active").getText()).trim()).toEqual("26");
-    //
-    //     await $(".day-number=31").click();
-    //     expect((await $(".day.cell.active").getText()).trim()).toEqual("31");
-    //
-    //     await $("#button-right").click();
-    //     await functions.pause(2000);
-    //     expect((await $("#month-name").getText()).toUpperCase()).toEqual("JUNI 2019");
-    //     expect((await $(".day.cell.active").getText()).trim()).toEqual("30");
-    //
-    //     await $("#button-left").click();
-    //     await functions.pause(2000);
-    //     expect((await $("#month-name").getText()).toUpperCase()).toEqual("MAI 2019");
-    //     expect((await $(".day.cell.active").getText()).trim()).toEqual("30");
-    //
-    //     await $(".day-number=31").click();
-    //     await functions.pause(500);
-    //     expect((await $(".day.cell.active").getText()).trim()).toEqual("31");
-    //
-    //     await $("#button-left").click();
-    //     await functions.pause(2000);
-    //     expect((await $("#month-name").getText()).toUpperCase()).toEqual("APRIL 2019");
-    //     expect((await $(".day.cell.active").getText()).trim()).toEqual("30");
-    // });
-
     it("repeated events displayed", async function () {
         await functions.pause(500);
         await $("#button-right").click();
@@ -165,6 +137,7 @@ describe("calendar site", () => {
         expect(await $(".name=Calendar Test 4").isDisplayed()).toBeTruthy();
         await $("#event-overview-container .makeSmall").click();
 
+        await functions.pause(1000);
         await $(".day-number=28").click();
         await functions.pause(1000);
         expect(await $(".day.cell.active").getText()).toEqual("28");
