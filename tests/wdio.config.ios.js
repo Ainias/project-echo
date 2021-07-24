@@ -12,10 +12,10 @@ exports.config = {
 
     // Where the files we are testing can be found.
      specs: [
-         // './tests/specs/mobile/*.js',
-         // './tests/specs/shared/*.js',
+         './tests/specs/mobile/*.js',
+         './tests/specs/shared/*.js',
 
-         './tests/specs/**/settingsSite.js',
+         // './tests/specs/**/settingsSite.js',
          // './tests/specs/**/searchSite.js',
          // './tests/specs/**/listChurch.js',
         // './tests/specs/**/favoriteSite2.js',

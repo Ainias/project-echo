@@ -14,6 +14,7 @@ import {SyncJob} from "cordova-sites-easy-sync/dist/client/SyncJob";
 import {Helper} from "js-helper/dist/shared/Helper";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared/FileMedium";
 import {Singleton} from "cordova-sites/dist/client/js/Singleton";
+import {Podcast} from "../../shared/model/Podcast";
 
 export class Sync extends Singleton {
 
@@ -26,7 +27,7 @@ export class Sync extends Singleton {
         this.syncInProgress = new Promise<any>(async resolve => {
             let syncJob = new SyncJob();
 
-            await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium], false).catch(e => console.error(e));
+            await syncJob.syncInBackgroundIfDataExists([Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium, Podcast], false).catch(e => console.error(e));
             let p = syncJob.getSyncPromise().then(async res => {
                 await EventHelper.updateFavorites(res["BlockedDay"]);
                 await EventHelper.updateNotificationsForEvents(res["Event"]["changed"]);

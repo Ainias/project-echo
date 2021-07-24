@@ -95,11 +95,11 @@ VALUES (1, '2019-06-18 18:11:24', '2019-06-18 18:11:24', 2, 0, 'default', 'every
        (7, '2019-06-18 18:11:24', '2019-06-18 18:11:24', 2, 0, 'events', 'Access for admins'),
        (8, '2019-06-18 18:11:24', '2019-06-18 18:11:24', 2, 0, 'organisers', 'Access for admins'),
        (9, '2019-06-18 18:11:24', '2019-06-18 18:11:24', 2, 0, 'fsjs', 'Access for admins'),
-       (10, '2019-06-18 18:11:24', '2019-06-18 18:11:24', 2, 0, 'posts', 'Access for admins');
+       (10, '2019-06-18 18:11:24', '2019-06-18 18:11:24', 2, 0, 'posts', 'Access for admins'),
+       (11, '2019-06-18 18:11:24', '2019-06-18 18:11:24', 2, 0, 'podcasts', 'Podcast editing');
 /*!40000 ALTER TABLE `access`
     ENABLE KEYS */;
-UNLOCK
-TABLES;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `blocked_day`
@@ -766,7 +766,10 @@ VALUES (1, '2020-02-23 14:10:25', '2020-02-23 14:10:25', 1, 0,
        (51, '2020-02-23 14:10:26', '2020-02-23 14:10:26', 1, 0,
         'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg', 1),
        (52, '2020-02-23 14:10:26', '2020-02-23 14:10:26', 1, 0,
-        'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg', 1);
+        'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg', 1),
+       (53, '2020-02-23 14:10:26', '2020-02-23 14:10:26', 1, 0,'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg', 1),
+       (54, '2020-02-23 14:10:26', '2020-02-23 14:10:26', 1, 0,'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg', 1),
+       (55, '2020-02-23 14:10:26', '2020-02-23 14:10:26', 1, 0,'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg', 1);
 /*!40000 ALTER TABLE `file_medium`
     ENABLE KEYS */;
 UNLOCK
@@ -928,7 +931,8 @@ VALUES (1, 1000000000000, 'SetupSchema1000000000000'),
        (4, 1000000006000, 'FsjSchema1000000006000'),
        (5, 1000000007000, 'AddRepeatedEvent1000000007000'),
        (6, 1000000010000, 'ImagesSchema1000000010000'),
-       (7, 1000000011000, 'ImagesSchemaDownload1000000011000');
+       (7, 1000000011000, 'ImagesSchemaDownload1000000011000'),
+       (8, 1000000011000, 'AddPodcasts1000000014000');
 /*!40000 ALTER TABLE `migrations`
     ENABLE KEYS */;
 UNLOCK
@@ -1188,7 +1192,8 @@ VALUES (1, 1),
        (6, 7),
        (6, 8),
        (6, 9),
-       (6, 10);
+       (6, 10),
+       (6, 11);
 /*!40000 ALTER TABLE `roleAccess`
     ENABLE KEYS */;
 UNLOCK
@@ -1383,7 +1388,8 @@ VALUES (1, 6, 1),
        (5, 7, 1),
        (6, 8, 1),
        (7, 9, 1),
-       (8, 10, 1);
+       (8, 10, 1),
+       (9, 11, 1);
 /*!40000 ALTER TABLE `user_access`
     ENABLE KEYS */;
 UNLOCK
@@ -1425,6 +1431,56 @@ VALUES (2, '2019-06-18 18:11:24', '2019-06-29 21:36:20', 47, 0, 'dbVersion', '1'
     ENABLE KEYS */;
 UNLOCK
 TABLES;
+
+
+DROP TABLE IF EXISTS `podcast`;
+CREATE TABLE `podcast` (
+                           `id` int(11) NOT NULL AUTO_INCREMENT,
+                           `createdAt` datetime NOT NULL,
+                           `updatedAt` datetime NOT NULL,
+                           `version` int(11) NOT NULL,
+                           `deleted` tinyint(1) NOT NULL,
+                           `titles` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+                           `descriptions` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+                           `spotifyLink` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                           `youtubeLink` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                           `duration` int(11) DEFAULT NULL,
+                           `releaseCircles` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                           PRIMARY KEY (`id`)
+);
+
+LOCK TABLES `podcast` WRITE;
+INSERT INTO `podcast`
+VALUES (1, '2019-06-18 18:11:24', '2019-06-29 21:36:20', 1, 0,
+        '{"de": "Bearbeiten des Podcasts Test", "en":"Edit podcast test"}',
+        '{"en":"Englische Beschreibung", "de":"Deutsche Beschreibung vor <b>Bearbeitung!</b>."}',
+        'my-website.de', '', 25, '{"de": "immer", "en": "always"}'),
+       (2, '2019-06-18 18:11:24', '2019-06-29 21:36:20', 1, 0,
+        '{"de": "Löschen des Podcasts", "en":"Edit podcast test"}',
+        '{"en":"Englische Beschreibung", "de":"Deutsche Beschreibung vor <b>Bearbeitung!</b>."}',
+        'my-website.de', '', 25, '{"de": "immer", "en": "always"}'),
+       (3, '2019-06-18 18:11:24', '2019-06-29 21:36:20', 1, 0,
+        '{"de": "Ansehen des Podcasts", "en":"View podcast test"}',
+        '{"en":"Englische Beschreibung", "de":"Deutsche Beschreibung mit <b>Fett!</b>"}',
+        'my-website.de', '', 25, '{"de": "Sonntags", "en": "Sundays"}');
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `podcastImages`;
+CREATE TABLE `podcastImages` (
+                                 `podcastId` int(11) NOT NULL,
+                                 `fileMediumId` int(11) NOT NULL,
+                                 PRIMARY KEY (`podcastId`,`fileMediumId`),
+                                 KEY `IDX_podcastFileMedium_podcastId` (`podcastId`),
+                                 KEY `IDX_podcastFileMedium_fileMediumId` (`fileMediumId`),
+                                 CONSTRAINT `FK_podcastFileMedium_fileMediumId` FOREIGN KEY (`fileMediumId`) REFERENCES `file_medium` (`id`) ON DELETE CASCADE,
+                                 CONSTRAINT `FK_podcastFileMedium_podcastId` FOREIGN KEY (`podcastId`) REFERENCES `podcast` (`id`) ON DELETE CASCADE
+);
+LOCK TABLES `podcastImages` WRITE;
+INSERT INTO podcastImages VALUES
+(1, 53),
+(2, 54),
+(3, 54);
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE = @OLD_SQL_MODE */;

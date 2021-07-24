@@ -21,7 +21,7 @@ export class PodcastDetailSite extends MenuFooterSite {
     async onConstruct(constructParameters: any): Promise<any[]> {
         const res = super.onConstruct(constructParameters);
 
-        if (!Helper.isSet(constructParameters, "id")){
+        if (!Helper.isSet(constructParameters, "id")) {
             new Toast("no id given").show();
             this.finish();
         }
@@ -43,19 +43,18 @@ export class PodcastDetailSite extends MenuFooterSite {
 
         const images = this.podcast.getImages();
 
-        (<HTMLImageElement>this.find("#podcast-image")).src = (images && images[0])?images[0].getUrl():"";
+        (<HTMLImageElement>this.find("#podcast-image")).src = (images && images[0]) ? images[0].getUrl() : "";
         (<HTMLElement>this.find("#name")).appendChild(Translator.makePersistentTranslation(this.podcast.getTitleTranslation()));
         (<HTMLElement>this.find("#description")).appendChild(Translator.makePersistentTranslation(this.podcast.getDescriptionTranslation()));
-        (<HTMLElement>this.find("#release-circle")).appendChild(Translator.makePersistentTranslation(this.podcast.getReleaseCircleTranslation()));
+        this.findAll(".release-circle").forEach(elem => elem.appendChild(Translator.makePersistentTranslation(this.podcast.getReleaseCircleTranslation())));
 
         const duration = this.podcast.getDuration();
-        if (duration){
-            (<HTMLElement>this.find("#duration")).appendChild(Translator.makePersistentTranslation("podcast-duration", [duration]));
+        if (duration) {
+            this.findAll(".duration").forEach(elem => elem.appendChild(Translator.makePersistentTranslation("podcast-duration", [duration])));
         }
 
-
         let spotifyLink = this.podcast.getSpotifyLink();
-        if (spotifyLink){
+        if (spotifyLink) {
             if (!spotifyLink.startsWith("http") && !spotifyLink.startsWith("//")) {
                 spotifyLink = "https://" + spotifyLink;
             }
@@ -66,7 +65,7 @@ export class PodcastDetailSite extends MenuFooterSite {
         }
 
         let youtubeLink = this.podcast.getYoutubeLink();
-        if (youtubeLink){
+        if (youtubeLink) {
             if (!youtubeLink.startsWith("http") && !youtubeLink.startsWith("//")) {
                 youtubeLink = "https://" + youtubeLink;
             }
@@ -91,13 +90,13 @@ export class PodcastDetailSite extends MenuFooterSite {
     }
 
     private async deletePodcast() {
-            if (UserManager.getInstance().hasAccess(Church.ACCESS_MODIFY)) {
-                if (await new ConfirmDialog("Möchtest du den Podcast wirklich löschen? Er wird unwiederbringlich verloren gehen!", "Podcast löschen?").show()) {
-                    await this.podcast.delete();
-                    new Toast("Der Podcast wurde erfolgreich gelöscht").show();
-                    this.finish();
-                }
+        if (UserManager.getInstance().hasAccess(Church.ACCESS_MODIFY)) {
+            if (await new ConfirmDialog("Möchtest du den Podcast wirklich löschen? Er wird unwiederbringlich verloren gehen!", "Podcast löschen?").show()) {
+                await this.podcast.delete();
+                new Toast("Der Podcast wurde erfolgreich gelöscht").show();
+                this.finish();
             }
+        }
     }
 
     private modifyPodcast() {

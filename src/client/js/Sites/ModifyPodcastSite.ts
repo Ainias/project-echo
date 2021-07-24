@@ -3,17 +3,18 @@ import {Podcast} from "../../../shared/model/Podcast";
 import {UserSite} from "cordova-sites-user-management/dist/client/js/Context/UserSite";
 import {App, Helper} from "cordova-sites";
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
+import {PodcastDetailSite} from "./PodcastDetailSite";
 
 const view = require("../../html/Sites/modifyPodcastSite.html");
 
-export class ModifyPodcastSite extends ModifyEntitySite {
+export class ModifyPodcastSite extends ModifyEntitySite<Podcast> {
 
     constructor(siteManager: any) {
         super(siteManager, view, Podcast);
         this.addDelegate(new UserSite(this, "podcasts", false));
     }
 
-    async dehydrate(entity: Podcast): Promise<{}> {
+    async dehydrate(entity) {
         const titles = entity.getTitles();
         const descriptions = entity.getDescriptions();
         const releaseCircles = entity.getReleaseCircles();
@@ -23,17 +24,17 @@ export class ModifyPodcastSite extends ModifyEntitySite {
             "title-en": titles.en,
             "description-de": descriptions.de,
             "description-en": descriptions.en,
-            "releaseCircle-de": releaseCircles.de?releaseCircles.de: "",
-            "releaseCircle-en": releaseCircles.en?releaseCircles.en: "",
+            "releaseCircle-de": releaseCircles.de ? releaseCircles.de : "",
+            "releaseCircle-en": releaseCircles.en ? releaseCircles.en : "",
             "spotifyLink": entity.getSpotifyLink(),
             "youtubeLink": entity.getYoutubeLink(),
             "duration": entity.getDuration(),
-            "image": entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl(): null,
-            "image-before": entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl(): null,
+            "image": entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl() : null,
+            "image-before": entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl() : null,
         };
     }
 
-    async hydrate(values: { [key: string]: string }, entity: Podcast): Promise<any> {
+    async hydrate(values, entity) {
         entity.setTitles({"de": values["title-de"], "en": values["title-en"]});
         entity.setDescriptions({"de": values["description-de"], "en": values["description-en"]});
         entity.setReleaseCircles({"de": values["releaseCircle-de"], "en": values["releaseCircle-en"]});
@@ -41,19 +42,21 @@ export class ModifyPodcastSite extends ModifyEntitySite {
         entity.setYoutubeLink(values["youtubeLink"]);
         entity.setDuration(parseInt(values["duration"]));
 
-
-        console.log("values", values);
         let imageSrc = values["image"];
         if (Helper.imageUrlIsEmpty(imageSrc)) {
             imageSrc = values["image-before"];
         }
-        const image: FileMedium = entity.getImages() && entity.getImages().length > 0? entity.getImages()[0]: new FileMedium();
+        const image: FileMedium = entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0] : new FileMedium();
         image.setSrc(imageSrc);
         await image.save();
 
         entity.setImages([image]);
 
         return entity;
+    }
+
+    onSaved() {
+        this.finishAndStartSite(PodcastDetailSite, {"id": this.getEntity().getId()});
     }
 }
 
