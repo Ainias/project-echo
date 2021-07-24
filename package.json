@@ -34,7 +34,7 @@
     "cordova-plugin-webpack": "^1.0.5",
     "cordova-sites": "git+https://github.com/Ainias/cordova-sites.git#0.7.15",
     "cordova-sites-database": "git+https://github.com/Ainias/cordova-sites-database.git#0.5.2",
-    "cordova-sites-easy-sync": "git+https://github.com/Ainias/cordova-sites-easy-sync.git#0.7.8",
+    "cordova-sites-easy-sync": "git+https://github.com/Ainias/cordova-sites-easy-sync.git#0.7.10",
     "cordova-sites-user-management": "git+https://github.com/Ainias/cordova-sites-user-management.git#0.5.8",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
