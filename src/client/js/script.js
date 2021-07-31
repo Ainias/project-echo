@@ -58,7 +58,7 @@ import {ChurchInstalink1000000013000} from "../../shared/model/migrations/Church
 import {Post} from "../../shared/model/Post";
 import {EventHelper} from "./Helper/EventHelper";
 
-import {DateHelper as MyDateHelper} from "./Helper/DateHelper";
+import {DateHelper as MyDateHelper} from "../../shared/helper/DateHelper";
 import {MatomoHelper} from "js-helper/dist/client/MatomoHelper";
 import {AddPodcasts1000000014000} from "../../shared/model/migrations/AddPodcasts";
 import {ModifyPodcastSite} from "./Sites/ModifyPodcastSite";
@@ -66,6 +66,7 @@ import {ModifyPodcastSite} from "./Sites/ModifyPodcastSite";
 import CKEditor from "@ckeditor/ckeditor5-build-classic";
 import {ListPodcastsSite} from "./Sites/ListPodcastsSite";
 import {Podcast} from "../../shared/model/Podcast";
+import {DeleteOldEventsJob} from "../../shared/DeleteOldEventsJob";
 
 window["CKEditor"] = CKEditor;
 window["JSObject"] = Object;
@@ -82,14 +83,7 @@ App.setLogo(logo);
 MatomoHelper.start("https://matomo.echoapp.de", __MATOMO_ID__, "m");
 App.addInitialization(async (app) => {
 
-    const deleteDate = new Date();
-    MyDateHelper.setMonth(deleteDate.getMonth() - 2, 1, deleteDate);
-    console.log("Date", deleteDate)
-    deleteDate.setDate(-1);
-
-    console.log("deleteOlder than", deleteDate);
-    EventHelper.deleteEventsOlderThan(deleteDate);
-
+    new DeleteOldEventsJob().deleteOldEvents()
     // DataManager._assetBasePath = (cordova.device !== "browser"?cordova.file.applicationDirectory:"");
 
     // let obj = await NativeStoragePromise.getItem("background-counter-obj", []);
@@ -135,11 +129,7 @@ App.addInitialization(async (app) => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
     // NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
 
-    if (await Podcast.count() > 0) {
-        console.log(await Podcast.count())
-        NavbarFragment.defaultActions.push(new StartSiteMenuAction("podcasts", ListPodcastsSite));
-    }
-
+    NavbarFragment.defaultActions.push(new UserMenuAction("podcasts", "view_podcasts", (app) => app.startSite(ListPodcastsSite)));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", AboutUsSite));
 
     const languageAction = new MenuAction("language", async () => {

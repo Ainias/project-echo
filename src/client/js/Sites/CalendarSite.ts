@@ -4,7 +4,7 @@ const view = require("../../html/Sites/calendarSite.html");
 import {FooterSite} from "./FooterSite";
 import {Scaler} from "../Scaler";
 import {Favorite} from "../Model/Favorite";
-import {DateHelper} from "../Helper/DateHelper";
+import {DateHelper} from "../../../shared/helper/DateHelper";
 import {ViewHelper} from "js-helper/dist/client";
 import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
 import {Helper} from "js-helper"

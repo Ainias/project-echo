@@ -29,6 +29,10 @@ import {ImagesSchemaDownload1000000011000} from "../shared/model/migrations/Imag
 import {EventWeblink1000000012000} from "../shared/model/migrations/EventWeblink";
 import {ChurchInstalink1000000013000} from "../shared/model/migrations/ChurchInstalink";
 import {AddPodcasts1000000014000} from "../shared/model/migrations/AddPodcasts";
+import {TestCron} from "./cronjobs/TestCron";
+import {DeleteOldEventsCron} from "./cronjobs/DeleteOldEventsCron";
+import {GetICalEventsCron} from "./cronjobs/GetICalEventsCron";
+import {AddViewPodcastsAccess1000000015000} from "../shared/model/migrations/AddViewPodcastsAccess";
 
 const translationGerman = require("../client/translations/de");
 const translationEnglish = require("../client/translations/en");
@@ -59,6 +63,7 @@ EasySyncServerDb.CONNECTION_PARAMETERS = {
         EventWeblink1000000012000,
         ChurchInstalink1000000013000,
         AddPodcasts1000000014000,
+        AddViewPodcastsAccess1000000015000
     ],
 
     "logging": ["error", "warn"]
@@ -117,6 +122,10 @@ app.use(function (err, req, res, next) {
         res.json({error: err});
     }
 });
+
+// new TestCron().start();
+// new DeleteOldEventsCron().start();
+// new GetICalEventsCron().start();
 
 EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
     Translator.init({

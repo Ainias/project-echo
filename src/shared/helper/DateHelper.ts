@@ -12,6 +12,10 @@ export class DateHelper extends OriginalDateHelper{
         date.setDate(1);
         date.setMonth(newMonth);
 
+        if (day !== undefined){
+            currentDayOfMonth = day;
+        }
+
         let numberDaysOfMonth = DateHelper.getNumberDaysOfMonth(date);
         if (currentDayOfMonth > numberDaysOfMonth) {
             currentDayOfMonth = numberDaysOfMonth;

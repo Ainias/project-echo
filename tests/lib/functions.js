@@ -294,12 +294,12 @@ function dayName(dayIndex) {
 }
 
 function prepareText(text){
+    text = text.replace(/[.*+?^${}()[\]\\]/g, "\\$&");
     if (browser.config.isSafari){
-        text = text.replace(/[.*+?^${}()[\]\\]/g, "\\$&").replace(/\n/g, '[ ]{0,2}');
+        text = text.replace(/\n/g, '[ ]{0,2}');
     }
     return new RegExp(text, "g");
 }
-
 
 module.exports = {
     login: login,
