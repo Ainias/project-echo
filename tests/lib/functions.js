@@ -83,7 +83,7 @@ async function setFormValues(values, useSelector) {
             }
 
             if (await elem.isTag("select") || await elem.isTag("SELECT")) {
-                // await browser.debug();
+                await elem.scrollIntoView();
                 await elem.selectByAttribute("value", values[selector]);
             } else if (await elem.getAttribute("type") === "checkbox" || await elem.getAttribute("type") === "radio") {
                 if (!await elem.isSelected()) {
@@ -158,8 +158,7 @@ async function acceptAlert() {
         } catch (e) {
             console.log("-------------ERROR----------------", e.message);
             if (e.message !== "An attempt was made to operate on a modal dialog when one was not open" && !e.message.startsWith("no such alert")) {
-                expect(e.message).toEqual("error message");
-                // throw e;
+                expect(e.message === "error message" || e.message === "unknown error").toBeTruthy();
             }
         }
     }
@@ -294,13 +293,20 @@ function dayName(dayIndex) {
     return dayNames[dayIndex];
 }
 
+function prepareText(text){
+    if (browser.config.isSafari){
+        text = text.replace(/[.*+?^${}()[\]\\]/g, "\\$&").replace(/\n/g, '[ ]{0,2}');
+    }
+    return new RegExp(text, "g");
+}
+
 
 module.exports = {
     login: login,
     logout: logout,
     queryDatabase: queryDatabase,
     setCurrentDate: setCurrentDate,
-    setFormValues: setFormValues,
+    setFormValues,
     verifyFormValues: verifyFormValues,
     addCustomChildSelector: addCustomChildSelector,
     getBaseUrl: getBaseUrl,
@@ -317,4 +323,5 @@ module.exports = {
     monthName: monthName,
     monthFullName: monthFullName,
     dayName: dayName,
+    prepareText
 };

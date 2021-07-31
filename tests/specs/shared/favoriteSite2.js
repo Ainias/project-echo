@@ -19,7 +19,7 @@ describe("favorite site 2", () => {
         browser.setTimeout({
             implicit: 5000
         });
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {

@@ -18,7 +18,7 @@ describe("search site", () => {
         browser.setTimeout({
             implicit: 5000
         });
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {
@@ -80,7 +80,7 @@ describe("search site", () => {
     it("search with churches", async function () {
         await find.one(".footer .icon.search").click();
         await functions.pause(500);
-        await $(".filter-tag=Köln City Church").click();
+        await $(".filter-tag=KÖLN CITY CHURCH").click();
 
         await functions.pause(1000);
 

@@ -17,7 +17,7 @@ describe("church site", () => {
         browser.setTimeout({
             implicit: 5000
         });
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {
@@ -64,20 +64,20 @@ describe("church site", () => {
         expect(await linkElem.getText()).toEqual("www.citychurch.koeln");
         expect((await linkElem.getAttribute("href")).startsWith("https://www.citychurch.koeln")).toBeTruthy();
 
-        let places = $$("#places-container .place");
+        let places = $$("#places-container .place .place-name");
         expect(await places.getLength()).toEqual(3);
-        expect(await places.get(0).getText()).toEqual("Köln City Church Headquarter\n" +
+        await places.get(0).expectMatchText(functions.prepareText("Köln City Church Headquarter\n" +
             "Waltherstraße 51\n" +
             "LESKAN Park, Halle 10\n" +
-            "51069 Köln, Dellbrück");
-        expect(await places.get(1).getText()).toEqual("Köln City Church\n" +
+            "51069 Köln, Dellbrück"))
+        await places.get(1).expectMatchText(functions.prepareText("Köln City Church\n" +
             "Campus Innenstadt (Cinedom)\n" +
             "Im Mediapark 1\n" +
-            "50670 Köln");
-        expect(await places.get(2).getText()).toEqual("Köln City Church\n" +
+            "50670 Köln"));
+        await places.get(2).expectMatchText(functions.prepareText("Köln City Church\n" +
             "Senats Hotel\n" +
             "Unter Goldschmied 9-17\n" +
             "50667 Köln\n" +
-            "Eingang über Laurenzplatz");
+            "Eingang über Laurenzplatz"));
     });
 });

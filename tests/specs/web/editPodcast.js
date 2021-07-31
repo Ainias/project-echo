@@ -18,11 +18,11 @@ describe("edit podcast", () => {
         browser.setTimeout({
             implicit: 5000
         });
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {
-        await functions.setCurrentDate();
+        // await functions.setCurrentDate();
 
         await functions.login("echo@silas.link", "123456");
 
@@ -68,7 +68,7 @@ describe("edit podcast", () => {
         expect(data["spotifyLink"]).toEqual("https://new.podcast.silas.link");
         expect(data["youtubeLink"]).toEqual("https://youtube.silas.link");
         expect(data["titles"]).toEqual("{\"de\":\"Neuer Podcast\",\"en\":\"New Podcast\"}");
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");
+        expect(data["descriptions"].match(/^{"de":"<p>(&nbsp;)?Meine Beschreibung<\/p>","en":"<p>(&nbsp;)?Meine Beschreibung<\/p>"}$/g)).toBeTruthy();
         expect(data["releaseCircles"]).toEqual("{\"de\":\"Jeden 2 Donnerstag\",\"en\":\"Every 2nd Thursday\"}");
         expect(data["duration"]).toEqual(30);
 
@@ -140,7 +140,8 @@ describe("edit podcast", () => {
         expect(data["spotifyLink"]).toEqual("echo.silas.link2");
         expect(data["youtubeLink"]).toEqual("echo.silas.link2Youtube");
         expect(data["titles"]).toEqual("{\"de\":\"Bearbeiteter Podcast\",\"en\":\"Edited Podcast\"}");
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete BeschreibungDeutsche Beschreibung vor <strong>Bearbeitung!</strong>.</p>\",\"en\":\"<p>Meine english BeschreibungEnglische Beschreibung</p>\"}");
+        expect(data["descriptions"].match(
+            /^{"de":"<p>(&nbsp;)?Meine bearbeitete BeschreibungDeutsche Beschreibung vor <strong>Bearbeitung!<\/strong>.<\/p>","en":"<p>(&nbsp;)?Meine english BeschreibungEnglische Beschreibung<\/p>"}$/g)).toBeTruthy();
         expect(data["releaseCircles"]).toEqual("{\"de\":\"de\",\"en\":\"en\"}");
         expect(data["duration"]).toEqual(45);
 

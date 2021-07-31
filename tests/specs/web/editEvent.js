@@ -18,7 +18,7 @@ describe("edit event", () => {
         browser.setTimeout({
             implicit: 5000
         });
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {
@@ -98,7 +98,7 @@ describe("edit event", () => {
         expect(data["type"]).toEqual("konzert");
         expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime());
         expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime());
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");
+        expect(data["descriptions"].match(/^{"de":"<p> ?Meine Beschreibung<\/p>","en":"<p> ?Meine Beschreibung<\/p>"}$/g)).toBeTruthy();
         expect(data["places"]).toEqual("{\"Köln\":\"Köln\",\"Aachen\":\"Aachen\",\"Remscheid City\":\"Remscheid City\"}");
         expect(data["isTemplate"]).toEqual(0);
         expect(data["repeatedEventId"]).toEqual(null);
@@ -190,7 +190,7 @@ describe("edit event", () => {
         expect(data["type"]).toEqual("sonstiges");
         expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime());
         expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime());
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");
+        expect(data["descriptions"].match(/^{"de":"<p> ?Meine Beschreibung<\/p>","en":"<p> ?Meine Beschreibung<\/p>"}$/g)).toBeTruthy();
         expect(data["places"]).toEqual("{\"Aachen\":\"Aachen\",\"Remscheid City\":\"Remscheid City\"}");
         expect(data["isTemplate"]).toEqual(1);
         let repeatedEventId = data["repeatedEventId"];
@@ -251,6 +251,7 @@ describe("edit event", () => {
         await editors.get(0).setValue(" Meine bearbeitete Beschreibung");
         await editors.get(1).setValue(" Meine english Beschreibung");
 
+
         await functions.setFormValues({
             "name-de": "Bearbeiteter Termin",
             "name-en": "Edited Event",
@@ -262,19 +263,21 @@ describe("edit event", () => {
         await $("[name=church-1]").click();
         await $("[name=church-3]").click();
 
-        await $("input[name=start]").click();
+        await $("input[name=start]").scrollIntoView().click();
+
         await functions.pause(200);
         await $$(".flatpickr-day=18").get(0).click();
         await $(".flatpickr-hour").setValue(11);
         await $(".flatpickr-minute").setValue(10);
 
-        await $("input[name=end]").click();
+
+        await $("input[name=end]").scrollIntoView().click();
         await functions.pause(200);
         await $$(".flatpickr-day=18").get(1).click();
         await $$(".flatpickr-hour").get(1).setValue(13);
         await $$(".flatpickr-minute").get(1).setValue(59);
 
-        await $("button.button=Speichern").click();
+        await $("button.button=Speichern").scrollIntoView().click();
 
         expect(await $("#event-name=Bearbeiteter Termin").isDisplayed()).toBeTruthy();
 
@@ -283,7 +286,8 @@ describe("edit event", () => {
         data = data[0];
 
         expect(data["names"]).toEqual("{\"de\":\"Bearbeiteter Termin\",\"en\":\"Edited Event\"}");
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete BeschreibungMy Description</p>\",\"en\":\"<p>Meine english Beschreibung</p>\"}");
+        expect(data["descriptions"].match(/^{"de":"<p> ?Meine bearbeitete BeschreibungMy Description<\/p>","en":"<p> ?Meine english Beschreibung<\/p>"}$/g)).toBeTruthy();
+        // expect(data["descriptions"]).toEqual(/^{"de":"<p> ?Meine BeschreibungMy Description<\/p>","en":"<p> ?Meine english Beschreibung<\/p>"}$/g);
         expect(data["places"]).toEqual("{\"bearbeitet\":\"bearbeitet\"}");
         expect(data["type"]).toEqual("konzert");
         expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 18, 11, 10).getTime());
@@ -352,19 +356,19 @@ describe("edit event", () => {
         await $("[name=church-1]").click();
         await $("[name=church-9]").click();
 
-        await $("input[name=start]").click();
+        await $("input[name=start]").scrollIntoView().click();
         await functions.pause(200);
         await $$(".flatpickr-day=19").get(0).click();
         await $(".flatpickr-hour").setValue(11);
         await $(".flatpickr-minute").setValue(10);
 
-        await $("input[name=end]").click();
+        await $("input[name=end]").scrollIntoView().click();
         await functions.pause(200);
         await $$(".flatpickr-day=19").get(1).click();
         await $$(".flatpickr-hour").get(1).setValue(13);
         await $$(".flatpickr-minute").get(1).setValue(59);
 
-        await $("button.button=Speichern").click();
+        await $("button.button=Speichern").scrollIntoView().click();
         expect(await $("#event-name=Bearbeiteter Termin wiederholend").isDisplayed()).toBeTruthy();
 
         let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin wiederholend%Edited Event wiederholend%' LIMIT 1");
@@ -372,7 +376,8 @@ describe("edit event", () => {
         data = data[0];
 
         expect(data["names"]).toEqual("{\"de\":\"Bearbeiteter Termin wiederholend\",\"en\":\"Edited Event wiederholend\"}");
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
+        expect(data["descriptions"].match(/^{"de":"<p> ?Meine bearbeitete Beschreibung wiederholendMy Description<\/p>","en":"<p> ?Meine english Beschreibung wiederholend<\/p>"}$/g)).toBeTruthy();
+        // expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
         expect(data["places"]).toEqual("{\"bearbeitet wiederholend\":\"bearbeitet wiederholend\"}");
         expect(data["type"]).toEqual("konferenz");
         expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime());
@@ -453,19 +458,19 @@ describe("edit event", () => {
         await $("[name=church-9]").click();
         await $("[name=church-7]").click();
 
-        await $("input[name=start]").click();
+        await $("input[name=start]").scrollIntoView().click();
         await functions.pause(200);
         await $$(".flatpickr-day=19").get(0).click();
         await $(".flatpickr-hour").setValue(11);
         await $(".flatpickr-minute").setValue(10);
 
-        await $("input[name=end]").click();
+        await $("input[name=end]").scrollIntoView().click();
         await functions.pause(200);
         await $$(".flatpickr-day=19").get(1).click();
         await $$(".flatpickr-hour").get(1).setValue(13);
         await $$(".flatpickr-minute").get(1).setValue(59);
 
-        await $("button.button=Speichern").click();
+        await $("button.button=Speichern").scrollIntoView().click();
 
         await functions.pause(250);
         expect(await $("#name=Bearbeiteter Termin wiederholend single").isDisplayed()).toBeTruthy();
@@ -475,7 +480,8 @@ describe("edit event", () => {
         data = data[0];
 
         expect(data["names"]).toEqual("{\"de\":\"Bearbeiteter Termin wiederholend single\",\"en\":\"Edited Event wiederholend\"}");
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
+        expect(data["descriptions"].match(/^{"de":"<p> ?Meine bearbeitete Beschreibung wiederholendMy Description<\/p>","en":"<p> ?Meine english Beschreibung wiederholend<\/p>"}$/g)).toBeTruthy();
+        // expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
         expect(data["places"]).toEqual("{\"bearbeitet wiederholend\":\"bearbeitet wiederholend\"}");
         expect(data["type"]).toEqual("konferenz");
         expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime());

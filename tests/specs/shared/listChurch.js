@@ -19,7 +19,7 @@ describe("church list suite", () => {
         browser.setTimeout({
             implicit: 5000
         });
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {
@@ -43,7 +43,7 @@ describe("church list suite", () => {
     it("check list", async function () {
         let elem = $(".alphabet-section.K .church-info");
         expect(await elem.isDisplayed()).toBeTruthy();
-        expect(await elem.$(".name .translation").getText()).toEqual("Köln City Church");
+        expect(await elem.$(".name .translation").getLowercaseText()).toEqual("köln city church");
         expect(await elem.$(".place .translation").getText()).toEqual("mehrere Standorte");
         expect(await elem.$(".link").getText()).toEqual("Mehr erfahren");
 
@@ -62,7 +62,7 @@ describe("church list suite", () => {
         expect(await aElem.isDisplayedInViewport()).toBeTruthy();
         expect(await vElem.isDisplayedInViewport()).toBeFalsy();
 
-        expect(await aElem.$(".church-info .place").getText()).toEqual("Cinedom Köln");
+        expect(await aElem.$(".church-info .place .place-name").getText()).toEqual("Cinedom Köln");
         expect(await vElem.$$(".church-info").getLength()).toEqual(2);
     });
 });

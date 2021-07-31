@@ -18,11 +18,11 @@ describe("edit church", () => {
         browser.setTimeout({
             implicit: 5000
         });
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {
-        await functions.setCurrentDate();
+        // await functions.setCurrentDate();
 
         await functions.login("echo@silas.link", "123456");
 
@@ -47,21 +47,21 @@ describe("edit church", () => {
         await editors.get(1).setValue(" Meine Beschreibung");
 
         await functions.setFormValues({
-            "name-de":"Neue Kirche",
-            "name-en":"New Church",
+            "name-de": "Neue Kirche",
+            "name-en": "New Church",
             // "description-de":"Meine Beschreibung",
             // "description-en":"My english description",
             "image": imagePath,
-            "website-url":"echo.silas.link",
-            "place-name-1":"Köln"
+            "website-url": "echo.silas.link",
+            "place-name-1": "Köln"
         });
 
         await $("#add-place").click();
         await $("#add-place").click();
 
         await functions.setFormValues({
-            "place-name-2":"Aachen",
-            "place-name-3":"Remscheid",
+            "place-name-2": "Aachen",
+            "place-name-3": "Remscheid",
         });
 
         await $("button.button=Speichern").click();
@@ -73,20 +73,20 @@ describe("edit church", () => {
 
         expect(data["website"]).toEqual("echo.silas.link");
         expect(data["names"]).toEqual("{\"de\":\"Neue Kirche\",\"en\":\"New Church\"}");
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine Beschreibung</p>\",\"en\":\"<p>Meine Beschreibung</p>\"}");
+        expect(data["descriptions"].match(/^{"de":"<p> ?Meine Beschreibung<\/p>","en":"<p> ?Meine Beschreibung<\/p>"}$/g)).toBeTruthy();
         expect(data["places"]).toEqual("{\"Köln\":\"Köln\",\"Aachen\":\"Aachen\",\"Remscheid\":\"Remscheid\"}");
 
         let id = data["id"];
 
-        data = await functions.queryDatabase("SELECT * FROM churchRegion WHERE churchId = "+id);
+        data = await functions.queryDatabase("SELECT * FROM churchRegion WHERE churchId = " + id);
         data = data[0];
         expect(data["regionId"]).toEqual(1);
 
-        data = await functions.queryDatabase("SELECT * FROM churchImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE churchId = "+id);
+        data = await functions.queryDatabase("SELECT * FROM churchImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE churchId = " + id);
         expect(data.length).toEqual(1);
 
         data = data[0];
-        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_"+data["src"]);
+        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_" + data["src"]);
         await functions.compareFiles(imagePath, savedImagePath);
     });
 
@@ -106,19 +106,16 @@ describe("edit church", () => {
 
         let editors = $$(".ck.ck-content");
 
-        // expect(await editors.get(0).getValue()).toEqual("Deutsche Beschreibung vor Bearbeitung!.");
-        // expect(await editors.get(1).getValue()).toEqual("Englische Beschreibung");
-
         await functions.verifyFormValues({
-            "name-de":"Bearbeiten der Kirche Test",
-            "name-en":"Edit church test",
-            "description-de":"Deutsche Beschreibung vor <b>Bearbeitung!</b>.",
-            "description-en":"Englische Beschreibung",
+            "name-de": "Bearbeiten der Kirche Test",
+            "name-en": "Edit church test",
+            "description-de": "Deutsche Beschreibung vor <b>Bearbeitung!</b>.",
+            "description-en": "Englische Beschreibung",
             "image-before": "https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg",
-            "website-url":"my-website.de",
-            "place-name-1":"Ort vor Bearbeitung 1",
-            "place-name-2":"Zweiter Ort",
-            "place-name-3":"Köln City Church \n" +
+            "website-url": "my-website.de",
+            "place-name-1": "Ort vor Bearbeitung 1",
+            "place-name-2": "Zweiter Ort",
+            "place-name-3": "Köln City Church \n" +
                 "Senats Hotel \n" +
                 "Unter Goldschmied 9-17 \n" +
                 "50667 Köln \n" +
@@ -136,11 +133,11 @@ describe("edit church", () => {
         await editors.get(1).setValue(" Meine english Beschreibung");
 
         await functions.setFormValues({
-            "name-de":"Bearbeitete Kirche",
-            "name-en":"Edited Church",
+            "name-de": "Bearbeitete Kirche",
+            "name-en": "Edited Church",
             "image": imagePath,
-            "website-url":"echo.silas.link2",
-            "place-name-1":"Köln bearbeitet"
+            "website-url": "echo.silas.link2",
+            "place-name-1": "Köln bearbeitet"
         });
 
         await functions.pause(1000);
@@ -155,36 +152,38 @@ describe("edit church", () => {
 
         expect(data["website"]).toEqual("echo.silas.link2");
         expect(data["names"]).toEqual("{\"de\":\"Bearbeitete Kirche\",\"en\":\"Edited Church\"}");
-        expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete BeschreibungDeutsche Beschreibung vor <strong>Bearbeitung!</strong>.</p>\",\"en\":\"<p>Meine english BeschreibungEnglische Beschreibung</p>\"}");
+        expect(data["descriptions"].match(
+            /^{"de":"<p> ?Meine bearbeitete BeschreibungDeutsche Beschreibung vor <strong>Bearbeitung!<\/strong>.<\/p>","en":"<p> ?Meine english BeschreibungEnglische Beschreibung<\/p>"}$/g)).toBeTruthy();
         expect(data["places"]).toEqual("{\"Köln bearbeitet\":\"Köln bearbeitet\"}");
 
         let id = data["id"];
 
-        data = await functions.queryDatabase("SELECT * FROM churchImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE churchId = "+id);
+        data = await functions.queryDatabase("SELECT * FROM churchImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE churchId = " + id);
         expect(data.length).toEqual(1);
 
         data = data[0];
-        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_"+data["src"]);
+        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_" + data["src"]);
         await functions.compareFiles(imagePath, savedImagePath);
     });
 
     it("delete church", async function () {
-        if (browser.config.isMobile) {
-            await $("button.menu-icon").click();
-            await find.one("#responsive-menu [data-translation='churches']").click();
-        } else {
-            await find.one("[data-translation='churches']").click();
+            if (browser.config.isMobile) {
+                await $("button.menu-icon").click();
+                await find.one("#responsive-menu [data-translation='churches']").click();
+            } else {
+                await find.one("[data-translation='churches']").click();
+            }
+            await $("h3.name=Löschen der Kirche Test").click();
+            expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
+
+            await $("#delete-church").click();
+            await $(".button=OK").click();
+
+            await functions.pause(1000);
+
+            let data = await functions.queryDatabase("SELECT * FROM church WHERE id=14 LIMIT 1");
+            data = data[0];
+            expect(data["deleted"]).toEqual(1);
         }
-        await $("h3.name=Löschen der Kirche Test").click();
-        expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
-
-        await $("#delete-church").click();
-        await $(".button=OK").click();
-
-        await functions.pause(1000);
-
-        let data = await functions.queryDatabase("SELECT * FROM church WHERE id=14 LIMIT 1");
-        data = data[0];
-        expect(data["deleted"]).toEqual(1);
-    });
+    );
 });

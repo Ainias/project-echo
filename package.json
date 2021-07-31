@@ -104,7 +104,7 @@
     "ts-loader": "^8.2.0",
     "typescript": "^3.8.3",
     "wd": "^1.14.0",
-    "webdriverio": "^6.12.1",
+    "webdriverio": "^7.9.0",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",

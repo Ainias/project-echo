@@ -19,7 +19,7 @@ describe("calendar site", () => {
             implicit: 5000
         });
 
-        await functions.mockMatomo();
+        // await functions.mockMatomo();
     });
 
     beforeEach(async function () {
@@ -95,11 +95,16 @@ describe("calendar site", () => {
     });
 
     it("filter link tests", async function () {
-        await browser.url(baseUrl + "?date=" + browser.config.fullYear
-            + "-" + (browser.config.month + 2) + "-01&filter=%7B\"types\"%3A%5B\"konzert\"%2C\"gottesdienst\"%5D%2C\"churches\"%3A%5B%5D%7D&s=calendar");
+        const url = baseUrl + "?date=" + browser.config.fullYear
+            + "-" + ((browser.config.month + 2)+"").padStart(2, "0")
+            + "-01&filter=%7B\"types\"%3A%5B\"konzert\"%2C\"gottesdienst\"%5D%2C\"churches\"%3A%5B%5D%7D&s=calendar";
+        console.log(url);
+
+        await browser.url(url);
 
         await functions.deactivateTranslationLogging();
         await functions.logErrors();
+        // await browser.debug()
 
         await functions.pause(1000);
         expect((await $("#month-name").getText()).toUpperCase()).toEqual(functions.monthFullName(browser.config.month + 1) + " " + browser.config.fullYear);
