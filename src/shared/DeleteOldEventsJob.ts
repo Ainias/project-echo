@@ -19,7 +19,9 @@ export class DeleteOldEventsJob{
             images.push(...e.getImages());
         });
 
+        // @ts-ignore
         await FileMedium.deleteMany(images, true);
+        // @ts-ignore
         await Event.deleteMany(events, true);
         return events.length;
     }

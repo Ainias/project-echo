@@ -2,7 +2,7 @@ import {Helper, DateHelper as OriginalDateHelper} from "js-helper";
 
 export class DateHelper extends OriginalDateHelper{
 
-    static setMonth(newMonth, day, date) {
+    static setMonth(newMonth, day, date?) {
         if (Helper.isNull(date) && day instanceof Date) {
             date = day;
             day = undefined;
