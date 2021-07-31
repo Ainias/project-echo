@@ -29,13 +29,11 @@ import "cordova-sites-user-management/dist/client/js/translationInit"
 import "cordova-sites/dist/client/js/translationInit"
 import logo from "../img/logo.png";
 
-import {ModifyPostSite} from "./Sites/ModifyPostSite";
 import {SetupSchema1000000000000} from "../../shared/model/migrations/SetupSchema";
 import {SetupUserManagement1000000001000} from "cordova-sites-user-management/dist/shared/migrations/SetupUserManagement"
 import {SetupFavorite1000000000001} from "../../shared/model/migrations/client/SetupFavorite";
 import {FsjSchema1000000006000} from "../../shared/model/migrations/FsjSchema";
 import {ModifyFsjSite} from "./Sites/ModifyFsjSite";
-import {ListFsjsSite} from "./Sites/ListFsjsSite";
 import {SystemCalendar} from "./SystemCalendar";
 import {FavoriteWithSystemCalendar1000000000002} from "../../shared/model/migrations/client/FavoriteWithSystemCalendar";
 import {SettingsSite} from "./Sites/SettingsSite";
@@ -48,7 +46,6 @@ import {ImagesSchema1000000010000} from "../../shared/model/migrations/ImagesSch
 import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
 import {ImagesSchemaDownload1000000011000} from "../../shared/model/migrations/ImagesSchemaDownload";
 import {ContactSite} from "./Sites/ContactSite";
-import * as typeorm from "typeorm";
 import {AboutUsSite} from "./Sites/AboutUsSite";
 
 import {Sync} from "./Sync";
@@ -56,7 +53,6 @@ import {DateHelper} from "js-helper";
 import {EventWeblink1000000012000} from "../../shared/model/migrations/EventWeblink";
 import {ChurchInstalink1000000013000} from "../../shared/model/migrations/ChurchInstalink";
 import {Post} from "../../shared/model/Post";
-import {EventHelper} from "./Helper/EventHelper";
 
 import {DateHelper as MyDateHelper} from "../../shared/helper/DateHelper";
 import {MatomoHelper} from "js-helper/dist/client/MatomoHelper";
@@ -129,7 +125,7 @@ App.addInitialization(async (app) => {
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("churches", ListChurchesSite));
     // NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
 
-    NavbarFragment.defaultActions.push(new UserMenuAction("podcasts", "view_podcasts", (app) => app.startSite(ListPodcastsSite)));
+    NavbarFragment.defaultActions.push(new UserMenuAction("podcasts", "view_podcasts", () => app.startSite(ListPodcastsSite)));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction("about us", AboutUsSite));
 
     const languageAction = new MenuAction("language", async () => {
