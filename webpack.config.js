@@ -95,6 +95,9 @@ let moduleExports = {
                             "ClearDatabaseMigration1000000000000",
                             "ImagesSchema1000000010000",
                             "ImagesSchemaDownload1000000011000",
+                            "Podcast",
+                            "AddPodcasts1000000014000",
+                            "AddViewPodcastsAccess1000000015000"
                         ],
                         keep_fnames: /[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/,
                     },
