@@ -5,9 +5,23 @@ $inputBorderBottom: solid 1px #626262;
 label {
   position: relative;
 
-  [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'],
-  [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'],
-  [type='color'], textarea, input[type='text'], input:not([type]) {
+  [type='text'],
+  [type='password'],
+  [type='date'],
+  [type='datetime'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='week'],
+  [type='email'],
+  [type='number'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='url'],
+  [type='color'],
+  textarea,
+  input[type='text'],
+  input:not([type]) {
     display: block;
     width: 100%;
     height: 2.4375rem;
@@ -42,7 +56,9 @@ label {
       }
     }
 
-    &:focus, &.notEmpty:not(:focus), &:not(:empty) {
+    &:focus,
+    &.notEmpty:not(:focus),
+    &:not(:empty) {
       ~ span {
         top: -11px;
         left: 0;
@@ -72,15 +88,16 @@ label {
     border-top-left-radius: 3px;
   }
 
-  [type="checkbox"].before-text {
+  [type='checkbox'].before-text {
     margin-bottom: 0;
   }
 }
 
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 
-  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }

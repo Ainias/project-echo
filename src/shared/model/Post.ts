@@ -1,10 +1,9 @@
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
-import {BaseDatabase} from "cordova-sites-database";
-import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
-import {Region} from "./Region";
+import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared';
+import { BaseDatabase } from 'cordova-sites-database';
+import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel';
+import { Region } from './Region';
 
 export class Post extends AccessEasySyncModel {
-
     texts;
     priority;
 
@@ -15,12 +14,12 @@ export class Post extends AccessEasySyncModel {
     }
 
     getTextTranslation() {
-        return "post-text-" + this.id;
+        return 'post-text-' + this.id;
     }
 
     getDynamicTranslations() {
         let translations = {};
-        Object.keys(this.texts).forEach(language => {
+        Object.keys(this.texts).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getTextTranslation()] = this.texts[language];
         });
@@ -29,24 +28,24 @@ export class Post extends AccessEasySyncModel {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["texts"] = BaseDatabase.TYPES.MY_JSON;
-        columns["priority"] = BaseDatabase.TYPES.INTEGER;
+        columns['texts'] = BaseDatabase.TYPES.MY_JSON;
+        columns['priority'] = BaseDatabase.TYPES.INTEGER;
         return columns;
     }
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["regions"] = {
+        relations['regions'] = {
             target: Region.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "postRegion"
+                name: 'postRegion',
             },
-            sync: true
+            sync: true,
         };
         return relations;
     }
 }
-Post.ACCESS_MODIFY = "posts";
-Post.SCHEMA_NAME="Post";
+Post.ACCESS_MODIFY = 'posts';
+Post.SCHEMA_NAME = 'Post';
 BaseDatabase.addModel(Post);

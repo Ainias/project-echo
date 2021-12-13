@@ -1,16 +1,16 @@
-import {App, Translator} from "cordova-sites"
+import { App, Translator } from 'cordova-sites';
 
-const view = require("../../html/Sites/calendarSite.html");
-import {FooterSite} from "./FooterSite";
-import {Scaler} from "../Scaler";
-import {Favorite} from "../Model/Favorite";
-import {DateHelper} from "../../../shared/helper/DateHelper";
-import {ViewHelper} from "js-helper/dist/client";
-import {EventOverviewFragment} from "../Fragments/EventOverviewFragment";
-import {Helper} from "js-helper"
-import {EventHelper} from "../Helper/EventHelper";
-import {FilterDialog} from "../Dialoges/FilterDialog";
-import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
+const view = require('../../html/Sites/calendarSite.html');
+import { FooterSite } from './FooterSite';
+import { Scaler } from '../Scaler';
+import { Favorite } from '../Model/Favorite';
+import { DateHelper } from '../../../shared/helper/DateHelper';
+import { ViewHelper } from 'js-helper/dist/client';
+import { EventOverviewFragment } from '../Fragments/EventOverviewFragment';
+import { Helper } from 'js-helper';
+import { EventHelper } from '../Helper/EventHelper';
+import { FilterDialog } from '../Dialoges/FilterDialog';
+import { NativeStoragePromise } from 'cordova-sites/dist/client/js/NativeStoragePromise';
 
 export class CalendarSite extends FooterSite {
     private _date: Date;
@@ -28,36 +28,36 @@ export class CalendarSite extends FooterSite {
     constructor(siteManager) {
         super(siteManager, view);
         this._date = new Date();
-        this.getFooterFragment().setSelected(".icon.calendar");
+        this.getFooterFragment().setSelected('.icon.calendar');
         this.favorites = {};
 
         this._filter = {};
 
         this._eventListFragment = new EventOverviewFragment(this);
         this._eventListFragment.setShowInPast(false);
-        this.addFragment("#event-overview", this._eventListFragment);
+        this.addFragment('#event-overview', this._eventListFragment);
     }
 
     async onConstruct(constructParameters) {
         let res = super.onConstruct(constructParameters);
 
-        if (Helper.isSet(constructParameters, "date")) {
-            this._date = new Date(constructParameters["date"]);
+        if (Helper.isSet(constructParameters, 'date')) {
+            this._date = new Date(constructParameters['date']);
         }
 
         let favorites = <Favorite[]>await Favorite.find();
-        favorites.forEach(fav => {
+        favorites.forEach((fav) => {
             this.favorites[fav.getEventId()] = true;
         });
 
-        if (Helper.isSet(constructParameters, "filter")) {
-            if (typeof constructParameters["filter"] === "string") {
-                this._filter = JSON.parse(constructParameters["filter"]);
+        if (Helper.isSet(constructParameters, 'filter')) {
+            if (typeof constructParameters['filter'] === 'string') {
+                this._filter = JSON.parse(constructParameters['filter']);
             } else {
-                this._filter = constructParameters["filter"];
+                this._filter = constructParameters['filter'];
             }
         } else {
-            this._filter = await NativeStoragePromise.getItem("calendar-filter", {});
+            this._filter = await NativeStoragePromise.getItem('calendar-filter', {});
         }
 
         return res;
@@ -66,29 +66,29 @@ export class CalendarSite extends FooterSite {
     async onViewLoaded() {
         let res = super.onViewLoaded();
 
-        this._view.classList.add("calendar-site")
+        this._view.classList.add('calendar-site');
 
-        this._dayTemplate = this.findBy("#day-template");
-        this._dayContainer = this.findBy("#day-container");
-        this._dayTemplate.removeAttribute("id");
+        this._dayTemplate = this.findBy('#day-template');
+        this._dayContainer = this.findBy('#day-container');
+        this._dayTemplate.removeAttribute('id');
         this._dayTemplate.remove();
 
-        this._eventOverviewContainer = this.findBy("#event-overview-container");
-        this._eventOverview = this.findBy("#event-overview");
+        this._eventOverviewContainer = this.findBy('#event-overview-container');
+        this._eventOverview = this.findBy('#event-overview');
 
-        this._monthNameElement = this.findBy("#month-name");
-        this.buttonLeft = this.findBy("#button-left");
-        this.buttonLeft.addEventListener("click", () => {
+        this._monthNameElement = this.findBy('#month-name');
+        this.buttonLeft = this.findBy('#button-left');
+        this.buttonLeft.addEventListener('click', () => {
             DateHelper.setMonth(this._date.getMonth() - 1, this._date);
             this.drawMonth(this._date);
         });
-        this.findBy("#button-right").addEventListener("click", () => {
+        this.findBy('#button-right').addEventListener('click', () => {
             DateHelper.setMonth(this._date.getMonth() + 1, this._date);
             this.drawMonth(this._date);
         });
 
-        let filterButton = this.findBy("#button-filter");
-        filterButton.addEventListener("click", async () => {
+        let filterButton = this.findBy('#button-filter');
+        filterButton.addEventListener('click', async () => {
             let res = await new FilterDialog(this._filter.types, this._filter.churches).show();
             if (Helper.isNotNull(res)) {
                 this._filter = res;
@@ -96,27 +96,33 @@ export class CalendarSite extends FooterSite {
                 this._filter = {};
             }
 
-            if (this._filter.types && this._filter.types.length > 0 || this._filter.churches && this._filter.churches.length > 0) {
-                filterButton.classList.add("active");
+            if (
+                (this._filter.types && this._filter.types.length > 0) ||
+                (this._filter.churches && this._filter.churches.length > 0)
+            ) {
+                filterButton.classList.add('active');
             } else {
-                filterButton.classList.remove("active");
+                filterButton.classList.remove('active');
             }
 
-            this.setParameter("filter", JSON.stringify(this._filter));
+            this.setParameter('filter', JSON.stringify(this._filter));
 
             await this.drawMonth(this._date);
-            await NativeStoragePromise.setItem("calendar-filter", this._filter);
+            await NativeStoragePromise.setItem('calendar-filter', this._filter);
         });
 
-        if (this._filter.types && this._filter.types.length > 0 || this._filter.churches && this._filter.churches.length > 0) {
-            filterButton.classList.add("active");
+        if (
+            (this._filter.types && this._filter.types.length > 0) ||
+            (this._filter.churches && this._filter.churches.length > 0)
+        ) {
+            filterButton.classList.add('active');
         }
 
-        this.findBy("#icon-big-small .makeBig").addEventListener("click", () => this.openEventList());
-        this.findBy("#icon-big-small .makeSmall").addEventListener("click", () => this.closeEventList());
+        this.findBy('#icon-big-small .makeBig').addEventListener('click', () => this.openEventList());
+        this.findBy('#icon-big-small .makeSmall').addEventListener('click', () => this.closeEventList());
 
-        this.scrollContainer = this.findBy("#calendar-scroll-container");
-        this.scrollContainer.addEventListener("scroll", () => {
+        this.scrollContainer = this.findBy('#calendar-scroll-container');
+        this.scrollContainer.addEventListener('scroll', () => {
             if (this.scrollContainer.scrollTop > 0) {
                 this.openEventList();
             } else {
@@ -131,12 +137,12 @@ export class CalendarSite extends FooterSite {
     }
 
     openEventList() {
-        this._eventOverviewContainer.classList.add("is-open")
+        this._eventOverviewContainer.classList.add('is-open');
         this.scrollContainer.scroll(0, 1);
     }
 
     closeEventList() {
-        this._eventOverviewContainer.classList.remove("is-open")
+        this._eventOverviewContainer.classList.remove('is-open');
         this.scrollContainer.scroll(0, 0);
     }
 
@@ -152,7 +158,15 @@ export class CalendarSite extends FooterSite {
         lastDay.setMonth(lastDay.getMonth() + 1);
         // lastDay.setSeconds(-1);
 
-        return await EventHelper.search("", DateHelper.strftime("%Y-%m-%d", firstDay), DateHelper.strftime("%Y-%m-%d %H:%M:%S", lastDay), this._filter.types, this._filter.churches, undefined, true);
+        return await EventHelper.search(
+            '',
+            DateHelper.strftime('%Y-%m-%d', firstDay),
+            DateHelper.strftime('%Y-%m-%d %H:%M:%S', lastDay),
+            this._filter.types,
+            this._filter.churches,
+            undefined,
+            true
+        );
     }
 
     async onStart(pauseArguments) {
@@ -165,7 +179,20 @@ export class CalendarSite extends FooterSite {
      * @param {Date} date
      */
     async drawMonth(date) {
-        const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const MONTH_NAMES = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        ];
 
         const minDate = new Date();
         minDate.setDate(1);
@@ -176,9 +203,9 @@ export class CalendarSite extends FooterSite {
         }
 
         if (minDate.getMonth() === date.getMonth() && minDate.getFullYear() === date.getFullYear()) {
-            this.buttonLeft.classList.add("hidden");
+            this.buttonLeft.classList.add('hidden');
         } else {
-            this.buttonLeft.classList.remove("hidden");
+            this.buttonLeft.classList.remove('hidden');
         }
 
         let actualDayOfMonth = date.getDate();
@@ -188,14 +215,14 @@ export class CalendarSite extends FooterSite {
 
         let now = new Date();
         let month = date.getMonth();
-        let isCurrentMonth = (now.getFullYear() === date.getFullYear() && now.getMonth() === month);
+        let isCurrentMonth = now.getFullYear() === date.getFullYear() && now.getMonth() === month;
 
         let offset = (date.getDay() + 6) % 7;
         let numberDays = DateHelper.getNumberDaysOfMonth(date);
 
         let eventDays = {};
         let events = await this.loadEventsForMonth(date);
-        events.forEach(event => {
+        events.forEach((event) => {
             let firstDayOfEvent = event.getStartTime().getDate();
             let lastDayOfEvent = event.getEndTime().getDate();
 
@@ -215,41 +242,41 @@ export class CalendarSite extends FooterSite {
 
         ViewHelper.removeAllChildren(this._monthNameElement);
         this._monthNameElement.appendChild(Translator.makePersistentTranslation(MONTH_NAMES[date.getMonth()]));
-        this._monthNameElement.appendChild(document.createTextNode(" " + date.getFullYear()));
+        this._monthNameElement.appendChild(document.createTextNode(' ' + date.getFullYear()));
 
         ViewHelper.removeAllChildren(this._dayContainer);
         for (let i = 0; i < offset; i++) {
             let day = <HTMLElement>this._dayTemplate.cloneNode(true);
-            day.classList.add("oldMonth");
+            day.classList.add('oldMonth');
             this._dayContainer.appendChild(day);
         }
         for (let i = 0; i < numberDays; i++) {
             let day = <HTMLElement>this._dayTemplate.cloneNode(true);
-            (day.querySelector(".day-number") as HTMLElement).innerText = (i + 1).toString();
+            (day.querySelector('.day-number') as HTMLElement).innerText = (i + 1).toString();
 
             if (isCurrentMonth && now.getDate() === i + 1) {
-                day.classList.add("today");
+                day.classList.add('today');
             }
 
-            day.addEventListener("click", () => {
-                let oldActiveDay = this.findBy(".day.active");
+            day.addEventListener('click', () => {
+                let oldActiveDay = this.findBy('.day.active');
                 if (oldActiveDay) {
-                    oldActiveDay.classList.remove("active");
+                    oldActiveDay.classList.remove('active');
                 }
-                day.classList.add("active");
-                this.showEventOverviews((eventDays[i]) ? eventDays[i] : []);
+                day.classList.add('active');
+                this.showEventOverviews(eventDays[i] ? eventDays[i] : []);
 
                 let newDate = new Date(date);
                 newDate.setDate(i + 1);
                 this._date = newDate;
-                this.setParameter("date", DateHelper.strftime("%Y-%m-%d", newDate));
+                this.setParameter('date', DateHelper.strftime('%Y-%m-%d', newDate));
             });
 
             if (eventDays[i]) {
-                day.classList.add("has-event");
+                day.classList.add('has-event');
             }
             if (i + 1 === actualDayOfMonth) {
-                day.classList.add("active");
+                day.classList.add('active');
                 if (eventDays[i]) {
                     this.showEventOverviews(eventDays[i]);
                 } else {
@@ -262,18 +289,18 @@ export class CalendarSite extends FooterSite {
 
         for (let i = offset + numberDays; i < 37; i++) {
             let day = <HTMLElement>this._dayTemplate.cloneNode(true);
-            day.classList.add("nextMonth");
+            day.classList.add('nextMonth');
             this._dayContainer.appendChild(day);
         }
 
         date.setDate(actualDayOfMonth);
 
         let scaler = new Scaler();
-        let maxHeight = window.getComputedStyle(this.findBy("#calendar")).getPropertyValue("height").replace("px", "");
+        let maxHeight = window.getComputedStyle(this.findBy('#calendar')).getPropertyValue('height').replace('px', '');
 
-        await scaler.scaleHeightThroughWidth(this.findBy("#scale-container"), parseFloat(maxHeight) * 0.73);
+        await scaler.scaleHeightThroughWidth(this.findBy('#scale-container'), parseFloat(maxHeight) * 0.73);
 
-        this.setParameter("date", DateHelper.strftime("%Y-%m-%d", date))
+        this.setParameter('date', DateHelper.strftime('%Y-%m-%d', date));
     }
 
     async showEventOverviews(events) {
@@ -282,5 +309,5 @@ export class CalendarSite extends FooterSite {
 }
 
 App.addInitialization((app) => {
-    app.addDeepLink("calendar", CalendarSite);
+    app.addDeepLink('calendar', CalendarSite);
 });

@@ -14,7 +14,8 @@
 }
 
 #calendar.testing {
-  .day, #month-name {
+  .day,
+  #month-name {
     user-select: initial;
   }
 }
@@ -51,8 +52,8 @@
 
     @each $breakpoint, $value in $margins {
       @include breakpoint($breakpoint) {
-        padding-left: 2*$value;
-        padding-right: 2*$value;
+        padding-left: 2 * $value;
+        padding-right: 2 * $value;
       }
     }
 
@@ -62,7 +63,9 @@
       margin-right: auto;
     }
 
-    #button-left, #button-right, .day {
+    #button-left,
+    #button-right,
+    .day {
       cursor: pointer;
       user-select: none;
     }
@@ -70,7 +73,8 @@
     #month-navigation {
       margin-bottom: 2rem;
 
-      #button-left, #button-right {
+      #button-left,
+      #button-right {
         text-align: center;
         width: 14.28571%;
         display: inline-block;
@@ -103,7 +107,8 @@
       user-select: none;
     }
 
-    .day, #month-name {
+    .day,
+    #month-name {
       color: $navColorWhite;
       text-align: center;
       user-select: none;
@@ -113,7 +118,7 @@
       position: relative;
 
       &::before {
-        content: "";
+        content: '';
         display: block;
         padding-top: 100%;
       }
@@ -212,10 +217,10 @@
 
         @each $breakpoint, $value in $margins {
           @include breakpoint($breakpoint) {
-            margin-left: 2*$value;
-            margin-right: 2*$value;
-            margin-top: 2*$value;
-            width: calc(100% - #{4*$value});
+            margin-left: 2 * $value;
+            margin-right: 2 * $value;
+            margin-top: 2 * $value;
+            width: calc(100% - #{4 * $value});
             //max-width: calc(100% + #{4*$value});
           }
         }
@@ -240,7 +245,6 @@
             display: none;
           }
         }
-
       }
 
       .day {
@@ -261,14 +265,14 @@
       #button-filter {
         display: inline-block;
         width: 14.28571%;
-        background-image: url("../img/icons/filter512.png");
+        background-image: url('../img/icons/filter512.png');
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
         cursor: pointer;
 
         &.active {
-          background-image: url("../img/icons/filterInvers512.png");
+          background-image: url('../img/icons/filterInvers512.png');
         }
       }
     }

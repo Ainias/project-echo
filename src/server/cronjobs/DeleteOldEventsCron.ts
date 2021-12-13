@@ -1,15 +1,15 @@
-import {AbstractCron} from "./AbstractCron";
-import {DeleteOldEventsJob} from "../../shared/DeleteOldEventsJob";
+import { AbstractCron } from './AbstractCron';
+import { DeleteOldEventsJob } from '../../shared/DeleteOldEventsJob';
 
-export class DeleteOldEventsCron extends AbstractCron{
+export class DeleteOldEventsCron extends AbstractCron {
     async run(): Promise<any> {
         const numDeleted = await new DeleteOldEventsJob().deleteOldEvents();
-        if (numDeleted >= 1){
-            console.log("Deleted "+numDeleted+" Events!");
+        if (numDeleted >= 1) {
+            console.log('Deleted ' + numDeleted + ' Events!');
         }
     }
 
     getTime(): string {
-        return "0 0 2 1 * *";
+        return '0 0 2 1 * *';
     }
 }

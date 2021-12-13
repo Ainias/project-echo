@@ -1,18 +1,18 @@
-import {App, Helper} from "cordova-sites";
+import { App, Helper } from 'cordova-sites';
 
 export class DragHelper {
     static init() {
-        window.addEventListener("mouseup", (e) => {
+        window.addEventListener('mouseup', (e) => {
             this._endDrag(e);
         });
-        window.addEventListener("mousemove", e => {
-           this._dragMove(e.clientY)
+        window.addEventListener('mousemove', (e) => {
+            this._dragMove(e.clientY);
         });
-        window.addEventListener("touchend", (e) => {
+        window.addEventListener('touchend', (e) => {
             this._endDrag(e);
         });
-        window.addEventListener("touchmove", e => {
-            this._dragMove(e.targetTouches[0].clientY)
+        window.addEventListener('touchmove', (e) => {
+            this._dragMove(e.targetTouches[0].clientY);
         });
 
         this._draggendListeners = [];
@@ -21,73 +21,80 @@ export class DragHelper {
     static async makeDragToShow(elem, listener, threshold) {
         threshold = Helper.nonNull(threshold, 15);
 
-        elem.addEventListener("mousedown", e => {
+        elem.addEventListener('mousedown', (e) => {
             this._beginDrag(elem, e.clientY, e);
         });
-        elem.addEventListener("touchstart", e => {
-            if (e.targetTouches.length === 1){
+        elem.addEventListener('touchstart', (e) => {
+            if (e.targetTouches.length === 1) {
                 this._beginDrag(elem, e.targetTouches[0].clientY, e);
             }
         });
 
-        elem.classList.add("draggable");
-        elem.dataset["originalTop"] = window.getComputedStyle(elem).getPropertyValue("top").replace("px", "");
-        elem.dataset["dragThreshold"] = threshold;
+        elem.classList.add('draggable');
+        elem.dataset['originalTop'] = window.getComputedStyle(elem).getPropertyValue('top').replace('px', '');
+        elem.dataset['dragThreshold'] = threshold;
 
         this._draggendListeners[elem] = listener;
     }
 
-    static _beginDrag(elem, y, e){
-        if (elem.classList.contains("draggable")) {
+    static _beginDrag(elem, y, e) {
+        if (elem.classList.contains('draggable')) {
             DragHelper.mouseDownData = {
                 element: elem,
                 y: y,
-                topStart: parseFloat(window.getComputedStyle(elem).getPropertyValue("top").replace("px", "")),
+                topStart: parseFloat(window.getComputedStyle(elem).getPropertyValue('top').replace('px', '')),
                 thresholdOverridden: false,
-                event: e
+                event: e,
             };
         }
     }
 
-    static _dragMove(y){
+    static _dragMove(y) {
         if (DragHelper.mouseDownData !== null) {
             let yDiff = DragHelper.mouseDownData.y - y;
             let elem = DragHelper.mouseDownData.element;
             let topStart = DragHelper.mouseDownData.topStart;
 
             //Set originalTop if not set before
-            let maxTop = elem.dataset["originalTop"];
-            if (maxTop.trim() === "") {
+            let maxTop = elem.dataset['originalTop'];
+            if (maxTop.trim() === '') {
                 maxTop = topStart;
-                elem.dataset["originalTop"] = maxTop;
+                elem.dataset['originalTop'] = maxTop;
             } else {
                 maxTop = parseFloat(maxTop);
             }
 
             //Set new top only if threshold is overridden
-            if (topStart !== maxTop || DragHelper.mouseDownData.thresholdOverridden || yDiff > elem.dataset["dragThreshold"]) {
-                elem.classList.add("is-dragging");
+            if (
+                topStart !== maxTop ||
+                DragHelper.mouseDownData.thresholdOverridden ||
+                yDiff > elem.dataset['dragThreshold']
+            ) {
+                elem.classList.add('is-dragging');
                 DragHelper.mouseDownData.event.stopPropagation();
                 if (topStart - yDiff < maxTop) {
-                    elem.style.top = Math.max(topStart - yDiff, 0) + "px";
+                    elem.style.top = Math.max(topStart - yDiff, 0) + 'px';
                 } else {
-                    elem.style.top = maxTop + "px";
+                    elem.style.top = maxTop + 'px';
                 }
                 DragHelper.mouseDownData.thresholdOverridden = true;
             }
         }
     }
 
-    static _endDrag(e){
+    static _endDrag(e) {
         if (DragHelper.mouseDownData !== null) {
             if (DragHelper.mouseDownData.thresholdOverridden) {
                 e.stopPropagation();
                 let elem = DragHelper.mouseDownData.element;
                 requestAnimationFrame(() => {
-                    elem.classList.remove("is-dragging");
+                    elem.classList.remove('is-dragging');
                 });
-                if (typeof this._draggendListeners[elem] === "function") {
-                    this._draggendListeners[elem](DragHelper.mouseDownData.topStart, parseFloat(window.getComputedStyle(elem).getPropertyValue("top").replace("px", "")));
+                if (typeof this._draggendListeners[elem] === 'function') {
+                    this._draggendListeners[elem](
+                        DragHelper.mouseDownData.topStart,
+                        parseFloat(window.getComputedStyle(elem).getPropertyValue('top').replace('px', ''))
+                    );
                 }
             }
             DragHelper.mouseDownData = null;

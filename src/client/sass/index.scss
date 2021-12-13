@@ -1,38 +1,38 @@
-@import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
+@import '../../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-@import "../../../node_modules/foundation-sites/scss/foundation";
+@import '../../../node_modules/foundation-sites/scss/foundation';
 
 //Settings nach foundation für mixins in settings
-@import "settings";
+@import 'settings';
 
 //Importiere zuerst foundation vor anderen Imports, damit foundation-settings überschrieben werden
 @include foundation-everything;
 
 //From framework
-@import "../../../node_modules/cordova-sites/cordova-sites";
+@import '../../../node_modules/cordova-sites/cordova-sites';
 
 //Anderes nach Settings, damit Settings bereits angewendet werden
-@import "navbar";
-@import "footer";
-@import "toast";
-@import "form";
-@import "dialog";
-@import "swipeFragment";
-@import "themes";
-@import "listChurchSite";
-@import "calendar";
-@import "showChrchSite";
-@import "event";
-@import "dragHelper";
-@import "eventList";
-@import "search";
-@import "place";
-@import "ckeditor";
-@import "post";
-@import "settingsDialog";
-@import "impressum";
-@import "echoIntroduction";
-@import "podcast";
+@import 'navbar';
+@import 'footer';
+@import 'toast';
+@import 'form';
+@import 'dialog';
+@import 'swipeFragment';
+@import 'themes';
+@import 'listChurchSite';
+@import 'calendar';
+@import 'showChrchSite';
+@import 'event';
+@import 'dragHelper';
+@import 'eventList';
+@import 'search';
+@import 'place';
+@import 'ckeditor';
+@import 'post';
+@import 'settingsDialog';
+@import 'impressum';
+@import 'echoIntroduction';
+@import 'podcast';
 
 @keyframes rotate {
   from {
@@ -91,7 +91,8 @@
   }
 }
 
-html, body {
+html,
+body {
   min-height: 100%;
   width: 100%;
   height: 100%;
@@ -100,7 +101,6 @@ html, body {
   position: fixed;
   overflow: hidden;
 }
-
 
 #site {
   position: relative;
@@ -117,7 +117,7 @@ html, body {
 }
 
 .right {
-  float: right
+  float: right;
 }
 
 .grow {
@@ -248,7 +248,8 @@ a.hidden-link {
 }
 
 //Echo-specific
-body, html {
+body,
+html {
   font-family: Montserrat, Arial, sans-serif;
   font-size: 18px;
   letter-spacing: 1.2px;
@@ -271,14 +272,12 @@ a.link {
   white-space: nowrap;
   overflow: hidden;
 
-
   &:not(.without-arrow)::before {
     padding-right: 0.2rem;
     vertical-align: top;
-    content: url("../img/icons/arrowOrange.svg");
+    content: url('../img/icons/arrowOrange.svg');
   }
 }
-
 
 .place {
   .place-img {
@@ -293,10 +292,10 @@ a.link {
 @each $breakpoint, $value in $margins {
   .full-width {
     @include breakpoint($breakpoint) {
-      margin-left: -2*$value;
-      margin-right: -2*$value;
-      width: calc(100% + #{4*$value});
-      max-width: calc(100% + #{4*$value});
+      margin-left: -2 * $value;
+      margin-right: -2 * $value;
+      width: calc(100% + #{4 * $value});
+      max-width: calc(100% + #{4 * $value});
     }
   }
 }
@@ -343,22 +342,23 @@ a.link {
     height: 1.5em;
     border-radius: 1.5em;
     background-color: #ccc;
-    transition: .4s;
+    transition: 0.4s;
 
     &:before {
       position: absolute;
-      content: "";
+      content: '';
       height: 1.1em;
       width: 1.1em;
       left: 0.15em;
       bottom: 0.15em;
       background-color: white;
-      transition: .4s;
+      transition: 0.4s;
       border-radius: 50%;
     }
   }
 
-  img, svg {
+  img,
+  svg {
     width: 1.4em;
     display: inline;
     vertical-align: initial;
@@ -377,8 +377,10 @@ a.link {
   margin: 0;
 }
 
-body, body.black {
-  a, button {
+body,
+body.black {
+  a,
+  button {
     &.button.highlight {
       background-color: lightgray;
     }

@@ -36,8 +36,8 @@
   cursor: pointer;
 
   &.selected {
-    border-color: #D56B52;
-    box-shadow: 0 0 1px 1px #D56B52;
+    border-color: #d56b52;
+    box-shadow: 0 0 1px 1px #d56b52;
   }
 }
 
@@ -45,20 +45,19 @@
   width: 1.2rem;
   height: 1.2rem;
   display: inline-block;
-  background: url("../img/icons/clearFilter512.png") no-repeat;
+  background: url('../img/icons/clearFilter512.png') no-repeat;
   background-size: contain;
   cursor: pointer;
   float: right;
   margin-right: 0.3rem;
   margin-top: 0.2rem;
-
 }
 
 #search-button {
   float: right;
   border-radius: 0.5rem;
   border: 0;
-  background-color: #D56B52;
+  background-color: #d56b52;
   color: white;
   font-size: 1.2em;
   margin-top: 1rem;

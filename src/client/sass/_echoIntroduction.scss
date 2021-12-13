@@ -1,8 +1,8 @@
-#echo-introduction{
-  section{
+#echo-introduction {
+  section {
     padding-top: 6rem;
   }
-  .text-section{
+  .text-section {
     //padding-top: 5rem;
     padding-bottom: 2rem;
     //min-height: 50vh;
@@ -14,7 +14,7 @@
     align-items: center;
     text-align: center;
 
-    @include breakpoint("medium"){
+    @include breakpoint('medium') {
       //min-height: 100vh;
       margin-top: 6rem;
       margin-bottom: 6rem;
@@ -22,16 +22,18 @@
       margin-right: 10%;
     }
   }
-  #ueberall-erhaeltlich{
-    h1, h2, h3{
+  #ueberall-erhaeltlich {
+    h1,
+    h2,
+    h3 {
       text-align: center;
     }
 
-    .link-tree{
+    .link-tree {
       width: 100%;
       padding: 1rem;
 
-      @include breakpoint("medium"){
+      @include breakpoint('medium') {
         display: flex;
         justify-content: center;
       }
@@ -49,7 +51,7 @@
     }
   }
   #trailer {
-    .video-container{
+    .video-container {
       width: 100%;
       object-fit: contain;
       video {
@@ -58,8 +60,8 @@
     }
   }
 
-  #vision{
-    background: url("../img/logo.png") no-repeat center;
+  #vision {
+    background: url('../img/logo.png') no-repeat center;
     background-size: contain;
     filter: grayscale(70%) brightness(170%);
   }

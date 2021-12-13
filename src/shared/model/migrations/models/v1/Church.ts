@@ -1,7 +1,7 @@
-import {BaseDatabase} from "cordova-sites-database";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
-import {Region} from "./Region";
-import {FsjChurchBaseObject} from "./FsjChurchBaseObject";
+import { BaseDatabase } from 'cordova-sites-database';
+import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared/EasySyncBaseModel';
+import { Region } from './Region';
+import { FsjChurchBaseObject } from './FsjChurchBaseObject';
 
 export class Church extends FsjChurchBaseObject {
     public places: any[];
@@ -13,7 +13,7 @@ export class Church extends FsjChurchBaseObject {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["places"] = BaseDatabase.TYPES.MY_JSON;
+        columns['places'] = BaseDatabase.TYPES.MY_JSON;
         return columns;
     }
 
@@ -41,18 +41,18 @@ export class Church extends FsjChurchBaseObject {
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["regions"] = {
+        relations['regions'] = {
             target: Region.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "churchRegion"
+                name: 'churchRegion',
             },
-            sync: true
+            sync: true,
         };
         return relations;
     }
 }
 
-Church.ACCESS_MODIFY = "admin";
-Church.SCHEMA_NAME = "Church";
+Church.ACCESS_MODIFY = 'admin';
+Church.SCHEMA_NAME = 'Church';
 // BaseDatabase.addModel(Church);

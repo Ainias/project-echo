@@ -1,9 +1,9 @@
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
-import {BaseDatabase} from "cordova-sites-database";
-import {Church} from "./Church";
-import {Region} from "./Region";
-import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
-import {Helper} from "js-helper/dist/shared/Helper";
+import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared';
+import { BaseDatabase } from 'cordova-sites-database';
+import { Church } from './Church';
+import { Region } from './Region';
+import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel';
+import { Helper } from 'js-helper/dist/shared/Helper';
 
 export class Event extends AccessEasySyncModel {
     private names: {};
@@ -18,15 +18,15 @@ export class Event extends AccessEasySyncModel {
     private repeatedEvent: any;
 
     static readonly TYPES: any = {
-        GOTTESDIENST: "gottesdienst",
-        KONZERT: "konzert",
-        HAUSKREIS: "hauskreis",
-        KONFERENZ: "konferenz",
-        GEBETSKREIS: "gebetskreis",
-        SPORT: "sport",
-        JUGENDKREIS: "jugendkreis",
-        STUDENTENKREIS: "studentenkreis",
-        SONSTIGES: "sonstiges",
+        GOTTESDIENST: 'gottesdienst',
+        KONZERT: 'konzert',
+        HAUSKREIS: 'hauskreis',
+        KONFERENZ: 'konferenz',
+        GEBETSKREIS: 'gebetskreis',
+        SPORT: 'sport',
+        JUGENDKREIS: 'jugendkreis',
+        STUDENTENKREIS: 'studentenkreis',
+        SONSTIGES: 'sonstiges',
     };
 
     constructor() {
@@ -43,21 +43,21 @@ export class Event extends AccessEasySyncModel {
     }
 
     getNameTranslation() {
-        return "event-name-" + this.id;
+        return 'event-name-' + this.id;
     }
 
     getDescriptionTranslation() {
-        return "event-description-" + this.id;
+        return 'event-description-' + this.id;
     }
 
     getDynamicTranslations() {
         let translations = {};
-        Object.keys(this.getNames()).forEach(language => {
+        Object.keys(this.getNames()).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getNameTranslation()] = this.getNames()[language];
         });
 
-        Object.keys(this.getDescriptions()).forEach(language => {
+        Object.keys(this.getDescriptions()).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getDescriptionTranslation()] = this.getDescriptions()[language];
         });
@@ -66,51 +66,51 @@ export class Event extends AccessEasySyncModel {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["names"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["descriptions"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["places"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["images"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
-        columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
-        columns["isTemplate"] = {type: BaseDatabase.TYPES.BOOLEAN, default: 0};
-        columns["type"] = {
+        columns['names'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns['descriptions'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns['places'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns['images'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns['startTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns['endTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns['isTemplate'] = { type: BaseDatabase.TYPES.BOOLEAN, default: 0 };
+        columns['type'] = {
             type: BaseDatabase.TYPES.STRING,
             default: Event.TYPES.GOTTESDIENST,
-            nullable: true
+            nullable: true,
         };
         return columns;
     }
 
     static async find(where?, order?, limit?, offset?, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
         return this._database.findEntities(this, where, order, limit, offset, relations);
     }
 
     static async findAndCount(where?, order?, limit?, offset?, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
         return this._database.findAndCountEntities(this, where, order, limit, offset, relations);
     }
 
     static async findOne(where?, order?, offset?, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
         return this._database.findOneEntity(this, where, order, offset, relations);
     }
 
     static async findById(id, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
         return this._database.findById(this, id, relations);
     }
 
     static async findByIds(ids, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
         return this._database.findByIds(this, ids, relations);
@@ -118,28 +118,28 @@ export class Event extends AccessEasySyncModel {
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["repeatedEvent"] = {
-            target: "RepeatedEvent",
-            type: "many-to-one",
+        relations['repeatedEvent'] = {
+            target: 'RepeatedEvent',
+            type: 'many-to-one',
             nullable: true,
             joinColumn: true,
-            inverseSide: "events"
+            inverseSide: 'events',
         };
-        relations["organisers"] = {
+        relations['organisers'] = {
             target: Church.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "churchEvent"
+                name: 'churchEvent',
             },
         };
-        relations["regions"] = {
+        relations['regions'] = {
             target: Region.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "eventRegion"
+                name: 'eventRegion',
             },
             // inverseSide: "events",
-            sync: true
+            sync: true,
         };
         return relations;
     }
@@ -244,5 +244,5 @@ export class Event extends AccessEasySyncModel {
     }
 }
 
-Event.ACCESS_MODIFY = "admin";
-Event.SCHEMA_NAME = "Event";
+Event.ACCESS_MODIFY = 'admin';
+Event.SCHEMA_NAME = 'Event';

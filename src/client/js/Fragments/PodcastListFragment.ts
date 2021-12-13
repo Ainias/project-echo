@@ -1,8 +1,8 @@
-import {AlphabeticListFragment, Translator} from "cordova-sites";
-import {Podcast} from "../../../shared/model/Podcast";
-import {PodcastDetailSite} from "../Sites/PodcastDetailSite";
+import { AlphabeticListFragment, Translator } from 'cordova-sites';
+import { Podcast } from '../../../shared/model/Podcast';
+import { PodcastDetailSite } from '../Sites/PodcastDetailSite';
 
-const view = require("../../html/Fragments/podcastListFragment.html");
+const view = require('../../html/Fragments/podcastListFragment.html');
 
 export class PodcastListFragment extends AlphabeticListFragment {
     private podcastTemplate: HTMLElement;
@@ -12,9 +12,9 @@ export class PodcastListFragment extends AlphabeticListFragment {
     }
 
     async onViewLoaded() {
-        this.podcastTemplate = this.find(".info-template");
+        this.podcastTemplate = this.find('.info-template');
         this.podcastTemplate.remove();
-        this.podcastTemplate.classList.remove("info-template");
+        this.podcastTemplate.classList.remove('info-template');
 
         return super.onViewLoaded();
     }
@@ -25,12 +25,13 @@ export class PodcastListFragment extends AlphabeticListFragment {
 
         const images = podcast.getImages();
 
-        console.log("images", images);
+        (<HTMLImageElement>infoElement.querySelector('.podcast-image')).src =
+            images && images[0] ? images[0].getUrl() : '';
+        infoElement
+            .querySelector('.name')
+            .appendChild(Translator.makePersistentTranslation(podcast.getTitleTranslation()));
 
-        (<HTMLImageElement>infoElement.querySelector(".podcast-image")).src = (images && images[0]) ? images[0].getUrl() : "";
-        infoElement.querySelector(".name").appendChild(Translator.makePersistentTranslation(podcast.getTitleTranslation()));
-
-        infoElement.addEventListener("click", () => {
+        infoElement.addEventListener('click', () => {
             this.infoElemClicked(podcast.id);
         });
         return infoElement;
@@ -38,6 +39,6 @@ export class PodcastListFragment extends AlphabeticListFragment {
 
     infoElemClicked(id) {
         // console.log("podcast clicked!", id);
-        this.getSite().startSite(PodcastDetailSite, {id});
+        this.getSite().startSite(PodcastDetailSite, { id });
     }
 }

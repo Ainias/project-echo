@@ -1,5 +1,4 @@
-import {BaseDatabase} from "cordova-sites-database";
-import {FsjChurchBaseObject} from "./FsjChurchBaseObject";
+import { FsjChurchBaseObject } from './FsjChurchBaseObject';
 
 export class Fsj extends FsjChurchBaseObject {
     constructor() {
@@ -7,6 +6,6 @@ export class Fsj extends FsjChurchBaseObject {
     }
 }
 
-Fsj.ACCESS_MODIFY = "admin";
-Fsj.SCHEMA_NAME = "Fsj";
+Fsj.ACCESS_MODIFY = 'admin';
+Fsj.SCHEMA_NAME = 'Fsj';
 // BaseDatabase.addModel(Fsj);

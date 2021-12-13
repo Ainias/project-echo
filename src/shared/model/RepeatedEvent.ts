@@ -1,8 +1,7 @@
-import {BaseDatabase} from "cordova-sites-database/dist/BaseDatabase";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
-import {Event} from "./Event";
-import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
-import {BlockedDay} from "./BlockedDay";
+import { BaseDatabase } from 'cordova-sites-database/dist/BaseDatabase';
+import { Event } from './Event';
+import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel';
+import { BlockedDay } from './BlockedDay';
 
 export class RepeatedEvent extends AccessEasySyncModel {
     private repeatingStrategy: number;
@@ -12,46 +11,46 @@ export class RepeatedEvent extends AccessEasySyncModel {
 
     private repeatUntil: Date;
 
-    private static DELETE_PATH = "/sync/deleteRepeatedEvent";
+    private static DELETE_PATH = '/sync/deleteRepeatedEvent';
 
     constructor() {
         super();
         this.repeatingStrategy = 0;
-        this.repeatingArguments = "";
+        this.repeatingArguments = '';
         this.originalEvent = null;
 
         this.repeatUntil = null;
         this.startDate = null;
     }
 
-    static getRelations(){
+    static getRelations() {
         let relations = super.getRelations();
-        relations.push("originalEvent.images");
-        relations.push("originalEvent.organisers");
+        relations.push('originalEvent.images');
+        relations.push('originalEvent.organisers');
         return relations;
     }
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["repeatUntil"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
-        columns["startDate"] = {type: BaseDatabase.TYPES.DATE};
-        columns["repeatingStrategy"] = BaseDatabase.TYPES.INTEGER;
-        columns["repeatingArguments"] = BaseDatabase.TYPES.TEXT;
+        columns['repeatUntil'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns['startDate'] = { type: BaseDatabase.TYPES.DATE };
+        columns['repeatingStrategy'] = BaseDatabase.TYPES.INTEGER;
+        columns['repeatingArguments'] = BaseDatabase.TYPES.TEXT;
         return columns;
     }
 
     static getRelationDefinitions() {
         let relations = AccessEasySyncModel.getRelationDefinitions();
-        relations["originalEvent"] = {
+        relations['originalEvent'] = {
             target: Event.getSchemaName(),
-            type: "one-to-one",
+            type: 'one-to-one',
             joinColumn: true,
             sync: true,
         };
-        relations["blockedDays"] = {
+        relations['blockedDays'] = {
             target: BlockedDay.getSchemaName(),
-            type: "one-to-many",
-            inverseSide: "repeatedEvent",
+            type: 'one-to-many',
+            inverseSide: 'repeatedEvent',
         };
         return relations;
     }
@@ -96,7 +95,7 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.originalEvent.getRegions();
     }
 
-    getOriginalEvent():Event{
+    getOriginalEvent(): Event {
         return this.originalEvent;
     }
 
@@ -104,18 +103,18 @@ export class RepeatedEvent extends AccessEasySyncModel {
     //     return super.delete();
     // }
     getRepeatUntil() {
-        return this.repeatUntil
+        return this.repeatUntil;
     }
 
-    setRepeatUntil(repeatUntil){
+    setRepeatUntil(repeatUntil) {
         this.repeatUntil = repeatUntil;
     }
 
-    getStartDate(){
+    getStartDate() {
         return this.startDate;
     }
 
-    setStartDate(startDate){
+    setStartDate(startDate) {
         this.startDate = startDate;
     }
 
@@ -123,24 +122,24 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return this.repeatingArguments;
     }
 
-    setRepeatingArguments(repeatingArguments){
+    setRepeatingArguments(repeatingArguments) {
         this.repeatingArguments = repeatingArguments;
     }
 
-    getRepeatingStrategy(){
+    getRepeatingStrategy() {
         return this.repeatingStrategy;
     }
 
-    setRepeatingStrategy(strategy){
+    setRepeatingStrategy(strategy) {
         this.repeatingStrategy = strategy;
     }
 
-    setOriginalEvent(event: Event){
+    setOriginalEvent(event: Event) {
         this.originalEvent = event;
     }
 }
 
-RepeatedEvent.ACCESS_MODIFY = "events";
-RepeatedEvent.SCHEMA_NAME = "RepeatedEvent";
+RepeatedEvent.ACCESS_MODIFY = 'events';
+RepeatedEvent.SCHEMA_NAME = 'RepeatedEvent';
 
 BaseDatabase.addModel(RepeatedEvent);

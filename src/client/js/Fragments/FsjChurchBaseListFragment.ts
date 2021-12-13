@@ -1,7 +1,7 @@
-import {AlphabeticListFragment, Translator} from "cordova-sites";
-import {Helper} from "js-helper/dist/shared"
+import { AlphabeticListFragment, Translator } from 'cordova-sites';
+import { Helper } from 'js-helper/dist/shared';
 
-const defaultView = require("../../html/Fragments/fsjChurchBaseListFragment.html");
+const defaultView = require('../../html/Fragments/fsjChurchBaseListFragment.html');
 
 export class FsjChurchBaseListFragment extends AlphabeticListFragment {
     private template: HTMLElement;
@@ -11,9 +11,9 @@ export class FsjChurchBaseListFragment extends AlphabeticListFragment {
     }
 
     async onViewLoaded() {
-        this.template = this.findBy(".info-template");
+        this.template = this.findBy('.info-template');
         this.template.remove();
-        this.template.classList.remove("info-template");
+        this.template.classList.remove('info-template');
 
         return super.onViewLoaded();
     }
@@ -24,13 +24,13 @@ export class FsjChurchBaseListFragment extends AlphabeticListFragment {
     renderElement(obj) {
         Translator.getInstance().addDynamicTranslations(obj.getDynamicTranslations());
         let infoElement = <HTMLElement>this.template.cloneNode(true);
-        infoElement.querySelector(".name").appendChild(Translator.makePersistentTranslation(obj.getNameTranslation()));
+        infoElement.querySelector('.name').appendChild(Translator.makePersistentTranslation(obj.getNameTranslation()));
 
-        infoElement.addEventListener("click", () => {
+        infoElement.addEventListener('click', () => {
             this.infoElemClicked(obj.id);
         });
         return infoElement;
     }
 
-    infoElemClicked(id){}
+    infoElemClicked(id) {}
 }

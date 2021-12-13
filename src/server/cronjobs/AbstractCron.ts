@@ -1,7 +1,6 @@
-import * as cron from "node-cron";
+import * as cron from 'node-cron';
 
 export abstract class AbstractCron {
-
     private task;
     private isScheduled: boolean = false;
 
@@ -10,10 +9,10 @@ export abstract class AbstractCron {
     private createTask() {
         if (cron.validate(this.getTime())) {
             this.task = cron.schedule(this.getTime(), () => this.run(), {
-                scheduled: this.isScheduled
+                scheduled: this.isScheduled,
             });
         } else {
-            throw new Error(this.getTime() + " is not a valid cron-time!");
+            throw new Error(this.getTime() + ' is not a valid cron-time!');
         }
     }
 
@@ -28,15 +27,15 @@ export abstract class AbstractCron {
         return this.task;
     }
 
-    start(){
+    start() {
         this.getTask().start();
     }
 
-    stop(){
+    stop() {
         this.getTask().stop();
     }
 
-    destroy(){
+    destroy() {
         this.getTask().destroy();
     }
 }

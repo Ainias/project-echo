@@ -1,17 +1,17 @@
-import {MenuFooterSite} from "./MenuFooterSite";
+import { MenuFooterSite } from './MenuFooterSite';
 
-import view from "../../html/Sites/impressumSite.html"
-import {CookieConsentHelper} from "../CookieConsent/CookieConsentHelper";
-import {App} from "cordova-sites/dist/client/js/App";
+import view from '../../html/Sites/impressumSite.html';
+import { CookieConsentHelper } from '../CookieConsent/CookieConsentHelper';
+import { App } from 'cordova-sites/dist/client/js/App';
 
-export class ImpressumSite extends MenuFooterSite{
+export class ImpressumSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
     }
 
-    onViewLoaded(){
+    onViewLoaded() {
         let res = super.onViewLoaded();
-        this.findBy("#open-cookie-settings").addEventListener("click", () => {
+        this.findBy('#open-cookie-settings').addEventListener('click', () => {
             CookieConsentHelper.showCookieDialog();
         });
         return res;
@@ -19,5 +19,5 @@ export class ImpressumSite extends MenuFooterSite{
 }
 
 App.addInitialization((app) => {
-    app.addDeepLink("impressum", ImpressumSite);
+    app.addDeepLink('impressum', ImpressumSite);
 });

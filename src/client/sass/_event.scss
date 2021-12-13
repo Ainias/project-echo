@@ -11,27 +11,27 @@
     justify-content: center;
   }
 
-  #event-website{
+  #event-website {
     margin-bottom: 0.5rem;
     display: block;
-    &::before{
+    &::before {
       padding-right: 0.2rem;
       vertical-align: top;
-      content: url("../img/icons/arrowOrange.svg");
+      content: url('../img/icons/arrowOrange.svg');
     }
   }
 }
 
 .favorite {
   cursor: pointer;
-  background-image: url("../img/icons/favorites-small.svg");
+  background-image: url('../img/icons/favorites-small.svg');
   background-repeat: no-repeat;
   display: inline-block;
   width: 24px;
   min-height: 24px;
 
   &.is-favorite {
-    background-image: url("../img/icons/favorites-small-selected.svg");
+    background-image: url('../img/icons/favorites-small-selected.svg');
     background-size: contain;
   }
 }
@@ -42,7 +42,7 @@
 
   button {
     cursor: pointer;
-    color: #D56B52;
+    color: #d56b52;
   }
 }
 
@@ -63,7 +63,7 @@
   }
 }
 
-#event-img{
+#event-img {
   //max-width: 200px;
   //max-height: 200px;
   max-height: 50vh;

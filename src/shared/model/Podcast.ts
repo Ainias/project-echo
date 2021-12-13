@@ -1,52 +1,51 @@
-import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
-import {BaseDatabase} from "cordova-sites-database";
-import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
+import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel';
+import { BaseDatabase } from 'cordova-sites-database';
+import { FileMedium } from 'cordova-sites-easy-sync/dist/shared';
+import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared/EasySyncBaseModel';
 
 export class Podcast extends AccessEasySyncModel {
-
-    private titles: { de: string, en: string };
-    private descriptions: { de: string, en: string };
+    private titles: { de: string; en: string };
+    private descriptions: { de: string; en: string };
     private images: FileMedium[];
     private spotifyLink: string;
     private youtubeLink: string;
     private duration: number;
-    private releaseCircles: { de: string, en: string };
+    private releaseCircles: { de: string; en: string };
 
     constructor() {
         super();
-        this.titles = {"de": null, "en": null};
-        this.descriptions = {"de": null, "en": null};
-        this.releaseCircles = {"de": null, "en": null};
+        this.titles = { de: null, en: null };
+        this.descriptions = { de: null, en: null };
+        this.releaseCircles = { de: null, en: null };
         this.spotifyLink = null;
         this.youtubeLink = null;
     }
 
     getTitleTranslation() {
-        return "podcasts-title-" + this.id;
+        return 'podcasts-title-' + this.id;
     }
 
     getDescriptionTranslation() {
-        return "podcasts-description-" + this.id;
+        return 'podcasts-description-' + this.id;
     }
 
     getReleaseCircleTranslation() {
-        return "podcasts-release-circle-" + this.id;
+        return 'podcasts-release-circle-' + this.id;
     }
 
     getDynamicTranslations() {
         let translations = {};
-        Object.keys(this.titles).forEach(language => {
+        Object.keys(this.titles).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getTitleTranslation()] = this.titles[language];
         });
-        Object.keys(this.descriptions).forEach(language => {
+        Object.keys(this.descriptions).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getDescriptionTranslation()] = this.descriptions[language];
         });
 
-        const releaseCircles = {de: "", en: "", ...this.releaseCircles};
-        Object.keys(releaseCircles).forEach(language => {
+        const releaseCircles = { de: '', en: '', ...this.releaseCircles };
+        Object.keys(releaseCircles).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getReleaseCircleTranslation()] = releaseCircles[language];
         });
@@ -62,21 +61,21 @@ export class Podcast extends AccessEasySyncModel {
             descriptions: BaseDatabase.TYPES.MY_JSON,
             spotifyLink: {
                 type: BaseDatabase.TYPES.TEXT,
-                nullable: true
+                nullable: true,
             },
             youtubeLink: {
                 type: BaseDatabase.TYPES.TEXT,
-                nullable: true
+                nullable: true,
             },
             duration: {
                 type: BaseDatabase.TYPES.INTEGER,
-                nullable: true
+                nullable: true,
             },
             releaseCircles: {
                 type: BaseDatabase.TYPES.MY_JSON,
-                nullable: true
-            }
-        }
+                nullable: true,
+            },
+        };
     }
 
     static getRelationDefinitions() {
@@ -85,13 +84,13 @@ export class Podcast extends AccessEasySyncModel {
             ...relations,
             images: {
                 target: FileMedium.getSchemaName(),
-                type: "many-to-many",
+                type: 'many-to-many',
                 joinTable: {
-                    name: "podcastImages"
+                    name: 'podcastImages',
                 },
-                sync: true
-            }
-        }
+                sync: true,
+            },
+        };
     }
 
     getImages() {
@@ -102,7 +101,7 @@ export class Podcast extends AccessEasySyncModel {
         this.images = images;
     }
 
-    setTitles(titles: { de: string, en: string }) {
+    setTitles(titles: { de: string; en: string }) {
         this.titles = titles;
     }
 
@@ -110,7 +109,7 @@ export class Podcast extends AccessEasySyncModel {
         return this.titles;
     }
 
-    setDescriptions(descriptions: { de: string, en: string }) {
+    setDescriptions(descriptions: { de: string; en: string }) {
         this.descriptions = descriptions;
     }
 
@@ -142,7 +141,7 @@ export class Podcast extends AccessEasySyncModel {
         return this.duration;
     }
 
-    setReleaseCircles(releaseCircle: { de: string, en: string }) {
+    setReleaseCircles(releaseCircle: { de: string; en: string }) {
         this.releaseCircles = releaseCircle;
     }
 
@@ -162,10 +161,8 @@ export class Podcast extends AccessEasySyncModel {
     //     };
     //     return relations;
     // }
-
 }
 
-Podcast.ACCESS_MODIFY = "podcasts";
-Podcast.SCHEMA_NAME = "Podcast";
+Podcast.ACCESS_MODIFY = 'podcasts';
+Podcast.SCHEMA_NAME = 'Podcast';
 BaseDatabase.addModel(Podcast);
-

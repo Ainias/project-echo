@@ -1,48 +1,45 @@
-import {MigrationInterface, QueryRunner, Table, TableColumn} from "typeorm";
-import {BaseDatabase} from "cordova-sites-database/dist/cordova-sites-database";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { BaseDatabase } from 'cordova-sites-database/dist/cordova-sites-database';
 
 export class FavoriteWithoutEventRelation1000000008000 implements MigrationInterface {
-
     async up(queryRunner: QueryRunner): Promise<any> {
         await this._changeFavorite(queryRunner);
     }
 
     async _changeFavorite(queryRunner: QueryRunner) {
-
-        await queryRunner.dropTable("favorite");
+        await queryRunner.dropTable('favorite');
 
         let favoriteTable = new Table({
-            name: "favorite",
+            name: 'favorite',
             columns: [
                 {
-                    name: "id",
+                    name: 'id',
                     isPrimary: true,
-                    type: "integer",
+                    type: 'integer',
                     isGenerated: true,
-                    generationStrategy: "increment" as "increment"
+                    generationStrategy: 'increment' as 'increment',
                 },
                 {
-                    name: "eventId",
-                    type: BaseDatabase.TYPES.STRING
+                    name: 'eventId',
+                    type: BaseDatabase.TYPES.STRING,
                 },
                 {
-                    name: "isFavorite",
+                    name: 'isFavorite',
                     type: BaseDatabase.TYPES.BOOLEAN,
                     default: 1,
                     isNullable: false,
                 },
                 {
-                    name: "systemCalendarId",
+                    name: 'systemCalendarId',
                     type: BaseDatabase.TYPES.INTEGER,
-                    isNullable: true
-                }
+                    isNullable: true,
+                },
             ],
         });
-        return await queryRunner.createTable(favoriteTable, true)
+        return await queryRunner.createTable(favoriteTable, true);
     }
 
     down(queryRunner: QueryRunner): Promise<any> {
         return undefined;
     }
-
 }

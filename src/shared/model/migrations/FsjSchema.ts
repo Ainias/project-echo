@@ -1,11 +1,10 @@
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
-import {BaseDatabase} from "cordova-sites-database/dist/cordova-sites-database";
-import {MigrationHelper} from "js-helper/dist/shared/MigrationHelper";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { BaseDatabase } from 'cordova-sites-database/dist/cordova-sites-database';
+import { MigrationHelper } from 'js-helper/dist/shared/MigrationHelper';
 
 export class FsjSchema1000000006000 implements MigrationInterface {
-
     _isServer(): boolean {
-        return (typeof document !== "object")
+        return typeof document !== 'object';
     }
 
     _createManyToManyTable(tableOne, tableTwo) {
@@ -18,50 +17,50 @@ export class FsjSchema1000000006000 implements MigrationInterface {
 
     async _addFsj(queryRunner: QueryRunner) {
         let fsjTable = new Table({
-            name: "fsj",
+            name: 'fsj',
             columns: [
                 {
-                    name: "id",
+                    name: 'id',
                     isPrimary: true,
                     type: BaseDatabase.TYPES.INTEGER,
                     isGenerated: this._isServer(),
-                    generationStrategy: "increment" as "increment"
+                    generationStrategy: 'increment' as 'increment',
                 },
                 {
-                    name: "createdAt",
+                    name: 'createdAt',
                     type: BaseDatabase.TYPES.DATE,
                 },
                 {
-                    name: "updatedAt",
+                    name: 'updatedAt',
                     type: BaseDatabase.TYPES.DATE,
                 },
                 {
-                    name: "version",
+                    name: 'version',
                     type: BaseDatabase.TYPES.INTEGER,
                 },
                 {
-                    name: "deleted",
+                    name: 'deleted',
                     type: BaseDatabase.TYPES.BOOLEAN,
                 },
                 {
-                    name: "names",
-                    type: this._isServer()?BaseDatabase.TYPES.MEDIUMTEXT:BaseDatabase.TYPES.TEXT,
+                    name: 'names',
+                    type: this._isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
                 },
                 {
-                    name: "descriptions",
-                    type: this._isServer()?BaseDatabase.TYPES.MEDIUMTEXT:BaseDatabase.TYPES.TEXT,
+                    name: 'descriptions',
+                    type: this._isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
                 },
                 {
-                    name: "images",
-                    type: this._isServer()?BaseDatabase.TYPES.MEDIUMTEXT:BaseDatabase.TYPES.TEXT,
+                    name: 'images',
+                    type: this._isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
                 },
                 {
-                    name: "website",
-                    type: BaseDatabase.TYPES.STRING
-                }
-            ]
+                    name: 'website',
+                    type: BaseDatabase.TYPES.STRING,
+                },
+            ],
         });
-        return await queryRunner.createTable(fsjTable, true)
+        return await queryRunner.createTable(fsjTable, true);
     }
 
     down(queryRunner: QueryRunner): Promise<any> {

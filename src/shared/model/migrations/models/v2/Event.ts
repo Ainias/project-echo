@@ -1,12 +1,12 @@
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
-import {BaseDatabase} from "cordova-sites-database/dist/BaseDatabase";
-import {Church} from "./Church";
-import {Region} from "./Region";
-import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
-import {Helper} from "js-helper/dist/shared/Helper";
-import {JsonHelper} from "js-helper/dist/shared/JsonHelper";
-import {BaseModel} from "cordova-sites-database/dist/BaseModel";
-import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
+import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared';
+import { BaseDatabase } from 'cordova-sites-database/dist/BaseDatabase';
+import { Church } from './Church';
+import { Region } from './Region';
+import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel';
+import { Helper } from 'js-helper/dist/shared/Helper';
+import { JsonHelper } from 'js-helper/dist/shared/JsonHelper';
+import { BaseModel } from 'cordova-sites-database/dist/BaseModel';
+import { FileMedium } from 'cordova-sites-easy-sync/dist/shared';
 
 export class Event extends AccessEasySyncModel {
     private names: {};
@@ -22,15 +22,15 @@ export class Event extends AccessEasySyncModel {
     private isTemplate: boolean = false;
 
     static readonly TYPES: { [key: string]: string } = {
-        GOTTESDIENST: "gottesdienst",
-        KONZERT: "konzert",
-        HAUSKREIS: "hauskreis",
-        KONFERENZ: "konferenz",
-        GEBETSKREIS: "gebetskreis",
-        SPORT: "sport",
-        JUGENDKREIS: "jugendkreis",
-        STUDENTENKREIS: "studentenkreis",
-        SONSTIGES: "sonstiges",
+        GOTTESDIENST: 'gottesdienst',
+        KONZERT: 'konzert',
+        HAUSKREIS: 'hauskreis',
+        KONFERENZ: 'konferenz',
+        GEBETSKREIS: 'gebetskreis',
+        SPORT: 'sport',
+        JUGENDKREIS: 'jugendkreis',
+        STUDENTENKREIS: 'studentenkreis',
+        SONSTIGES: 'sonstiges',
     };
 
     constructor() {
@@ -48,28 +48,28 @@ export class Event extends AccessEasySyncModel {
 
     static getRelations() {
         let relations = super.getRelations();
-        relations.push("repeatedEvent.originalEvent");
-        relations.push("repeatedEvent.originalEvent.images");
-        relations.push("repeatedEvent.originalEvent.organisers");
+        relations.push('repeatedEvent.originalEvent');
+        relations.push('repeatedEvent.originalEvent.images');
+        relations.push('repeatedEvent.originalEvent.organisers');
         return relations;
     }
 
     getNameTranslation() {
-        return "event-name-" + this.id;
+        return 'event-name-' + this.id;
     }
 
     getDescriptionTranslation() {
-        return "event-description-" + this.id;
+        return 'event-description-' + this.id;
     }
 
     getDynamicTranslations() {
         let translations = {};
-        Object.keys(this.getNames()).forEach(language => {
+        Object.keys(this.getNames()).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getNameTranslation()] = this.getNames()[language];
         });
 
-        Object.keys(this.getDescriptions()).forEach(language => {
+        Object.keys(this.getDescriptions()).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getDescriptionTranslation()] = this.getDescriptions()[language];
         });
@@ -78,13 +78,13 @@ export class Event extends AccessEasySyncModel {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["names"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["descriptions"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["places"] = {type: BaseDatabase.TYPES.MY_JSON, nullable: true};
-        columns["startTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
-        columns["endTime"] = {type: BaseDatabase.TYPES.DATE, nullable: true};
-        columns["isTemplate"] = {type: BaseDatabase.TYPES.BOOLEAN, default: false};
-        columns["type"] = {
+        columns['names'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns['descriptions'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns['places'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns['startTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns['endTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns['isTemplate'] = { type: BaseDatabase.TYPES.BOOLEAN, default: false };
+        columns['type'] = {
             type: BaseDatabase.TYPES.STRING,
             default: Event.TYPES.GOTTESDIENST,
             nullable: true,
@@ -93,7 +93,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     static async find(where?, order?, limit?, offset?, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
 
@@ -106,60 +106,60 @@ export class Event extends AccessEasySyncModel {
 
         //Android saves boolean as strings (why ever?!?), so copy every condition and "or" them with both, string and boolean
         let newWheres = [];
-        where.forEach(orCondition => {
+        where.forEach((orCondition) => {
             //Check first, if it is client only. On server load all non-deleted for syncing purpose
-            if (!Helper.isSet(orCondition, "isTemplate") && typeof document === "object") {
-                orCondition["isTemplate"] = false;
-            } else if (orCondition["isTemplate"] === "false") {
-                orCondition["isTemplate"] = false;
-            } else if (orCondition["isTemplate"] === "true") {
-                orCondition["isTemplate"] = true;
+            if (!Helper.isSet(orCondition, 'isTemplate') && typeof document === 'object') {
+                orCondition['isTemplate'] = false;
+            } else if (orCondition['isTemplate'] === 'false') {
+                orCondition['isTemplate'] = false;
+            } else if (orCondition['isTemplate'] === 'true') {
+                orCondition['isTemplate'] = true;
             }
 
             newWheres.push(orCondition);
 
             let newCondition = {};
-            Object.keys(orCondition).forEach(key => newCondition[key] = orCondition[key]);
-            newCondition["isTemplate"] = (newCondition["isTemplate"] ? "true" : "false");
+            Object.keys(orCondition).forEach((key) => (newCondition[key] = orCondition[key]));
+            newCondition['isTemplate'] = newCondition['isTemplate'] ? 'true' : 'false';
 
-            newWheres.push(newCondition)
+            newWheres.push(newCondition);
         });
 
         return this._database.findEntities(this, newWheres, order, limit, offset, relations);
     }
 
     static async findAndCount(where?, order?, limit?, offset?, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
 
         if (Helper.isNull(where)) {
             where = {};
         }
-        if (!Helper.isSet(where, "isTemplate") && typeof document === "object") {
-            where["isTemplate"] = false;
+        if (!Helper.isSet(where, 'isTemplate') && typeof document === 'object') {
+            where['isTemplate'] = false;
         }
 
         return this._database.findAndCountEntities(this, where, order, limit, offset, relations);
     }
 
     static async findOne(where?, order?, offset?, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
 
         if (Helper.isNull(where)) {
             where = {};
         }
-        if (!Helper.isSet(where, "isTemplate") && typeof document === "object") {
-            where["isTemplate"] = false;
+        if (!Helper.isSet(where, 'isTemplate') && typeof document === 'object') {
+            where['isTemplate'] = false;
         }
 
         return this._database.findOneEntity(this, where, order, offset, relations);
     }
 
     static async findById(id, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
 
@@ -167,15 +167,15 @@ export class Event extends AccessEasySyncModel {
     }
 
     static async findByIds(ids, relations?) {
-        if (typeof relations === "undefined") {
+        if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
 
         let noTemplateEvents = [];
 
         let events = await this._database.findByIds(this, ids, relations);
-        if (typeof document === "object") {
-            events.forEach(e => {
+        if (typeof document === 'object') {
+            events.forEach((e) => {
                 if (!e.getIsTemplate()) {
                     noTemplateEvents.push(e);
                 }
@@ -186,36 +186,36 @@ export class Event extends AccessEasySyncModel {
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["repeatedEvent"] = {
-            target: "RepeatedEvent",
-            type: "many-to-one",
+        relations['repeatedEvent'] = {
+            target: 'RepeatedEvent',
+            type: 'many-to-one',
             nullable: true,
             joinColumn: true,
-            inverseSide: "events"
+            inverseSide: 'events',
         };
-        relations["organisers"] = {
+        relations['organisers'] = {
             target: Church.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "churchEvent"
+                name: 'churchEvent',
             },
         };
-        relations["regions"] = {
+        relations['regions'] = {
             target: Region.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "eventRegion"
+                name: 'eventRegion',
             },
             // inverseSide: "events",
-            sync: true
+            sync: true,
         };
-        relations["images"] = {
+        relations['images'] = {
             target: FileMedium.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "eventImages"
+                name: 'eventImages',
             },
-            sync: true
+            sync: true,
         };
         return relations;
     }
@@ -228,7 +228,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setNames(value: {}) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && JsonHelper.deepEqual(this.repeatedEvent.getNames(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            JsonHelper.deepEqual(this.repeatedEvent.getNames(), value)
+        ) {
             this.names = null;
         } else {
             this.names = value;
@@ -243,7 +247,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setDescriptions(value: {}) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && JsonHelper.deepEqual(this.repeatedEvent.getDescriptions(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            JsonHelper.deepEqual(this.repeatedEvent.getDescriptions(), value)
+        ) {
             this.descriptions = null;
         } else {
             this.descriptions = value;
@@ -258,7 +266,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setStartTime(value: Date) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && JsonHelper.deepEqual(this.repeatedEvent.getStartTime(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            JsonHelper.deepEqual(this.repeatedEvent.getStartTime(), value)
+        ) {
             this.startTime = null;
         } else {
             this.startTime = value;
@@ -273,7 +285,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setEndTime(value: Date) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && JsonHelper.deepEqual(this.repeatedEvent.getEndTime(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            JsonHelper.deepEqual(this.repeatedEvent.getEndTime(), value)
+        ) {
             this.endTime = null;
         } else {
             this.endTime = value;
@@ -303,7 +319,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setImages(value: any[]) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && JsonHelper.deepEqual(this.repeatedEvent.getImages(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            JsonHelper.deepEqual(this.repeatedEvent.getImages(), value)
+        ) {
             this.images = null;
         } else {
             this.images = value;
@@ -318,7 +338,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setOrganisers(value: any) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && BaseModel.equals(this.repeatedEvent.getOrganisers(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            BaseModel.equals(this.repeatedEvent.getOrganisers(), value)
+        ) {
             this.organisers = null;
         } else {
             this.organisers = value;
@@ -333,7 +357,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setPlaces(value: any[]) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && JsonHelper.deepEqual(this.repeatedEvent.getPlaces(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            JsonHelper.deepEqual(this.repeatedEvent.getPlaces(), value)
+        ) {
             this.places = null;
         } else {
             this.places = value;
@@ -348,7 +376,11 @@ export class Event extends AccessEasySyncModel {
     }
 
     setRegions(value: any) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && BaseModel.equals(this.repeatedEvent.getRegions(), value)) {
+        if (
+            !this.getIsTemplate() &&
+            Helper.isNotNull(this.repeatedEvent) &&
+            BaseModel.equals(this.repeatedEvent.getRegions(), value)
+        ) {
             this.regions = null;
         } else {
             this.regions = value;
@@ -364,5 +396,5 @@ export class Event extends AccessEasySyncModel {
     }
 }
 
-Event.ACCESS_MODIFY = "admin";
-Event.SCHEMA_NAME = "Event";
+Event.ACCESS_MODIFY = 'admin';
+Event.SCHEMA_NAME = 'Event';

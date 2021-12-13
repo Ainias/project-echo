@@ -1,15 +1,16 @@
-@import "settings";
+@import 'settings';
 
 * {
   //transition: background-color .25s ease-out, color .25s ease-out;
-  transition: .25s ease-out, color .25s ease-out;
+  transition: 0.25s ease-out, color 0.25s ease-out;
 }
 
 @mixin defineTheme($theme) {
   background: map-get($theme, background);
   color: map-get($theme, textColor);
 
-  a.link, a {
+  a.link,
+  a {
     text-decoration: none;
     color: map-get($theme, highlight);
     border-bottom: map-get($theme, linkBorderBottom);
@@ -38,18 +39,22 @@
       }
     }
 
-    .menu-icon::after, .menu-icon:hover::after {
+    .menu-icon::after,
+    .menu-icon:hover::after {
       background: map-get($theme, navBarTextColor);
       box-shadow: 0 7px 0 map-get($theme, navBarTextColor), 0 14px 0 map-get($theme, navBarTextColor);
     }
-
   }
-  button.button, a.button {
+  button.button,
+  a.button {
     background-color: map-get($theme, themeColor);
     border: map-get($theme, buttonBorder);
     color: map-get($theme, buttonColor);
 
-    &.disabled, &.disabled:hover, &.disabled:focus, &:hover {
+    &.disabled,
+    &.disabled:hover,
+    &.disabled:focus,
+    &:hover {
       background-color: map-get($theme, themeColor);
     }
   }
@@ -71,18 +76,36 @@
   }
 
   svg {
-    .fill-color, &.fill-color {
+    .fill-color,
+    &.fill-color {
       fill: currentColor;
     }
 
-    .fill-background, &.fill-background {
+    .fill-background,
+    &.fill-background {
       fill: #{map-get($theme, background)};
     }
   }
 
   //Forms
   label {
-    [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea, input[type=text], input:not([type]) {
+    [type='text'],
+    [type='password'],
+    [type='date'],
+    [type='datetime'],
+    [type='datetime-local'],
+    [type='month'],
+    [type='week'],
+    [type='email'],
+    [type='number'],
+    [type='search'],
+    [type='tel'],
+    [type='time'],
+    [type='url'],
+    [type='color'],
+    textarea,
+    input[type='text'],
+    input:not([type]) {
       border-bottom: solid #{map-get($theme, textColor)};
       background: #{map-get($theme, background)};
       color: #{map-get($theme, textColor)};
@@ -91,23 +114,24 @@
         border-bottom: solid #{map-get($theme, textColor)};
       }
 
-      &:focus, &.notEmpty:not(:focus) {
+      &:focus,
+      &.notEmpty:not(:focus) {
         ~ span {
           color: #{map-get($theme, textColor)};
         }
       }
 
       ~ span {
-        color: #{adjust_color( map-get($theme, textColor), $alpha: -0.35)};
+        color: #{adjust_color(map-get($theme, textColor), $alpha: -0.35)};
       }
     }
 
     textarea {
-      box-shadow: 0 0 3px 2px hsla(0, 0%, 53%, .31) !important;
+      box-shadow: 0 0 3px 2px hsla(0, 0%, 53%, 0.31) !important;
     }
   }
   input.notEmpty:invalid {
-    background-color: #{adjust_color( map-get($theme, themeColor), $alpha: -0.35)};
+    background-color: #{adjust_color(map-get($theme, themeColor), $alpha: -0.35)};
   }
 
   .footer {
@@ -119,18 +143,20 @@
       border-top: 1px solid map-get($theme, colorOne);
     }
   }
-  .place, .alphabet-scroll-to, .faded-text {
+  .place,
+  .alphabet-scroll-to,
+  .faded-text {
     color: map-get($theme, textColorOne);
   }
 }
 
 body {
   @each $theme, $values in $themes {
-    @if (map-get($values, class) == "") {
-      @include defineTheme($values)
+    @if (map-get($values, class) == '') {
+      @include defineTheme($values);
     } @else {
       &.#{map-get($values, class)} {
-        @include defineTheme($values)
+        @include defineTheme($values);
       }
     }
   }
@@ -235,4 +261,3 @@ body {
     }
   }
 }
-

@@ -1,23 +1,23 @@
-import view from "../../html/Sites/showFsjChurchSite.html"
-import {Helper, Toast, Translator} from "cordova-sites";
-import {Church} from "../../../shared/model/Church";
-import {AbsoluteBarMenuSite} from "./AbsoluteBarMenuSite";
-import {UserManager} from "cordova-sites-user-management/dist/client/js/UserManager";
+import view from '../../html/Sites/showFsjChurchSite.html';
+import { Helper, Toast, Translator } from 'cordova-sites';
+import { Church } from '../../../shared/model/Church';
+import { AbsoluteBarMenuSite } from './AbsoluteBarMenuSite';
+import { UserManager } from 'cordova-sites-user-management/dist/client/js/UserManager';
 
 export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this.footerFragment.setSelected(".icon.home");
+        this.footerFragment.setSelected('.icon.home');
     }
 
     /**
      * @param {FsjChurchBaseObject} elem
      */
-    setElement(elem){
+    setElement(elem) {
         this._element = elem;
 
         if (Helper.isNull(this._element)) {
-            new Toast("no element found").show();
+            new Toast('no element found').show();
             this.finish();
             return;
         }
@@ -32,13 +32,13 @@ export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
     async onConstruct(constructParameters) {
         let res = super.onConstruct(constructParameters);
 
-        if (Helper.isNull(constructParameters) || Helper.isNull(constructParameters["id"])) {
-            new Toast("no id given").show();
+        if (Helper.isNull(constructParameters) || Helper.isNull(constructParameters['id'])) {
+            new Toast('no id given').show();
             this.finish();
             return;
         }
 
-        let elem = await this._loadElem(parseInt(constructParameters["id"]));
+        let elem = await this._loadElem(parseInt(constructParameters['id']));
         this.setElement(elem);
 
         return res;
@@ -51,41 +51,44 @@ export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
         translator.addDynamicTranslations(this._element.getDynamicTranslations());
 
         //name
-        this.findBy("#name").appendChild(translator.makePersistentTranslation(this._element.getNameTranslation(), true));
+        this.findBy('#name').appendChild(
+            translator.makePersistentTranslation(this._element.getNameTranslation(), true)
+        );
 
         //description
-        this.findBy("#description").appendChild(translator.makePersistentTranslation(this._element.getDescriptionTranslation()));
+        this.findBy('#description').appendChild(
+            translator.makePersistentTranslation(this._element.getDescriptionTranslation())
+        );
 
         //link
-        let link = this.findBy("#website");
+        let link = this.findBy('#website');
 
         let href = this._element.website;
-        if (!href.startsWith("http") && !href.startsWith("//")) {
-            href = "https://" + href;
+        if (!href.startsWith('http') && !href.startsWith('//')) {
+            href = 'https://' + href;
         }
         link.href = href;
         link.appendChild(document.createTextNode(this._element.website));
 
-
         UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
             if (loggedIn && manager.hasAccess(Church.ACCESS_MODIFY)) {
-                this.findBy(".admin-panel").classList.remove("hidden");
+                this.findBy('.admin-panel').classList.remove('hidden');
             } else {
-                this.findBy(".admin-panel").classList.add("hidden");
+                this.findBy('.admin-panel').classList.add('hidden');
             }
         }, true);
 
-        this.findBy("#delete-elem").addEventListener("click", async () => {
-                this._deleteElem();
+        this.findBy('#delete-elem').addEventListener('click', async () => {
+            this._deleteElem();
             // if (UserManager.getInstance().hasAccess(Church.ACCESS_MODIFY)) {
-                // if (await new ConfirmDialog("möchtest du die Kirche wirklich löschen? Sie wird unwiederbringlich verloren gehen!", "Kirche löschen?").show()) {
-                //     await this._element.delete();
-                //     new Toast("Kirche wurde erfolgreich gelöscht").show();
-                //     this.finish();
-                // }
+            // if (await new ConfirmDialog("möchtest du die Kirche wirklich löschen? Sie wird unwiederbringlich verloren gehen!", "Kirche löschen?").show()) {
+            //     await this._element.delete();
+            //     new Toast("Kirche wurde erfolgreich gelöscht").show();
+            //     this.finish();
+            // }
             // }
         });
-        this.findBy("#modify-elem").addEventListener("click", async () => {
+        this.findBy('#modify-elem').addEventListener('click', async () => {
             this._modifyElem();
             // if (UserManager.getInstance().hasAccess(Church.ACCESS_MODIFY)) {
             //     this.finishAndStartSite(ModifyChurchSite, {id: this._element.id});
@@ -96,14 +99,14 @@ export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
     }
 
     async _loadElem(number) {
-        throw new Error("needs to be overriden! - loadElem")
+        throw new Error('needs to be overriden! - loadElem');
     }
 
     _deleteElem() {
-        throw new Error("needs to be overriden! - deleteElem")
+        throw new Error('needs to be overriden! - deleteElem');
     }
 
     _modifyElem() {
-        throw new Error("needs to be overriden! - modifyElem")
+        throw new Error('needs to be overriden! - modifyElem');
     }
 }

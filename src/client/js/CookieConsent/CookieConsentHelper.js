@@ -1,37 +1,38 @@
-import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
-import {NecessaryNativeStoragePromise} from "./NecessaryNativeStoragePromise";
-import {CookieDialog} from "./CookieDialog";
+import { NativeStoragePromise } from 'cordova-sites/dist/client/js/NativeStoragePromise';
+import { NecessaryNativeStoragePromise } from './NecessaryNativeStoragePromise';
+import { CookieDialog } from './CookieDialog';
 
 export class CookieConsentHelper {
     static async giveConsentToCookies(consent) {
-        await NecessaryNativeStoragePromise.setItem(CookieConsentHelper.consentKey, JSON.stringify(consent)).catch(e => console.error(e));
-        if (consent.indexOf("functional") !== -1) {
-            await  NativeStoragePromise.makePersistent();
-        }
-        else {
+        await NecessaryNativeStoragePromise.setItem(CookieConsentHelper.consentKey, JSON.stringify(consent)).catch(
+            (e) => console.error(e)
+        );
+        if (consent.indexOf('functional') !== -1) {
+            await NativeStoragePromise.makePersistent();
+        } else {
             await NativeStoragePromise.makeUnpersistent();
         }
     }
 
-    static async mustAskForConsent(){
-        return (await NecessaryNativeStoragePromise.getItem(CookieConsentHelper.consentKey, null) === null);
+    static async mustAskForConsent() {
+        return (await NecessaryNativeStoragePromise.getItem(CookieConsentHelper.consentKey, null)) === null;
     }
 
     static async getConsent() {
         // if (device.platform !== "browser"){
         //     return ["functional", "statistic", "thirdParty"]
         // }
-        return JSON.parse(await NecessaryNativeStoragePromise.getItem(CookieConsentHelper.consentKey, "[]"));
+        return JSON.parse(await NecessaryNativeStoragePromise.getItem(CookieConsentHelper.consentKey, '[]'));
     }
 
-    static async hasConsent(consent){
+    static async hasConsent(consent) {
         let consents = await this.getConsent();
         return consents.indexOf(consent) !== -1;
     }
 
-    static async addConsent(consent){
+    static async addConsent(consent) {
         let consents = await this.getConsent();
-        if (consents.indexOf(consent) === -1){
+        if (consents.indexOf(consent) === -1) {
             consents.push(consent);
             this.giveConsentToCookies(consents);
         }
@@ -48,4 +49,4 @@ export class CookieConsentHelper {
     }
 }
 
-CookieConsentHelper.consentKey = "cookieConsent";
+CookieConsentHelper.consentKey = 'cookieConsent';

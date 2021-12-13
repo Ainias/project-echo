@@ -1,55 +1,54 @@
-import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
-import {BaseDatabase} from "cordova-sites-database/dist/BaseDatabase";
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared/EasySyncBaseModel";
-import {RepeatedEvent} from "./RepeatedEvent";
-import {Event} from "./Event";
+import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel';
+import { BaseDatabase } from 'cordova-sites-database/dist/BaseDatabase';
+import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared/EasySyncBaseModel';
+import { RepeatedEvent } from './RepeatedEvent';
+import { Event } from './Event';
 
-export class BlockedDay extends AccessEasySyncModel{
-
+export class BlockedDay extends AccessEasySyncModel {
     private day: Date;
     private repeatedEvent: RepeatedEvent;
     private event: Event;
 
-    getEvent(){
+    getEvent() {
         return this.event;
     }
-    setEvent(event:Event){
+    setEvent(event: Event) {
         this.event = event;
     }
 
-    getRepeatedEvent(){
+    getRepeatedEvent() {
         return this.repeatedEvent;
     }
 
-    setRepeatedEvent(repeatedEvent:RepeatedEvent){
+    setRepeatedEvent(repeatedEvent: RepeatedEvent) {
         this.repeatedEvent = repeatedEvent;
     }
 
-    getDay(){
+    getDay() {
         return this.day;
     }
-    setDay(day: Date){
+    setDay(day: Date) {
         this.day = day;
     }
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["day"] = BaseDatabase.TYPES.DATE;
+        columns['day'] = BaseDatabase.TYPES.DATE;
         return columns;
     }
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["repeatedEvent"] = {
+        relations['repeatedEvent'] = {
             target: RepeatedEvent.getSchemaName(),
-            type: "many-to-one",
-            inverseSide: "blockedDays",
+            type: 'many-to-one',
+            inverseSide: 'blockedDays',
             joinColumn: true,
             sync: true,
         };
-        relations["event"] = {
+        relations['event'] = {
             target: Event.getSchemaName(),
-            type: "one-to-one",
+            type: 'one-to-one',
             joinColumn: true,
             sync: true,
         };
@@ -57,5 +56,5 @@ export class BlockedDay extends AccessEasySyncModel{
     }
 }
 
-BlockedDay.ACCESS_MODIFY = "events";
+BlockedDay.ACCESS_MODIFY = 'events';
 BaseDatabase.addModel(BlockedDay);

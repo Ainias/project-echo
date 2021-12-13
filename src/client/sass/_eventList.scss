@@ -13,11 +13,12 @@
       margin-right: 1rem;
     }
 
-    .column-name{
+    .column-name {
       overflow: hidden;
     }
 
-    .time, .name {
+    .time,
+    .name {
       font-size: 1.33em;
       display: block;
       @include breakpoint(small down) {
@@ -34,7 +35,8 @@
       > .flex-container {
         display: block;
 
-        .name, .tag-panel {
+        .name,
+        .tag-panel {
           display: block;
           width: 100%;
           padding-left: 0;

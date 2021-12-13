@@ -1,11 +1,11 @@
 .podcast-info {
   .podcast-image-container {
     width: 5rem;
+    margin: 0.2rem 0.5rem 0.2rem 0.2rem;
   }
 }
 
 #podcast-details {
-
   .admin-panel {
     float: initial;
     text-align: right;
@@ -27,7 +27,8 @@
     margin-bottom: 0;
   }
 
-  .release-circle, .duration {
+  .release-circle,
+  .duration {
     //font-size: small;
     color: $greyColor;
     display: inline-block;

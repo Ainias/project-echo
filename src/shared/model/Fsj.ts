@@ -1,6 +1,6 @@
-import {BaseDatabase} from "cordova-sites-database";
-import {FsjChurchBaseObject} from "./FsjChurchBaseObject";
-import { FileMedium, EasySyncBaseModel } from "cordova-sites-easy-sync/dist/shared";
+import { BaseDatabase } from 'cordova-sites-database';
+import { FsjChurchBaseObject } from './FsjChurchBaseObject';
+import { FileMedium, EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared';
 
 export class Fsj extends FsjChurchBaseObject {
     constructor() {
@@ -9,18 +9,18 @@ export class Fsj extends FsjChurchBaseObject {
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["images"] = {
+        relations['images'] = {
             target: FileMedium.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "fsjImages"
+                name: 'fsjImages',
             },
-            sync: true
+            sync: true,
         };
         return relations;
     }
 }
 
-Fsj.ACCESS_MODIFY = "fsjs";
-Fsj.SCHEMA_NAME = "Fsj";
+Fsj.ACCESS_MODIFY = 'fsjs';
+Fsj.SCHEMA_NAME = 'Fsj';
 BaseDatabase.addModel(Fsj);

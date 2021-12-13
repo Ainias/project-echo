@@ -1,14 +1,14 @@
 //#church-info-container{
-  .church-info{
-    cursor: pointer;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-top: 1px solid #f3f1f1;
-    .name {
-      margin-bottom: 0;
-    }
-    .place{
-      margin-bottom: 0.2rem;
-    }
+.church-info {
+  cursor: pointer;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 1px solid #f3f1f1;
+  .name {
+    margin-bottom: 0;
   }
+  .place {
+    margin-bottom: 0.2rem;
+  }
+}
 //}

@@ -1,4 +1,4 @@
-.setting-row:not(.hidden){
+.setting-row:not(.hidden) {
   line-height: 1;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
@@ -6,15 +6,13 @@
   cursor: pointer;
   background: rgba(195, 195, 195, 0.13);
   font-weight: initial;
-  input[type=checkbox]
-  {
+  input[type='checkbox'] {
     margin: 0;
   }
 }
 
-
-#time-before-setting-row{
-  select{
+#time-before-setting-row {
+  select {
     width: 5rem;
     padding-right: 0.5rem;
     margin: 0;
@@ -24,33 +22,32 @@
     display: inline-block;
     margin: 0;
   }
-  span{
+  span {
     position: relative;
     color: initial;
   }
 }
 
-
 .switch {
   position: relative;
   //display: inline-block;
 
-  @include breakpoint(small down){
+  @include breakpoint(small down) {
     //font-size: 0.6em;
   }
-  @include breakpoint(smedium down){
+  @include breakpoint(smedium down) {
     //font-size: 0.7em;
   }
 
   input {
     display: none;
-    &:checked + .slider{
+    &:checked + .slider {
       background-color: #000000;
-      &:before{
+      &:before {
         transform: translateX(1.5em);
       }
     }
-    &:focus + .slider{
+    &:focus + .slider {
       //box-shadow: 0 0 1px #2196F3;
     }
   }
@@ -62,26 +59,27 @@
     height: 1.5em;
     border-radius: 1.5em;
     background-color: #ccc;
-    transition: .4s;
+    transition: 0.4s;
     margin: 0;
     float: right;
-    &:before{
+    &:before {
       position: absolute;
-      content: "";
+      content: '';
       height: 1.1em;
       width: 1.1em;
       left: 0.15em;
       bottom: 0.15em;
       background-color: white;
-      transition: .4s;
+      transition: 0.4s;
       border-radius: 50%;
     }
   }
-  img, svg{
+  img,
+  svg {
     width: 1.4em;
     display: inline;
     vertical-align: initial;
-    path{
+    path {
       stroke-color: inherit;
     }
   }

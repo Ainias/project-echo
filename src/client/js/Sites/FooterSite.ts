@@ -1,15 +1,15 @@
-import {MatomoDelegateSite, TemplateSite} from "cordova-sites";
+import { MatomoDelegateSite, TemplateSite } from 'cordova-sites';
 
-const footerTemplate = require("../../html/Sites/footerSite.html");
-import {FooterFragment} from "../Fragments/FooterFragment";
+const footerTemplate = require('../../html/Sites/footerSite.html');
+import { FooterFragment } from '../Fragments/FooterFragment';
 
 export class FooterSite extends TemplateSite {
     private _footerFragment: FooterFragment;
 
     constructor(siteManager, view) {
-        super(siteManager, view, footerTemplate, "#site-content");
+        super(siteManager, view, footerTemplate, '#site-content');
         this._footerFragment = new FooterFragment(this);
-        this.addFragment("#footer-fragment", this._footerFragment);
+        this.addFragment('#footer-fragment', this._footerFragment);
         this.addDelegate(new MatomoDelegateSite(this));
     }
 

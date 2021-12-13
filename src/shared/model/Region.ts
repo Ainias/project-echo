@@ -1,8 +1,8 @@
-import {EasySyncBaseModel} from "cordova-sites-easy-sync/dist/shared";
-import {BaseDatabase} from "cordova-sites-database";
-import {Church} from "./Church";
-import {Event} from "./Event";
-import {AccessEasySyncModel} from "cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel";
+import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared';
+import { BaseDatabase } from 'cordova-sites-database';
+import { Church } from './Church';
+import { Event } from './Event';
+import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v1/model/AccessEasySyncModel';
 
 export class Region extends AccessEasySyncModel {
     private churches: Church[];
@@ -13,7 +13,7 @@ export class Region extends AccessEasySyncModel {
         super();
         this.name = null;
         this.churches = null;
-        this.events= null;
+        this.events = null;
     }
 
     getName() {
@@ -34,29 +34,29 @@ export class Region extends AccessEasySyncModel {
 
     static getColumnDefinitions() {
         let columns = super.getColumnDefinitions();
-        columns["name"] = {type: BaseDatabase.TYPES.STRING};
+        columns['name'] = { type: BaseDatabase.TYPES.STRING };
         return columns;
     }
 
     static getRelationDefinitions() {
         let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations["churches"] = {
+        relations['churches'] = {
             target: Church.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "churchRegion"
+                name: 'churchRegion',
             },
-            inverseSide: "regions",
+            inverseSide: 'regions',
             sync: false,
             // cascade: true
         };
-        relations["events"] = {
+        relations['events'] = {
             target: Event.getSchemaName(),
-            type: "many-to-many",
+            type: 'many-to-many',
             joinTable: {
-                name: "eventRegion"
+                name: 'eventRegion',
             },
-            inverseSide: "regions",
+            inverseSide: 'regions',
             // cascade: true
             sync: false,
         };
@@ -64,6 +64,6 @@ export class Region extends AccessEasySyncModel {
         return relations;
     }
 }
-Region.ACCESS_MODIFY = "events";
-Region.SCHEMA_NAME="Region";
+Region.ACCESS_MODIFY = 'events';
+Region.SCHEMA_NAME = 'Region';
 BaseDatabase.addModel(Region);

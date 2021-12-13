@@ -1,11 +1,11 @@
-import {AbstractFragment} from "cordova-sites/dist/client/js/Context/AbstractFragment";
-import {SystemCalendar} from "../../SystemCalendar";
-import {ChooseDialog} from "cordova-sites/dist/client/js/Dialog/ChooseDialog";
+import { AbstractFragment } from 'cordova-sites/dist/client/js/Context/AbstractFragment';
+import { SystemCalendar } from '../../SystemCalendar';
+import { ChooseDialog } from 'cordova-sites/dist/client/js/Dialog/ChooseDialog';
 
-const view = require("../../../html/Fragments/Settings/systemCalendarSettingsFragment.html");
+const view = require('../../../html/Fragments/Settings/systemCalendarSettingsFragment.html');
 
-import {NativeStoragePromise} from "cordova-sites/dist/client/js/NativeStoragePromise";
-import {Helper} from "js-helper/dist/shared";
+import { NativeStoragePromise } from 'cordova-sites/dist/client/js/NativeStoragePromise';
+import { Helper } from 'js-helper/dist/shared';
 
 export class SystemCalendarSettingsFragment extends AbstractFragment {
     private insertFavoritesCheckbox: HTMLInputElement;
@@ -17,43 +17,43 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
     async onViewLoaded() {
         let res = super.onViewLoaded();
 
-        let currentName = (await SystemCalendar.getSelectedCalendar())?.name
+        let currentName = (await SystemCalendar.getSelectedCalendar())?.name;
         if (Helper.isNull(currentName)) {
-            currentName = "";
+            currentName = '';
         }
-        this.findBy("#system-calendar").innerText = currentName;
+        this.findBy('#system-calendar').innerText = currentName;
 
-        const systemCalendarLine = this.findBy("#system-calendar-line");
-        systemCalendarLine.addEventListener("click", async () => {
+        const systemCalendarLine = this.findBy('#system-calendar-line');
+        systemCalendarLine.addEventListener('click', async () => {
             currentName = await this.selectNewCalendar();
         });
 
-        let insertFavorites = await NativeStoragePromise.getItem("insert-favorites", "1");
+        let insertFavorites = await NativeStoragePromise.getItem('insert-favorites', '1');
 
-        this.insertFavoritesCheckbox = this.findBy("#insert-favorites");
-        this.insertFavoritesCheckbox.addEventListener("change", async () => {
+        this.insertFavoritesCheckbox = this.findBy('#insert-favorites');
+        this.insertFavoritesCheckbox.addEventListener('change', async () => {
             if (this.insertFavoritesCheckbox.checked) {
-                systemCalendarLine.classList.remove("hidden");
-                await NativeStoragePromise.setItem("insert-favorites", "1");
+                systemCalendarLine.classList.remove('hidden');
+                await NativeStoragePromise.setItem('insert-favorites', '1');
 
-                if (currentName === "") {
+                if (currentName === '') {
                     currentName = await this.selectNewCalendar();
-                    if (!await SystemCalendar.hasCalendarPermission()) {
-                        await NativeStoragePromise.setItem("insert-favorites", "0");
-                        systemCalendarLine.classList.add("hidden");
+                    if (!(await SystemCalendar.hasCalendarPermission())) {
+                        await NativeStoragePromise.setItem('insert-favorites', '0');
+                        systemCalendarLine.classList.add('hidden');
                         this.insertFavoritesCheckbox.checked = false;
                     }
                 }
                 // await EventHelper.updateNotificationsForFavorites();
             } else {
-                systemCalendarLine.classList.add("hidden");
-                await NativeStoragePromise.setItem("insert-favorites", "0");
+                systemCalendarLine.classList.add('hidden');
+                await NativeStoragePromise.setItem('insert-favorites', '0');
                 // await NotificationScheduler.getInstance().cancelAllNotifications();
             }
         });
-        if (insertFavorites === "0" || !await SystemCalendar.hasCalendarPermission()) {
+        if (insertFavorites === '0' || !(await SystemCalendar.hasCalendarPermission())) {
             this.insertFavoritesCheckbox.checked = false;
-            systemCalendarLine.classList.add("hidden");
+            systemCalendarLine.classList.add('hidden');
         }
 
         return res;
@@ -63,20 +63,24 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
         this.getSite().showLoadingSymbol();
 
         let calendarOptions = await this.getCalendarOptions();
-        if (!await SystemCalendar.hasCalendarPermission()){
+        if (!(await SystemCalendar.hasCalendarPermission())) {
             this.getSite().removeLoadingSymbol();
-            return "";
+            return '';
         }
 
-        let selectedCalendar: number = await (new ChooseDialog(calendarOptions, "select-calendar", false).show()) as number;
+        let selectedCalendar: number = (await new ChooseDialog(
+            calendarOptions,
+            'select-calendar',
+            false
+        ).show()) as number;
 
         this.getSite().removeLoadingSymbol();
         if (selectedCalendar) {
-            this.findBy("#system-calendar").innerText = calendarOptions[selectedCalendar];
+            this.findBy('#system-calendar').innerText = calendarOptions[selectedCalendar];
             await NativeStoragePromise.setItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY, selectedCalendar);
             return calendarOptions[selectedCalendar];
         }
-        return "";
+        return '';
     }
 
     async getCalendarOptions() {
@@ -84,7 +88,7 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
         let calendarOptions = {};
 
         let addOwnCalendar = true;
-        calendars.forEach(cal => {
+        calendars.forEach((cal) => {
             calendarOptions[cal.id] = cal.name;
             if (cal.name === SystemCalendar.NAME) {
                 addOwnCalendar = false;

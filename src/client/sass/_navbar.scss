@@ -1,5 +1,5 @@
-@import "../../../node_modules/foundation-sites/scss/foundation";
-@import "settings";
+@import '../../../node_modules/foundation-sites/scss/foundation';
+@import 'settings';
 
 #navbar-fragment {
   .grid-container {
@@ -9,15 +9,14 @@
   }
 
   .top-bar {
-
-    &.with-image{
+    &.with-image {
       margin-bottom: 1rem;
     }
 
     #responsive-menu-toggle {
       z-index: 10000;
     }
-    img.background-img{
+    img.background-img {
       max-height: 100vh;
       //max-width: 100%;
       object-fit: cover;
@@ -25,15 +24,15 @@
 
     li {
       a {
-        @include breakpoint(medium down){
+        @include breakpoint(medium down) {
           padding-left: 1rem;
-          padding-right: 1rem
+          padding-right: 1rem;
         }
       }
     }
 
-    .language-action{
-      a{
+    .language-action {
+      a {
         padding-top: 0.15rem;
         padding-bottom: 0;
       }
@@ -43,7 +42,7 @@
 
 nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
   //background: green !important;
-  .language-action-mobile{
+  .language-action-mobile {
     img {
       display: inline-block;
     }
@@ -59,7 +58,7 @@ nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
   &.hidden-menu {
     top: 1.6rem;
     @include breakpoint(medium down) {
-      top: 2.6rem
+      top: 2.6rem;
     }
     bottom: 0;
     border-top-left-radius: 15px;
@@ -70,14 +69,15 @@ nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
     }
   }
 
-  .menu, &.menu {
+  .menu,
+  &.menu {
     li {
       z-index: 100;
 
       a {
         @each $breakpoint, $value in $margins {
           @include breakpoint($breakpoint) {
-            padding-left: 2*$value;
+            padding-left: 2 * $value;
           }
         }
       }
@@ -92,7 +92,7 @@ nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
         a {
           @each $breakpoint, $value in $margins {
             @include breakpoint($breakpoint) {
-              padding-right: 2*$value;
+              padding-right: 2 * $value;
             }
           }
         }
@@ -107,7 +107,6 @@ nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
           max-height: 1.8rem;
         }
       }
-
     }
 
     > li > ul.is-dropdown-submenu {
@@ -128,7 +127,6 @@ nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
   }
 }
 
-
 .absolute-menu-site #navbar-fragment {
   position: absolute;
   width: 100%;
@@ -141,7 +139,8 @@ nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
     color: inherit !important;
     background-color: initial;
 
-    .menu-icon::after, .menu-icon:hover::after {
+    .menu-icon::after,
+    .menu-icon:hover::after {
       background: white;
       box-shadow: 0 7px 0 white, 0 14px 0 white;
     }
@@ -152,7 +151,7 @@ nav.top-bar > span #responsive-menu .navbar-menu.hidden-menu {
 
     .navbar-menu.hidden-menu {
       border-color: #3b3b3b;
-    } ;
+    }
 
     ul {
       background-color: #3b3b3b !important;

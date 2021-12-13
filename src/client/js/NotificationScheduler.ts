@@ -1,15 +1,13 @@
-import {Singleton} from "cordova-sites/dist/client/js/Singleton";
-import {App} from "cordova-sites/dist/client/js/App";
-import {EventSite} from "./Sites/EventSite";
-import {Favorite} from "./Model/Favorite";
+import { Singleton } from 'cordova-sites/dist/client/js/Singleton';
+import { App } from 'cordova-sites/dist/client/js/App';
+import { EventSite } from './Sites/EventSite';
 
 declare var cordova;
 declare var device;
 
 export class NotificationScheduler extends Singleton {
-
     _canNotify() {
-        return (typeof device === "undefined" || device.platform !== "browser");
+        return typeof device === 'undefined' || device.platform !== 'browser';
     }
 
     async hasPermission() {
@@ -18,7 +16,7 @@ export class NotificationScheduler extends Singleton {
         }
 
         return new Promise((resolve) => {
-            cordova.plugins.notification.local.hasPermission(granted => resolve(granted));
+            cordova.plugins.notification.local.hasPermission((granted) => resolve(granted));
         });
     }
 
@@ -27,9 +25,9 @@ export class NotificationScheduler extends Singleton {
             return;
         }
 
-        if (!await this.hasPermission()) {
+        if (!(await this.hasPermission())) {
             return new Promise((resolve) => {
-                cordova.plugins.notification.local.requestPermission(granted => resolve(granted));
+                cordova.plugins.notification.local.requestPermission((granted) => resolve(granted));
             });
         }
         return true;
@@ -40,7 +38,7 @@ export class NotificationScheduler extends Singleton {
             return;
         }
 
-        if (!await this.hasPermission() && !await this.requestPermission()) {
+        if (!(await this.hasPermission()) && !(await this.requestPermission())) {
             return;
         }
 
@@ -49,14 +47,17 @@ export class NotificationScheduler extends Singleton {
             at.setTime(now.getTime() + 1000 * 60);
         }
 
-        return new Promise(resolve => {
-            cordova.plugins.notification.local.schedule({
-                id: id,
-                title: title,
-                text: text,
-                trigger: {at: at},
-                data: eventId
-            }, resolve);
+        return new Promise((resolve) => {
+            cordova.plugins.notification.local.schedule(
+                {
+                    id: id,
+                    title: title,
+                    text: text,
+                    trigger: { at: at },
+                    data: eventId,
+                },
+                resolve
+            );
         });
     }
 
@@ -64,7 +65,7 @@ export class NotificationScheduler extends Singleton {
         if (!this._canNotify()) {
             return;
         }
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             cordova.plugins.notification.local.cancelAll(resolve);
         });
     }
@@ -73,20 +74,20 @@ export class NotificationScheduler extends Singleton {
         if (!this._canNotify()) {
             return;
         }
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             cordova.plugins.notification.local.cancel(id, resolve);
         });
-    };
+    }
 
     async _handleClick(app) {
         if (!this._canNotify()) {
             return;
         }
 
-        cordova.plugins.notification.local.on("click", e => {
-            app.startSite(EventSite, {"id": e.data});
-            App.setStartParam("s", "event");
-            App.setStartParam("id", e.data);
+        cordova.plugins.notification.local.on('click', (e) => {
+            app.startSite(EventSite, { id: e.data });
+            App.setStartParam('s', 'event');
+            App.setStartParam('id', e.data);
         });
     }
 }

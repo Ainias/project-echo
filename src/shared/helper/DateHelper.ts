@@ -1,7 +1,6 @@
-import {Helper, DateHelper as OriginalDateHelper} from "js-helper";
+import { Helper, DateHelper as OriginalDateHelper } from 'js-helper';
 
-export class DateHelper extends OriginalDateHelper{
-
+export class DateHelper extends OriginalDateHelper {
     static setMonth(newMonth, day, date?) {
         if (Helper.isNull(date) && day instanceof Date) {
             date = day;
@@ -12,7 +11,7 @@ export class DateHelper extends OriginalDateHelper{
         date.setDate(1);
         date.setMonth(newMonth);
 
-        if (day !== undefined){
+        if (day !== undefined) {
             currentDayOfMonth = day;
         }
 
@@ -28,7 +27,7 @@ export class DateHelper extends OriginalDateHelper{
 
     static getNumberDaysOfMonth(date) {
         if (!(date instanceof Date)) {
-            if (typeof date === "number" && date <= 11) {
+            if (typeof date === 'number' && date <= 11) {
                 date = new Date();
                 date.setMonth(date, 1);
             } else {

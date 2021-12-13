@@ -15,17 +15,17 @@
     white-space: initial;
   }
 
-  .non-third-party-cookies-accepted-message{
+  .non-third-party-cookies-accepted-message {
     padding: 2rem 0.7rem;
     text-align: center;
     color: black;
     border: 1px solid $greyColor;
     border-radius: 3px;
   }
-
 }
 
-.place-query, .place-name {
+.place-query,
+.place-name {
   &::placeholder {
     color: rgba(0, 0, 0, 0.65);
   }

@@ -1,151 +1,164 @@
-@import "foundationSettings";
+@import 'foundationSettings';
 
 $navColorBlack: #fff;
 $navBorderColorBlack: #1e1c1c;
 
-$navBackgroundWhite: linear-gradient(to bottom, #3B3B3B, #191919);
+$navBackgroundWhite: linear-gradient(to bottom, #3b3b3b, #191919);
 $navBackgroundDefault: $navBackgroundWhite;
 $navBackgroundBlack: $navBackgroundWhite;
 
 $navBackgroundWithImage: rgba(1, 1, 1, 0.5);
 
-$highlightColor: #D56B52;
+$highlightColor: #d56b52;
 $greyColor: #838383;
 
 $defaultThemeValues: (
-        class: "",
+  class: '',
   //themeColor: #383838,
-        themeColor: #ffffff,
-        lightThemeColor: #353535,
-        linkColor: #000,
-        spinnerColor: #000,
-        navBarTextColor: inherit,
-        textColor: #000,
-        textColor2: #555555,
-        lightLinkColor: #fff,
-        linkBorderBottom: none,
-        linkHoverColor: #4e4e4e,
-        lightLinkHoverColor: #cacaca,
-        background: #fff,
-        background-gradient: linear-gradient(#3b3b3b, #191919),
-        highlight: #D56B52,
-        textColorOne: $greyColor,
-        colorOne: #F3F1F1,
-        colorTwo: #3B3B3B,
-        colorThree: #FFF,
-        buttonBorder: none,
-        buttonColor: white,
+  themeColor: #ffffff,
+  lightThemeColor: #353535,
+  linkColor: #000,
+  spinnerColor: #000,
+  navBarTextColor: inherit,
+  textColor: #000,
+  textColor2: #555555,
+  lightLinkColor: #fff,
+  linkBorderBottom: none,
+  linkHoverColor: #4e4e4e,
+  lightLinkHoverColor: #cacaca,
+  background: #fff,
+  background-gradient: linear-gradient(#3b3b3b, #191919),
+  highlight: #d56b52,
+  textColorOne: $greyColor,
+  colorOne: #f3f1f1,
+  colorTwo: #3b3b3b,
+  colorThree: #fff,
+  buttonBorder: none,
+  buttonColor: white,
 );
 
 $themes: (
-        black:(
-                class: black,
-          //themeColor: #000000,
-                themeColor: #ffffff,
-                lightThemeColor: #353535,
-                linkColor: #000,
-                spinnerColor: #000,
-                navBarTextColor: inherit,
-                textColor: #000,
-                textColor2: #555555,
-                lightLinkColor: #fff,
-                linkBorderBottom: none,
-                linkHoverColor: #4e4e4e,
-                lightLinkHoverColor: #cacaca,
-                background: #fff,
-                background-gradient: linear-gradient(#3b3b3b, #191919),
-                highlight: #D56B52,
-                textColorOne: $greyColor,
-                colorOne: #F3F1F1,
-                colorTwo: #3B3B3B,
-                colorThree: #FFF,
-                buttonBorder: 1px solid black,
-                buttonColor: black,
-        ),
-        red:(
-                class: red,
-                themeColor: #ff0000,
-                lightThemeColor: #870015,
-                linkColor: #ff3d00,
-                spinnerColor: #b71c1a,
-                navBarTextColor: #fff,
-                textColor: #000,
-                textColor2: #555555,
-                lightLinkColor: #ff3d00,
-                linkBorderBottom: none,
-                linkHoverColor: #ff3d00,
-                lightLinkHoverColor: #ff3d00,
-                background: #fff
-        ),
-        blue:(
-                class: blue,
-                themeColor: #2c58ae,
-                lightThemeColor: #1a3062,
-                linkColor: #546cfe,
-                spinnerColor: #673AB7,
-                navBarTextColor: #fff,
-                textColor: #000,
-                textColor2: #555555,
-                lightLinkColor: #546cfe,
-                linkBorderBottom: none,
-                linkHoverColor: #546cfe,
-                lightLinkHoverColor: #546cfe,
-                background: #fff
-        ),
-        green:(
-                class: green,
-                themeColor: #008000,
-                lightThemeColor: #003613,
-                linkColor: #009829,
-                spinnerColor: #008000,
-                navBarTextColor: #fff,
-                textColor: #000,
-                textColor2: #555555,
-                lightLinkColor: #009829,
-                linkBorderBottom: none,
-                linkHoverColor: #009829,
-                lightLinkHoverColor: #009829,
-                background: #fff
-        ),
-        pink:(
-                class: pink,
-                themeColor: #ff69b4,
-                lightThemeColor: #70374a,
-                linkColor: #fe64af,
-                spinnerColor: #ff69b4,
-                navBarTextColor: #fff,
-                textColor: #000,
-                textColor2: #555555,
-                lightLinkColor: #fe64af,
-                linkBorderBottom: none,
-                linkHoverColor: #fe64af,
-                lightLinkHoverColor: #fe64af,
-                background: #fff
-        ),
-        dark: (
-                class: dark,
-                themeColor: #373737,
-                lightThemeColor: #4b4b4b,
-                linkColor: #fff,
-                spinnerColor: #ffffff,
-                navBarTextColor: #fff,
-                textColor: #ffffff,
-                textColor2: #9b9b9b,
-                lightLinkColor: #ffffff,
-                linkBorderBottom: 1px solid #ffffff,
-                linkHoverColor: #ffffff,
-                lightLinkHoverColor: #ffffff,
-                background: #000000
-        )
+  black: (
+    class: black,
+    //themeColor: #000000,
+    themeColor: #ffffff,
+    lightThemeColor: #353535,
+    linkColor: #000,
+    spinnerColor: #000,
+    navBarTextColor: inherit,
+    textColor: #000,
+    textColor2: #555555,
+    lightLinkColor: #fff,
+    linkBorderBottom: none,
+    linkHoverColor: #4e4e4e,
+    lightLinkHoverColor: #cacaca,
+    background: #fff,
+    background-gradient: linear-gradient(#3b3b3b, #191919),
+    highlight: #d56b52,
+    textColorOne: $greyColor,
+    colorOne: #f3f1f1,
+    colorTwo: #3b3b3b,
+    colorThree: #fff,
+    buttonBorder: 1px solid black,
+    buttonColor: black,
+  ),
+  red: (
+    class: red,
+    themeColor: #ff0000,
+    lightThemeColor: #870015,
+    linkColor: #ff3d00,
+    spinnerColor: #b71c1a,
+    navBarTextColor: #fff,
+    textColor: #000,
+    textColor2: #555555,
+    lightLinkColor: #ff3d00,
+    linkBorderBottom: none,
+    linkHoverColor: #ff3d00,
+    lightLinkHoverColor: #ff3d00,
+    background: #fff,
+  ),
+  blue: (
+    class: blue,
+    themeColor: #2c58ae,
+    lightThemeColor: #1a3062,
+    linkColor: #546cfe,
+    spinnerColor: #673ab7,
+    navBarTextColor: #fff,
+    textColor: #000,
+    textColor2: #555555,
+    lightLinkColor: #546cfe,
+    linkBorderBottom: none,
+    linkHoverColor: #546cfe,
+    lightLinkHoverColor: #546cfe,
+    background: #fff,
+  ),
+  green: (
+    class: green,
+    themeColor: #008000,
+    lightThemeColor: #003613,
+    linkColor: #009829,
+    spinnerColor: #008000,
+    navBarTextColor: #fff,
+    textColor: #000,
+    textColor2: #555555,
+    lightLinkColor: #009829,
+    linkBorderBottom: none,
+    linkHoverColor: #009829,
+    lightLinkHoverColor: #009829,
+    background: #fff,
+  ),
+  pink: (
+    class: pink,
+    themeColor: #ff69b4,
+    lightThemeColor: #70374a,
+    linkColor: #fe64af,
+    spinnerColor: #ff69b4,
+    navBarTextColor: #fff,
+    textColor: #000,
+    textColor2: #555555,
+    lightLinkColor: #fe64af,
+    linkBorderBottom: none,
+    linkHoverColor: #fe64af,
+    lightLinkHoverColor: #fe64af,
+    background: #fff,
+  ),
+  dark: (
+    class: dark,
+    themeColor: #373737,
+    lightThemeColor: #4b4b4b,
+    linkColor: #fff,
+    spinnerColor: #ffffff,
+    navBarTextColor: #fff,
+    textColor: #ffffff,
+    textColor2: #9b9b9b,
+    lightLinkColor: #ffffff,
+    linkBorderBottom: 1px solid #ffffff,
+    linkHoverColor: #ffffff,
+    lightLinkHoverColor: #ffffff,
+    background: #000000,
+  ),
 );
 
 @function recursive-map-merge($parent-map, $child-map) {
   $result: $parent-map;
   @each $key, $value in $child-map {
-    @if (not map-has-key($result, $key)) or (type-of(map-get($result, $key)) != type-of($value)) or (not (type-of(map-get($result, $key)) == map and type-of($value) == map)) {
-      $result: map-merge($result, ($key: $value));
+    @if (not map-has-key($result, $key)) or
+      (type-of(map-get($result, $key)) != type-of($value)) or
+      (not (type-of(map-get($result, $key)) == map and type-of($value) == map))
+    {
+      $result: map-merge(
+        $result,
+        (
+          $key: $value,
+        )
+      );
     } @else {
-      $result: map-merge($result, ($key: non-destructive-map-merge(map-get($result, $key), $value)));
+      $result: map-merge(
+        $result,
+        (
+          $key: non-destructive-map-merge(map-get($result, $key), $value),
+        )
+      );
     }
   }
   @return $result;
@@ -153,50 +166,55 @@ $themes: (
 
 @each $theme, $values in $themes {
   $themeMap: recursive-map-merge($defaultThemeValues, $values);
-  $themes: map-merge($themes, ($theme: $themeMap))
+  $themes: map-merge(
+    $themes,
+    (
+      $theme: $themeMap,
+    )
+  );
 }
 
 $breakpoints: (
-        small: 0,
-        smedium: 400px,
-        medium: 640px,
-        large: 1024px,
-        xlarge: 1200px,
-        xxlarge: 1440px,
+  small: 0,
+  smedium: 400px,
+  medium: 640px,
+  large: 1024px,
+  xlarge: 1200px,
+  xxlarge: 1440px,
 );
 
 $margins: (
-        small: 0.625rem,
+  small: 0.625rem,
   //smedium: 0.625rem,
-        medium: 0.9375rem,
+  medium: 0.9375rem,
   //large: 0.9375rem,
   //xlarge: 0.9375rem,
-  //xxlarge: 0.9375rem,
+  //xxlarge: 0.9375rem,,,
 );
 
 $widths: (
-        10:10%,
-        20:20%,
-        30:30%,
-        40:40%,
-        50:50%,
-        60:60%,
-        70:70%,
-        80:80%,
-        90:90%,
-        100:100%,
+  10: 10%,
+  20: 20%,
+  30: 30%,
+  40: 40%,
+  50: 50%,
+  60: 60%,
+  70: 70%,
+  80: 80%,
+  90: 90%,
+  100: 100%,
 );
 
 $marginClasses: (
-        0:0,
-        1:1rem,
-        2:2rem,
-        3:3rem,
-        4:4rem,
-        5:5rem,
-        6:6rem,
-        7:7rem,
-        8:8rem,
-        9:9rem,
-        10:10rem,
+  0: 0,
+  1: 1rem,
+  2: 2rem,
+  3: 3rem,
+  4: 4rem,
+  5: 5rem,
+  6: 6rem,
+  7: 7rem,
+  8: 8rem,
+  9: 9rem,
+  10: 10rem,
 );

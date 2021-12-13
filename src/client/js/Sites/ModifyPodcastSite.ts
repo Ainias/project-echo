@@ -1,17 +1,16 @@
-import {ModifyEntitySite} from "cordova-sites-easy-sync";
-import {Podcast} from "../../../shared/model/Podcast";
-import {UserSite} from "cordova-sites-user-management/dist/client/js/Context/UserSite";
-import {App, Helper} from "cordova-sites";
-import {FileMedium} from "cordova-sites-easy-sync/dist/shared";
-import {PodcastDetailSite} from "./PodcastDetailSite";
+import { ModifyEntitySite } from 'cordova-sites-easy-sync';
+import { Podcast } from '../../../shared/model/Podcast';
+import { UserSite } from 'cordova-sites-user-management/dist/client/js/Context/UserSite';
+import { App, Helper } from 'cordova-sites';
+import { FileMedium } from 'cordova-sites-easy-sync/dist/shared';
+import { PodcastDetailSite } from './PodcastDetailSite';
 
-const view = require("../../html/Sites/modifyPodcastSite.html");
+const view = require('../../html/Sites/modifyPodcastSite.html');
 
 export class ModifyPodcastSite extends ModifyEntitySite<Podcast> {
-
     constructor(siteManager: any) {
         super(siteManager, view, Podcast);
-        this.addDelegate(new UserSite(this, "podcasts", false));
+        this.addDelegate(new UserSite(this, 'podcasts', false));
     }
 
     async dehydrate(entity) {
@@ -20,33 +19,34 @@ export class ModifyPodcastSite extends ModifyEntitySite<Podcast> {
         const releaseCircles = entity.getReleaseCircles();
 
         return {
-            "title-de": titles.de,
-            "title-en": titles.en,
-            "description-de": descriptions.de,
-            "description-en": descriptions.en,
-            "releaseCircle-de": releaseCircles.de ? releaseCircles.de : "",
-            "releaseCircle-en": releaseCircles.en ? releaseCircles.en : "",
-            "spotifyLink": entity.getSpotifyLink(),
-            "youtubeLink": entity.getYoutubeLink(),
-            "duration": entity.getDuration(),
-            "image": entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl() : null,
-            "image-before": entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl() : null,
+            'title-de': titles.de,
+            'title-en': titles.en,
+            'description-de': descriptions.de,
+            'description-en': descriptions.en,
+            'releaseCircle-de': releaseCircles.de ? releaseCircles.de : '',
+            'releaseCircle-en': releaseCircles.en ? releaseCircles.en : '',
+            spotifyLink: entity.getSpotifyLink(),
+            youtubeLink: entity.getYoutubeLink(),
+            duration: entity.getDuration(),
+            image: entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl() : null,
+            'image-before': entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0].getUrl() : null,
         };
     }
 
     async hydrate(values, entity) {
-        entity.setTitles({"de": values["title-de"], "en": values["title-en"]});
-        entity.setDescriptions({"de": values["description-de"], "en": values["description-en"]});
-        entity.setReleaseCircles({"de": values["releaseCircle-de"], "en": values["releaseCircle-en"]});
-        entity.setSpotifyLink(values["spotifyLink"]);
-        entity.setYoutubeLink(values["youtubeLink"]);
-        entity.setDuration(parseInt(values["duration"]));
+        entity.setTitles({ de: values['title-de'], en: values['title-en'] });
+        entity.setDescriptions({ de: values['description-de'], en: values['description-en'] });
+        entity.setReleaseCircles({ de: values['releaseCircle-de'], en: values['releaseCircle-en'] });
+        entity.setSpotifyLink(values['spotifyLink']);
+        entity.setYoutubeLink(values['youtubeLink']);
+        entity.setDuration(parseInt(values['duration']));
 
-        let imageSrc = values["image"];
+        let imageSrc = values['image'];
         if (Helper.imageUrlIsEmpty(imageSrc)) {
-            imageSrc = values["image-before"];
+            imageSrc = values['image-before'];
         }
-        const image: FileMedium = entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0] : new FileMedium();
+        const image: FileMedium =
+            entity.getImages() && entity.getImages().length > 0 ? entity.getImages()[0] : new FileMedium();
         image.setSrc(imageSrc);
         await image.save();
 
@@ -56,10 +56,10 @@ export class ModifyPodcastSite extends ModifyEntitySite<Podcast> {
     }
 
     onSaved() {
-        this.finishAndStartSite(PodcastDetailSite, {"id": this.getEntity().getId()});
+        this.finishAndStartSite(PodcastDetailSite, { id: this.getEntity().getId() });
     }
 }
 
 App.addInitialization((app) => {
-    app.addDeepLink("modifyPodcast", ModifyPodcastSite);
+    app.addDeepLink('modifyPodcast', ModifyPodcastSite);
 });
