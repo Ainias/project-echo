@@ -1,8 +1,8 @@
 {
   "background_color": "#FFF",
   "display": "standalone",
-  "name": "Echo",
-  "short_name": "Echo",
+  "name": "Echo Test",
+  "short_name": "Echo Test",
   "version": "de.echoapp",
   "description": "Ein christlicher Terminkalender für Gemeinden rund un Köln.",
   "author": "Project Echo Team",

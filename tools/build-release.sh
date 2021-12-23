@@ -14,7 +14,10 @@ echo "copying signing..."
 cp tools/signing/echo.jks platforms/android/app/
 cp tools/signing/release-signing.properties platforms/android/app/
 
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk;
+export PATH=$JAVA_HOME/bin:$PATH;
 export ORG_GRADLE_PROJECT_cdvReleaseSigningPropertiesFile=release-signing.properties
+
 npm run "cordova release android"
 
 #cordova build android --release

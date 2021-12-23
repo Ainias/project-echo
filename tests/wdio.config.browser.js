@@ -80,8 +80,8 @@ exports.config = {
 
     // Where the files we are testing can be found.
     specs: [
-        // './tests/specs/shared/*.js',
-        // './tests/specs/web/*.js',
+        './tests/specs/shared/*.js',
+        './tests/specs/web/*.js',
 
         // './tests/specs/**/editChurch.js',
         // './tests/specs/**/editEvent.js',
@@ -90,7 +90,7 @@ exports.config = {
         // './tests/specs/**/podcast.js',
         // './tests/specs/**/favoriteSite.js',
         // './tests/specs/**/favoriteSite2.js',
-        './tests/specs/**/calendarSite.js',
+        // './tests/specs/**/calendarSite.js',
         // './tests/specs/**/churchSite.js',
         // './tests/specs/**/eventSite.js',
         // './tests/specs/**/listChurch.js',
