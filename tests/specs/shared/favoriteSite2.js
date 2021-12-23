@@ -54,10 +54,11 @@ describe('favorite site 2', () => {
         await functions.pause(1000);
         await $('.favorite').click();
         await functions.acceptAlert();
-        await functions.acceptAlert();
+        //await functions.acceptAlert();
         await functions.pause(1000);
 
         await functions.acceptInsertFavorites();
+        await functions.acceptAlert();
 
         expect(await $('.favorite.is-favorite').isExisting()).toBeTruthy();
         await $('.footer .icon.favorites').click();

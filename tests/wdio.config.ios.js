@@ -1,5 +1,5 @@
 const Service = require("./setup");
-
+const path = require("path");
 const now = new Date();
 
 exports.config = {
@@ -12,14 +12,15 @@ exports.config = {
 
     // Where the files we are testing can be found.
      specs: [
-         './tests/specs/mobile/*.js',
-         './tests/specs/shared/*.js',
+         //'./tests/specs/mobile/*.js',
+         //'./tests/specs/shared/*.js',
 
-         // './tests/specs/**/settingsSite.js',
+         // './tests/specs/**/favoriteSite2.js',
+          './tests/specs/**/settingsSite.js',
+
          // './tests/specs/**/searchSite.js',
          // './tests/specs/**/listChurch.js',
-        // './tests/specs/**/favoriteSite2.js',
-        // './tests/specs/**/eventSite.js',
+         //'./tests/specs/**/eventSite.js',
 
          // './tests/specs/**/posts.js',
          // './tests/specs/**/favoriteSite.js',
@@ -28,7 +29,7 @@ exports.config = {
 
      ],
 
-    delayFactor: 6,
+    delayFactor: 2,
 
     isMobile: true,
 
@@ -90,7 +91,7 @@ exports.config = {
     // configured.
     capabilities: [{
 
-        app: 'platforms/ios/build/emulator/Echo.app',
+        app: './platforms/ios/build/emulator/Echo Test.app',
 
         automationName: "XCUITest",
 
@@ -105,7 +106,7 @@ exports.config = {
 
         // The version of the Android or iOS system
         // platformVersion: '13.3',
-        platformVersion: '14.2',
+        platformVersion: '15.2',
         //platformVersion: '12.4',
 
         orientation: "PORTRAIT",

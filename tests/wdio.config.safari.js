@@ -64,12 +64,12 @@ exports.config = {
     // Where the files we are testing can be found.
     // specs: ['./tests/specs/**/*.js'],
     specs: [
-        // './tests/specs/web/*.js',
-        // './tests/specs/shared/*.js',
+        './tests/specs/web/*.js',
+        './tests/specs/shared/*.js',
 
-        './tests/specs/**/editEvent.js',
-        './tests/specs/**/editPodcast.js',
-        './tests/specs/**/editChurch.js',
+        // './tests/specs/**/editEvent.js',
+        // './tests/specs/**/editPodcast.js',
+        // './tests/specs/**/editChurch.js',
 
         // './tests/specs/**/editFsj.js',
         // './tests/specs/**/calendarSite.js',

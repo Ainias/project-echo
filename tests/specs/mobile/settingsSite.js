@@ -78,7 +78,7 @@ describe("settingsSite", () => {
         expect(selected[0].name).toEqual("echo");
     });
 
-    fit("deactivate notifications", async function () {
+    it("deactivate notifications", async function () {
         await functions.acceptInsertFavorites()
         await functions.acceptAlert();
         await functions.acceptAlert();

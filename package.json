@@ -11,7 +11,7 @@
     "cordova android": "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk; export PATH=$JAVA_HOME/bin:$PATH; export IS_MOBILE=1 && cordova run android --device",
     "cordova android emulator": "export IS_MOBILE=1; cordova run android",
     "cordova release android": "cordova build android --release",
-    "cordova ios": "cordova emulate ios --target=\"iPhone-11-Pro-Max\"",
+    "cordova ios": "cordova emulate ios --target=\"iPhone-11\"",
     "cordova release ios": "cordova build ios --release",
     "appium": "appium",
     "appium-doctor": "appium-doctor",
@@ -32,7 +32,6 @@
     "@types/node": "^15.3.0",
     "body-parser": "^1.19.0",
     "cordova-browser": "^6.0.0",
-    "cordova-ios": "^5.1.1",
     "cordova-plugin-webpack": "^1.0.5",
     "cordova-sites": "git+https://github.com/Ainias/cordova-sites.git#0.7.19",
     "cordova-sites-database": "git+https://github.com/Ainias/cordova-sites-database.git#0.5.3",
@@ -75,6 +74,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.2",
     "cordova-android": "^9.1.0",
+    "cordova-ios": "^6.2.0",
     "cordova-plugin-background-fetch": "^6.1.1",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-calendar": "^5.1.5",
@@ -148,8 +148,8 @@
     },
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   },
   "browserslist": [
