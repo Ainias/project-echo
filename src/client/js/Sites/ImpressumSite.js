@@ -10,7 +10,7 @@ export class ImpressumSite extends MenuFooterSite {
     }
 
     onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
         this.findBy('#open-cookie-settings').addEventListener('click', () => {
             CookieConsentHelper.showCookieDialog();
         });

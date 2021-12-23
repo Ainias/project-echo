@@ -1,7 +1,7 @@
 import translationGerman from '../translations/de.json';
 import translationEnglish from '../translations/en.json';
 import { App, StartSiteMenuAction, Translator, NavbarFragment, DataManager, MenuAction } from 'cordova-sites';
-import { Helper } from 'js-helper/dist/shared';
+import { Helper, DateHelper } from 'js-helper/dist/shared';
 import { EasySyncClientDb, SetupEasySync1000000000500 } from 'cordova-sites-easy-sync/dist/client';
 
 import { WelcomeSite } from './Sites/WelcomeSite';
@@ -14,7 +14,7 @@ import '../img/flag_german.svg';
 import '../img/flag_usa.svg';
 
 import { BaseDatabase } from 'cordova-sites-database';
-import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared';
+import { EasySyncBaseModel, FileMedium } from 'cordova-sites-easy-sync/dist/shared';
 import { ListChurchesSite } from './Sites/ListChurchesSite';
 import { ModifyEventSite } from './Sites/ModifyEventSite';
 import { UserManager, LoginSite, RegistrationSite, UserMenuAction } from 'cordova-sites-user-management/dist/client';
@@ -24,7 +24,7 @@ import { ImpressumSite } from './Sites/ImpressumSite';
 
 import bibelverse from './bibelverse.json';
 
-//translation import
+// translation import
 import 'cordova-sites-user-management/dist/client/js/translationInit';
 import 'cordova-sites/dist/client/js/translationInit';
 import logo from '../img/logo.png';
@@ -43,13 +43,11 @@ import { ClearDatabaseJob } from './ClearDatabase/ClearDatabaseJob';
 import { CookieConsentHelper } from './CookieConsent/CookieConsentHelper';
 import { NativeStoragePromise } from 'cordova-sites/dist/client/js/NativeStoragePromise';
 import { ImagesSchema1000000010000 } from '../../shared/model/migrations/ImagesSchema';
-import { FileMedium } from 'cordova-sites-easy-sync/dist/shared';
 import { ImagesSchemaDownload1000000011000 } from '../../shared/model/migrations/ImagesSchemaDownload';
 import { ContactSite } from './Sites/ContactSite';
 import { AboutUsSite } from './Sites/AboutUsSite';
 
 import { Sync } from './Sync';
-import { DateHelper } from 'js-helper';
 import { EventWeblink1000000012000 } from '../../shared/model/migrations/EventWeblink';
 import { ChurchInstalink1000000013000 } from '../../shared/model/migrations/ChurchInstalink';
 import '../../shared/model/Post';
@@ -63,9 +61,9 @@ import { ListPodcastsSite } from './Sites/ListPodcastsSite';
 import '../../shared/model/Podcast';
 import { DeleteOldEventsJob } from '../../shared/DeleteOldEventsJob';
 
-window['CKEditor'] = CKEditor;
-window['JSObject'] = Object;
-window['version'] = __VERSION__;
+window.CKEditor = CKEditor;
+window.JSObject = Object;
+window.version = __VERSION__;
 
 EasySyncClientDb.BASE_MODEL = EasySyncBaseModel;
 
@@ -76,25 +74,23 @@ App.setLogo(logo);
 
 MatomoHelper.start('https://matomo.echoapp.de', __MATOMO_ID__, 'm');
 App.addInitialization(async (app) => {
-    new DeleteOldEventsJob().deleteOldEvents();
+    DeleteOldEventsJob.deleteOldEvents();
     // DataManager._assetBasePath = (cordova.device !== "browser"?cordova.file.applicationDirectory:"");
 
     // let obj = await NativeStoragePromise.getItem("background-counter-obj", []);
     // console.log("background obj: ", obj);
     // await NativeStoragePromise.setItem("background-counter-obj", []);
 
-    //add Bibelvers to html
-    let vers = bibelverse[Math.floor(Math.random() * bibelverse.length)];
-    document.head.prepend(
-        document.createComment(vers['vers'] + ' \n- ' + vers['stelle'] + ' (' + vers['uebersetzung'] + ')')
-    );
+    // add Bibelvers to html
+    const vers = bibelverse[Math.floor(Math.random() * bibelverse.length)];
+    document.head.prepend(document.createComment(`${vers.vers} \n- ${vers.stelle} (${vers.uebersetzung})`));
 
     if (window.StatusBar) {
         StatusBar.overlaysWebView(true);
         StatusBar.backgroundColorByHexString('#33000000');
     }
 
-    window['missingTranslations'] = {};
+    window.missingTranslations = {};
     Translator.init({
         translations: {
             de: translationGerman,
@@ -104,10 +100,10 @@ App.addInitialization(async (app) => {
         // markTranslations: true,
         markUntranslatedTranslations: __IS_DEVELOP__,
         logMissingTranslations: (key, language) => {
-            window['missingTranslations'][language] = Helper.nonNull(window['missingTranslations'][language], []);
-            window['missingTranslations'][language].push(key);
-            if (window['shouldConsoleMissingTranslation'] !== false) {
-                console.error('missing translation for language >' + language + '< and key >' + key + '<');
+            window.missingTranslations[language] = Helper.nonNull(window.missingTranslations[language], []);
+            window.missingTranslations[language].push(key);
+            if (window.shouldConsoleMissingTranslation !== false) {
+                console.error(`missing translation for language >${language}< and key >${key}<`);
             }
         },
     });
@@ -116,17 +112,15 @@ App.addInitialization(async (app) => {
         return Translator.makePersistentTranslation(key).outerHTML;
     });
 
-    //Setting Title
+    // Setting Title
     NavbarFragment.title = '';
 
-    //Creating Menu
+    // Creating Menu
     NavbarFragment.defaultActions.push(new StartSiteMenuAction('events', CalendarSite));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction('churches', ListChurchesSite));
     // NavbarFragment.defaultActions.push(new StartSiteMenuAction("fsjs", ListFsjsSite));
 
-    NavbarFragment.defaultActions.push(
-        new UserMenuAction('podcasts', 'view_podcasts', () => app.startSite(ListPodcastsSite))
-    );
+    NavbarFragment.defaultActions.push(new MenuAction('podcasts', () => app.startSite(ListPodcastsSite)));
     NavbarFragment.defaultActions.push(new StartSiteMenuAction('about us', AboutUsSite));
 
     const languageAction = new MenuAction('language', async () => {
@@ -221,21 +215,21 @@ App.addInitialization(async (app) => {
         .catch((e) => console.error(e));
 
     try {
-        //Updates height for "mobile browser address bar hiding"-bug
-        let updateWindowHeight = () => {
-            document.body.style.height = window.innerHeight + 'px';
+        // Updates height for "mobile browser address bar hiding"-bug
+        const updateWindowHeight = () => {
+            document.body.style.height = `${window.innerHeight}px`;
             setTimeout(updateWindowHeight, 350);
         };
         updateWindowHeight();
     } catch (e) {}
 });
 
-//TODO anpassen
+// TODO anpassen
 SystemCalendar.NAME = 'echo';
 SystemCalendar.WEBSITE = 'echoapp.de';
 
-DataManager._basePath = __HOST_ADDRESS__ + '/api/v1/';
-FileMedium.PUBLIC_PATH = __HOST_ADDRESS__ + '/uploads/img_';
+DataManager._basePath = `${__HOST_ADDRESS__}/api/v1/`;
+FileMedium.PUBLIC_PATH = `${__HOST_ADDRESS__}/uploads/img_`;
 DataManager.onlineCallback = (isOnline) => {
     if (!isOnline) {
         console.log('not (yet) online!');
@@ -246,6 +240,7 @@ Object.assign(BaseDatabase.CONNECTION_OPTIONS, {
     logging: ['error', 'warn'],
     synchronize: false,
     migrationsRun: true,
+    // migrationsTransactionMode: 'none',
     migrations: [
         SetupSchema1000000000000,
         SetupFavorite1000000000001,
@@ -267,7 +262,7 @@ EasySyncClientDb.errorListener = async (e) => {
     console.error(e);
     await ClearDatabaseJob.doJob();
     debugger;
-    //work with timeout since saving of db only occurs after 150ms in browser
+    // work with timeout since saving of db only occurs after 150ms in browser
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(window.location.reload(true));
@@ -278,13 +273,13 @@ EasySyncClientDb.errorListener = async (e) => {
 NativeStoragePromise.prefix = 'functional_';
 NativeStoragePromise.persistent = false;
 
-let app = new App();
+const app = new App();
 app.start(WelcomeSite)
     .catch((e) => console.error(e))
     .then(async () => {
         console.log('initialisation done!', new Date());
 
-        //cookie compliance
+        // cookie compliance
         if (device.platform === 'browser') {
             if (await CookieConsentHelper.mustAskForConsent()) {
                 await CookieConsentHelper.showCookieDialog();
@@ -300,9 +295,9 @@ app.start(WelcomeSite)
             }
         }
 
-        //For testing purposes
-        window['queryDb'] = async (sql) => {
-            let res = await EasySyncClientDb.getInstance().rawQuery(sql);
+        // For testing purposes
+        window.queryDb = async (sql) => {
+            const res = await EasySyncClientDb.getInstance().rawQuery(sql);
             console.log(res);
             return res;
         };

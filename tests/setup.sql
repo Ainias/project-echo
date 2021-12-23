@@ -30,12 +30,14 @@ CREATE FUNCTION _DAY(dayPart int, timePart varchar (8))
 DROP FUNCTION IF EXISTS _MONTH;
 CREATE FUNCTION _MONTH(monthPart int, dayPart int, timePart varchar (8))
     RETURNS VARCHAR(20)
-    RETURN STR_TO_DATE(CONCAT(@YEAR, '-', monthPart, '-', dayPart, ' ', timePart), '%Y-%m-%d %H:%i:%s');
+    BEGIN
+    RETURN STR_TO_DATE(CONCAT(IF(monthPart > 12,@YEAR+1, @YEAR ), '-', ((monthPart - 1)%12)+1, '-', dayPart, ' ', timePart), '%Y-%m-%d %H:%i:%s');
+END;
 
 DROP FUNCTION IF EXISTS _YEAR;
 CREATE FUNCTION _YEAR(yearPart int, monthPart int, dayPart int, timePart varchar (8))
     RETURNS VARCHAR(20)
-    RETURN STR_TO_DATE(CONCAT(yearPart, '-', monthPart, '-', dayPart, ' ', timePart), '%Y-%m-%d %H:%i:%s');
+    RETURN STR_TO_DATE(CONCAT(IF(monthPart > 12,@YEAR+1, @YEAR ), '-', ((monthPart - 1)%12)+1, '-', dayPart, ' ', timePart), '%Y-%m-%d %H:%i:%s');
 
 -- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
 --
@@ -137,8 +139,8 @@ TABLES `blocked_day` WRITE;
 /*!40000 ALTER TABLE `blocked_day`
     DISABLE KEYS */;
 INSERT INTO `blocked_day`
-VALUES (1, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, _MONTH(@MONTH+2, 18-((WEEKDAY(_MONTH(@MONTH+2, 18, '00:00:00'))+1)%7)+2, '00:00:00'), 1, NULL),
-       (2, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 26, '00:00:00'))+1)%7)+2, '00:00:00'), 1, 14);
+VALUES (1, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, _MONTH(@MONTH+2, 20-((WEEKDAY(_MONTH(@MONTH+2, 18, '00:00:00'))+1)%7), '00:00:00'), 1, NULL),
+       (2, '2020-04-05 00:00:00', '2020-04-05 00:00:00', 1, 0, _MONTH(@MONTH+2, 28-((WEEKDAY(_MONTH(@MONTH+2, 26, '00:00:00'))+1)%7), '00:00:00'), 1, 14);
 /*!40000 ALTER TABLE `blocked_day`
     ENABLE KEYS */;
 UNLOCK
@@ -442,46 +444,46 @@ VALUES (4, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Event 
        (5, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 3, 0, '{\"de\":\"EVENT SITE TEST 1\",\"en\":\"Event 4\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\",\"en\":\"English dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
         '{\"place 1\":\"place 1\"}',
-        _MONTH (@MONTH - 1, 29, '15:00:00'), _DAY (2, '10:00:00'), 0, 'gottesdienst', NULL),
+        _MONTH (@MONTH - 1, 28, '15:00:00'), _DAY (2, '10:00:00'), 0, 'gottesdienst', NULL),
        (6, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 3, 0, '{\"de\":\"Search Test 1\",\"en\":\"Event 5\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\",\"en\":\"English ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
         '{\"place 1\":\"place 1\"}',
-        _MONTH (@MONTH+1, 29, '10:00:00'), _MONTH (@MONTH+1, 29, '10:00:00'), 0, 'gottesdienst', NULL),
+        _MONTH (@MONTH+1, 28, '10:00:00'), _MONTH (@MONTH+1, 28, '10:00:00'), 0, 'gottesdienst', NULL),
        (7, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 2\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
         '[\"place 1\"]',
-        _MONTH (@MONTH+1, 29, '10:00:00'), _MONTH (@MONTH+1, 29, '10:00:00'), 0, 'gottesdienst', NULL),
+        _MONTH (@MONTH+1, 28, '10:00:00'), _MONTH (@MONTH+1, 28, '10:00:00'), 0, 'gottesdienst', NULL),
        (8, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 3\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
         '[\"place 1\"]',
-        _MONTH (@MONTH+1, 29, '10:00:00'), _MONTH (@MONTH+1, 29, '10:00:00'), 0, 'gottesdienst', NULL),
+        _MONTH (@MONTH+1, 28, '10:00:00'), _MONTH (@MONTH+1, 28, '10:00:00'), 0, 'gottesdienst', NULL),
        (9, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 4\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', _MONTH (@MONTH+1, 29, '10:00:00'), _MONTH (@MONTH+1, 29, '12:00:00'), 0, 'gottesdienst', NULL),
+        '[\"place 1\"]', _MONTH (@MONTH+1, 28, '10:00:00'), _MONTH (@MONTH+1, 28, '12:00:00'), 0, 'gottesdienst', NULL),
        (10, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 5\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
         '[\"place 1\"]',
-        _MONTH (@MONTH+1, 29, '10:00:00'), _MONTH (@MONTH+1, 29, '12:00:00'), 0, 'gottesdienst', NULL),
+        _MONTH (@MONTH+1, 28, '10:00:00'), _MONTH (@MONTH+1, 28, '12:00:00'), 0, 'gottesdienst', NULL),
        (11, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 6\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', _MONTH (@MONTH + 1, 29, '10:00:00'), _MONTH (@MONTH + 1, 29, '12:00:00'), 0, 'konzert',
+        '[\"place 1\"]', _MONTH (@MONTH + 1, 28, '10:00:00'), _MONTH (@MONTH + 1, 28, '12:00:00'), 0, 'konzert',
         NULL),
        (12, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Search Test 7\"}',
         '{\"de\":\"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\"}',
-        '[\"place 1\"]', _MONTH (@MONTH + 1, 29, '10:00:00'), _MONTH (@MONTH + 1, 29, '12:00:00'), 0, 'hauskreis',
+        '[\"place 1\"]', _MONTH (@MONTH + 1, 28, '10:00:00'), _MONTH (@MONTH + 1, 28, '12:00:00'), 0, 'hauskreis',
         NULL),
        (13, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 1\"}',
         '{\"de\":\"My Description\"}', '[\"place 1\"]',
-        _MONTH (@MONTH + 2, 29, '10:00:00'), _MONTH (@MONTH + 2, 29, '12:00:00'), 1, 'hauskreis',
+        _MONTH (@MONTH + 2, 28, '10:00:00'), _MONTH (@MONTH + 2, 28, '12:00:00'), 1, 'hauskreis',
         1),
        (14, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 1.1\"}',
         '{\"de\":\"My changed Description\"}', '[\"place 2\"]',
-        _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 28, '10:00:00'))+1)%7), '10:00:00'),
-        _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 28, '12:00:00'))+1)%7), '10:00:00'), 0,
+        _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 26, '00:00:00'))+1)%7), '10:00:00'),
+        _MONTH(@MONTH+2, 26-((WEEKDAY(_MONTH(@MONTH+2, 26, '12:00:00'))+1)%7), '10:00:00'), 0,
         'hauskreis', 1),
        (15, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 2\"}',
         '{\"de\":\"My Description\"}', '[\"place 1\"]',
-        _YEAR(@YEAR-1, @MONTH+1, 29, '11:00:00'), _YEAR(@YEAR-1, @MONTH+1, 29, '12:00:00'), 1, 'konzert', 2),
+        _YEAR(@YEAR-1, @MONTH+1, 28, '11:00:00'), _YEAR(@YEAR-1, @MONTH+1, 28, '12:00:00'), 1, 'konzert', 2),
        (16, '2019-04-05 00:00:00', '2020-02-23 14:10:27', 1, 0, '{\"de\":\"Calendar Test 3\"}',
         '{\"de\":\"My Description\"}', '[\"place 1\"]',
         _YEAR(@YEAR, @MONTH+1, 28, '11:00:00'), _YEAR(@YEAR, @MONTH+1, 28, '12:00:00'), 0, 'sonstiges', null),

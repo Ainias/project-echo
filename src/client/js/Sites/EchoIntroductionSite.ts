@@ -12,7 +12,7 @@ export class EchoIntroductionSite extends MyMenuSite {
         this.getNavbarFragment().setBackgroundImage(componentImg);
     }
 
-    onCreateMenu(navbar: NavbarFragment) {
+    onCreateMenu(navbar: NavbarFragment<EchoIntroductionSite>) {
         navbar.removeAllActions(false);
 
         const menuItems = {

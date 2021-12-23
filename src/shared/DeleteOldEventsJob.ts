@@ -4,7 +4,7 @@ import { LessThan } from 'typeorm';
 import { FileMedium } from 'cordova-sites-easy-sync/dist/shared';
 
 export class DeleteOldEventsJob {
-    async deleteOldEvents() {
+    static async deleteOldEvents() {
         const deleteDate = new Date();
         DateHelper.setMonth(deleteDate.getMonth() - 2, 1, deleteDate);
         deleteDate.setDate(-1);
@@ -25,9 +25,7 @@ export class DeleteOldEventsJob {
             images.push(...e.getImages());
         });
 
-        // @ts-ignore
         await FileMedium.deleteMany(images, true);
-        // @ts-ignore
         await Event.deleteMany(events, true);
         return events.length;
     }

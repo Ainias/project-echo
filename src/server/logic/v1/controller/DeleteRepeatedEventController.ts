@@ -16,7 +16,9 @@ export class DeleteRepeatedEventController {
 
         let user = req.user;
         if (
+            // @ts-ignore
             model.ACCESS_MODIFY === false ||
+            // @ts-ignore
             (model.ACCESS_MODIFY !== true && (!user || !(await UserManager.hasAccess(user, model.ACCESS_MODIFY))))
         ) {
             throw new Error(

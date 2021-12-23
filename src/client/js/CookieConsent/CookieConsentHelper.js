@@ -26,12 +26,12 @@ export class CookieConsentHelper {
     }
 
     static async hasConsent(consent) {
-        let consents = await this.getConsent();
+        const consents = await this.getConsent();
         return consents.indexOf(consent) !== -1;
     }
 
     static async addConsent(consent) {
-        let consents = await this.getConsent();
+        const consents = await this.getConsent();
         if (consents.indexOf(consent) === -1) {
             consents.push(consent);
             this.giveConsentToCookies(consents);
@@ -44,7 +44,7 @@ export class CookieConsentHelper {
     }
 
     static async showCookieDialog() {
-        let result = await new CookieDialog(await this.getConsent()).show();
+        const result = await new CookieDialog(await this.getConsent()).show();
         await this.giveConsentToCookies(result);
     }
 }

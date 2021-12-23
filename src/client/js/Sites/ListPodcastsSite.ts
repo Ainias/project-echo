@@ -13,7 +13,7 @@ export class ListPodcastsSite extends MenuFooterSite {
         super(siteManager, view);
         this.alphabeticListFragment = new PodcastListFragment(this);
         this.addFragment('#podcast-list', this.alphabeticListFragment);
-        this._footerFragment.setSelected('.icon.home');
+        this.getFooterFragment().setSelected('.icon.home');
     }
 
     async onConstruct(constructParameters) {
@@ -29,8 +29,8 @@ export class ListPodcastsSite extends MenuFooterSite {
         const namedPodcasts = {};
         Object.values(podcasts).forEach((podcast) => {
             const names = podcast.getTitles();
-            let name = Helper.nonNull(names[currentLang], names[fallbackLanguage], names[Object.keys(names)[0]], '');
-            namedPodcasts[name + '-' + podcast.id] = podcast;
+            const name = Helper.nonNull(names[currentLang], names[fallbackLanguage], names[Object.keys(names)[0]], '');
+            namedPodcasts[`${name}-${podcast.id}`] = podcast;
         });
 
         this.alphabeticListFragment.setElements(namedPodcasts);

@@ -3,13 +3,13 @@ import { BaseDatabase } from 'cordova-sites-database/dist/cordova-sites-database
 
 export class FavoriteWithoutEventRelation1000000008000 implements MigrationInterface {
     async up(queryRunner: QueryRunner): Promise<any> {
-        await this._changeFavorite(queryRunner);
+        await this.changeFavorite(queryRunner);
     }
 
-    async _changeFavorite(queryRunner: QueryRunner) {
+    async changeFavorite(queryRunner: QueryRunner) {
         await queryRunner.dropTable('favorite');
 
-        let favoriteTable = new Table({
+        const favoriteTable = new Table({
             name: 'favorite',
             columns: [
                 {
@@ -17,7 +17,7 @@ export class FavoriteWithoutEventRelation1000000008000 implements MigrationInter
                     isPrimary: true,
                     type: 'integer',
                     isGenerated: true,
-                    generationStrategy: 'increment' as 'increment',
+                    generationStrategy: 'increment' as const,
                 },
                 {
                     name: 'eventId',
@@ -36,10 +36,10 @@ export class FavoriteWithoutEventRelation1000000008000 implements MigrationInter
                 },
             ],
         });
-        return await queryRunner.createTable(favoriteTable, true);
+        return queryRunner.createTable(favoriteTable, true);
     }
 
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return undefined;
     }
 }

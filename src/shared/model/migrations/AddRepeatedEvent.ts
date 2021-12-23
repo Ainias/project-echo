@@ -5,26 +5,26 @@ import { Event } from './models/v1/Event';
 import { BlockedDay } from '../BlockedDay';
 
 export class AddRepeatedEvent1000000007000 implements MigrationInterface {
-    _isServer(): boolean {
+    private isServer(): boolean {
         return typeof document !== 'object';
     }
 
-    _createManyToManyTable(tableOne, tableTwo) {
+    private createManyToManyTable(tableOne, tableTwo) {
         return MigrationHelper.createManyToManyTable(tableOne, tableTwo);
     }
 
     async up(queryRunner: QueryRunner): Promise<any> {
-        if (this._isServer()) {
+        if (this.isServer()) {
             await queryRunner.query('ALTER TABLE event ENGINE=InnoDB;');
         }
 
-        let repeatedEventTable = MigrationHelper.createTableFromModelClass(RepeatedEvent);
+        const repeatedEventTable = MigrationHelper.createTableFromModelClass(RepeatedEvent);
         await queryRunner.createTable(repeatedEventTable);
 
-        let blockedDayTable = MigrationHelper.createTableFromModelClass(BlockedDay);
+        const blockedDayTable = MigrationHelper.createTableFromModelClass(BlockedDay);
         await queryRunner.createTable(blockedDayTable);
 
-        if (this._isServer()) {
+        if (this.isServer()) {
             await queryRunner.query('SET foreign_key_checks=0;');
             await MigrationHelper.updateModel(queryRunner, Event);
             await queryRunner.query('SET foreign_key_checks=1;');
@@ -35,7 +35,7 @@ export class AddRepeatedEvent1000000007000 implements MigrationInterface {
         }
     }
 
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return undefined;
     }
 }

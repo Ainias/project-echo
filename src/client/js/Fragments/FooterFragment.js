@@ -12,7 +12,7 @@ export class FooterFragment extends AbstractFragment {
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
         this.findBy('.icon.home').addEventListener('click', () => {
             this.getSite().startSite(WelcomeSite);
@@ -40,7 +40,7 @@ export class FooterFragment extends AbstractFragment {
 
     async setSelected(selectorOrElement) {
         await this._viewPromise;
-        let oldSelected = this.findBy('.selected');
+        const oldSelected = this.findBy('.selected');
         if (Helper.isNotNull(oldSelected)) {
             oldSelected.classList.remove('selected');
         }

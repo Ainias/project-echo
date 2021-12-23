@@ -15,24 +15,23 @@ export class ModifyFsjSite extends MenuFooterSite {
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
+        const res = super.onConstruct(constructParameters);
 
         this._fsj = null;
-        if (constructParameters['id']) {
-            this._fsj = await Fsj.findById(constructParameters['id'], Fsj.getRelations());
+        if (constructParameters.id) {
+            this._fsj = await Fsj.findById(constructParameters.id, Fsj.getRelations());
         }
-        this._placeNumber = 0;
 
         return res;
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
-        let imageInput = this.findBy('#event-image-input');
+        const imageInput = this.findBy('#event-image-input');
         imageInput.addEventListener('change', () => {
             if (imageInput.files && imageInput.files[0]) {
-                let reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = (e) => {
                     this.findBy('#event-image').src = e.target.result;
                 };
@@ -43,9 +42,9 @@ export class ModifyFsjSite extends MenuFooterSite {
         this._form = new Form(this.findBy('#modify-fsj-form'), async (values) => {
             this.showLoadingSymbol();
 
-            let names = {};
-            let descriptions = {};
-            let imageSrc = !Helper.imageUrlIsEmpty(values['image']) ? values['image'] : values['image-before'];
+            const names = {};
+            const descriptions = {};
+            const imageSrc = !Helper.imageUrlIsEmpty(values.image) ? values.image : values['image-before'];
 
             Object.keys(values).forEach((valName) => {
                 if (valName.startsWith('name-')) {
@@ -99,16 +98,16 @@ export class ModifyFsjSite extends MenuFooterSite {
             return;
         }
 
-        let values = {};
+        const values = {};
 
-        let names = this._fsj.names;
+        const { names } = this._fsj;
         Object.keys(names).forEach((lang) => {
-            values['name-' + lang] = names[lang];
+            values[`name-${lang}`] = names[lang];
         });
 
-        let descriptions = this._fsj.descriptions;
+        const { descriptions } = this._fsj;
         Object.keys(descriptions).forEach((lang) => {
-            values['description-' + lang] = descriptions[lang];
+            values[`description-${lang}`] = descriptions[lang];
         });
 
         values['website-url'] = this._fsj.website;

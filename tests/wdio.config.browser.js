@@ -1,9 +1,8 @@
-const Service = require("./setup");
+const Service = require('./setup');
 
 const now = new Date();
 
 exports.config = {
-
     startDate: now,
     year: now.getFullYear().toString().substr(2),
     fullYear: now.getFullYear(),
@@ -12,7 +11,7 @@ exports.config = {
 
     isMobile: false,
 
-    runner: "local",
+    runner: 'local',
 
     // wdio will run your tests using the framework below. You can choose from several,
     // much like the reporters. The full list is at https://www.npmjs.com/search?q=wdio-framework
@@ -21,7 +20,7 @@ exports.config = {
     // By default, Jasmine times out within 10 seconds. This is not really enough time
     // for us as it takes a while for Appium to get set up.
     jasmineNodeOpts: {
-        defaultTimeoutInterval: 90000
+        defaultTimeoutInterval: 90000,
     },
 
     sync: true,
@@ -37,7 +36,7 @@ exports.config = {
     bail: 0,
 
     // baseUrl: "http://127.0.0.1:3000",
-    baseUrl: "http://127.0.0.1:8000",
+    baseUrl: 'http://127.0.0.1:8000',
     // baseUrl: "http://127.0.0.1:8001",
 
     waitforTimeout: 10000,
@@ -53,22 +52,26 @@ exports.config = {
 
     // Use the Appium plugin for Webdriver. Without this, we would need to run appium
     // separately on the command line.
-
-
+    hostname: '127.0.0.1',
     services: [
         // 'appium'
-        ['selenium-standalone', {
-            args: {
-                // "chrome": {version: "87.0.4280.88"}
-                // chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
-                drivers: {chrome: '88.0.4324.96'}
-            },
-            installArgs: {
-                // "chrome": {version: "87.0.4280.88"}
-                // chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
-                drivers: {chrome: '88.0.4324.96'}
-            }
-        }]
+        // [
+        //     'selenium-standalone',
+        //     {
+        //         logPath: 'tests/logs',
+        //         args: {
+        //             // "chrome": {version: "87.0.4280.88"}
+        //             // chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
+        //             drivers: { chrome: '88.0.4324.96' },
+        //         },
+        //         installArgs: {
+        //             // "chrome": {version: "87.0.4280.88"}
+        //             // chromedriverExecutable: path.join(__dirname, "misc/web/chromedriver"),
+        //             drivers: { chrome: '88.0.4324.96' },
+        //         },
+        //     },
+        // ],
+        'chromedriver',
         // [Service.service,{}]
     ],
 
@@ -80,37 +83,39 @@ exports.config = {
         // './tests/specs/shared/*.js',
         // './tests/specs/web/*.js',
 
-        // './tests/specs/**/editEvent.js',
         // './tests/specs/**/editChurch.js',
-        // './tests/specs/**/podcast.js',
-
-
-        // './tests/specs/**/favoriteSite2.js',
-        // './tests/specs/**/favoriteSite.js',
-        // './tests/specs/**/eventSite.js',
+        // './tests/specs/**/editEvent.js',
+        // './tests/specs/**/editPodcast.js',
         // './tests/specs/**/searchSite.js',
-        './tests/specs/**/churchSite.js',
+        // './tests/specs/**/podcast.js',
+        // './tests/specs/**/favoriteSite.js',
+        // './tests/specs/**/favoriteSite2.js',
+        './tests/specs/**/calendarSite.js',
+        // './tests/specs/**/churchSite.js',
+        // './tests/specs/**/eventSite.js',
         // './tests/specs/**/listChurch.js',
     ],
 
-    capabilities: [{
-        browserName: "chrome",
-        // browserName: "brave",
-        // browserName: "firefox",
-        maxInstances: 1,
-        // maxInstances: 1,
-        // 'goog:chromeOptions': {
-        //     to run chrome headless the following flags are required
-        //     (see https://developers.google.com/web/updates/2017/04/headless-chrome)
-        //     args: ['--headless', '--disable-gpu'],
-        // },
-        // 'moz:firefoxOptions': {
-        //     args: [
-        //         "-headless",
-        //     ],
-        //     prefs: {"intl.accept_languages": "de, de-DE"}
-        // }
-    },
+    capabilities: [
+        {
+            browserName: 'chrome',
+            maxInstances: 1,
+            hostname: '127.0.0.1',
+            // browserName: "brave",
+            // browserName: "firefox",
+            // maxInstances: 1,
+            // 'goog:chromeOptions': {
+            //     to run chrome headless the following flags are required
+            //     (see https://developers.google.com/web/updates/2017/04/headless-chrome)
+            //     args: ['--headless', '--disable-gpu'],
+            // },
+            // 'moz:firefoxOptions': {
+            //     args: [
+            //         "-headless",
+            //     ],
+            //     prefs: {"intl.accept_languages": "de, de-DE"}
+            // }
+        },
         // {
         //     browserName: "firefox",
         //     baseUrl: "http://127.0.0.1:8000",
@@ -165,5 +170,5 @@ exports.config = {
         //     let element = $("#main-content");
         //     return await element.isDisplayed()
         // });
-    }
+    },
 };

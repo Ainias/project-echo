@@ -19,12 +19,12 @@ export class CookieDialog extends Dialog {
                         view.querySelector('#cookie-settings').classList.remove('hidden');
                     });
 
-                    let form = new Form(view.querySelector('#cookie-settings-form'), (values) => {
+                    const form = new Form(view.querySelector('#cookie-settings-form'), (values) => {
                         this._result = Object.keys(values);
                         this.close();
                     });
 
-                    let values = {};
+                    const values = {};
                     currentConsent.forEach((cookie) => {
                         values[cookie] = 1;
                     });

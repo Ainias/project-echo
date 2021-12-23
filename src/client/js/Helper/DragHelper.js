@@ -31,8 +31,8 @@ export class DragHelper {
         });
 
         elem.classList.add('draggable');
-        elem.dataset['originalTop'] = window.getComputedStyle(elem).getPropertyValue('top').replace('px', '');
-        elem.dataset['dragThreshold'] = threshold;
+        elem.dataset.originalTop = window.getComputedStyle(elem).getPropertyValue('top').replace('px', '');
+        elem.dataset.dragThreshold = threshold;
 
         this._draggendListeners[elem] = listener;
     }
@@ -41,7 +41,7 @@ export class DragHelper {
         if (elem.classList.contains('draggable')) {
             DragHelper.mouseDownData = {
                 element: elem,
-                y: y,
+                y,
                 topStart: parseFloat(window.getComputedStyle(elem).getPropertyValue('top').replace('px', '')),
                 thresholdOverridden: false,
                 event: e,
@@ -51,31 +51,31 @@ export class DragHelper {
 
     static _dragMove(y) {
         if (DragHelper.mouseDownData !== null) {
-            let yDiff = DragHelper.mouseDownData.y - y;
-            let elem = DragHelper.mouseDownData.element;
-            let topStart = DragHelper.mouseDownData.topStart;
+            const yDiff = DragHelper.mouseDownData.y - y;
+            const elem = DragHelper.mouseDownData.element;
+            const {topStart} = DragHelper.mouseDownData;
 
-            //Set originalTop if not set before
-            let maxTop = elem.dataset['originalTop'];
+            // Set originalTop if not set before
+            let maxTop = elem.dataset.originalTop;
             if (maxTop.trim() === '') {
                 maxTop = topStart;
-                elem.dataset['originalTop'] = maxTop;
+                elem.dataset.originalTop = maxTop;
             } else {
                 maxTop = parseFloat(maxTop);
             }
 
-            //Set new top only if threshold is overridden
+            // Set new top only if threshold is overridden
             if (
                 topStart !== maxTop ||
                 DragHelper.mouseDownData.thresholdOverridden ||
-                yDiff > elem.dataset['dragThreshold']
+                yDiff > elem.dataset.dragThreshold
             ) {
                 elem.classList.add('is-dragging');
                 DragHelper.mouseDownData.event.stopPropagation();
                 if (topStart - yDiff < maxTop) {
-                    elem.style.top = Math.max(topStart - yDiff, 0) + 'px';
+                    elem.style.top = `${Math.max(topStart - yDiff, 0)  }px`;
                 } else {
-                    elem.style.top = maxTop + 'px';
+                    elem.style.top = `${maxTop  }px`;
                 }
                 DragHelper.mouseDownData.thresholdOverridden = true;
             }
@@ -86,7 +86,7 @@ export class DragHelper {
         if (DragHelper.mouseDownData !== null) {
             if (DragHelper.mouseDownData.thresholdOverridden) {
                 e.stopPropagation();
-                let elem = DragHelper.mouseDownData.element;
+                const elem = DragHelper.mouseDownData.element;
                 requestAnimationFrame(() => {
                     elem.classList.remove('is-dragging');
                 });

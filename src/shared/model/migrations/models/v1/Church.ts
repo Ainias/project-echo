@@ -12,8 +12,8 @@ export class Church extends FsjChurchBaseObject {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['places'] = BaseDatabase.TYPES.MY_JSON;
+        const columns = super.getColumnDefinitions();
+        columns.places = BaseDatabase.TYPES.MY_JSON;
         return columns;
     }
 
@@ -40,8 +40,8 @@ export class Church extends FsjChurchBaseObject {
     // }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations['regions'] = {
+        const relations = EasySyncBaseModel.getRelationDefinitions();
+        relations.regions = {
             target: Region.getSchemaName(),
             type: 'many-to-many',
             joinTable: {

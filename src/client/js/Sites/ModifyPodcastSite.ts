@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { ModifyEntitySite } from 'cordova-sites-easy-sync';
 import { Podcast } from '../../../shared/model/Podcast';
 import { UserSite } from 'cordova-sites-user-management/dist/client/js/Context/UserSite';
@@ -37,11 +38,11 @@ export class ModifyPodcastSite extends ModifyEntitySite<Podcast> {
         entity.setTitles({ de: values['title-de'], en: values['title-en'] });
         entity.setDescriptions({ de: values['description-de'], en: values['description-en'] });
         entity.setReleaseCircles({ de: values['releaseCircle-de'], en: values['releaseCircle-en'] });
-        entity.setSpotifyLink(values['spotifyLink']);
-        entity.setYoutubeLink(values['youtubeLink']);
-        entity.setDuration(parseInt(values['duration']));
+        entity.setSpotifyLink(values.spotifyLink);
+        entity.setYoutubeLink(values.youtubeLink);
+        entity.setDuration(Number(values.duration));
 
-        let imageSrc = values['image'];
+        let imageSrc = values.image;
         if (Helper.imageUrlIsEmpty(imageSrc)) {
             imageSrc = values['image-before'];
         }

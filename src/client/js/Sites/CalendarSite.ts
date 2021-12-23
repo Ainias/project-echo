@@ -1,6 +1,4 @@
 import { App, Translator } from 'cordova-sites';
-
-const view = require('../../html/Sites/calendarSite.html');
 import { FooterSite } from './FooterSite';
 import { Scaler } from '../Scaler';
 import { Favorite } from '../Model/Favorite';
@@ -12,108 +10,110 @@ import { EventHelper } from '../Helper/EventHelper';
 import { FilterDialog } from '../Dialoges/FilterDialog';
 import { NativeStoragePromise } from 'cordova-sites/dist/client/js/NativeStoragePromise';
 
+const view = require('../../html/Sites/calendarSite.html');
+
 export class CalendarSite extends FooterSite {
-    private _date: Date;
+    private date: Date;
     private favorites: { [id: number]: boolean };
-    private _filter: any;
-    private _eventListFragment: EventOverviewFragment;
-    private _dayTemplate: HTMLElement;
-    private _dayContainer: HTMLElement;
-    private _eventOverviewContainer: HTMLElement;
-    private _eventOverview: HTMLElement;
-    private _monthNameElement: HTMLElement;
+    private filter: any;
+    private eventListFragment: EventOverviewFragment;
+    private dayTemplate: HTMLElement;
+    private dayContainer: HTMLElement;
+    private eventOverviewContainer: HTMLElement;
+    private eventOverview: HTMLElement;
+    private monthNameElement: HTMLElement;
     private scrollContainer: HTMLElement;
     private buttonLeft: HTMLElement;
 
     constructor(siteManager) {
         super(siteManager, view);
-        this._date = new Date();
+        this.date = new Date();
         this.getFooterFragment().setSelected('.icon.calendar');
         this.favorites = {};
 
-        this._filter = {};
+        this.filter = {};
 
-        this._eventListFragment = new EventOverviewFragment(this);
-        this._eventListFragment.setShowInPast(false);
-        this.addFragment('#event-overview', this._eventListFragment);
+        this.eventListFragment = new EventOverviewFragment(this);
+        this.eventListFragment.setShowInPast(false);
+        this.addFragment('#event-overview', this.eventListFragment);
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
+        const res = super.onConstruct(constructParameters);
 
         if (Helper.isSet(constructParameters, 'date')) {
-            this._date = new Date(constructParameters['date']);
+            this.date = new Date(constructParameters.date);
         }
 
-        let favorites = <Favorite[]>await Favorite.find();
+        const favorites = <Favorite[]>await Favorite.find();
         favorites.forEach((fav) => {
             this.favorites[fav.getEventId()] = true;
         });
 
         if (Helper.isSet(constructParameters, 'filter')) {
-            if (typeof constructParameters['filter'] === 'string') {
-                this._filter = JSON.parse(constructParameters['filter']);
+            if (typeof constructParameters.filter === 'string') {
+                this.filter = JSON.parse(constructParameters.filter);
             } else {
-                this._filter = constructParameters['filter'];
+                this.filter = constructParameters.filter;
             }
         } else {
-            this._filter = await NativeStoragePromise.getItem('calendar-filter', {});
+            this.filter = await NativeStoragePromise.getItem('calendar-filter', {});
         }
 
         return res;
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
         this._view.classList.add('calendar-site');
 
-        this._dayTemplate = this.findBy('#day-template');
-        this._dayContainer = this.findBy('#day-container');
-        this._dayTemplate.removeAttribute('id');
-        this._dayTemplate.remove();
+        this.dayTemplate = this.findBy('#day-template');
+        this.dayContainer = this.findBy('#day-container');
+        this.dayTemplate.removeAttribute('id');
+        this.dayTemplate.remove();
 
-        this._eventOverviewContainer = this.findBy('#event-overview-container');
-        this._eventOverview = this.findBy('#event-overview');
+        this.eventOverviewContainer = this.findBy('#event-overview-container');
+        this.eventOverview = this.findBy('#event-overview');
 
-        this._monthNameElement = this.findBy('#month-name');
+        this.monthNameElement = this.findBy('#month-name');
         this.buttonLeft = this.findBy('#button-left');
         this.buttonLeft.addEventListener('click', () => {
-            DateHelper.setMonth(this._date.getMonth() - 1, this._date);
-            this.drawMonth(this._date);
+            DateHelper.setMonth(this.date.getMonth() - 1, this.date);
+            this.drawMonth(this.date);
         });
         this.findBy('#button-right').addEventListener('click', () => {
-            DateHelper.setMonth(this._date.getMonth() + 1, this._date);
-            this.drawMonth(this._date);
+            DateHelper.setMonth(this.date.getMonth() + 1, this.date);
+            this.drawMonth(this.date);
         });
 
-        let filterButton = this.findBy('#button-filter');
+        const filterButton = this.findBy('#button-filter');
         filterButton.addEventListener('click', async () => {
-            let res = await new FilterDialog(this._filter.types, this._filter.churches).show();
-            if (Helper.isNotNull(res)) {
-                this._filter = res;
+            const filterRes = await new FilterDialog(this.filter.types, this.filter.churches).show();
+            if (Helper.isNotNull(filterRes)) {
+                this.filter = filterRes;
             } else {
-                this._filter = {};
+                this.filter = {};
             }
 
             if (
-                (this._filter.types && this._filter.types.length > 0) ||
-                (this._filter.churches && this._filter.churches.length > 0)
+                (this.filter.types && this.filter.types.length > 0) ||
+                (this.filter.churches && this.filter.churches.length > 0)
             ) {
                 filterButton.classList.add('active');
             } else {
                 filterButton.classList.remove('active');
             }
 
-            this.setParameter('filter', JSON.stringify(this._filter));
+            this.setParameter('filter', JSON.stringify(this.filter));
 
-            await this.drawMonth(this._date);
-            await NativeStoragePromise.setItem('calendar-filter', this._filter);
+            await this.drawMonth(this.date);
+            await NativeStoragePromise.setItem('calendar-filter', this.filter);
         });
 
         if (
-            (this._filter.types && this._filter.types.length > 0) ||
-            (this._filter.churches && this._filter.churches.length > 0)
+            (this.filter.types && this.filter.types.length > 0) ||
+            (this.filter.churches && this.filter.churches.length > 0)
         ) {
             filterButton.classList.add('active');
         }
@@ -137,40 +137,40 @@ export class CalendarSite extends FooterSite {
     }
 
     openEventList() {
-        this._eventOverviewContainer.classList.add('is-open');
+        this.eventOverviewContainer.classList.add('is-open');
         this.scrollContainer.scroll(0, 1);
     }
 
     closeEventList() {
-        this._eventOverviewContainer.classList.remove('is-open');
+        this.eventOverviewContainer.classList.remove('is-open');
         this.scrollContainer.scroll(0, 0);
     }
 
     async loadEventsForMonth(date) {
-        let firstDay = new Date(date);
+        const firstDay = new Date(date);
         firstDay.setDate(1);
         firstDay.setHours(0);
         firstDay.setMinutes(0);
         firstDay.setSeconds(0);
         firstDay.setMilliseconds(0);
 
-        let lastDay = new Date(firstDay);
+        const lastDay = new Date(firstDay);
         lastDay.setMonth(lastDay.getMonth() + 1);
         // lastDay.setSeconds(-1);
 
-        return await EventHelper.search(
+        return EventHelper.search(
             '',
             DateHelper.strftime('%Y-%m-%d', firstDay),
             DateHelper.strftime('%Y-%m-%d %H:%M:%S', lastDay),
-            this._filter.types,
-            this._filter.churches,
+            this.filter.types,
+            this.filter.churches,
             undefined,
             true
         );
     }
 
     async onStart(pauseArguments) {
-        await this.drawMonth(this._date);
+        await this.drawMonth(this.date);
         await super.onStart(pauseArguments);
     }
 
@@ -208,20 +208,20 @@ export class CalendarSite extends FooterSite {
             this.buttonLeft.classList.remove('hidden');
         }
 
-        let actualDayOfMonth = date.getDate();
+        const actualDayOfMonth = date.getDate();
 
         date = new Date(Helper.nonNull(date, new Date()));
         date.setDate(1);
 
-        let now = new Date();
-        let month = date.getMonth();
-        let isCurrentMonth = now.getFullYear() === date.getFullYear() && now.getMonth() === month;
+        const now = new Date();
+        const month = date.getMonth();
+        const isCurrentMonth = now.getFullYear() === date.getFullYear() && now.getMonth() === month;
 
-        let offset = (date.getDay() + 6) % 7;
-        let numberDays = DateHelper.getNumberDaysOfMonth(date);
+        const offset = (date.getDay() + 6) % 7;
+        const numberDays = DateHelper.getNumberDaysOfMonth(date);
 
-        let eventDays = {};
-        let events = await this.loadEventsForMonth(date);
+        const eventDays = {};
+        const events = await this.loadEventsForMonth(date);
         events.forEach((event) => {
             let firstDayOfEvent = event.getStartTime().getDate();
             let lastDayOfEvent = event.getEndTime().getDate();
@@ -240,18 +240,18 @@ export class CalendarSite extends FooterSite {
             }
         });
 
-        ViewHelper.removeAllChildren(this._monthNameElement);
-        this._monthNameElement.appendChild(Translator.makePersistentTranslation(MONTH_NAMES[date.getMonth()]));
-        this._monthNameElement.appendChild(document.createTextNode(' ' + date.getFullYear()));
+        ViewHelper.removeAllChildren(this.monthNameElement);
+        this.monthNameElement.appendChild(Translator.makePersistentTranslation(MONTH_NAMES[date.getMonth()]));
+        this.monthNameElement.appendChild(document.createTextNode(` ${date.getFullYear()}`));
 
-        ViewHelper.removeAllChildren(this._dayContainer);
+        ViewHelper.removeAllChildren(this.dayContainer);
         for (let i = 0; i < offset; i++) {
-            let day = <HTMLElement>this._dayTemplate.cloneNode(true);
+            const day = <HTMLElement>this.dayTemplate.cloneNode(true);
             day.classList.add('oldMonth');
-            this._dayContainer.appendChild(day);
+            this.dayContainer.appendChild(day);
         }
         for (let i = 0; i < numberDays; i++) {
-            let day = <HTMLElement>this._dayTemplate.cloneNode(true);
+            const day = <HTMLElement>this.dayTemplate.cloneNode(true);
             (day.querySelector('.day-number') as HTMLElement).innerText = (i + 1).toString();
 
             if (isCurrentMonth && now.getDate() === i + 1) {
@@ -259,16 +259,16 @@ export class CalendarSite extends FooterSite {
             }
 
             day.addEventListener('click', () => {
-                let oldActiveDay = this.findBy('.day.active');
+                const oldActiveDay = this.findBy('.day.active');
                 if (oldActiveDay) {
                     oldActiveDay.classList.remove('active');
                 }
                 day.classList.add('active');
                 this.showEventOverviews(eventDays[i] ? eventDays[i] : []);
 
-                let newDate = new Date(date);
+                const newDate = new Date(date);
                 newDate.setDate(i + 1);
-                this._date = newDate;
+                this.date = newDate;
                 this.setParameter('date', DateHelper.strftime('%Y-%m-%d', newDate));
             });
 
@@ -284,19 +284,22 @@ export class CalendarSite extends FooterSite {
                 }
             }
 
-            this._dayContainer.appendChild(day);
+            this.dayContainer.appendChild(day);
         }
 
         for (let i = offset + numberDays; i < 37; i++) {
-            let day = <HTMLElement>this._dayTemplate.cloneNode(true);
+            const day = <HTMLElement>this.dayTemplate.cloneNode(true);
             day.classList.add('nextMonth');
-            this._dayContainer.appendChild(day);
+            this.dayContainer.appendChild(day);
         }
 
         date.setDate(actualDayOfMonth);
 
-        let scaler = new Scaler();
-        let maxHeight = window.getComputedStyle(this.findBy('#calendar')).getPropertyValue('height').replace('px', '');
+        const scaler = new Scaler();
+        const maxHeight = window
+            .getComputedStyle(this.findBy('#calendar'))
+            .getPropertyValue('height')
+            .replace('px', '');
 
         await scaler.scaleHeightThroughWidth(this.findBy('#scale-container'), parseFloat(maxHeight) * 0.73);
 
@@ -304,7 +307,7 @@ export class CalendarSite extends FooterSite {
     }
 
     async showEventOverviews(events) {
-        await this._eventListFragment.setEvents(events);
+        await this.eventListFragment.setEvents(events);
     }
 }
 

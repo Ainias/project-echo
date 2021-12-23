@@ -3,11 +3,11 @@ import { BaseDatabase } from 'cordova-sites-database/dist/cordova-sites-database
 
 export class SetupFavorite1000000000001 implements MigrationInterface {
     async up(queryRunner: QueryRunner): Promise<any> {
-        await this._addFavorite(queryRunner);
+        await this.addFavorite(queryRunner);
     }
 
-    async _addFavorite(queryRunner: QueryRunner) {
-        let churchTable = new Table({
+    private async addFavorite(queryRunner: QueryRunner) {
+        const churchTable = new Table({
             name: 'favorite',
             columns: [
                 {
@@ -15,7 +15,7 @@ export class SetupFavorite1000000000001 implements MigrationInterface {
                     isPrimary: true,
                     type: 'integer',
                     isGenerated: true,
-                    generationStrategy: 'increment' as 'increment',
+                    generationStrategy: 'increment' as const,
                 },
                 {
                     name: 'eventId',
@@ -37,10 +37,10 @@ export class SetupFavorite1000000000001 implements MigrationInterface {
                 },
             ],
         });
-        return await queryRunner.createTable(churchTable, true);
+        return queryRunner.createTable(churchTable, true);
     }
 
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return undefined;
     }
 }

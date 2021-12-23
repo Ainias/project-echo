@@ -1,8 +1,6 @@
 import { DateHelper } from 'js-helper/dist/shared/DateHelper';
 
-const view = require('../../html/Fragments/eventOverviewFragment.html');
-
-import { AbstractFragment, Translator } from 'cordova-sites';
+import { AbstractFragment, MenuSite, Translator } from 'cordova-sites';
 import { PlaceHelper } from '../Helper/PlaceHelper';
 import { EventSite } from '../Sites/EventSite';
 import { Favorite } from '../Model/Favorite';
@@ -12,88 +10,88 @@ import { Helper } from 'js-helper/dist/shared';
 import { Event } from '../../../shared/model/Event';
 import { Church } from '../../../shared/model/Church';
 
-export class EventOverviewFragment extends AbstractFragment {
-    private _events: Event[];
-    private _showInPast: boolean;
-    private _eventContainer: HTMLElement;
-    private _eventContainerPast: HTMLElement;
-    private _eventTemplate: HTMLElement;
-    private _eventOverviewTemplate: HTMLElement;
-    private _pastSection: HTMLElement;
+const view = require('../../html/Fragments/eventOverviewFragment.html');
 
-    private showMaxEvents: number = 0;
+export class EventOverviewFragment extends AbstractFragment<MenuSite> {
+    private events: Event[];
+    private showInPast: boolean;
+    private eventContainer: HTMLElement;
+    private eventContainerPast: HTMLElement;
+    private eventTemplate: HTMLElement;
+    private eventOverviewTemplate: HTMLElement;
+    private pastSection: HTMLElement;
+
+    private showMaxEvents = 0;
 
     constructor(site) {
         super(site, view);
-        this._events = [];
-        this._showInPast = true;
+        this.events = [];
+        this.showInPast = true;
     }
 
     setShowMaxEvents(maxEvents) {
         this.showMaxEvents = maxEvents;
-        this._viewLoadedPromise.then(() => this._renderList());
+        this.getViewLoadedPromise().then(() => this.renderList());
     }
 
     setShowInPast(showInPast) {
-        this._showInPast = showInPast === true;
+        this.showInPast = showInPast === true;
     }
 
     async setEvents(events) {
-        this._events = events;
-        await this._viewLoadedPromise;
-        await this._renderList();
+        this.events = events;
+        await this.getViewLoadedPromise();
+        await this.renderList();
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
-        this._eventContainer = this.findBy('#event-container-future');
-        this._eventContainerPast = this.findBy('#event-container-past');
-        this._eventTemplate = this.findBy('#event-template');
-        this._eventOverviewTemplate = this.findBy('#event-overview-template');
-        this._pastSection = this.findBy('#past-section');
+        const res = super.onViewLoaded();
+        this.eventContainer = this.findBy('#event-container-future');
+        this.eventContainerPast = this.findBy('#event-container-past');
+        this.eventTemplate = this.findBy('#event-template');
+        this.eventOverviewTemplate = this.findBy('#event-overview-template');
+        this.pastSection = this.findBy('#past-section');
 
-        this._eventTemplate.removeAttribute('id');
-        this._eventOverviewTemplate.removeAttribute('id');
+        this.eventTemplate.removeAttribute('id');
+        this.eventOverviewTemplate.removeAttribute('id');
 
-        this._eventTemplate.remove();
-        this._eventOverviewTemplate.remove();
+        this.eventTemplate.remove();
+        this.eventOverviewTemplate.remove();
 
         return res;
     }
 
-    async _renderList() {
-        let currentYear = DateHelper.strftime('%y');
-        let unsortedFavorites = {};
-        this._events.forEach((event) => {
+    async renderList() {
+        const currentYear = DateHelper.strftime('%y');
+        const unsortedFavorites = {};
+        this.events.forEach((event) => {
             if (Helper.isNotNull(event)) {
-                //adding translations
+                // adding translations
                 Translator.addDynamicTranslations(event.getDynamicTranslations());
 
-                let yearSuffixStart = DateHelper.strftime('%y', event.getStartTime());
-                let yearSuffixEnd = DateHelper.strftime('%y', event.getEndTime());
+                const yearSuffixStart = DateHelper.strftime('%y', event.getStartTime());
+                const yearSuffixEnd = DateHelper.strftime('%y', event.getEndTime());
                 let dayName = DateHelper.strftime('%a %d.%m.', event.getStartTime());
-                let endDay = DateHelper.strftime('%a %d.%m.', event.getEndTime());
+                const endDay = DateHelper.strftime('%a %d.%m.', event.getEndTime());
 
                 if (yearSuffixEnd !== yearSuffixStart) {
-                    dayName += ' ' + yearSuffixStart + ' - ' + endDay + ' ' + yearSuffixEnd;
+                    dayName += ` ${yearSuffixStart} - ${endDay} ${yearSuffixEnd}`;
                 } else if (dayName !== endDay) {
-                    dayName += ' - ' + endDay;
+                    dayName += ` - ${endDay}`;
                     if (currentYear !== yearSuffixStart) {
-                        dayName += ' ' + yearSuffixStart;
+                        dayName += ` ${yearSuffixStart}`;
                     }
                 }
 
-                let sortingStartDay =
-                    DateHelper.strftime('%Y.%m.%d', event.getStartTime()) +
-                    ',' +
-                    dayName +
-                    ',' +
-                    DateHelper.strftime('%Y.%m.%d', event.getEndTime());
+                const sortingStartDay = `${DateHelper.strftime(
+                    '%Y.%m.%d',
+                    event.getStartTime()
+                )},${dayName},${DateHelper.strftime('%Y.%m.%d', event.getEndTime())}`;
                 if (Helper.isNull(unsortedFavorites[sortingStartDay])) {
                     unsortedFavorites[sortingStartDay] = {};
                 }
 
-                let startTime = DateHelper.strftime('%H:%M', event.getStartTime());
+                const startTime = DateHelper.strftime('%H:%M', event.getStartTime());
                 if (Helper.isNull(unsortedFavorites[sortingStartDay][startTime])) {
                     unsortedFavorites[sortingStartDay][startTime] = [];
                 }
@@ -101,7 +99,7 @@ export class EventOverviewFragment extends AbstractFragment {
             }
         });
 
-        let sortedFavorites: { [key: string]: { [key: string]: Event[] } } = {};
+        const sortedFavorites: { [key: string]: { [key: string]: Event[] } } = {};
         Object.keys(unsortedFavorites)
             .sort()
             .forEach((day) => {
@@ -110,39 +108,40 @@ export class EventOverviewFragment extends AbstractFragment {
                     .sort()
                     .forEach((time) => {
                         sortedFavorites[day][time] = unsortedFavorites[day][time].sort((a, b) => {
-                            let aUpper = Translator.translate(a.getNameTranslation()).toUpperCase();
-                            let bUpper = Translator.translate(b.getNameTranslation()).toUpperCase();
+                            const aUpper = Translator.translate(a.getNameTranslation()).toUpperCase();
+                            const bUpper = Translator.translate(b.getNameTranslation()).toUpperCase();
 
+                            // eslint-disable-next-line no-nested-ternary
                             return aUpper < bUpper ? -1 : aUpper > bUpper ? 1 : 0;
                         });
                     });
             });
 
-        let today = DateHelper.strftime('%Y.%m.%d');
+        const today = DateHelper.strftime('%Y.%m.%d');
 
-        ViewHelper.removeAllChildren(this._eventContainer);
-        ViewHelper.removeAllChildren(this._eventContainerPast);
+        ViewHelper.removeAllChildren(this.eventContainer);
+        ViewHelper.removeAllChildren(this.eventContainerPast);
 
         let hasEventsInPast = false;
-        let translator = Translator.getInstance();
+        const translator = Translator.getInstance();
 
         let numEvents = 0;
 
         Object.keys(sortedFavorites).some((day) => {
-            let dayParts = day.split(',');
+            const dayParts = day.split(',');
 
-            let dayContainer = <HTMLElement>this._eventTemplate.cloneNode(true);
-            dayContainer.querySelector('.day').innerHTML = dayParts[1];
+            const dayContainer = <HTMLElement>this.eventTemplate.cloneNode(true);
+            [, dayContainer.querySelector('.day').innerHTML] = dayParts;
 
             const res = Object.keys(sortedFavorites[day]).some((time) => {
                 return sortedFavorites[day][time].some((event) => {
-                    let eventElement = <HTMLElement>this._eventOverviewTemplate.cloneNode(true);
+                    const eventElement = <HTMLElement>this.eventOverviewTemplate.cloneNode(true);
                     eventElement
                         .querySelector('.name')
                         .appendChild(translator.makePersistentTranslation(event.getNameTranslation()));
                     (eventElement.querySelector('.time') as HTMLElement).innerText = time;
 
-                    let places = event.getPlaces();
+                    const places = event.getPlaces();
                     const placesIsArray = Array.isArray(places);
                     let placesIndexes = places;
                     if (!placesIsArray) {
@@ -157,14 +156,14 @@ export class EventOverviewFragment extends AbstractFragment {
                                   true
                               )
                             : PlaceHelper.createMultipleLocationsView()
-                        ).then((view) => eventElement.querySelector('.place-container').appendChild(view));
+                        ).then((placeView) => eventElement.querySelector('.place-container').appendChild(placeView));
                     }
 
                     eventElement.addEventListener('click', () => {
                         this.startSite(EventSite, { id: event.getId() });
                     });
 
-                    let favElem = eventElement.querySelector('.favorite');
+                    const favElem = eventElement.querySelector('.favorite');
                     Favorite.eventIsFavorite(event.getId()).then((isFavorite) => {
                         if (isFavorite) {
                             favElem.classList.add('is-favorite');
@@ -175,8 +174,8 @@ export class EventOverviewFragment extends AbstractFragment {
                         e.stopPropagation();
                         e.preventDefault();
 
-                        //TODO changing
-                        let isFavourite = await EventHelper.toggleFavorite(event);
+                        // TODO changing
+                        const isFavourite = await EventHelper.toggleFavorite(event);
                         if (isFavourite) {
                             favElem.classList.add('is-favorite');
                         } else {
@@ -190,7 +189,7 @@ export class EventOverviewFragment extends AbstractFragment {
                         organisers.forEach((organiser) => {
                             Translator.addDynamicTranslations(organiser.getDynamicTranslations());
 
-                            let organiserTagElement = document.createElement('span');
+                            const organiserTagElement = document.createElement('span');
                             organiserTagElement.classList.add('tag');
                             organiserTagElement.appendChild(
                                 Translator.makePersistentTranslation(organiser.getNameTranslation())
@@ -201,32 +200,30 @@ export class EventOverviewFragment extends AbstractFragment {
 
                     dayContainer.appendChild(eventElement);
                     numEvents++;
-                    if (this.showMaxEvents > 0 && numEvents >= this.showMaxEvents) {
-                        return true;
-                    }
+                    return this.showMaxEvents > 0 && numEvents >= this.showMaxEvents;
                 });
             });
 
-            if (this._showInPast && dayParts[2] < today) {
-                this._eventContainerPast.appendChild(dayContainer);
+            if (this.showInPast && dayParts[2] < today) {
+                this.eventContainerPast.appendChild(dayContainer);
                 hasEventsInPast = true;
             } else {
-                this._eventContainer.appendChild(dayContainer);
+                this.eventContainer.appendChild(dayContainer);
             }
             return res;
         });
         if (Object.keys(sortedFavorites).length === 0) {
-            let elem = document.createElement('div');
+            const elem = document.createElement('div');
             elem.classList.add('no-events');
             elem.appendChild(Translator.makePersistentTranslation('no events'));
-            this._eventContainer.appendChild(elem);
+            this.eventContainer.appendChild(elem);
         }
         if (hasEventsInPast) {
-            this._pastSection.classList.remove('hidden');
+            this.pastSection.classList.remove('hidden');
         } else {
-            this._pastSection.classList.add('hidden');
+            this.pastSection.classList.add('hidden');
         }
-        Translator.getInstance().updateTranslations(this._eventContainer);
-        Translator.getInstance().updateTranslations(this._eventContainerPast);
+        Translator.getInstance().updateTranslations(this.eventContainer);
+        Translator.getInstance().updateTranslations(this.eventContainerPast);
     }
 }

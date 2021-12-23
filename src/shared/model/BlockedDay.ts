@@ -12,6 +12,7 @@ export class BlockedDay extends AccessEasySyncModel {
     getEvent() {
         return this.event;
     }
+
     setEvent(event: Event) {
         this.event = event;
     }
@@ -27,26 +28,27 @@ export class BlockedDay extends AccessEasySyncModel {
     getDay() {
         return this.day;
     }
+
     setDay(day: Date) {
         this.day = day;
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['day'] = BaseDatabase.TYPES.DATE;
+        const columns = super.getColumnDefinitions();
+        columns.day = BaseDatabase.TYPES.DATE;
         return columns;
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations['repeatedEvent'] = {
+        const relations = EasySyncBaseModel.getRelationDefinitions();
+        relations.repeatedEvent = {
             target: RepeatedEvent.getSchemaName(),
             type: 'many-to-one',
             inverseSide: 'blockedDays',
             joinColumn: true,
             sync: true,
         };
-        relations['event'] = {
+        relations.event = {
             target: Event.getSchemaName(),
             type: 'one-to-one',
             joinColumn: true,

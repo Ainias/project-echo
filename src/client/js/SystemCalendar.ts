@@ -5,7 +5,7 @@ import { Helper } from 'js-helper';
 import { NativeStoragePromise } from 'cordova-sites/dist/client/js/NativeStoragePromise';
 import { ConfirmDialog } from 'cordova-sites/dist/client';
 
-declare var device;
+declare let device;
 
 export class SystemCalendar {
     static NAME = 'echo';
@@ -13,84 +13,111 @@ export class SystemCalendar {
     static WEBSITE = 'echo.silas.link';
 
     static async createCalendar() {
-        return new Promise(async (resolve, reject) => {
-            if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
-                resolve(undefined);
-            } else {
-                let options = window['plugins'].calendar.getCreateCalendarOptions();
-                options.calendarName = SystemCalendar.NAME;
-                window['plugins'].calendar.createCalendar(options, resolve, reject);
-            }
+        return new Promise((resolve, reject) => {
+            (async () => {
+                if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
+                    resolve(undefined);
+                } else {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const options = window.plugins.calendar.getCreateCalendarOptions();
+                    options.calendarName = SystemCalendar.NAME;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    window.plugins.calendar.createCalendar(options, resolve, reject);
+                }
+            })();
         }).catch((e) => console.error(e));
     }
 
     static async deleteCalendar() {
-        return new Promise(async (resolve, reject) => {
-            if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
-                return resolve(undefined);
-            }
-            window['plugins'].calendar.deleteCalendar(SystemCalendar.NAME, resolve, reject);
+        return new Promise((resolve, reject) => {
+            (async () => {
+                if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
+                    resolve(undefined);
+                    return;
+                }
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                window.plugins.calendar.deleteCalendar(SystemCalendar.NAME, resolve, reject);
+            })();
         }).catch((e) => console.error(e));
     }
 
     static async createEvent(title, location, description, start, end, url) {
-        return new Promise(async (resolve, reject) => {
-            if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
-                resolve(undefined);
-            } else {
-                let calendar = await this.getSelectedCalendar().catch((e) => console.error(e));
-                if (Helper.isNull(calendar)) {
-                    return resolve(undefined);
-                }
+        return new Promise((resolve, reject) => {
+            (async () => {
+                if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
+                    resolve(undefined);
+                } else {
+                    const calendar = await this.getSelectedCalendar().catch((e) => console.error(e));
+                    if (Helper.isNull(calendar)) {
+                        resolve(undefined);
+                        return;
+                    }
 
-                let options = window['plugins'].calendar.getCalendarOptions();
-                options.calendarName = calendar.name;
-                options.calendarId = calendar.id;
-                options.url = url;
-                window['plugins'].calendar.createEventWithOptions(
-                    title,
-                    location,
-                    description,
-                    start,
-                    end,
-                    options,
-                    resolve,
-                    reject
-                );
-            }
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const options = window.plugins.calendar.getCalendarOptions();
+                    options.calendarName = calendar.name;
+                    options.calendarId = calendar.id;
+                    options.url = url;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    window.plugins.calendar.createEventWithOptions(
+                        title,
+                        location,
+                        description,
+                        start,
+                        end,
+                        options,
+                        resolve,
+                        reject
+                    );
+                }
+            })();
         }).catch((e) => console.error(e));
     }
 
     static async findEvent(title, location, description, start, end) {
-        return new Promise(async (resolve, reject) => {
-            if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
-                resolve(undefined);
-            } else {
-                let calendar = await this.getMyCalendar();
-                let options = window['plugins'].calendar.getCalendarOptions();
-                options.calendarName = calendar.name;
-                options.calendarId = calendar.id;
-                options.url = 'https://echo.silas.link?s=event&id=1';
-                window['plugins'].calendar.findEventWithOptions(
-                    title,
-                    location,
-                    description,
-                    start,
-                    end,
-                    options,
-                    resolve,
-                    reject
-                );
-            }
+        return new Promise((resolve, reject) => {
+            (async () => {
+                if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
+                    resolve(undefined);
+                } else {
+                    const calendar = await this.getMyCalendar();
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const options = window.plugins.calendar.getCalendarOptions();
+                    options.calendarName = calendar.name;
+                    options.calendarId = calendar.id;
+                    options.url = 'https://echo.silas.link?s=event&id=1'; // TODO richtige URL?
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    window.plugins.calendar.findEventWithOptions(
+                        title,
+                        location,
+                        description,
+                        start,
+                        end,
+                        options,
+                        resolve,
+                        reject
+                    );
+                }
+            })();
         }).catch((e) => console.error(e));
     }
 
     static async hasCalendarPermission() {
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
             if (device.platform === 'browser') {
-                return resolve(true);
+                resolve(true);
+                return;
             }
-            window['plugins'].calendar.hasReadPermission((result) => resolve(result));
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            window.plugins.calendar.hasReadPermission((result) => resolve(result));
         });
     }
 
@@ -111,17 +138,21 @@ export class SystemCalendar {
                 await NativeStoragePromise.setItem('insert-favorites', '0');
             }
             return shouldInsert;
-        } else {
-            return shouldInsertFavorites === '1';
         }
+        return shouldInsertFavorites === '1';
     }
 
     static async listCalendars() {
-        return new Promise<any[]>(async (resolve, reject) => {
-            if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
-                return resolve([]);
-            }
-            window['plugins'].calendar.listCalendars(resolve, reject);
+        return new Promise<any[]>((resolve, reject) => {
+            (async () => {
+                if (device.platform === 'browser' || (await this.askIfFavoritesShouldBeInSystemCalendar()) === false) {
+                    return resolve([]);
+                }
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                window.plugins.calendar.listCalendars(resolve, reject);
+                return undefined;
+            })();
         }).catch((e) => {
             console.error(e);
             return [];
@@ -134,15 +165,15 @@ export class SystemCalendar {
             fav = new Favorite();
         }
 
-        let translator = Translator.getInstance();
+        const translator = Translator.getInstance();
         translator.addDynamicTranslations(event.getDynamicTranslations());
 
-        let places = await event.getPlaces();
+        const places = await event.getPlaces();
 
         fav.systemCalendarId = await this.createEvent(
             translator.translate(event.getNameTranslation()),
             Helper.isNotNull(places) && Object.keys(places).length >= 1 ? Object.keys(places)[0] : '',
-            translator.translate(event.getDescriptionTranslation()) + '\n\n',
+            `${translator.translate(event.getDescriptionTranslation())}\n\n`,
             await event.getStartTime(),
             await event.getEndTime(),
             SystemCalendar.WEBSITE + DataManager.buildQuery({ s: 'event', id: event.id })
@@ -151,31 +182,36 @@ export class SystemCalendar {
     }
 
     static async deleteEventFromSystemCalendar(event) {
-        let fav = await Favorite.findOne({ eventId: event.id });
+        const fav = await Favorite.findOne({ eventId: event.id });
         if (!fav) {
-            return;
+            return Promise.resolve();
         }
-        let res = this.deleteEvenById(fav.systemCalendarId);
+        const res = this.deleteEvenById(fav.systemCalendarId);
         fav.systemCalendarId = null;
         await fav.save();
         return res;
     }
 
     static async deleteEvenById(id) {
-        return new Promise(async (resolve, reject) => {
-            if (
-                device.platform === 'browser' ||
-                Helper.isNull(id) ||
-                (await this.askIfFavoritesShouldBeInSystemCalendar()) === false
-            ) {
-                return resolve(undefined);
-            }
-            window['plugins'].calendar.deleteEventById(id, undefined, resolve, reject);
+        return new Promise((resolve, reject) => {
+            (async () => {
+                if (
+                    device.platform === 'browser' ||
+                    Helper.isNull(id) ||
+                    (await this.askIfFavoritesShouldBeInSystemCalendar()) === false
+                ) {
+                    return resolve(undefined);
+                }
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                window.plugins.calendar.deleteEventById(id, undefined, resolve, reject);
+                return undefined;
+            })();
         }).catch((e) => console.error(e));
     }
 
     static async getMyCalendar() {
-        let calendars = await this.listCalendars();
+        const calendars = await this.listCalendars();
         let calendar = null;
 
         calendars.some((sysCalendar) => {
@@ -198,10 +234,10 @@ export class SystemCalendar {
             return null;
         }
 
-        let calendars = await this.listCalendars();
+        const calendars = await this.listCalendars();
         let calendar = null;
 
-        let calendarId = await NativeStoragePromise.getItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY);
+        const calendarId = await NativeStoragePromise.getItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY);
 
         calendars.some((sysCalendar) => {
             if (
@@ -215,9 +251,9 @@ export class SystemCalendar {
             return false;
         });
 
-        //Dauerschleife durch Permission-Abfrage verhindern
+        // Dauerschleife durch Permission-Abfrage verhindern
         if (calendar === null && (await this.hasCalendarPermission())) {
-            let id = await this.createCalendar();
+            const id = await this.createCalendar();
             await NativeStoragePromise.setItem(SystemCalendar.SYSTEM_CALENDAR_ID_KEY, id);
             return this.getSelectedCalendar();
         }

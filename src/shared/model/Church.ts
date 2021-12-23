@@ -5,7 +5,7 @@ import { FsjChurchBaseObject } from './FsjChurchBaseObject';
 import { FileMedium } from 'cordova-sites-easy-sync/dist/shared';
 
 export class Church extends FsjChurchBaseObject {
-    public places: any[];
+    public places: string[] | Record<string, string>;
     private instagram: string;
 
     constructor() {
@@ -15,15 +15,15 @@ export class Church extends FsjChurchBaseObject {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['places'] = BaseDatabase.TYPES.MY_JSON;
-        columns['instagram'] = { type: BaseDatabase.TYPES.STRING, nullable: true };
+        const columns = super.getColumnDefinitions();
+        columns.places = BaseDatabase.TYPES.MY_JSON;
+        columns.instagram = { type: BaseDatabase.TYPES.STRING, nullable: true };
         return columns;
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations['regions'] = {
+        const relations = EasySyncBaseModel.getRelationDefinitions();
+        relations.regions = {
             target: Region.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
@@ -31,7 +31,7 @@ export class Church extends FsjChurchBaseObject {
             },
             sync: true,
         };
-        relations['images'] = {
+        relations.images = {
             target: FileMedium.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
@@ -45,6 +45,7 @@ export class Church extends FsjChurchBaseObject {
     getInstagram() {
         return this.instagram;
     }
+
     setInstagram(instagram: string) {
         this.instagram = instagram;
     }

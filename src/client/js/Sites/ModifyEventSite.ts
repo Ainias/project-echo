@@ -1,5 +1,3 @@
-const view = require('../../html/Sites/addEventSite.html');
-
 import { MenuFooterSite } from './MenuFooterSite';
 import { App, Form, Translator, Helper, Toast } from 'cordova-sites';
 import { Church } from '../../../shared/model/Church';
@@ -18,17 +16,19 @@ import { EventHelper } from '../Helper/EventHelper';
 import { BlockedDay } from '../../../shared/model/BlockedDay';
 import { FileMedium } from 'cordova-sites-easy-sync/dist/shared/FileMedium';
 
+const view = require('../../html/Sites/addEventSite.html');
+
 export class ModifyEventSite extends MenuFooterSite {
-    private _churches: Church[];
-    private _event: Event | RepeatedEvent;
-    private _blockedDay: Date;
-    private _placeNumber: number;
-    private _placesContainer: HTMLElement;
-    private _placesLineTemplate: HTMLElement;
-    private _placePreview: HTMLIFrameElement;
-    private _form: Form;
-    private _repeatableSectionElement: HTMLElement;
-    private _repeatableCheckbox: HTMLInputElement;
+    private churches: Church[];
+    private event: Event | RepeatedEvent;
+    private blockedDay: Date;
+    private placeNumber: number;
+    private placesContainer: HTMLElement;
+    private placesLineTemplate: HTMLElement;
+    private placePreview: HTMLIFrameElement;
+    private form: Form;
+    private repeatableSectionElement: HTMLElement;
+    private repeatableCheckbox: HTMLInputElement;
 
     constructor(siteManager) {
         super(siteManager, view);
@@ -36,59 +36,59 @@ export class ModifyEventSite extends MenuFooterSite {
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
-        this._churches = <Church[]>await Church.find();
+        const res = super.onConstruct(constructParameters);
+        this.churches = <Church[]>await Church.find();
 
-        if (constructParameters['id']) {
-            if (constructParameters['isRepeatableEvent']) {
-                let relations = RepeatedEvent.getRelations();
-                this._event = await RepeatedEvent.findById(constructParameters['id'], relations);
+        if (constructParameters.id) {
+            if (constructParameters.isRepeatableEvent) {
+                const relations = RepeatedEvent.getRelations();
+                this.event = await RepeatedEvent.findById(constructParameters.id, relations);
             } else {
-                let id = constructParameters['id'];
+                const { id } = constructParameters;
                 if (typeof id === 'string' && id.startsWith('r')) {
-                    let parts = id.split('-');
+                    const parts = id.split('-');
                     if (parts.length === 4) {
-                        let relations = RepeatedEvent.getRelations();
-                        let repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), relations);
+                        const relations = RepeatedEvent.getRelations();
+                        const repeatedEvent = await RepeatedEvent.findById(parts[0].substr(1), relations);
 
-                        this._blockedDay = new Date(parseInt(parts[1]), parseInt(parts[2]) - 1, parseInt(parts[3]));
-                        this._event = await EventHelper.generateSingleEventFromRepeatedEvent(
+                        this.blockedDay = new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3]));
+                        this.event = await EventHelper.generateSingleEventFromRepeatedEvent(
                             repeatedEvent,
-                            this._blockedDay
+                            this.blockedDay
                         );
-                        this._event.id = null;
+                        this.event.id = null;
                     }
                 } else {
-                    this._event = await Event.findById(id, Event.getRelations());
+                    this.event = await Event.findById(id, Event.getRelations());
                 }
             }
         }
 
-        this._placeNumber = 0;
+        this.placeNumber = 0;
         return res;
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
-        let organizerCheckbox = this.findBy('.organizer-template');
-        let organizerContainer = organizerCheckbox.parentElement;
+        const organizerCheckbox = this.findBy('.organizer-template');
+        const organizerContainer = organizerCheckbox.parentElement;
 
         organizerCheckbox.remove();
         organizerCheckbox.classList.remove('organizer-template');
 
-        this._placesContainer = this.findBy('#places-container');
-        this._placesLineTemplate = this.findBy('#place-line-template');
-        this._placesLineTemplate.removeAttribute('id');
-        this._placesLineTemplate.remove();
+        this.placesContainer = this.findBy('#places-container');
+        this.placesLineTemplate = this.findBy('#place-line-template');
+        this.placesLineTemplate.removeAttribute('id');
+        this.placesLineTemplate.remove();
 
-        this._placePreview = this.findBy('#place-preview');
+        this.placePreview = this.findBy('#place-preview');
 
-        this._churches.forEach((church) => {
+        this.churches.forEach((church) => {
             Translator.addDynamicTranslations(church.getDynamicTranslations());
 
-            let elem = organizerCheckbox.cloneNode(true);
-            elem.querySelector('.organizer-checkbox').name = 'church-' + church.id;
+            const elem = organizerCheckbox.cloneNode(true);
+            elem.querySelector('.organizer-checkbox').name = `church-${church.id}`;
             elem.querySelector('.organizer-checkbox').value = church.id;
             elem.querySelector('.church-name').appendChild(
                 Translator.makePersistentTranslation(church.getNameTranslation())
@@ -97,10 +97,10 @@ export class ModifyEventSite extends MenuFooterSite {
             organizerContainer.appendChild(elem);
         });
 
-        let imageInput = this.findBy('#event-image-input');
+        const imageInput = this.findBy('#event-image-input');
         imageInput.addEventListener('change', () => {
             if (imageInput.files && imageInput.files[0]) {
-                let reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = (e) => {
                     this.findBy('#event-image').src = e.target.result;
                 };
@@ -108,32 +108,32 @@ export class ModifyEventSite extends MenuFooterSite {
             }
         });
 
-        let typeSelect = this.findBy('[name=type]');
+        const typeSelect = this.findBy('[name=type]');
         Object.values(Event.TYPES).forEach((type) => {
-            let optionElem = <HTMLOptionElement>Translator.makePersistentTranslation(type, undefined, 'option');
+            const optionElem = <HTMLOptionElement>Translator.makePersistentTranslation(type, undefined, 'option');
             optionElem.value = type;
             typeSelect.appendChild(optionElem);
         });
 
-        this._form = new Form(this.findBy('#add-event-form'), async (values) => {
+        this.form = new Form(this.findBy('#add-event-form'), async (values) => {
             this.showLoadingSymbol();
-            let names = {};
-            let descriptions = {};
-            let organizers = [];
-            let imageSrc = values['image'];
+            const names = {};
+            const descriptions = {};
+            const organizers = [];
+            let imageSrc = values.image;
 
-            if (Helper.imageUrlIsEmpty(values['image'])) {
+            if (Helper.imageUrlIsEmpty(values.image)) {
                 imageSrc = values['image-before'];
             }
 
-            let places = {};
-            let regions = [await Region.findById(1)];
+            const places = {};
+            const regions = [await Region.findById(1)];
 
-            let indexedChurches = Helper.arrayToObject(this._churches, (church) => church.id);
+            const indexedChurches = Helper.arrayToObject(this.churches, (church) => church.id);
 
             Object.keys(values).forEach((valName) => {
                 if (valName.startsWith('church-')) {
-                    organizers.push(indexedChurches[parseInt(values[valName])]);
+                    organizers.push(indexedChurches[Number(values[valName])]);
                 }
                 if (valName.startsWith('name-')) {
                     names[valName.split('-')[1]] = values[valName];
@@ -142,7 +142,7 @@ export class ModifyEventSite extends MenuFooterSite {
                     descriptions[valName.split('-')[1]] = values[valName].replace(/&nbsp;/g, ' ');
                 }
                 if (valName.startsWith('place-name-')) {
-                    let val = values['place-query-' + valName.substring(11)];
+                    let val = values[`place-query-${valName.substring(11)}`];
                     if (val.trim() === '') {
                         val = values[valName];
                     }
@@ -151,11 +151,11 @@ export class ModifyEventSite extends MenuFooterSite {
             });
 
             let event;
-            if (this._event) {
-                if (this._event instanceof RepeatedEvent) {
-                    event = this._event.getOriginalEvent();
+            if (this.event) {
+                if (this.event instanceof RepeatedEvent) {
+                    event = this.event.getOriginalEvent();
                 } else {
-                    event = this._event;
+                    event = this.event;
                 }
             } else {
                 event = new Event();
@@ -163,7 +163,7 @@ export class ModifyEventSite extends MenuFooterSite {
 
             let img: any;
             if (event.images && event.images.length >= 0) {
-                img = event.images[0];
+                [img] = event.images;
             } else {
                 img = new FileMedium();
             }
@@ -176,21 +176,21 @@ export class ModifyEventSite extends MenuFooterSite {
             event.setOrganisers(organizers);
             event.setImages([img]);
             event.setPlaces(places);
-            event.setStartTime(new Date(values['start']));
-            event.setEndTime(new Date(values['end']));
-            event.setType(values['type']);
+            event.setStartTime(new Date(values.start));
+            event.setEndTime(new Date(values.end));
+            event.setType(values.type);
             event.setRegions(regions);
-            if (values['website'].trim() === '') {
-                values['website'] = null;
+            if (values.website.trim() === '') {
+                values.website = null;
             }
-            event.setWebsite(values['website']);
+            event.setWebsite(values.website);
 
-            let eventId = event.id;
-            let savePromise = event.save();
+            const eventId = event.id;
+            const savePromise = event.save();
             if (Helper.isNotNull(event.repeatedEvent) && eventId === null) {
-                let blockedDay = new BlockedDay();
-                blockedDay.setDay(this._blockedDay);
-                this._blockedDay.setHours(12);
+                const blockedDay = new BlockedDay();
+                blockedDay.setDay(this.blockedDay);
+                this.blockedDay.setHours(12);
                 blockedDay.setRepeatedEvent(event.repeatedEvent);
                 blockedDay.setEvent(event);
                 event.repeatedEvent.blockedDays.push(blockedDay);
@@ -200,34 +200,34 @@ export class ModifyEventSite extends MenuFooterSite {
             await savePromise;
             // eventId = event.id;
 
-            if (values['repeatable'] || this._event instanceof RepeatedEvent) {
+            if (values.repeatable || this.event instanceof RepeatedEvent) {
                 let repeatedEvent: RepeatedEvent;
-                if (this._event instanceof RepeatedEvent) {
-                    repeatedEvent = this._event;
+                if (this.event instanceof RepeatedEvent) {
+                    repeatedEvent = this.event;
                 } else {
                     repeatedEvent = new RepeatedEvent();
-                    this._event = repeatedEvent;
+                    this.event = repeatedEvent;
                 }
 
-                repeatedEvent.setStartDate(new Date(values['start']));
+                repeatedEvent.setStartDate(new Date(values.start));
 
                 repeatedEvent.setOriginalEvent(event);
                 event.repeatedEvent = repeatedEvent;
                 event.setIsTemplate(true);
 
-                let repeatUntil = new Date(values['repeat-until']);
-                if (isNaN(repeatUntil.getTime())) {
+                const repeatUntil = new Date(values['repeat-until']);
+                if (Number.isNaN(repeatUntil.getTime())) {
                     repeatedEvent.setRepeatUntil(null);
                 } else {
                     repeatedEvent.setRepeatUntil(repeatUntil);
                 }
 
-                let repeatedDays = [];
-                let days = [1, 2, 3, 4, 5, 6, 0];
+                const repeatedDays = [];
+                const days = [1, 2, 3, 4, 5, 6, 0];
 
                 days.forEach((day) => {
-                    if (values['repeat-' + day]) {
-                        repeatedDays.push(values['repeat-' + day]);
+                    if (values[`repeat-${day}`]) {
+                        repeatedDays.push(values[`repeat-${day}`]);
                     }
                 });
 
@@ -236,8 +236,8 @@ export class ModifyEventSite extends MenuFooterSite {
                 await event.save();
             }
 
-            if (this._event instanceof RepeatedEvent) {
-                const nextEvent = await EventHelper.generateNextSingleEventFromRepeatedEvent(this._event);
+            if (this.event instanceof RepeatedEvent) {
+                const nextEvent = await EventHelper.generateNextSingleEventFromRepeatedEvent(this.event);
                 this.finishAndStartSite(EventSite, {
                     id: nextEvent.getId(),
                 });
@@ -249,19 +249,19 @@ export class ModifyEventSite extends MenuFooterSite {
             this.showLoadingSymbol();
         });
 
-        this._form.addValidator((values) => {
-            let errors = {};
-            if (values['start'].trim() === '') {
-                errors['error1'] = 'required';
+        this.form.addValidator((values) => {
+            const errors: Record<string, string> = {};
+            if (values.start.trim() === '') {
+                errors.error1 = 'required';
             }
-            if (values['end'].trim() === '') {
-                errors['error2'] = 'reqired';
+            if (values.end.trim() === '') {
+                errors.error2 = 'reqired';
             }
             if (Object.keys(errors).length > 0) {
                 return errors;
             }
 
-            if (new Date(values['start']).getTime() > new Date(values['end']).getTime()) {
+            if (new Date(values.start).getTime() > new Date(values.end).getTime()) {
                 new Toast('the endpoint must be after the start').show();
                 return {
                     end: 'the endpoint must be after the start',
@@ -271,7 +271,7 @@ export class ModifyEventSite extends MenuFooterSite {
         });
 
         this.findBy('.editor', true).forEach(async (e) => {
-            this._form.addEditor(await CKEditor.create(e, CONSTANTS.CK_EDITOR_CONFIG));
+            this.form.addEditor(await CKEditor.create(e, CONSTANTS.CK_EDITOR_CONFIG));
         });
 
         this.findBy('#add-place').addEventListener('click', () => {
@@ -280,14 +280,14 @@ export class ModifyEventSite extends MenuFooterSite {
 
         this.addPlaceLine();
 
-        this._repeatableSectionElement = this.findBy('#repeatable-section');
+        this.repeatableSectionElement = this.findBy('#repeatable-section');
 
-        this._repeatableCheckbox = this.findBy('#repeatable-checkbox');
-        this._repeatableCheckbox.addEventListener('change', () => {
-            if (this._repeatableCheckbox.checked) {
-                this._repeatableSectionElement.classList.remove('hidden');
+        this.repeatableCheckbox = this.findBy('#repeatable-checkbox');
+        this.repeatableCheckbox.addEventListener('change', () => {
+            if (this.repeatableCheckbox.checked) {
+                this.repeatableSectionElement.classList.remove('hidden');
             } else {
-                this._repeatableSectionElement.classList.add('hidden');
+                this.repeatableSectionElement.classList.add('hidden');
             }
         });
 
@@ -304,14 +304,14 @@ export class ModifyEventSite extends MenuFooterSite {
     }
 
     addPlaceLine() {
-        this._placeNumber++;
-        let newLine = <HTMLElement>this._placesLineTemplate.cloneNode(true);
+        this.placeNumber++;
+        const newLine = <HTMLElement>this.placesLineTemplate.cloneNode(true);
 
-        let placeNameElem = <HTMLInputElement>newLine.querySelector('.place-name');
-        placeNameElem.name = 'place-name-' + this._placeNumber;
+        const placeNameElem = <HTMLInputElement>newLine.querySelector('.place-name');
+        placeNameElem.name = `place-name-${this.placeNumber}`;
 
-        let placeQueryElem = <HTMLInputElement>newLine.querySelector('.place-query');
-        placeQueryElem.name = 'place-query-' + this._placeNumber;
+        const placeQueryElem = <HTMLInputElement>newLine.querySelector('.place-query');
+        placeQueryElem.name = `place-query-${this.placeNumber}`;
 
         placeNameElem.addEventListener('input', () => {
             placeQueryElem.placeholder = placeNameElem.value;
@@ -329,9 +329,9 @@ export class ModifyEventSite extends MenuFooterSite {
                 clearTimeout(updateTimeout);
             }
             updateTimeout = setTimeout(() => {
-                let newSrc = PlaceHelper._buildMapsLink(placeQueryElem.value || placeQueryElem.placeholder);
-                if (this._placePreview.src !== newSrc) {
-                    this._placePreview.src = newSrc;
+                const newSrc = PlaceHelper.buildMapsLink(placeQueryElem.value || placeQueryElem.placeholder);
+                if (this.placePreview.src !== newSrc) {
+                    this.placePreview.src = newSrc;
                 }
             }, 200);
         };
@@ -344,7 +344,7 @@ export class ModifyEventSite extends MenuFooterSite {
             newLine.remove();
         });
 
-        this._placesContainer.appendChild(newLine);
+        this.placesContainer.appendChild(newLine);
         requestAnimationFrame(() => {
             placeNameElem.focus();
         });
@@ -353,35 +353,35 @@ export class ModifyEventSite extends MenuFooterSite {
     }
 
     async setFormValuesFromEvent() {
-        if (this._event instanceof Event || this._event instanceof RepeatedEvent) {
-            let values = {};
+        if (this.event instanceof Event || this.event instanceof RepeatedEvent) {
+            const values: Record<string, string | Record<string, string>> = {};
 
-            let names = this._event.getNames();
+            const names = this.event.getNames();
             Object.keys(names).forEach((lang) => {
-                values['name-' + lang] = names[lang];
+                values[`name-${lang}`] = names[lang];
             });
 
-            let descriptions = this._event.getDescriptions();
+            const descriptions = this.event.getDescriptions();
             Object.keys(descriptions).forEach((lang) => {
-                values['description-' + lang] = descriptions[lang].replace(/&nbsp;/g, ' ');
+                values[`description-${lang}`] = descriptions[lang].replace(/&nbsp;/g, ' ');
             });
-            values['type'] = this._event.getType();
-            values['start'] = DateHelper.strftime('%Y-%m-%d %H:%M', this._event.getStartTime());
-            values['end'] = DateHelper.strftime('%Y-%m-%d %H:%M', this._event.getEndTime());
-            values['website'] = this._event.getWebsite();
+            values.type = this.event.getType();
+            values.start = DateHelper.strftime('%Y-%m-%d %H:%M', this.event.getStartTime());
+            values.end = DateHelper.strftime('%Y-%m-%d %H:%M', this.event.getEndTime());
+            values.website = this.event.getWebsite();
 
-            let organisers = this._event.getOrganisers();
+            const organisers = this.event.getOrganisers();
             if (Helper.isNotNull(organisers)) {
                 organisers.forEach((church) => {
-                    values['church-' + church.id] = church.id;
+                    values[`church-${church.id}`] = church.id;
                 });
             }
 
-            this.findBy('#event-image').src = this._event.getImages()[0].getUrl();
-            this.findBy("input[type='hidden'][name='image-before']").value = this._event.getImages()[0];
+            this.findBy('#event-image').src = this.event.getImages()[0].getUrl();
+            [this.findBy("input[type='hidden'][name='image-before']").value] = this.event.getImages();
             this.findBy("input[type='file'][name='image']").removeAttribute('required');
 
-            let places: any = this._event.getPlaces();
+            let places: any = this.event.getPlaces();
             if (Array.isArray(places)) {
                 places = Helper.arrayToObject(places, (place) => place);
             }
@@ -390,11 +390,11 @@ export class ModifyEventSite extends MenuFooterSite {
                     this.addPlaceLine();
                 }
 
-                values['place-name-' + (i + 1)] = placeName;
+                values[`place-name-${i + 1}`] = placeName;
                 if (placeName !== places[placeName]) {
-                    values['place-query-' + (i + 1)] = places[placeName];
+                    values[`place-query-${i + 1}`] = places[placeName];
                 } else {
-                    let queryElem = <HTMLInputElement>this.findBy("[name='place-query-" + (i + 1) + "']");
+                    const queryElem = <HTMLInputElement>this.findBy(`[name='place-query-${i + 1}']`);
                     queryElem.placeholder = placeName;
                     queryElem.removeAttribute('data-translation-placeholder');
                 }
@@ -403,26 +403,26 @@ export class ModifyEventSite extends MenuFooterSite {
                 this.findBy('.remove-place')?.dispatchEvent(new MouseEvent('click'));
             }
 
-            if (this._event instanceof RepeatedEvent) {
-                this._repeatableCheckbox.checked = true;
-                this._repeatableCheckbox.setAttribute('readonly', 'true');
-                this._repeatableCheckbox.setAttribute('disabled', 'true');
-                this._repeatableSectionElement.classList.remove('hidden');
+            if (this.event instanceof RepeatedEvent) {
+                this.repeatableCheckbox.checked = true;
+                this.repeatableCheckbox.setAttribute('readonly', 'true');
+                this.repeatableCheckbox.setAttribute('disabled', 'true');
+                this.repeatableSectionElement.classList.remove('hidden');
 
-                if (Helper.isNotNull(this._event.getRepeatUntil())) {
-                    values['repeat-until'] = DateHelper.strftime('%Y-%m-%d %H:%M', this._event.getRepeatUntil());
+                if (Helper.isNotNull(this.event.getRepeatUntil())) {
+                    values['repeat-until'] = DateHelper.strftime('%Y-%m-%d %H:%M', this.event.getRepeatUntil());
                 }
 
-                let repeatingArguments = this._event.getRepeatingArguments().split(',');
+                const repeatingArguments = this.event.getRepeatingArguments().split(',');
                 repeatingArguments.forEach((weekday) => {
-                    values['repeat-' + weekday] = weekday;
+                    values[`repeat-${weekday}`] = weekday;
                 });
-            } else if (this._event.getRepeatedEvent()) {
-                this._repeatableCheckbox.setAttribute('readonly', 'true');
-                this._repeatableCheckbox.setAttribute('disabled', 'true');
+            } else if (this.event.getRepeatedEvent()) {
+                this.repeatableCheckbox.setAttribute('readonly', 'true');
+                this.repeatableCheckbox.setAttribute('disabled', 'true');
             }
 
-            await this._form.setValues(values);
+            await this.form.setValues(values);
         }
     }
 }

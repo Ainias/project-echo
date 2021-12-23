@@ -4,12 +4,12 @@ import { Podcast } from './models/v2/Podcast';
 import { Helper } from 'js-helper/dist/shared/Helper';
 
 export class AddPodcasts1000000014000 implements MigrationInterface {
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return Promise.resolve(undefined);
     }
 
     async up(queryRunner: QueryRunner): Promise<any> {
-        let podcastTable = MigrationHelper.createTableFromModelClass(Podcast);
+        const podcastTable = MigrationHelper.createTableFromModelClass(Podcast);
         await queryRunner.createTable(podcastTable);
 
         const podcastImagesTable = MigrationHelper.createManyToManyTable('podcast', 'fileMedium');
@@ -18,7 +18,7 @@ export class AddPodcasts1000000014000 implements MigrationInterface {
 
         if (MigrationHelper.isServer()) {
             let accesses = await queryRunner.query('SELECT * FROM access');
-            accesses = Helper.arrayToObject(accesses, (obj) => obj['id']);
+            accesses = Helper.arrayToObject(accesses, (obj) => obj.id);
 
             if (Helper.isNull(accesses['11']))
                 await queryRunner.query(
@@ -26,7 +26,7 @@ export class AddPodcasts1000000014000 implements MigrationInterface {
                 );
 
             let roleAccesses = await queryRunner.query('SELECT * FROM roleAccess');
-            roleAccesses = Helper.arrayToObject(roleAccesses, (obj) => obj['roleId'] + ',' + obj['accessId']);
+            roleAccesses = Helper.arrayToObject(roleAccesses, (obj) => `${obj.roleId},${obj.accessId}`);
 
             if (Helper.isNull(roleAccesses['6,11']))
                 await queryRunner.query('INSERT INTO `roleAccess` (roleId, accessId) VALUES (6,11)');

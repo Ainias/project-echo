@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10015" id="de.echoapp" version="1.0.15" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Echo</name>
+<widget android-versionCode="10015" id="de.echoapp.test" version="1.0.15" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Echo Test</name>
     <description>
         Ein christlicher Terminkalender für Gemeinden rund un Köln.
     </description>
@@ -81,7 +81,6 @@
         <variable name="CALENDAR_USAGE_DESCRIPTION" value="This App accesses your calendar in order to register events." />
     </plugin>
     <plugin name="cordova-plugin-wkwebview-file-xhr" spec="^3.0.0" />
-    <engine name="android" spec="^9.0.0" />
     <engine name="browser" spec="^6.0.0" />
     <engine name="ios" spec="^6.1.1" />
 </widget>

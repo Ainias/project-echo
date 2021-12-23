@@ -1,6 +1,3 @@
-const view = require('../../html/Sites/welcomeSite.html');
-const componentImg = require('../../img/component.jpg');
-
 import { AbsoluteBarMenuSite } from './AbsoluteBarMenuSite';
 import { Post } from '../../../shared/model/Post';
 import { Translator } from 'cordova-sites/dist/client/js/Translator';
@@ -14,11 +11,14 @@ import { ViewHelper } from 'js-helper/dist/client/ViewHelper';
 import { EventOverviewFragment } from '../Fragments/EventOverviewFragment';
 import { EventHelper } from '../Helper/EventHelper';
 
+const view = require('../../html/Sites/welcomeSite.html');
+const componentImg = require('../../img/component.jpg');
+
 export class WelcomeSite extends AbsoluteBarMenuSite {
-    private _eventListFragment: EventOverviewFragment;
-    private _postTemplate: HTMLElement;
-    private _postContainer: HTMLElement;
-    private _posts: Post[];
+    private eventListFragment: EventOverviewFragment;
+    private postTemplate: HTMLElement;
+    private postContainer: HTMLElement;
+    private posts: Post[];
 
     constructor(siteManager) {
         super(siteManager, view);
@@ -27,18 +27,18 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         this.footerFragment.setSelected('.icon.home');
         this.getNavbarFragment().setBackgroundImage(componentImg);
 
-        this._eventListFragment = new EventOverviewFragment(this);
-        this.addFragment('#favorite-list', this._eventListFragment);
+        this.eventListFragment = new EventOverviewFragment(this);
+        this.addFragment('#favorite-list', this.eventListFragment);
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
-        this._postTemplate = this.findBy('#post-template');
-        this._postTemplate.remove();
-        this._postTemplate.removeAttribute('id');
+        this.postTemplate = this.findBy('#post-template');
+        this.postTemplate.remove();
+        this.postTemplate.removeAttribute('id');
 
-        this._postContainer = this.findBy('#post-container');
+        this.postContainer = this.findBy('#post-container');
 
         const spoiler = this.findBy('.text-spoiler');
         spoiler.addEventListener('click', () => spoiler.classList.toggle('open'));
@@ -46,19 +46,19 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         return res;
     }
 
-    async onStart(pauseArguments) {
-        this._posts = <Post[]>await Post.find(undefined, {
+    async onStart() {
+        this.posts = <Post[]>await Post.find(undefined, {
             priority: 'DESC',
             createdAt: 'ASC',
         });
 
-        this._posts = [];
-        ViewHelper.removeAllChildren(this._postContainer);
+        this.posts = [];
+        ViewHelper.removeAllChildren(this.postContainer);
 
-        this._posts.forEach((post) => {
+        this.posts.forEach((post) => {
             Translator.getInstance().addDynamicTranslations(post.getDynamicTranslations());
 
-            let postElem = <HTMLElement>this._postTemplate.cloneNode(true);
+            const postElem = <HTMLElement>this.postTemplate.cloneNode(true);
             postElem
                 .querySelector('.text')
                 .appendChild(Translator.getInstance().makePersistentTranslation(post.getTextTranslation()));
@@ -86,15 +86,15 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
                 }
             });
 
-            this._postContainer.appendChild(postElem);
+            this.postContainer.appendChild(postElem);
         });
-        this._checkRightsPanel();
-        Translator.getInstance().updateTranslations(this._postContainer);
+        this.checkRightsPanel();
+        Translator.getInstance().updateTranslations(this.postContainer);
 
-        //Load events of next Week
-        let now = new Date();
+        // Load events of next Week
+        const now = new Date();
 
-        let inOneWeek = new Date();
+        const inOneWeek = new Date();
         inOneWeek.setDate(now.getDate() + 7);
         inOneWeek.setHours(0);
         inOneWeek.setMinutes(0);
@@ -102,7 +102,7 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         inOneWeek.setMilliseconds(0);
         // inOneWeek.setSeconds(-1);
 
-        let events = await EventHelper.search(
+        const events = await EventHelper.search(
             '',
             DateHelper.strftime('%Y-%m-%d', now),
             DateHelper.strftime('%Y-%m-%d', inOneWeek),
@@ -115,10 +115,10 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         //     events = [events[0]];
         // }
 
-        //TODO show favorites instead of next Events?
+        // TODO show favorites instead of next Events?
 
         // let favorites = await Favorite.find({
-        //     isFavorite: true,
+        //     isFavorite: 1,
         // }, undefined, undefined, undefined);
         // let events = await Favorite.getEvents(favorites);
         //
@@ -128,11 +128,11 @@ export class WelcomeSite extends AbsoluteBarMenuSite {
         // events = events.filter(e => e.getEndTime().getTime() > now).sort((a,b) => a.getStartTime() - b.getStartTime())
         //     .filter((e,i) => i < SHOW_MAX_FAVORITES);
 
-        this._eventListFragment.setShowMaxEvents(1);
-        this._eventListFragment.setEvents(events);
+        this.eventListFragment.setShowMaxEvents(1);
+        this.eventListFragment.setEvents(events);
     }
 
-    _checkRightsPanel() {
+    checkRightsPanel() {
         UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
             if (loggedIn && manager.hasAccess(Event.ACCESS_MODIFY)) {
                 this.findBy('.admin-panel', true).forEach((elem) => elem.classList.remove('hidden'));

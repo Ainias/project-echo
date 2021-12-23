@@ -9,9 +9,11 @@ export class ImagesSchemaDownload1000000011000 implements MigrationInterface {
             await MigrationHelper.updateModel(queryRunner, FileMedium);
             await queryRunner.query('SET foreign_key_checks=1;');
         } else {
-            //Why ever stop und start von Transaction, damit foreign keys funktionieren
-            await queryRunner.commitTransaction();
-            await queryRunner.startTransaction();
+            if (queryRunner.connection.options.type !== 'cordova') {
+                // Why ever stop und start von Transaction, damit foreign keys funktionieren
+                await queryRunner.commitTransaction();
+                await queryRunner.startTransaction();
+            }
 
             await queryRunner.query('PRAGMA foreign_keys = OFF');
             await MigrationHelper.updateModel(queryRunner, FileMedium);
@@ -19,7 +21,7 @@ export class ImagesSchemaDownload1000000011000 implements MigrationInterface {
         }
     }
 
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return undefined;
     }
 }

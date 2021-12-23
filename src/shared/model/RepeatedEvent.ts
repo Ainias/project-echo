@@ -24,30 +24,30 @@ export class RepeatedEvent extends AccessEasySyncModel {
     }
 
     static getRelations() {
-        let relations = super.getRelations();
+        const relations = super.getRelations();
         relations.push('originalEvent.images');
         relations.push('originalEvent.organisers');
         return relations;
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['repeatUntil'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
-        columns['startDate'] = { type: BaseDatabase.TYPES.DATE };
-        columns['repeatingStrategy'] = BaseDatabase.TYPES.INTEGER;
-        columns['repeatingArguments'] = BaseDatabase.TYPES.TEXT;
+        const columns = super.getColumnDefinitions();
+        columns.repeatUntil = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns.startDate = { type: BaseDatabase.TYPES.DATE };
+        columns.repeatingStrategy = BaseDatabase.TYPES.INTEGER;
+        columns.repeatingArguments = BaseDatabase.TYPES.TEXT;
         return columns;
     }
 
     static getRelationDefinitions() {
-        let relations = AccessEasySyncModel.getRelationDefinitions();
-        relations['originalEvent'] = {
+        const relations = AccessEasySyncModel.getRelationDefinitions();
+        relations.originalEvent = {
             target: Event.getSchemaName(),
             type: 'one-to-one',
             joinColumn: true,
             sync: true,
         };
-        relations['blockedDays'] = {
+        relations.blockedDays = {
             target: BlockedDay.getSchemaName(),
             type: 'one-to-many',
             inverseSide: 'repeatedEvent',
@@ -55,15 +55,15 @@ export class RepeatedEvent extends AccessEasySyncModel {
         return relations;
     }
 
-    getNames(): {} {
+    getNames(): Record<string, string> {
         return this.originalEvent.getNames();
     }
 
-    getWebsite(): {} {
+    getWebsite(): string {
         return this.originalEvent.getWebsite();
     }
 
-    getDescriptions(): {} {
+    getDescriptions(): Record<string, string> {
         return this.originalEvent.getDescriptions();
     }
 

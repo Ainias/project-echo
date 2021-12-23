@@ -14,11 +14,11 @@ export class Post extends AccessEasySyncModel {
     }
 
     getTextTranslation() {
-        return 'post-text-' + this.id;
+        return `post-text-${  this.id}`;
     }
 
     getDynamicTranslations() {
-        let translations = {};
+        const translations = {};
         Object.keys(this.texts).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getTextTranslation()] = this.texts[language];
@@ -27,15 +27,15 @@ export class Post extends AccessEasySyncModel {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['texts'] = BaseDatabase.TYPES.MY_JSON;
-        columns['priority'] = BaseDatabase.TYPES.INTEGER;
+        const columns = super.getColumnDefinitions();
+        columns.texts = BaseDatabase.TYPES.MY_JSON;
+        columns.priority = BaseDatabase.TYPES.INTEGER;
         return columns;
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations['regions'] = {
+        const relations = EasySyncBaseModel.getRelationDefinitions();
+        relations.regions = {
             target: Region.getSchemaName(),
             type: 'many-to-many',
             joinTable: {

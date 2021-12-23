@@ -16,50 +16,50 @@ export class Favorite extends BaseModel {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['eventId'] = { type: BaseDatabase.TYPES.STRING };
-        columns['isFavorite'] = BaseDatabase.TYPES.BOOLEAN;
-        columns['systemCalendarId'] = { type: BaseDatabase.TYPES.INTEGER, nullable: true };
+        const columns = super.getColumnDefinitions();
+        columns.eventId = { type: BaseDatabase.TYPES.STRING };
+        columns.isFavorite = BaseDatabase.TYPES.BOOLEAN;
+        columns.systemCalendarId = { type: BaseDatabase.TYPES.INTEGER, nullable: true };
         return columns;
     }
 
     static async getEvents(favorites) {
-        let repeatedEventIds = {};
-        let events = {};
-        let eventIds = {};
+        const repeatedEventIds = {};
+        const events = {};
+        const eventIds = {};
 
         favorites.forEach((fav, index) => {
             if (fav.eventId.startsWith('r')) {
-                let parts = fav.eventId.substr(1).split('-');
+                const parts = fav.eventId.substr(1).split('-');
                 repeatedEventIds[parts[0]] = Helper.nonNull(repeatedEventIds[parts[0]], []);
                 repeatedEventIds[parts[0]].push(index);
             } else {
-                eventIds[parseInt(fav.eventId)] = index;
+                eventIds[Number(fav.eventId)] = index;
             }
         });
 
-        let promises = [];
+        const promises = [];
         promises.push(
             RepeatedEvent.findByIds(Object.keys(repeatedEventIds), RepeatedEvent.getRelations()).then(
                 async (repeatedEvents) => {
                     await Helper.asyncForEach(
                         repeatedEvents,
                         async (repeatedEvent) => {
-                            let indexes = repeatedEventIds[repeatedEvent.id];
+                            const indexes = repeatedEventIds[repeatedEvent.id];
                             await Helper.asyncForEach(
                                 indexes,
                                 async (index) => {
-                                    let fav = favorites[index];
-                                    let parts = fav.eventId.substr(1).split('-');
+                                    const fav = favorites[index];
+                                    const parts = fav.eventId.substr(1).split('-');
 
                                     if (parts.length === 4) {
                                         events[index] = await EventHelper.generateSingleEventFromRepeatedEvent(
                                             repeatedEvent,
-                                            new Date(parseInt(parts[1]), parseInt(parts[2]) - 1, parseInt(parts[3])),
+                                            new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3])),
                                             true
                                         );
                                     } else {
-                                        //TODO get next event from helper
+                                        // TODO get next event from helper
                                         events[index] = repeatedEvent;
                                     }
                                 },
@@ -75,7 +75,7 @@ export class Favorite extends BaseModel {
             Event.findByIds(Object.keys(eventIds), ['repeatedEvent', 'repeatedEvent.originalEvent']).then(
                 (loadedEvents) => {
                     loadedEvents.forEach((event) => {
-                        let index = eventIds[event.id];
+                        const index = eventIds[event.id];
                         events[index] = event;
                     });
                 }
@@ -88,29 +88,27 @@ export class Favorite extends BaseModel {
 
     async getEvent(): Promise<Event> {
         if (this.eventId.startsWith('r')) {
-            let parts = this.eventId.substr(1).split('-');
-            let repeatedEvent = await RepeatedEvent.findById(parts[0]);
+            const parts = this.eventId.substr(1).split('-');
+            const repeatedEvent = await RepeatedEvent.findById(parts[0]);
             if (parts.length === 4) {
                 return EventHelper.generateSingleEventFromRepeatedEvent(
                     repeatedEvent,
-                    new Date(parseInt(parts[1]), parseInt(parts[2]) - 1, parseInt(parts[3]))
+                    new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3]))
                 );
-            } else {
-                //TODO get next event from helper
-                return repeatedEvent;
             }
-        } else {
-            return Event.findById(this.eventId);
+            // TODO get next event from helper
+            return repeatedEvent;
         }
+        return Event.findById(this.eventId);
     }
 
     static async eventIsFavorite(eventId) {
-        let fav = await this.findOne({ eventId: eventId });
+        const fav = await this.findOne({ eventId });
         return fav instanceof Favorite && fav.isFavorite;
     }
 
     static async toggle(eventId) {
-        let fav = await this.findOne({ eventId: eventId });
+        let fav = await this.findOne({ eventId });
         if (fav instanceof Favorite) {
             fav.isFavorite = !fav.isFavorite;
             await fav.save();

@@ -16,10 +16,10 @@ export class FsjChurchBaseObject extends AccessEasySyncModel {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['names'] = BaseDatabase.TYPES.MY_JSON;
-        columns['descriptions'] = BaseDatabase.TYPES.MY_JSON;
-        columns['website'] = BaseDatabase.TYPES.STRING;
+        const columns = super.getColumnDefinitions();
+        columns.names = BaseDatabase.TYPES.MY_JSON;
+        columns.descriptions = BaseDatabase.TYPES.MY_JSON;
+        columns.website = BaseDatabase.TYPES.STRING;
         return columns;
     }
 
@@ -40,15 +40,15 @@ export class FsjChurchBaseObject extends AccessEasySyncModel {
     }
 
     getNameTranslation() {
-        return (<typeof EasySyncBaseModel>this.constructor).getSchemaName() + '-name-' + this.id;
+        return `${(<typeof EasySyncBaseModel>this.constructor).getSchemaName()  }-name-${  this.id}`;
     }
 
     getDescriptionTranslation() {
-        return (<typeof EasySyncBaseModel>this.constructor).getSchemaName() + '-description-' + this.id;
+        return `${(<typeof EasySyncBaseModel>this.constructor).getSchemaName()  }-description-${  this.id}`;
     }
 
     getDynamicTranslations() {
-        let translations = {};
+        const translations = {};
         Object.keys(this.names).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getNameTranslation()] = this.names[language];

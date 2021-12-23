@@ -14,7 +14,7 @@ export class SettingsDialog extends Dialog {
                 NativeStoragePromise.getItem('time-to-notify-base'),
                 NativeStoragePromise.getItem('time-to-notify-multiplier'),
             ]).then((res) => {
-                let content = res[0];
+                const content = res[0];
                 this._timeBeforeNotificationRow = content.querySelector('#time-before-setting-row');
 
                 this._sendNotificationCheckbox = content.querySelector('#send-notifications');
@@ -46,8 +46,8 @@ export class SettingsDialog extends Dialog {
     close() {
         let p = Promise.resolve();
         if (this._content) {
-            let timeToNotifyBase = parseInt(this._content.querySelector('#after').value);
-            let timeToNotifyMultiplier = parseInt(this._content.querySelector('#multiplier').value);
+            const timeToNotifyBase = parseInt(this._content.querySelector('#after').value);
+            const timeToNotifyMultiplier = parseInt(this._content.querySelector('#multiplier').value);
 
             p = Promise.all([
                 NativeStoragePromise.setItem('send-notifications', this._sendNotificationCheckbox.checked ? '1' : '0'),

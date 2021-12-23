@@ -22,19 +22,19 @@ export class Podcast extends AccessEasySyncModel {
     }
 
     getTitleTranslation() {
-        return 'podcasts-title-' + this.id;
+        return `podcasts-title-${this.id}`;
     }
 
     getDescriptionTranslation() {
-        return 'podcasts-description-' + this.id;
+        return `podcasts-description-${this.id}`;
     }
 
     getReleaseCircleTranslation() {
-        return 'podcasts-release-circle-' + this.id;
+        return `podcasts-release-circle-${this.id}`;
     }
 
     getDynamicTranslations() {
-        let translations = {};
+        const translations = {};
         Object.keys(this.titles).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getTitleTranslation()] = this.titles[language];
@@ -54,7 +54,7 @@ export class Podcast extends AccessEasySyncModel {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
+        const columns = super.getColumnDefinitions();
         return {
             ...columns,
             titles: BaseDatabase.TYPES.MY_JSON,
@@ -79,12 +79,12 @@ export class Podcast extends AccessEasySyncModel {
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
+        const relations = EasySyncBaseModel.getRelationDefinitions();
         return {
             ...relations,
             images: {
                 target: FileMedium.getSchemaName(),
-                type: 'many-to-many',
+                type: 'many-to-many' as const,
                 joinTable: {
                     name: 'podcastImages',
                 },

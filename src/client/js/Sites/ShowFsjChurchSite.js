@@ -22,50 +22,50 @@ export class ShowFsjChurchSite extends AbsoluteBarMenuSite {
             return;
         }
 
-        //Image
-        let images = this._element.images;
+        // Image
+        const {images} = this._element;
         if (images.length > 0) {
             this._navbarFragment.setBackgroundImage(images[0]);
         }
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
+        const res = super.onConstruct(constructParameters);
 
-        if (Helper.isNull(constructParameters) || Helper.isNull(constructParameters['id'])) {
+        if (Helper.isNull(constructParameters) || Helper.isNull(constructParameters.id)) {
             new Toast('no id given').show();
             this.finish();
             return;
         }
 
-        let elem = await this._loadElem(parseInt(constructParameters['id']));
+        const elem = await this._loadElem(parseInt(constructParameters.id));
         this.setElement(elem);
 
         return res;
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
-        let translator = Translator.getInstance();
+        const translator = Translator.getInstance();
         translator.addDynamicTranslations(this._element.getDynamicTranslations());
 
-        //name
+        // name
         this.findBy('#name').appendChild(
             translator.makePersistentTranslation(this._element.getNameTranslation(), true)
         );
 
-        //description
+        // description
         this.findBy('#description').appendChild(
             translator.makePersistentTranslation(this._element.getDescriptionTranslation())
         );
 
-        //link
-        let link = this.findBy('#website');
+        // link
+        const link = this.findBy('#website');
 
         let href = this._element.website;
         if (!href.startsWith('http') && !href.startsWith('//')) {
-            href = 'https://' + href;
+            href = `https://${  href}`;
         }
         link.href = href;
         link.appendChild(document.createTextNode(this._element.website));

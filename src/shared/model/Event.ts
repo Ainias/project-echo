@@ -1,4 +1,4 @@
-import { EasySyncBaseModel } from 'cordova-sites-easy-sync/dist/shared';
+import { EasySyncBaseModel, FileMedium } from 'cordova-sites-easy-sync/dist/shared';
 import { BaseDatabase } from 'cordova-sites-database/dist/BaseDatabase';
 import { Church } from './Church';
 import { Region } from './Region';
@@ -6,13 +6,12 @@ import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v
 import { Helper } from 'js-helper/dist/shared/Helper';
 import { JsonHelper } from 'js-helper/dist/shared/JsonHelper';
 import { BaseModel } from 'cordova-sites-database/dist/BaseModel';
-import { FileMedium } from 'cordova-sites-easy-sync/dist/shared';
 import { RepeatedEvent } from './RepeatedEvent';
 import { ClientFileMedium } from 'cordova-sites-easy-sync';
 
 export class Event extends AccessEasySyncModel {
-    private names: {};
-    private descriptions: {};
+    private names: Record<string, string>;
+    private descriptions: Record<string, string>;
     private startTime: Date;
     private endTime: Date;
     private type: string;
@@ -22,7 +21,7 @@ export class Event extends AccessEasySyncModel {
     private regions: any;
     private repeatedEvent: any;
     private website: string;
-    private isTemplate: boolean = false;
+    private isTemplate = false;
 
     static readonly TYPES = {
         GOTTESDIENST: 'gottesdienst',
@@ -51,7 +50,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     static getRelations() {
-        let relations = super.getRelations();
+        const relations = super.getRelations();
         relations.push('repeatedEvent.originalEvent');
         relations.push('repeatedEvent.originalEvent.images');
         relations.push('repeatedEvent.originalEvent.organisers');
@@ -63,15 +62,15 @@ export class Event extends AccessEasySyncModel {
     }
 
     getNameTranslation() {
-        return 'event-name-' + this.id;
+        return `event-name-${this.id}`;
     }
 
     getDescriptionTranslation() {
-        return 'event-description-' + this.id;
+        return `event-description-${this.id}`;
     }
 
     getDynamicTranslations() {
-        let translations = {};
+        const translations = {};
         Object.keys(this.getNames()).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getNameTranslation()] = this.getNames()[language];
@@ -85,15 +84,15 @@ export class Event extends AccessEasySyncModel {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['names'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
-        columns['descriptions'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
-        columns['places'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
-        columns['startTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
-        columns['endTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
-        columns['isTemplate'] = { type: BaseDatabase.TYPES.BOOLEAN, default: false };
-        columns['website'] = { type: BaseDatabase.TYPES.STRING, nullable: true };
-        columns['type'] = {
+        const columns = super.getColumnDefinitions();
+        columns.names = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns.descriptions = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns.places = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns.startTime = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns.endTime = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns.isTemplate = { type: BaseDatabase.TYPES.BOOLEAN, default: false };
+        columns.website = { type: BaseDatabase.TYPES.STRING, nullable: true };
+        columns.type = {
             type: BaseDatabase.TYPES.STRING,
             default: Event.TYPES.GOTTESDIENST,
             nullable: true,
@@ -113,28 +112,28 @@ export class Event extends AccessEasySyncModel {
             where = [where];
         }
 
-        //Android saves boolean as strings (why ever?!?), so copy every condition and "or" them with both, string and boolean
-        let newWheres = [];
+        // Android saves boolean as strings (why ever?!?), so copy every condition and "or" them with both, string and boolean
+        const newWheres = [];
         where.forEach((orCondition) => {
-            //Check first, if it is client only. On server load all non-deleted for syncing purpose
+            // Check first, if it is client only. On server load all non-deleted for syncing purpose
             if (!Helper.isSet(orCondition, 'isTemplate') && typeof document === 'object') {
-                orCondition['isTemplate'] = false;
-            } else if (orCondition['isTemplate'] === 'false') {
-                orCondition['isTemplate'] = false;
-            } else if (orCondition['isTemplate'] === 'true') {
-                orCondition['isTemplate'] = true;
+                orCondition.isTemplate = false;
+            } else if (orCondition.isTemplate === 'false') {
+                orCondition.isTemplate = false;
+            } else if (orCondition.isTemplate === 'true') {
+                orCondition.isTemplate = true;
             }
 
             newWheres.push(orCondition);
 
-            let newCondition = {};
+            const newCondition: Record<string, any> = {};
             Object.keys(orCondition).forEach((key) => (newCondition[key] = orCondition[key]));
-            newCondition['isTemplate'] = newCondition['isTemplate'] ? 'true' : 'false';
+            newCondition.isTemplate = newCondition.isTemplate ? 'true' : 'false';
 
             newWheres.push(newCondition);
         });
 
-        return this._database.findEntities(this, newWheres, order, limit, offset, relations);
+        return this.database.findEntities(this, newWheres, order, limit, offset, relations);
     }
 
     static async findAndCount(where?, order?, limit?, offset?, relations?) {
@@ -146,10 +145,10 @@ export class Event extends AccessEasySyncModel {
             where = {};
         }
         if (!Helper.isSet(where, 'isTemplate') && typeof document === 'object') {
-            where['isTemplate'] = false;
+            where.isTemplate = false;
         }
 
-        return this._database.findAndCountEntities(this, where, order, limit, offset, relations);
+        return this.database.findAndCountEntities(this, where, order, limit, offset, relations);
     }
 
     static async findOne(where?, order?, offset?, relations?) {
@@ -161,10 +160,10 @@ export class Event extends AccessEasySyncModel {
             where = {};
         }
         if (!Helper.isSet(where, 'isTemplate') && typeof document === 'object') {
-            where['isTemplate'] = false;
+            where.isTemplate = false;
         }
 
-        return this._database.findOneEntity(this, where, order, offset, relations);
+        return this.database.findOneEntity(this, where, order, offset, relations);
     }
 
     static async findById(id, relations?) {
@@ -172,7 +171,7 @@ export class Event extends AccessEasySyncModel {
             relations = Event.getRelations();
         }
 
-        return await this._database.findById(this, id, relations);
+        return this.database.findById(this, id, relations);
     }
 
     static async findByIds(ids, relations?) {
@@ -180,9 +179,9 @@ export class Event extends AccessEasySyncModel {
             relations = Event.getRelations();
         }
 
-        let noTemplateEvents = [];
+        const noTemplateEvents = [];
 
-        let events = await this._database.findByIds(this, ids, relations);
+        const events = await this.database.findByIds(this, ids, relations);
         if (typeof document === 'object') {
             events.forEach((e) => {
                 if (!e.getIsTemplate()) {
@@ -194,22 +193,22 @@ export class Event extends AccessEasySyncModel {
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations['repeatedEvent'] = {
+        const relations = EasySyncBaseModel.getRelationDefinitions();
+        relations.repeatedEvent = {
             target: 'RepeatedEvent',
             type: 'many-to-one',
             nullable: true,
             joinColumn: true,
             inverseSide: 'events',
         };
-        relations['organisers'] = {
+        relations.organisers = {
             target: Church.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
                 name: 'churchEvent',
             },
         };
-        relations['regions'] = {
+        relations.regions = {
             target: Region.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
@@ -218,7 +217,7 @@ export class Event extends AccessEasySyncModel {
             // inverseSide: "events",
             sync: true,
         };
-        relations['images'] = {
+        relations.images = {
             target: FileMedium.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
@@ -229,14 +228,14 @@ export class Event extends AccessEasySyncModel {
         return relations;
     }
 
-    getNames(): {} {
+    getNames() {
         if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getNames();
         }
         return this.names;
     }
 
-    setNames(value: {}) {
+    setNames(value: Record<string, string>) {
         if (
             !this.getIsTemplate() &&
             Helper.isNotNull(this.repeatedEvent) &&
@@ -267,14 +266,14 @@ export class Event extends AccessEasySyncModel {
         }
     }
 
-    getDescriptions(): {} {
+    getDescriptions() {
         if (Helper.isNull(this.descriptions) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getDescriptions();
         }
         return this.descriptions;
     }
 
-    setDescriptions(value: {}) {
+    setDescriptions(value: Record<string, string>) {
         if (
             !this.getIsTemplate() &&
             Helper.isNotNull(this.repeatedEvent) &&
@@ -332,7 +331,7 @@ export class Event extends AccessEasySyncModel {
     }
 
     setType(value: string) {
-        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && this.repeatedEvent.getType() == value) {
+        if (!this.getIsTemplate() && Helper.isNotNull(this.repeatedEvent) && this.repeatedEvent.getType() === value) {
             this.type = null;
         } else {
             this.type = value;

@@ -3,10 +3,10 @@ import { BaseDatabase } from 'cordova-sites-database/dist/BaseDatabase';
 
 export class EventWeblink1000000012000 implements MigrationInterface {
     async up(queryRunner: QueryRunner): Promise<any> {
-        await this._addWeblink(queryRunner);
+        await this.addWeblink(queryRunner);
     }
 
-    async _addWeblink(queryRunner: QueryRunner) {
+    private async addWeblink(queryRunner: QueryRunner) {
         await queryRunner.addColumn(
             'event',
             new TableColumn({
@@ -17,7 +17,7 @@ export class EventWeblink1000000012000 implements MigrationInterface {
         );
     }
 
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return undefined;
     }
 }

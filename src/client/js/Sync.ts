@@ -23,28 +23,30 @@ export class Sync extends Singleton {
         if (this.syncInProgress !== null) {
             return this.syncInProgress;
         }
-        this.syncInProgress = new Promise<any>(async (resolve) => {
-            let syncJob = new SyncJob();
+        this.syncInProgress = new Promise<any>((resolve) => {
+            (async () => {
+                const syncJob = new SyncJob();
 
-            await syncJob
-                .syncInBackgroundIfDataExists(
-                    [Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium, Podcast],
-                    false
-                )
-                .catch((e) => console.error(e));
-            let p = syncJob
-                .getSyncPromise()
-                .then(async (res) => {
-                    await EventHelper.updateFavorites(res['BlockedDay']);
-                    await EventHelper.updateNotificationsForEvents(res['Event']['changed']);
-                    await EventHelper.deleteNotificationsForEvents(res['Event']['deleted']);
-                })
-                .catch((e) => console.error(e));
-            if (Helper.nonNull(awaitFullSync, true)) {
-                await p;
-            }
-            this.syncInProgress = null;
-            resolve(undefined);
+                await syncJob
+                    .syncInBackgroundIfDataExists(
+                        [Church, Event, Region, Post, Fsj, RepeatedEvent, BlockedDay, FileMedium, Podcast],
+                        false
+                    )
+                    .catch((e) => console.error(e));
+                const p = syncJob
+                    .getSyncPromise()
+                    .then(async (res) => {
+                        await EventHelper.updateFavorites(res.BlockedDay);
+                        await EventHelper.updateNotificationsForEvents(res.Event.changed);
+                        await EventHelper.deleteNotificationsForEvents(res.Event.deleted);
+                    })
+                    .catch((e) => console.error(e));
+                if (Helper.nonNull(awaitFullSync, true)) {
+                    await p;
+                }
+                this.syncInProgress = null;
+                resolve(undefined);
+            })();
         });
         return this.syncInProgress;
     }
@@ -64,17 +66,19 @@ export class Sync extends Singleton {
 
                 const sync: Sync = this.getInstance();
 
-                let syncPromise = sync.sync(false);
+                const syncPromise = sync.sync(false);
 
-                //Prevent timeout on iOS
-                let timeoutPromise = new Promise((r) => setTimeout(r, 29 * 1000));
+                // Prevent timeout on iOS
+                const timeoutPromise = new Promise((r) => {
+                    setTimeout(r, 29 * 1000);
+                });
                 await Promise.race([syncPromise, timeoutPromise]);
 
                 BackgroundFetch.finish(taskId);
             },
             async (error) => {
                 console.log('[background-sync]', error);
-                let errorObj = await NativeStoragePromise.getItem('background-error-obj', []);
+                const errorObj = await NativeStoragePromise.getItem('background-error-obj', []);
                 errorObj.push(error);
                 await NativeStoragePromise.setItem('background-error-obj', errorObj);
             },

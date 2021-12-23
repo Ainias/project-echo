@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddViewPodcastsAccess1000000015000 implements MigrationInterface {
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return Promise.resolve(undefined);
     }
 
@@ -17,7 +17,7 @@ export class AddViewPodcastsAccess1000000015000 implements MigrationInterface {
         const roleId = await queryRunner.query("SELECT id FROM role WHERE name = 'podcast-viewer'");
 
         await queryRunner.query(
-            'INSERT INTO roleAccess (roleId, accessId) VALUES (' + roleId[0]['id'] + ', ' + accessId[0]['id'] + ')'
+            `INSERT INTO roleAccess (roleId, accessId) VALUES (${roleId[0].id}, ${accessId[0].id})`
         );
     }
 }

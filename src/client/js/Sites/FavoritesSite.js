@@ -7,20 +7,18 @@ import { EventOverviewFragment } from '../Fragments/EventOverviewFragment';
 export class FavoritesSite extends FooterSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this._eventListFragment = new EventOverviewFragment(this);
-        this.addFragment('#favorite-list', this._eventListFragment);
-        this._footerFragment.setSelected('.icon.favorites');
+        this.eventListFragment = new EventOverviewFragment(this);
+        this.addFragment('#favorite-list', this.eventListFragment);
+        this.getFooterFragment().setSelected('.icon.favorites');
     }
 
     async onStart(pauseArguments) {
-        let res = super.onStart(pauseArguments);
+        const res = super.onStart(pauseArguments);
 
-        let favorites = await Favorite.find({ isFavorite: true }, undefined, undefined, undefined);
-        let events = await Favorite.getEvents(favorites);
+        const favorites = await Favorite.find({ isFavorite: 1 }, undefined, undefined, undefined);
+        const events = await Favorite.getEvents(favorites);
 
-        console.log('favorites', favorites, events);
-
-        this._eventListFragment.setEvents(events);
+        this.eventListFragment.setEvents(events);
 
         return res;
     }

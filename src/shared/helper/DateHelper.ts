@@ -15,7 +15,7 @@ export class DateHelper extends OriginalDateHelper {
             currentDayOfMonth = day;
         }
 
-        let numberDaysOfMonth = DateHelper.getNumberDaysOfMonth(date);
+        const numberDaysOfMonth = DateHelper.getNumberDaysOfMonth(date);
         if (currentDayOfMonth > numberDaysOfMonth) {
             currentDayOfMonth = numberDaysOfMonth;
         }
@@ -35,7 +35,7 @@ export class DateHelper extends OriginalDateHelper {
             }
         }
 
-        let workingDate = new Date(date);
+        const workingDate = new Date(date);
         workingDate.setDate(1);
         workingDate.setMonth(date.getMonth() + 1);
         workingDate.setDate(0);

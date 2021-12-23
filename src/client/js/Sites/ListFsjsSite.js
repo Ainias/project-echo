@@ -8,32 +8,32 @@ import { FsjListFragment } from '../Fragments/FsjListFragment';
 export class ListFsjsSite extends MenuFooterSite {
     constructor(siteManager) {
         super(siteManager, view);
-        this._alphabeticListFragment = new FsjListFragment(this);
-        this.addFragment('#fsj-list', this._alphabeticListFragment);
-        this._footerFragment.setSelected('.icon.home');
+        this.alphabeticListFragment = new FsjListFragment(this);
+        this.addFragment('#fsj-list', this.alphabeticListFragment);
+        this.getFooterFragment().setSelected('.icon.home');
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
+        const res = super.onConstruct(constructParameters);
 
-        let fsjArray = await Fsj.find();
-        let fsjs = Helper.arrayToObject(fsjArray, (fsj) => fsj.id);
+        const fsjArray = await Fsj.find();
+        const fsjs = Helper.arrayToObject(fsjArray, (fsj) => fsj.id);
 
-        let currentLang = Translator.getInstance().getCurrentLanguage();
-        let fallbackLanguage = Translator.getInstance().getFallbackLanguage();
+        const currentLang = Translator.getInstance().getCurrentLanguage();
+        const fallbackLanguage = Translator.getInstance().getFallbackLanguage();
 
-        let namedFsjs = {};
+        const namedFsjs = {};
         Object.values(fsjs).forEach((fsjs) => {
-            let name = Helper.nonNull(
+            const name = Helper.nonNull(
                 fsjs.names[currentLang],
                 fsjs.names[fallbackLanguage],
                 fsjs.names[Object.keys(fsjs.names)[0]],
                 ''
             );
-            namedFsjs[name + '-' + fsjs.id] = fsjs;
+            namedFsjs[`${name}-${fsjs.id}`] = fsjs;
         });
 
-        this._alphabeticListFragment.setElements(namedFsjs);
+        this.alphabeticListFragment.setElements(namedFsjs);
 
         return res;
     }

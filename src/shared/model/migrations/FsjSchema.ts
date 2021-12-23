@@ -3,28 +3,28 @@ import { BaseDatabase } from 'cordova-sites-database/dist/cordova-sites-database
 import { MigrationHelper } from 'js-helper/dist/shared/MigrationHelper';
 
 export class FsjSchema1000000006000 implements MigrationInterface {
-    _isServer(): boolean {
+    private isServer(): boolean {
         return typeof document !== 'object';
     }
 
-    _createManyToManyTable(tableOne, tableTwo) {
+    private createManyToManyTable(tableOne, tableTwo) {
         return MigrationHelper.createManyToManyTable(tableOne, tableTwo);
     }
 
     async up(queryRunner: QueryRunner): Promise<any> {
-        await this._addFsj(queryRunner);
+        await this.addFsj(queryRunner);
     }
 
-    async _addFsj(queryRunner: QueryRunner) {
-        let fsjTable = new Table({
+    private async addFsj(queryRunner: QueryRunner) {
+        const fsjTable = new Table({
             name: 'fsj',
             columns: [
                 {
                     name: 'id',
                     isPrimary: true,
                     type: BaseDatabase.TYPES.INTEGER,
-                    isGenerated: this._isServer(),
-                    generationStrategy: 'increment' as 'increment',
+                    isGenerated: this.isServer(),
+                    generationStrategy: 'increment' as const,
                 },
                 {
                     name: 'createdAt',
@@ -44,15 +44,15 @@ export class FsjSchema1000000006000 implements MigrationInterface {
                 },
                 {
                     name: 'names',
-                    type: this._isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
+                    type: this.isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
                 },
                 {
                     name: 'descriptions',
-                    type: this._isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
+                    type: this.isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
                 },
                 {
                     name: 'images',
-                    type: this._isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
+                    type: this.isServer() ? BaseDatabase.TYPES.MEDIUMTEXT : BaseDatabase.TYPES.TEXT,
                 },
                 {
                     name: 'website',
@@ -60,10 +60,10 @@ export class FsjSchema1000000006000 implements MigrationInterface {
                 },
             ],
         });
-        return await queryRunner.createTable(fsjTable, true);
+        return queryRunner.createTable(fsjTable, true);
     }
 
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return undefined;
     }
 }

@@ -33,14 +33,14 @@ export class Region extends AccessEasySyncModel {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['name'] = { type: BaseDatabase.TYPES.STRING };
+        const columns = super.getColumnDefinitions();
+        columns.name = { type: BaseDatabase.TYPES.STRING };
         return columns;
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations['churches'] = {
+        const relations = EasySyncBaseModel.getRelationDefinitions();
+        relations.churches = {
             target: Church.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
@@ -50,7 +50,7 @@ export class Region extends AccessEasySyncModel {
             sync: false,
             // cascade: true
         };
-        relations['events'] = {
+        relations.events = {
             target: Event.getSchemaName(),
             type: 'many-to-many',
             joinTable: {

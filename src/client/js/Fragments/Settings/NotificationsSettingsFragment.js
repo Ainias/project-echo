@@ -11,9 +11,9 @@ export class NotificationsSettingsFragment extends AbstractFragment {
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
-        let notificationSettings = await Promise.all([
+        const notificationSettings = await Promise.all([
             NativeStoragePromise.getItem('send-notifications', '1'),
             NativeStoragePromise.getItem('time-to-notify-base', '1'),
             NativeStoragePromise.getItem('time-to-notify-multiplier', '86400'),
@@ -39,8 +39,8 @@ export class NotificationsSettingsFragment extends AbstractFragment {
             this._timeBeforeNotificationRow.classList.add('hidden');
         }
 
-        let afterElement = this.findBy('#after');
-        let multiplierElement = this.findBy('#multiplier');
+        const afterElement = this.findBy('#after');
+        const multiplierElement = this.findBy('#multiplier');
         if (notificationSettings[1]) {
             afterElement.value = notificationSettings[1];
         }

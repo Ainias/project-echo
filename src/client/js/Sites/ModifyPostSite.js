@@ -15,26 +15,24 @@ export class ModifyPostSite extends MenuFooterSite {
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
+        const res = super.onConstruct(constructParameters);
 
         this._post = null;
-        if (constructParameters['id']) {
-            this._post = await Post.findById(constructParameters['id'], Church.getRelations());
-            console.log(this._post);
+        if (constructParameters.id) {
+            this._post = await Post.findById(constructParameters.id, Church.getRelations());
         }
-        this._placeNumber = 0;
 
         return res;
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
         this._form = new Form(this.findBy('#modify-post-form'), async (values) => {
             this.showLoadingSymbol();
 
-            let texts = {};
-            let regions = [await Region.findById(1)];
+            const texts = {};
+            const regions = [await Region.findById(1)];
 
             Object.keys(values).forEach((valName) => {
                 if (valName.startsWith('text-')) {
@@ -50,7 +48,7 @@ export class ModifyPostSite extends MenuFooterSite {
             }
             post.texts = texts;
             post.regions = regions;
-            post.priority = parseInt(values['priority']);
+            post.priority = parseInt(values.priority);
 
             await post.save();
             this.removeLoadingSymbol();
@@ -71,13 +69,13 @@ export class ModifyPostSite extends MenuFooterSite {
             return;
         }
 
-        let values = {};
+        const values = {};
 
-        let texts = this._post.texts;
+        const { texts } = this._post;
         Object.keys(texts).forEach((lang) => {
-            values['text-' + lang] = texts[lang];
+            values[`text-${lang}`] = texts[lang];
         });
-        values['priority'] = this._post.priority;
+        values.priority = this._post.priority;
         console.log(values);
 
         await this._form.setValues(values);

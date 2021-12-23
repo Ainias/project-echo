@@ -1,8 +1,7 @@
 import { MenuFooterSite } from './MenuFooterSite';
-import { App, ConfirmDialog, Toast } from 'cordova-sites';
+import { App, ConfirmDialog, Toast, Translator } from 'cordova-sites';
 import { Helper } from 'js-helper/dist/shared';
 import { Podcast } from '../../../shared/model/Podcast';
-import { Translator } from 'cordova-sites/dist/client';
 import { UserManager } from 'cordova-sites-user-management/dist/client/js/UserManager';
 import { Church } from '../../../shared/model/Church';
 import { ModifyPodcastSite } from './ModifyPodcastSite';
@@ -24,7 +23,7 @@ export class PodcastDetailSite extends MenuFooterSite {
             this.finish();
         }
 
-        this.podcast = await Podcast.findById(constructParameters['id'], Podcast.getRelations());
+        this.podcast = await Podcast.findById(constructParameters.id, Podcast.getRelations());
 
         if (Helper.isNull(this.podcast)) {
             new Toast('no podcast found').show();
@@ -62,7 +61,7 @@ export class PodcastDetailSite extends MenuFooterSite {
         let spotifyLink = this.podcast.getSpotifyLink();
         if (spotifyLink) {
             if (!spotifyLink.startsWith('http') && !spotifyLink.startsWith('//')) {
-                spotifyLink = 'https://' + spotifyLink;
+                spotifyLink = `https://${spotifyLink}`;
             }
 
             const spotifyButton = <HTMLLinkElement>this.find('#spotify-link');
@@ -73,7 +72,7 @@ export class PodcastDetailSite extends MenuFooterSite {
         let youtubeLink = this.podcast.getYoutubeLink();
         if (youtubeLink) {
             if (!youtubeLink.startsWith('http') && !youtubeLink.startsWith('//')) {
-                youtubeLink = 'https://' + youtubeLink;
+                youtubeLink = `https://${youtubeLink}`;
             }
 
             const youtubeButton = <HTMLLinkElement>this.find('#youtube-link');
@@ -114,6 +113,7 @@ export class PodcastDetailSite extends MenuFooterSite {
         if (UserManager.getInstance().hasAccess(Podcast.ACCESS_MODIFY)) {
             return this.finishAndStartSite(ModifyPodcastSite, { id: this.podcast.id });
         }
+        return Promise.resolve();
     }
 }
 

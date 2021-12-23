@@ -1,9 +1,10 @@
 import { Helper, Translator, ViewInflater } from 'cordova-sites';
-
-const placeView = require('../../html/place.html');
 import { CookieConsentHelper } from '../CookieConsent/CookieConsentHelper';
 
+const placeView = require('../../html/place.html');
+
 export class PlaceHelper {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private static API_KEY: string = __MAPS_API_KEY__;
 
@@ -16,7 +17,7 @@ export class PlaceHelper {
 
     static async createPlace(placeName, placeQuery, small?) {
         small = Helper.nonNull(small, false);
-        let view = await ViewInflater.getInstance().load(placeView);
+        const view = await ViewInflater.getInstance().load(placeView);
 
         if (this.isURL(placeQuery)) {
             const a = document.createElement('a');
@@ -45,17 +46,14 @@ export class PlaceHelper {
         return view;
     }
 
-    static _buildMapsLink(placeQuery) {
-        return (
-            'https://www.google.com/maps/embed/v1/place?key=' +
-            PlaceHelper.API_KEY +
-            '&q=' +
-            encodeURIComponent(placeQuery.replace(/\n/g, ', '))
-        );
+    static buildMapsLink(placeQuery) {
+        return `https://www.google.com/maps/embed/v1/place?key=${PlaceHelper.API_KEY}&q=${encodeURIComponent(
+            placeQuery.replace(/\n/g, ', ')
+        )}`;
     }
 
     static async createMultipleLocationsView() {
-        let view = await ViewInflater.getInstance().load(placeView);
+        const view = await ViewInflater.getInstance().load(placeView);
         view.querySelector('.place-name').appendChild(Translator.makePersistentTranslation('Multiple locations'));
         view.querySelector('.place').classList.add('small');
 
@@ -63,16 +61,16 @@ export class PlaceHelper {
     }
 
     static async buildGoogleMaps(view, placeQuery) {
-        let iframe = view.querySelector('.place-google-maps');
+        const iframe = view.querySelector('.place-google-maps');
         if (await CookieConsentHelper.hasConsent('thirdParty')) {
-            iframe.src = this._buildMapsLink(placeQuery);
+            iframe.src = this.buildMapsLink(placeQuery);
             iframe.classList.remove('hidden');
         } else {
-            let policyNotice = view.querySelector('.non-third-party-cookies-accepted-message');
+            const policyNotice = view.querySelector('.non-third-party-cookies-accepted-message');
             policyNotice.classList.remove('hidden');
 
             view.querySelector('.activate-map').addEventListener('click', () => {
-                iframe.src = this._buildMapsLink(placeQuery);
+                iframe.src = this.buildMapsLink(placeQuery);
                 iframe.classList.remove('hidden');
                 policyNotice.classList.add('hidden');
                 if (view.querySelector('.accept-third-party-cookies').checked) {

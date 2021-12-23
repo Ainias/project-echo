@@ -14,7 +14,7 @@ export class Scaler {
                 // return window.getComputedStyle(element, null).getPropertyValue("width").replace("px", "");
             },
             (width) => {
-                element.style.width = Math.fround(width * 1000 + 0.00001) / 1000 + 'px';
+                element.style.width = `${Math.fround(width * 1000 + 0.00001) / 1000  }px`;
             },
             null,
             element
@@ -34,14 +34,14 @@ export class Scaler {
 
         let breakCount = 0;
 
-        let previousValues = [];
+        const previousValues = [];
         let currentValue = parseFloat(await getTargetValueFn());
         let currentDelta = Math.abs(targetValue - currentValue);
         while (currentDelta > delta) {
-            let previousValue = currentValue;
+            const previousValue = currentValue;
             previousValues.push(previousValue);
 
-            let scaleValue = parseFloat(await getScaleValueFn());
+            const scaleValue = parseFloat(await getScaleValueFn());
             await setScaleValueFn((scaleValue * targetValue) / currentValue);
 
             currentValue = parseFloat(await getTargetValueFn());

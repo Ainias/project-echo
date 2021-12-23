@@ -13,7 +13,7 @@ export class ImagesSchema1000000010000 implements MigrationInterface {
         }
 
         if (!(await queryRunner.hasTable('file_medium'))) {
-            let table = MigrationHelper.createTableFromModelClass(FileMedium);
+            const table = MigrationHelper.createTableFromModelClass(FileMedium);
             table.columns.forEach((column) => {
                 if (column.name === 'src') {
                     column.type = MigrationHelper.isServer() ? 'MEDIUMTEXT' : 'TEXT';
@@ -22,11 +22,11 @@ export class ImagesSchema1000000010000 implements MigrationInterface {
             await queryRunner.createTable(table);
         }
 
-        let fsjManyToManyTable = MigrationHelper.createManyToManyTable('fsj', 'fileMedium');
+        const fsjManyToManyTable = MigrationHelper.createManyToManyTable('fsj', 'fileMedium');
         fsjManyToManyTable.name = 'fsjImages';
-        let churchManyToManyTable = MigrationHelper.createManyToManyTable('church', 'fileMedium');
+        const churchManyToManyTable = MigrationHelper.createManyToManyTable('church', 'fileMedium');
         churchManyToManyTable.name = 'churchImages';
-        let eventManyToManyTable = MigrationHelper.createManyToManyTable('event', 'fileMedium');
+        const eventManyToManyTable = MigrationHelper.createManyToManyTable('event', 'fileMedium');
         eventManyToManyTable.name = 'eventImages';
 
         await queryRunner.createTable(churchManyToManyTable);
@@ -40,28 +40,24 @@ export class ImagesSchema1000000010000 implements MigrationInterface {
             );
             await queryRunner.query('INSERT INTO fsjImages (fsjId, fileMediumId) SELECT id, id FROM fsj');
 
-            let idOffset = (await queryRunner.query('SELECT MAX(id) AS maxId FROM file_medium'))[0]['maxId'];
+            let idOffset = (await queryRunner.query('SELECT MAX(id) AS maxId FROM file_medium'))[0].maxId;
             idOffset++;
 
             await queryRunner.query(
-                'INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) SELECT id+' +
-                    idOffset +
-                    ', now(), now(), 1, 0, SUBSTRING(images, 3, LENGTH(images)-4) FROM church'
+                `INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) SELECT id+${idOffset}, now(), now(), 1, 0, SUBSTRING(images, 3, LENGTH(images)-4) FROM church`
             );
             await queryRunner.query(
-                'INSERT INTO churchImages (churchId, fileMediumId) SELECT id, id+' + idOffset + ' FROM church'
+                `INSERT INTO churchImages (churchId, fileMediumId) SELECT id, id+${idOffset} FROM church`
             );
 
-            idOffset = (await queryRunner.query('SELECT MAX(id) AS maxId FROM file_medium'))[0]['maxId'];
+            idOffset = (await queryRunner.query('SELECT MAX(id) AS maxId FROM file_medium'))[0].maxId;
             idOffset++;
 
             await queryRunner.query(
-                'INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) SELECT id+' +
-                    idOffset +
-                    ', now(), now(), 1, 0, SUBSTRING(images, 3, LENGTH(images)-4) FROM event WHERE event.images IS NOT NULL'
+                `INSERT INTO file_medium (id, createdAt, updatedAt, version, deleted, src) SELECT id+${idOffset}, now(), now(), 1, 0, SUBSTRING(images, 3, LENGTH(images)-4) FROM event WHERE event.images IS NOT NULL`
             );
             await queryRunner.query(
-                'INSERT INTO eventImages (eventId, fileMediumId) SELECT id, id+' + idOffset + ' FROM event'
+                `INSERT INTO eventImages (eventId, fileMediumId) SELECT id, id+${idOffset} FROM event`
             );
 
             await queryRunner.query('UPDATE fsj SET updatedAt = now();');
@@ -80,7 +76,7 @@ export class ImagesSchema1000000010000 implements MigrationInterface {
         }
     }
 
-    down(queryRunner: QueryRunner): Promise<any> {
+    down(): Promise<any> {
         return undefined;
     }
 }

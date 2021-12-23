@@ -14,15 +14,15 @@ export class ListChurchesSite extends MenuFooterSite {
         super(siteManager, view);
         this.alphabeticListFragment = new ChurchListFragment(this);
         this.addFragment('#church-list', this.alphabeticListFragment);
-        this._footerFragment.setSelected('.icon.home');
+        this.getFooterFragment().setSelected('.icon.home');
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
+        const res = super.onConstruct(constructParameters);
 
-        let regionIds = [];
+        const regionIds = [];
         if (constructParameters) {
-            Helper.nonNull(constructParameters['regionIds'], []);
+            Helper.nonNull(constructParameters.regionIds, []);
         }
         let regions: Region[];
         if (regionIds.length >= 1) {
@@ -37,7 +37,7 @@ export class ListChurchesSite extends MenuFooterSite {
             )) as Region[];
         }
 
-        let churches: { [id: number]: Church } = {};
+        const churches: { [id: number]: Church } = {};
         regions.forEach((region) => {
             if (region.getChurches()) {
                 region.getChurches().forEach((church) => {
@@ -46,14 +46,14 @@ export class ListChurchesSite extends MenuFooterSite {
             }
         });
 
-        let currentLang = Translator.getInstance().getCurrentLanguage();
-        let fallbackLanguage = Translator.getInstance().getFallbackLanguage();
+        const currentLang = Translator.getInstance().getCurrentLanguage();
+        const fallbackLanguage = Translator.getInstance().getFallbackLanguage();
 
-        let namedChurches = {};
+        const namedChurches = {};
         Object.values(churches).forEach((church) => {
             const names = church.getNames();
-            let name = Helper.nonNull(names[currentLang], names[fallbackLanguage], names[Object.keys(names)[0]], '');
-            namedChurches[name + '-' + church.id] = church;
+            const name = Helper.nonNull(names[currentLang], names[fallbackLanguage], names[Object.keys(names)[0]], '');
+            namedChurches[`${name}-${church.id}`] = church;
         });
 
         this.alphabeticListFragment.setElements(namedChurches);

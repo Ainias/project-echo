@@ -1,9 +1,10 @@
 import { AlphabeticListFragment, Translator } from 'cordova-sites';
 import { Helper } from 'js-helper/dist/shared';
+import type { ListFsjsSite } from '../Sites/ListFsjsSite';
 
 const defaultView = require('../../html/Fragments/fsjChurchBaseListFragment.html');
 
-export class FsjChurchBaseListFragment extends AlphabeticListFragment {
+export class FsjChurchBaseListFragment extends AlphabeticListFragment<ListFsjsSite> {
     private template: HTMLElement;
 
     constructor(site, view) {
@@ -23,7 +24,7 @@ export class FsjChurchBaseListFragment extends AlphabeticListFragment {
      */
     renderElement(obj) {
         Translator.getInstance().addDynamicTranslations(obj.getDynamicTranslations());
-        let infoElement = <HTMLElement>this.template.cloneNode(true);
+        const infoElement = <HTMLElement>this.template.cloneNode(true);
         infoElement.querySelector('.name').appendChild(Translator.makePersistentTranslation(obj.getNameTranslation()));
 
         infoElement.addEventListener('click', () => {
@@ -32,5 +33,6 @@ export class FsjChurchBaseListFragment extends AlphabeticListFragment {
         return infoElement;
     }
 
+    // eslint-disable-next-line class-methods-use-this,@typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
     infoElemClicked(id) {}
 }

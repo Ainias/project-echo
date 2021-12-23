@@ -1,27 +1,27 @@
-const find = require("../lib/PromiseSelector");
+const find = require('../lib/PromiseSelector');
 const $ = find.one;
-const fs = require("fs");
-const sharp = require("sharp");
+const fs = require('fs');
+const sharp = require('sharp');
 
 async function login(email, password) {
-    await browser.url(await getBaseUrl() + "?s=login");
+    await browser.url((await getBaseUrl()) + '?s=login');
 
     await browser.waitUntil(async () => {
-        let element = $("#main-content");
-        return await element.isDisplayed()
+        let element = $('#main-content');
+        return await element.isDisplayed();
     });
     await acceptCookies();
 
     await browser.pause(1000);
-    await $("input[name=email]").setValue(email);
-    await $("input[name=password]").setValue(password);
-    await $("button=Login").click();
+    await $('input[name=email]').setValue(email);
+    await $('input[name=password]').setValue(password);
+    await $('button=Login').click();
     await browser.pause(3000);
 }
 
 async function logout() {
-    await $(".footer .icon.home").click();
-    await $("span=Logout").click();
+    await $('.footer .icon.home').click();
+    await $('span=Logout').click();
 }
 
 async function pause(delay) {
@@ -29,9 +29,8 @@ async function pause(delay) {
 }
 
 async function queryDatabase(query) {
-
     let mysql = browser.config.mysqlConnection;
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         mysql.query(query, function (err, result) {
             if (!err) {
                 resolve(result);
@@ -44,26 +43,25 @@ async function queryDatabase(query) {
 }
 
 async function setCurrentDate(date) {
-
     if (!(date instanceof Date)) {
         date = new Date(2019, 5, 26, 14, 30, 42);
     }
 
     const time = date.getTime();
     await browser.execute((time) => {
-        const OldDate = window["Date"];
+        const OldDate = window['Date'];
 
         class Date extends OldDate {
             constructor(...args) {
                 if (arguments.length === 0) {
                     super(time);
                 } else {
-                    super(...arguments)
+                    super(...arguments);
                 }
             }
         }
 
-        window["Date"] = Date;
+        window['Date'] = Date;
     }, time);
 }
 
@@ -73,20 +71,23 @@ async function setFormValues(values, useSelector) {
     }
 
     let promise = Promise.resolve();
-    Object.keys(values).forEach(selector => {
+    Object.keys(values).forEach((selector) => {
         promise = promise.then(async () => {
             let elem;
             if (useSelector) {
-                elem = $(selector)
+                elem = $(selector);
             } else {
-                elem = $("[name=" + selector + "]");
+                elem = $('[name=' + selector + ']');
             }
 
-            if (await elem.isTag("select") || await elem.isTag("SELECT")) {
+            if ((await elem.isTag('select')) || (await elem.isTag('SELECT'))) {
                 await elem.scrollIntoView();
-                await elem.selectByAttribute("value", values[selector]);
-            } else if (await elem.getAttribute("type") === "checkbox" || await elem.getAttribute("type") === "radio") {
-                if (!await elem.isSelected()) {
+                await elem.selectByAttribute('value', values[selector]);
+            } else if (
+                (await elem.getAttribute('type')) === 'checkbox' ||
+                (await elem.getAttribute('type')) === 'radio'
+            ) {
+                if (!(await elem.isSelected())) {
                     return elem.click();
                 }
             } else {
@@ -100,7 +101,7 @@ async function setFormValues(values, useSelector) {
 async function acceptCookies() {
     if (!browser.config.isMobile) {
         try {
-            await $("#accept-all").click();
+            await $('#accept-all').click();
         } catch (e) {
             console.error(e);
         }
@@ -113,12 +114,12 @@ async function verifyFormValues(values, useSelector) {
     }
 
     let promise = Promise.resolve();
-    Object.keys(values).forEach(selector => {
+    Object.keys(values).forEach((selector) => {
         promise = promise.then(async () => {
             if (useSelector) {
                 expect(await $(selector).getValue()).toEqual(values[selector]);
             } else {
-                expect(await $("[name=" + selector + "]").getValue()).toEqual(values[selector]);
+                expect(await $('[name=' + selector + ']').getValue()).toEqual(values[selector]);
             }
         });
     });
@@ -126,10 +127,10 @@ async function verifyFormValues(values, useSelector) {
 }
 
 async function addCustomChildSelector() {
-    await browser.addLocatorStategy("selectParent", (parentSelector, childSelector) => {
+    await browser.addLocatorStategy('selectParent', (parentSelector, childSelector) => {
         let children = document.querySelectorAll(childSelector);
         let parents = [];
-        children.forEach(child => {
+        children.forEach((child) => {
             let parent = child.closest(parentSelector);
             if (parent) {
                 parents.push(parent);
@@ -140,7 +141,7 @@ async function addCustomChildSelector() {
 }
 
 async function getBaseUrl() {
-    if (browser.config.baseUrl.trim() !== "") {
+    if (browser.config.baseUrl.trim() !== '') {
         return browser.config.baseUrl;
     } else {
         return browser.getUrl();
@@ -156,9 +157,12 @@ async function acceptAlert() {
             // await browser.acceptAlert();
             // await pause(500);
         } catch (e) {
-            console.log("-------------ERROR----------------", e.message);
-            if (e.message !== "An attempt was made to operate on a modal dialog when one was not open" && !e.message.startsWith("no such alert")) {
-                expect(e.message === "error message" || e.message === "unknown error").toBeTruthy();
+            console.log('-------------ERROR----------------', e.message);
+            if (
+                e.message !== 'An attempt was made to operate on a modal dialog when one was not open' &&
+                !e.message.startsWith('no such alert')
+            ) {
+                expect(e.message === 'error message' || e.message === 'unknown error').toBeTruthy();
             }
         }
     }
@@ -167,18 +171,17 @@ async function acceptAlert() {
 async function acceptInsertFavorites() {
     if (browser.config.hasAlertDialogs !== false) {
         try {
-            await $(".modal-button-container .button.right [data-translation=yes]").click();
-        } catch (e) {
-
-        }
+            await $('.modal-button-container .button.right [data-translation=yes]').click();
+        } catch (e) {}
     }
 }
 
 async function compareFiles(originalPath, expectedPath) {
     let filePromises = [
-        new Promise((res, rej) => fs.readFile(originalPath, (err, data) => err ? rej(err) : res(data)))
-            .then(fileData => sharp(fileData).resize({width: 800, withoutEnlargement: true}).toBuffer()),
-        new Promise((res, rej) => fs.readFile(expectedPath, (err, data) => err ? rej(err) : res(data)))
+        new Promise((res, rej) => fs.readFile(originalPath, (err, data) => (err ? rej(err) : res(data)))).then(
+            (fileData) => sharp(fileData).resize({ width: 800, withoutEnlargement: true }).toBuffer()
+        ),
+        new Promise((res, rej) => fs.readFile(expectedPath, (err, data) => (err ? rej(err) : res(data)))),
     ];
 
     let fileData = await Promise.all(filePromises);
@@ -187,118 +190,133 @@ async function compareFiles(originalPath, expectedPath) {
 
 async function deactivateTranslationLogging() {
     await browser.execute(() => {
-        window["shouldConsoleMissingTranslation"] = false;
+        window['shouldConsoleMissingTranslation'] = false;
     });
 }
 
 async function logErrors() {
     await browser.execute(() => {
-        window["loggedErrors"] = [];
-        window.addEventListener("error", event => {
-            window["loggedErrors"].push(event.message);
-        }, true);
+        window['loggedErrors'] = [];
+        window.addEventListener(
+            'error',
+            (event) => {
+                window['loggedErrors'].push(event.message);
+            },
+            true
+        );
         window.onunhandledrejection = (e) => {
-            window["loggedErrors"].push(e.reason);
-        }
+            window['loggedErrors'].push(e.reason);
+        };
     });
 }
 
 async function getLoggedErrors() {
     return await browser.execute(() => {
-        return window["loggedErrors"];
+        return window['loggedErrors'];
     });
 }
 
 async function asyncExecute(func, ...args) {
     // console.log(func+"");
 
-    let index = await browser.execute((funcString, args) => {
-        let func = eval(funcString);
-        let res = func(...args);
-        if (!window["testValIndex"]) {
-            window["testValIndex"] = 0;
-        }
-        window["testValIndex"]++;
-        let index = window["testValIndex"];
-        Promise.resolve(res).then(r => window["test-res-" + index] = r);
-        return index;
-        // return args;
-    }, func + "", args);
+    let index = await browser.execute(
+        (funcString, args) => {
+            let func = eval(funcString);
+            let res = func(...args);
+            if (!window['testValIndex']) {
+                window['testValIndex'] = 0;
+            }
+            window['testValIndex']++;
+            let index = window['testValIndex'];
+            Promise.resolve(res).then((r) => (window['test-res-' + index] = r));
+            return index;
+            // return args;
+        },
+        func + '',
+        args
+    );
 
     // console.log(index);
 
     //
     await pause(1000);
-    return await browser.execute((i) => window["test-res-" + i], index);
+    return await browser.execute((i) => window['test-res-' + i], index);
     // return index;
 }
 
 async function mockMatomo() {
     if (!browser.config.isMobile) {
         //Mock funktioniert nur im Browser
-        const mock = await browser.mock("https://matomo.echoapp.de/m.js");
+        const mock = await browser.mock('https://matomo.echoapp.de/m.js');
         mock.respond('./tests/misc/matomoMock.js');
     }
 }
 
 function monthName(monthIndex) {
-    const monthNames = [
-        "Jan",
-        "Feb",
-        "Mär",
-        "Apr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dez",
-    ];
+    const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
 
     return monthNames[monthIndex];
 }
 
 function monthFullName(monthIndex) {
     const monthNames = [
-        "Januar",
-        "Februar",
-        "März",
-        "April",
-        "Mai",
-        "Juni",
-        "Juli",
-        "August",
-        "September",
-        "Oktober",
-        "November",
-        "Dezember",
+        'Januar',
+        'Februar',
+        'März',
+        'April',
+        'Mai',
+        'Juni',
+        'Juli',
+        'August',
+        'September',
+        'Oktober',
+        'November',
+        'Dezember',
     ];
 
-    return monthNames[monthIndex].toUpperCase();
+    return monthNames[monthIndex % 12].toUpperCase();
+}
+
+function monthFullNamePlusYear(monthIndex, year) {
+    const monthNames = [
+        'Januar',
+        'Februar',
+        'März',
+        'April',
+        'Mai',
+        'Juni',
+        'Juli',
+        'August',
+        'September',
+        'Oktober',
+        'November',
+        'Dezember',
+    ];
+
+    if (monthIndex > 11) {
+        year++;
+        monthIndex %= 12;
+    }
+
+    return monthNames[monthIndex].toUpperCase() + ' ' + year;
 }
 
 function dayName(dayIndex) {
-    const dayNames = [
-        "So",
-        "Mo",
-        "Di",
-        "Mi",
-        "Do",
-        "Fr",
-        "Sa",
-    ];
+    const dayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 
     return dayNames[dayIndex];
 }
 
-function prepareText(text){
-    text = text.replace(/[.*+?^${}()[\]\\]/g, "\\$&");
-    if (browser.config.isSafari){
+function prepareText(text) {
+    text = text.replace(/[.*+?^${}()[\]\\]/g, '\\$&');
+    if (browser.config.isSafari) {
         text = text.replace(/\n/g, '[ ]{0,2}');
     }
-    return new RegExp(text, "g");
+    return new RegExp(text, 'g');
+}
+
+function toSQLWeekday(day) {
+    return (day + 5) % 7;
 }
 
 module.exports = {
@@ -323,5 +341,7 @@ module.exports = {
     monthName: monthName,
     monthFullName: monthFullName,
     dayName: dayName,
-    prepareText
+    prepareText,
+    monthFullNamePlusYear,
+    toSQLWeekday,
 };

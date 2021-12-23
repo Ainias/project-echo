@@ -1,22 +1,22 @@
-const find = require("../../lib/PromiseSelector");
+const find = require('../../lib/PromiseSelector');
 const $ = find.one;
 const $$ = find.multiple;
-const functions = require("../../lib/functions");
-const path = require("path");
+const functions = require('../../lib/functions');
+const path = require('path');
 
-describe("edit event", () => {
+describe('edit event', () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
 
     let baseUrl = null;
     beforeAll(async () => {
-        if (browser.config.baseUrl.trim() !== "") {
+        if (browser.config.baseUrl.trim() !== '') {
             baseUrl = browser.config.baseUrl;
         } else {
             baseUrl = await browser.getUrl();
         }
 
         browser.setTimeout({
-            implicit: 5000
+            implicit: 5000,
         });
         // await functions.mockMatomo();
     });
@@ -24,12 +24,12 @@ describe("edit event", () => {
     beforeEach(async function () {
         await browser.setWindowSize(1600, 900);
 
-        await functions.login("echo@silas.link", "123456");
+        await functions.login('echo@silas.link', '123456');
         await browser.pause(1000);
 
         await browser.waitUntil(async () => {
-            let element = $("#main-content");
-            return await element.isDisplayed()
+            let element = $('#main-content');
+            return await element.isDisplayed();
         });
     });
 
@@ -37,548 +37,614 @@ describe("edit event", () => {
         await functions.logout();
     });
 
-    it("new event", async function () {
-        let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
+    it('new event', async function () {
+        let imagePath = path.join(__dirname, '../../misc/img/church.jpeg');
 
-        await $("span=Neuer Termin").click();
+        await $('span=Neuer Termin').click();
 
-        let editors = $$(".ck.ck-content");
+        let editors = $$('.ck.ck-content');
 
-        await editors.get(0).setValue(" Meine Beschreibung");
-        await editors.get(1).setValue(" Meine Beschreibung");
+        await editors.get(0).setValue(' Meine Beschreibung');
+        await editors.get(1).setValue(' Meine Beschreibung');
 
         await functions.setFormValues({
-            "name-de": "Neues Event",
-            "name-en": "New Event",
-            "image": imagePath,
-            "place-name-1": "Köln",
-            "church-1": "1",
-            "church-4": "4",
-            "type": "konzert",
+            'name-de': 'Neues Event',
+            'name-en': 'New Event',
+            image: imagePath,
+            'place-name-1': 'Köln',
+            'church-1': '1',
+            'church-4': '4',
+            type: 'konzert',
             // "start": "2020-04-09 12:00",
             // "end": "2020-04-09 14:30",
         });
 
         // await browser.debug();
 
-        await $("input[name=start]").click();
+        await $('input[name=start]').click();
         await functions.pause(200);
-        await $$(".flatpickr-day=16").get(0).click();
-        await $(".flatpickr-hour").setValue(11);
-        await $(".flatpickr-minute").setValue(10);
-
+        await $$('.flatpickr-day=16').get(0).click();
+        await $('.flatpickr-hour').setValue(11);
+        await $('.flatpickr-minute').setValue(10);
 
         await functions.pause(2000);
-        await $("input[name=end]").click();
+        await $('input[name=end]').click();
         // await browser.debug();
         await functions.pause(200);
-        await $$(".flatpickr-day=16").get(1).click();
+        await $$('.flatpickr-day=16').get(1).click();
         // await browser.debug();
-        await $$(".flatpickr-hour").get(1).setValue(13);
-        await $$(".flatpickr-minute").get(1).setValue(59);
+        await $$('.flatpickr-hour').get(1).setValue(13);
+        await $$('.flatpickr-minute').get(1).setValue(59);
 
         // await browser.debug();
 
-        await $("#add-place").click();
-        await $("#add-place").click();
+        await $('#add-place').click();
+        await $('#add-place').click();
 
         await functions.setFormValues({
-            "place-name-2": "Aachen",
-            "place-name-3": "Remscheid City",
+            'place-name-2': 'Aachen',
+            'place-name-3': 'Remscheid City',
         });
 
-        await $("button.button=Speichern").click();
+        await $('button.button=Speichern').click();
 
-        expect(await $("h1#name=Neues Event").isDisplayed()).toBeTruthy();
+        expect(await $('h1#name=Neues Event').isDisplayed()).toBeTruthy();
 
-        let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Neues Event%New Event%' LIMIT 1");
+        let data = await functions.queryDatabase(
+            "SELECT * FROM event WHERE names LIKE '%Neues Event%New Event%' LIMIT 1"
+        );
         data = data[0];
 
-        expect(data["names"]).toEqual("{\"de\":\"Neues Event\",\"en\":\"New Event\"}");
-        expect(data["type"]).toEqual("konzert");
-        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime());
-        expect(data["descriptions"].match(/^{"de":"<p> ?Meine Beschreibung<\/p>","en":"<p> ?Meine Beschreibung<\/p>"}$/g)).toBeTruthy();
-        expect(data["places"]).toEqual("{\"Köln\":\"Köln\",\"Aachen\":\"Aachen\",\"Remscheid City\":\"Remscheid City\"}");
-        expect(data["isTemplate"]).toEqual(0);
-        expect(data["repeatedEventId"]).toEqual(null);
+        expect(data['names']).toEqual('{"de":"Neues Event","en":"New Event"}');
+        expect(data['type']).toEqual('konzert');
+        expect(data['startTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime()
+        );
+        expect(data['endTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime()
+        );
+        expect(
+            data['descriptions'].match(/^{"de":"<p> ?Meine Beschreibung<\/p>","en":"<p> ?Meine Beschreibung<\/p>"}$/g)
+        ).toBeTruthy();
+        expect(data['places']).toEqual('{"Köln":"Köln","Aachen":"Aachen","Remscheid City":"Remscheid City"}');
+        expect(data['isTemplate']).toEqual(0);
+        expect(data['repeatedEventId']).toEqual(null);
 
-        let id = data["id"];
+        let id = data['id'];
 
-        data = await functions.queryDatabase("SELECT * FROM churchEvent WHERE eventId = " + id + " ORDER BY churchId");
+        data = await functions.queryDatabase('SELECT * FROM churchEvent WHERE eventId = ' + id + ' ORDER BY churchId');
         expect(data.length).toEqual(2);
-        expect(data[0]["churchId"]).toEqual(1);
-        expect(data[1]["churchId"]).toEqual(4);
+        expect(data[0]['churchId']).toEqual(1);
+        expect(data[1]['churchId']).toEqual(4);
 
-        data = await functions.queryDatabase("SELECT * FROM eventRegion WHERE eventId = " + id);
+        data = await functions.queryDatabase('SELECT * FROM eventRegion WHERE eventId = ' + id);
         data = data[0];
-        expect(data["regionId"]).toEqual(1);
+        expect(data['regionId']).toEqual(1);
 
-        data = await functions.queryDatabase("SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = " + id);
+        data = await functions.queryDatabase(
+            'SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = ' + id
+        );
         expect(data.length).toEqual(1);
 
         data = data[0];
-        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_" + data["src"]);
+        let savedImagePath = path.join(__dirname, '../../../src/server/uploads/img_' + data['src']);
         await functions.compareFiles(imagePath, savedImagePath);
 
-        await $(".footer .icon.home").click();
+        await $('.footer .icon.home').click();
     });
 
-    it("new repeated event", async function () {
-        let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
+    it('new repeated event', async function () {
+        let imagePath = path.join(__dirname, '../../misc/img/church.jpeg');
 
-        await $("span=Neuer Termin").click();
+        await $('span=Neuer Termin').click();
 
-        let editors = $$(".ck.ck-content");
+        let editors = $$('.ck.ck-content');
 
-        await editors.get(0).setValue(" Meine Beschreibung");
-        await editors.get(1).setValue(" Meine Beschreibung");
+        await editors.get(0).setValue(' Meine Beschreibung');
+        await editors.get(1).setValue(' Meine Beschreibung');
 
         await functions.setFormValues({
-            "name-de": "Neues wiederholendes Event",
-            "name-en": "New repeating Event",
-            "image": imagePath,
-            "place-name-1": "Aachen",
-            "church-2": "2",
-            "church-5": "5",
-            "type": "sonstiges",
+            'name-de': 'Neues wiederholendes Event',
+            'name-en': 'New repeating Event',
+            image: imagePath,
+            'place-name-1': 'Aachen',
+            'church-2': '2',
+            'church-5': '5',
+            type: 'sonstiges',
         });
 
-        await $("input[name=start]").click();
+        await $('input[name=start]').click();
         await functions.pause(200);
-        await $$(".flatpickr-day=16").get(0).click();
-        await $(".flatpickr-hour").setValue(11);
-        await $(".flatpickr-minute").setValue(10);
+        await $$('.flatpickr-day=16').get(0).click();
+        await $('.flatpickr-hour').setValue(11);
+        await $('.flatpickr-minute').setValue(10);
 
-        await $("input[name=end]").click();
+        await $('input[name=end]').click();
         await functions.pause(200);
-        await $$(".flatpickr-day=16").get(1).click();
-        await $$(".flatpickr-hour").get(1).setValue(13);
-        await $$(".flatpickr-minute").get(1).setValue(59);
+        await $$('.flatpickr-day=16').get(1).click();
+        await $$('.flatpickr-hour').get(1).setValue(13);
+        await $$('.flatpickr-minute').get(1).setValue(59);
 
-        await $("#add-place").click();
-        await $("#add-place").click();
-
-        await functions.setFormValues({
-            "place-name-2": "Aachen",
-            "place-name-3": "Remscheid City",
-        });
-
-        await $("#repeatable-checkbox").click();
+        await $('#add-place').click();
+        await $('#add-place').click();
 
         await functions.setFormValues({
-            "repeat-2": "2",
-            "repeat-3": "3",
-            "repeat-6": "6",
+            'place-name-2': 'Aachen',
+            'place-name-3': 'Remscheid City',
         });
 
-        await $("input[name=repeat-until]").click();
+        await $('#repeatable-checkbox').click();
+
+        await functions.setFormValues({
+            'repeat-2': '2',
+            'repeat-3': '3',
+            'repeat-6': '6',
+        });
+
+        await $('input[name=repeat-until]').click();
         await functions.pause(500);
-        await $$(".flatpickr-day=25").get(2).click();
+        await $$('.flatpickr-day=25').get(2).click();
         // await functions.pause(5000);
-        await $$(".flatpickr-hour").get(2).setValue(23);
-        await $$(".flatpickr-minute").get(2).setValue(58);
+        await $$('.flatpickr-hour').get(2).setValue(23);
+        await $$('.flatpickr-minute').get(2).setValue(58);
 
-        await $("button.button=Speichern").click();
+        await $('button.button=Speichern').click();
 
-        expect(await $("#event-name=Neues wiederholendes Event").isDisplayed()).toBeTruthy();
+        expect(await $('#event-name=Neues wiederholendes Event').isDisplayed()).toBeTruthy();
 
-        let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Neues wiederholendes Event%New repeating Event%' LIMIT 1");
+        let data = await functions.queryDatabase(
+            "SELECT * FROM event WHERE names LIKE '%Neues wiederholendes Event%New repeating Event%' LIMIT 1"
+        );
         data = data[0];
 
-        expect(data["names"]).toEqual("{\"de\":\"Neues wiederholendes Event\",\"en\":\"New repeating Event\"}");
-        expect(data["type"]).toEqual("sonstiges");
-        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime());
-        expect(data["descriptions"].match(/^{"de":"<p> ?Meine Beschreibung<\/p>","en":"<p> ?Meine Beschreibung<\/p>"}$/g)).toBeTruthy();
-        expect(data["places"]).toEqual("{\"Aachen\":\"Aachen\",\"Remscheid City\":\"Remscheid City\"}");
-        expect(data["isTemplate"]).toEqual(1);
-        let repeatedEventId = data["repeatedEventId"];
+        expect(data['names']).toEqual('{"de":"Neues wiederholendes Event","en":"New repeating Event"}');
+        expect(data['type']).toEqual('sonstiges');
+        expect(data['startTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 16, 11, 10).getTime()
+        );
+        expect(data['endTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 16, 13, 59).getTime()
+        );
+        expect(
+            data['descriptions'].match(/^{"de":"<p> ?Meine Beschreibung<\/p>","en":"<p> ?Meine Beschreibung<\/p>"}$/g)
+        ).toBeTruthy();
+        expect(data['places']).toEqual('{"Aachen":"Aachen","Remscheid City":"Remscheid City"}');
+        expect(data['isTemplate']).toEqual(1);
+        let repeatedEventId = data['repeatedEventId'];
 
-        let id = data["id"];
+        let id = data['id'];
 
-        data = await functions.queryDatabase("SELECT * FROM churchEvent WHERE eventId = " + id + " ORDER BY churchId");
+        data = await functions.queryDatabase('SELECT * FROM churchEvent WHERE eventId = ' + id + ' ORDER BY churchId');
         expect(data.length).toEqual(2);
-        expect(data[0]["churchId"]).toEqual(2);
-        expect(data[1]["churchId"]).toEqual(5);
+        expect(data[0]['churchId']).toEqual(2);
+        expect(data[1]['churchId']).toEqual(5);
 
-        data = await functions.queryDatabase("SELECT * FROM eventRegion WHERE eventId = " + id);
+        data = await functions.queryDatabase('SELECT * FROM eventRegion WHERE eventId = ' + id);
         data = data[0];
-        expect(data["regionId"]).toEqual(1);
+        expect(data['regionId']).toEqual(1);
 
-        data = await functions.queryDatabase("SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = " + id);
+        data = await functions.queryDatabase(
+            'SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = ' + id
+        );
         expect(data.length).toEqual(1);
 
         data = data[0];
-        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_" + data["src"]);
+        let savedImagePath = path.join(__dirname, '../../../src/server/uploads/img_' + data['src']);
         await functions.compareFiles(imagePath, savedImagePath);
 
-        data = await functions.queryDatabase("SELECT * FROM repeated_event WHERE id = " + repeatedEventId);
+        data = await functions.queryDatabase('SELECT * FROM repeated_event WHERE id = ' + repeatedEventId);
         expect(data.length).toEqual(1);
         data = data[0];
 
-        expect(data["repeatingStrategy"]).toEqual(0);
-        expect(data["repeatUntil"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 25, 23, 58).getTime());
-        expect(data["repeatingArguments"]).toEqual("2,3,6");
+        expect(data['repeatingStrategy']).toEqual(0);
+        expect(data['repeatUntil'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 25, 23, 58).getTime()
+        );
+        expect(data['repeatingArguments']).toEqual('2,3,6');
 
-        await $(".footer .icon.home").click();
+        await $('.footer .icon.home').click();
     });
 
-    it("edit normal event", async function () {
-        let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
+    it('edit normal event', async function () {
+        let imagePath = path.join(__dirname, '../../misc/img/church.jpeg');
 
-        await $(".footer .icon.calendar").click();
-        await $(".day-number=5").click();
-        await $("div.name=Termin zum bearbeiten").click();
+        await $('.footer .icon.calendar').click();
+        await $('.makeBig').click();
+        await $('.day-number=5').click();
+        await $('div.name=Termin zum bearbeiten').click();
 
-        expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
+        expect(await $('.admin-panel').isDisplayed()).toBeTruthy();
 
-        await $("#modify-event").click();
+        await $('#modify-event').click();
 
-        let editors = $$(".ck.ck-content");
+        let editors = $$('.ck.ck-content');
 
         await functions.verifyFormValues({
-            "name-de": "Termin zum bearbeiten",
-            "name-en": "",
-            "description-de": "My Description",
-            "description-en": "",
-            "image-before": "https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg",
-            "place-name-1": "place 1",
-            "church-1": "1",
-            "church-2": "2",
+            'name-de': 'Termin zum bearbeiten',
+            'name-en': '',
+            'description-de': 'My Description',
+            'description-en': '',
+            'image-before': 'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg',
+            'place-name-1': 'place 1',
+            'church-1': '1',
+            'church-2': '2',
         });
 
-        await editors.get(0).setValue(" Meine bearbeitete Beschreibung");
-        await editors.get(1).setValue(" Meine english Beschreibung");
-
+        await editors.get(0).setValue(' Meine bearbeitete Beschreibung');
+        await editors.get(1).setValue(' Meine english Beschreibung');
 
         await functions.setFormValues({
-            "name-de": "Bearbeiteter Termin",
-            "name-en": "Edited Event",
-            "image": imagePath,
-            "place-name-1": "bearbeitet",
-            "type": "konzert"
+            'name-de': 'Bearbeiteter Termin',
+            'name-en': 'Edited Event',
+            image: imagePath,
+            'place-name-1': 'bearbeitet',
+            type: 'konzert',
         });
 
-        await $("[name=church-1]").click();
-        await $("[name=church-3]").click();
+        await $('[name=church-1]').click();
+        await $('[name=church-3]').click();
 
-        await $("input[name=start]").scrollIntoView().click();
+        await $('input[name=start]').scrollIntoView().click();
 
         await functions.pause(200);
-        await $$(".flatpickr-day=18").get(0).click();
-        await $(".flatpickr-hour").setValue(11);
-        await $(".flatpickr-minute").setValue(10);
+        await $$('.flatpickr-day=18').get(0).click();
+        await $('.flatpickr-hour').setValue(11);
+        await $('.flatpickr-minute').setValue(10);
 
-
-        await $("input[name=end]").scrollIntoView().click();
+        await $('input[name=end]').scrollIntoView().click();
         await functions.pause(200);
-        await $$(".flatpickr-day=18").get(1).click();
-        await $$(".flatpickr-hour").get(1).setValue(13);
-        await $$(".flatpickr-minute").get(1).setValue(59);
+        await $$('.flatpickr-day=18').get(1).click();
+        await $$('.flatpickr-hour').get(1).setValue(13);
+        await $$('.flatpickr-minute').get(1).setValue(59);
 
-        await $("button.button=Speichern").scrollIntoView().click();
+        await $('button.button=Speichern').scrollIntoView().click();
 
-        expect(await $("#event-name=Bearbeiteter Termin").isDisplayed()).toBeTruthy();
+        expect(await $('#event-name=Bearbeiteter Termin').isDisplayed()).toBeTruthy();
 
-        let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin%Edited Event%' LIMIT 1");
+        let data = await functions.queryDatabase(
+            "SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin%Edited Event%' LIMIT 1"
+        );
 
         data = data[0];
 
-        expect(data["names"]).toEqual("{\"de\":\"Bearbeiteter Termin\",\"en\":\"Edited Event\"}");
-        expect(data["descriptions"].match(/^{"de":"<p> ?Meine bearbeitete BeschreibungMy Description<\/p>","en":"<p> ?Meine english Beschreibung<\/p>"}$/g)).toBeTruthy();
+        expect(data['names']).toEqual('{"de":"Bearbeiteter Termin","en":"Edited Event"}');
+        expect(
+            data['descriptions'].match(
+                /^{"de":"<p> ?Meine bearbeitete BeschreibungMy Description<\/p>","en":"<p> ?Meine english Beschreibung<\/p>"}$/g
+            )
+        ).toBeTruthy();
         // expect(data["descriptions"]).toEqual(/^{"de":"<p> ?Meine BeschreibungMy Description<\/p>","en":"<p> ?Meine english Beschreibung<\/p>"}$/g);
-        expect(data["places"]).toEqual("{\"bearbeitet\":\"bearbeitet\"}");
-        expect(data["type"]).toEqual("konzert");
-        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 18, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 18, 13, 59).getTime());
-        expect(data["isTemplate"]).toEqual(0);
+        expect(data['places']).toEqual('{"bearbeitet":"bearbeitet"}');
+        expect(data['type']).toEqual('konzert');
+        expect(data['startTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 18, 11, 10).getTime()
+        );
+        expect(data['endTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 18, 13, 59).getTime()
+        );
+        expect(data['isTemplate']).toEqual(0);
 
-        let id = data["id"];
+        let id = data['id'];
 
-        data = await functions.queryDatabase("SELECT * FROM churchEvent WHERE eventId = " + id + " ORDER BY churchId");
+        data = await functions.queryDatabase('SELECT * FROM churchEvent WHERE eventId = ' + id + ' ORDER BY churchId');
         expect(data.length).toEqual(2);
-        expect(data[0]["churchId"]).toEqual(2);
-        expect(data[1]["churchId"]).toEqual(3);
+        expect(data[0]['churchId']).toEqual(2);
+        expect(data[1]['churchId']).toEqual(3);
 
-        data = await functions.queryDatabase("SELECT * FROM eventRegion WHERE eventId = " + id);
+        data = await functions.queryDatabase('SELECT * FROM eventRegion WHERE eventId = ' + id);
         data = data[0];
-        expect(data["regionId"]).toEqual(1);
+        expect(data['regionId']).toEqual(1);
 
-        data = await functions.queryDatabase("SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = " + id);
+        data = await functions.queryDatabase(
+            'SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = ' + id
+        );
         expect(data.length).toEqual(1);
 
         data = data[0];
-        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_" + data["src"]);
+        let savedImagePath = path.join(__dirname, '../../../src/server/uploads/img_' + data['src']);
         await functions.compareFiles(imagePath, savedImagePath);
     });
 
-    it("edit repeating event", async function () {
-        let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
+    it('edit repeating event', async function () {
+        let imagePath = path.join(__dirname, '../../misc/img/church.jpeg');
 
         const day = new Date(browser.config.fullYear, browser.config.month, 20);
-        const dayNumber = 21-day.getDay()
+        const dayNumber = 21 - day.getDay();
 
-        await $(".footer .icon.calendar").click();
-        await $(".day-number="+dayNumber.toString()).click();
-        await $(".name=Termin zum bearbeiten wiederholend").click();
+        await $('.footer .icon.calendar').click();
+        await $('.day-number=' + dayNumber.toString()).click();
+        await $('.name=Termin zum bearbeiten wiederholend').click();
 
-        expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
+        expect(await $('.admin-panel').isDisplayed()).toBeTruthy();
 
-        await $("#modify-event").click();
-        await $("button.button=Serie").click();
+        await $('#modify-event').click();
+        await $('button.button=Serie').click();
         // await browser.pause(5000);
 
-        let editors = $$(".ck.ck-content");
+        let editors = $$('.ck.ck-content');
 
         await functions.verifyFormValues({
-            "name-de": "Termin zum bearbeiten wiederholend",
-            "name-en": "",
-            "description-de": "My Description",
-            "description-en": "",
-            "image-before": "https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg",
-            "place-name-1": "place 1",
-            "church-1": "1",
-            "church-2": "2",
+            'name-de': 'Termin zum bearbeiten wiederholend',
+            'name-en': '',
+            'description-de': 'My Description',
+            'description-en': '',
+            'image-before': 'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg',
+            'place-name-1': 'place 1',
+            'church-1': '1',
+            'church-2': '2',
         });
 
-        await editors.get(0).setValue(" Meine bearbeitete Beschreibung wiederholend");
-        await editors.get(1).setValue(" Meine english Beschreibung wiederholend");
+        await editors.get(0).setValue(' Meine bearbeitete Beschreibung wiederholend');
+        await editors.get(1).setValue(' Meine english Beschreibung wiederholend');
 
         await functions.setFormValues({
-            "name-de": "Bearbeiteter Termin wiederholend",
-            "name-en": "Edited Event wiederholend",
-            "image": imagePath,
-            "place-name-1": "bearbeitet wiederholend",
-            "type": "konferenz"
+            'name-de': 'Bearbeiteter Termin wiederholend',
+            'name-en': 'Edited Event wiederholend',
+            image: imagePath,
+            'place-name-1': 'bearbeitet wiederholend',
+            type: 'konferenz',
         });
 
-        await $("[name=church-1]").click();
-        await $("[name=church-9]").click();
+        await $('[name=church-1]').click();
+        await $('[name=church-9]').click();
 
-        await $("input[name=start]").scrollIntoView().click();
+        await $('input[name=start]').scrollIntoView().click();
         await functions.pause(200);
-        await $$(".flatpickr-day=19").get(0).click();
-        await $(".flatpickr-hour").setValue(11);
-        await $(".flatpickr-minute").setValue(10);
+        await $$('.flatpickr-day=19').get(0).click();
+        await $('.flatpickr-hour').setValue(11);
+        await $('.flatpickr-minute').setValue(10);
 
-        await $("input[name=end]").scrollIntoView().click();
+        await $('input[name=end]').scrollIntoView().click();
         await functions.pause(200);
-        await $$(".flatpickr-day=19").get(1).click();
-        await $$(".flatpickr-hour").get(1).setValue(13);
-        await $$(".flatpickr-minute").get(1).setValue(59);
+        await $$('.flatpickr-day=19').get(1).click();
+        await $$('.flatpickr-hour').get(1).setValue(13);
+        await $$('.flatpickr-minute').get(1).setValue(59);
 
-        await $("button.button=Speichern").scrollIntoView().click();
-        expect(await $("#event-name=Bearbeiteter Termin wiederholend").isDisplayed()).toBeTruthy();
+        await $('button.button=Speichern').scrollIntoView().click();
+        expect(await $('#event-name=Bearbeiteter Termin wiederholend').isDisplayed()).toBeTruthy();
 
-        let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin wiederholend%Edited Event wiederholend%' LIMIT 1");
+        let data = await functions.queryDatabase(
+            "SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin wiederholend%Edited Event wiederholend%' LIMIT 1"
+        );
 
         data = data[0];
 
-        expect(data["names"]).toEqual("{\"de\":\"Bearbeiteter Termin wiederholend\",\"en\":\"Edited Event wiederholend\"}");
-        expect(data["descriptions"].match(/^{"de":"<p> ?Meine bearbeitete Beschreibung wiederholendMy Description<\/p>","en":"<p> ?Meine english Beschreibung wiederholend<\/p>"}$/g)).toBeTruthy();
+        expect(data['names']).toEqual('{"de":"Bearbeiteter Termin wiederholend","en":"Edited Event wiederholend"}');
+        expect(
+            data['descriptions'].match(
+                /^{"de":"<p> ?Meine bearbeitete Beschreibung wiederholendMy Description<\/p>","en":"<p> ?Meine english Beschreibung wiederholend<\/p>"}$/g
+            )
+        ).toBeTruthy();
         // expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
-        expect(data["places"]).toEqual("{\"bearbeitet wiederholend\":\"bearbeitet wiederholend\"}");
-        expect(data["type"]).toEqual("konferenz");
-        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 13, 59).getTime());
-        expect(data["isTemplate"]).toEqual(1);
+        expect(data['places']).toEqual('{"bearbeitet wiederholend":"bearbeitet wiederholend"}');
+        expect(data['type']).toEqual('konferenz');
+        expect(data['startTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime()
+        );
+        expect(data['endTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 19, 13, 59).getTime()
+        );
+        expect(data['isTemplate']).toEqual(1);
 
-        let id = data["id"];
-        let repeatedEventId = data["repeatedEventId"];
+        let id = data['id'];
+        let repeatedEventId = data['repeatedEventId'];
 
-        data = await functions.queryDatabase("SELECT * FROM churchEvent WHERE eventId = " + id + " ORDER BY churchId");
+        data = await functions.queryDatabase('SELECT * FROM churchEvent WHERE eventId = ' + id + ' ORDER BY churchId');
         expect(data.length).toEqual(2);
-        expect(data[0]["churchId"]).toEqual(2);
-        expect(data[1]["churchId"]).toEqual(9);
+        expect(data[0]['churchId']).toEqual(2);
+        expect(data[1]['churchId']).toEqual(9);
 
-        data = await functions.queryDatabase("SELECT * FROM eventRegion WHERE eventId = " + id);
+        data = await functions.queryDatabase('SELECT * FROM eventRegion WHERE eventId = ' + id);
         data = data[0];
-        expect(data["regionId"]).toEqual(1);
+        expect(data['regionId']).toEqual(1);
 
-        data = await functions.queryDatabase("SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = " + id);
+        data = await functions.queryDatabase(
+            'SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = ' + id
+        );
         expect(data.length).toEqual(1);
 
         data = data[0];
-        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_" + data["src"]);
+        let savedImagePath = path.join(__dirname, '../../../src/server/uploads/img_' + data['src']);
         await functions.compareFiles(imagePath, savedImagePath);
 
-        data = await functions.queryDatabase("SELECT * FROM repeated_event WHERE id = " + repeatedEventId);
+        data = await functions.queryDatabase('SELECT * FROM repeated_event WHERE id = ' + repeatedEventId);
         expect(data.length).toEqual(1);
         data = data[0];
 
-        expect(data["repeatingStrategy"]).toEqual(0);
-        expect(data["repeatUntil"]).toEqual(null);
-        expect(data["repeatingArguments"]).toEqual("1,5");
+        expect(data['repeatingStrategy']).toEqual(0);
+        expect(data['repeatUntil']).toEqual(null);
+        expect(data['repeatingArguments']).toEqual('1,5');
 
-        await $(".footer .icon.home").click();
+        await $('.footer .icon.home').click();
     });
 
-    it("edit repeating single event", async function () {
-        let imagePath = path.join(__dirname, "../../misc/img/church.jpeg");
+    it('edit repeating single event', async function () {
+        let imagePath = path.join(__dirname, '../../misc/img/church.jpeg');
 
         const day = new Date(browser.config.fullYear, browser.config.month, 20);
-        const dayNumber = 23-day.getDay()
+        const dayNumber = 23 - day.getDay();
 
-        await $(".footer .icon.calendar").click();
-        await $(".day-number="+dayNumber.toString()).click();
-        await $(".name=Termin zum bearbeiten single wiederholend").click();
+        await $('.footer .icon.calendar').click();
+        await $('.day-number=' + dayNumber.toString()).click();
+        await $('.name=Termin zum bearbeiten single wiederholend').click();
 
-        expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
+        expect(await $('.admin-panel').isDisplayed()).toBeTruthy();
 
-        await $("#modify-event").click();
-        await $("button.button=Veranstaltung").click();
+        await $('#modify-event').click();
+        await $('button.button=Veranstaltung').click();
         // await browser.pause(5000);
 
-        let editors = $$(".ck.ck-content");
+        let editors = $$('.ck.ck-content');
 
         await functions.verifyFormValues({
-            "name-de": "Termin zum bearbeiten single wiederholend",
-            "name-en": "",
-            "description-de": "My Description",
-            "description-en": "",
-            "image-before": "https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg",
-            "place-name-1": "place 1",
-            "church-1": "1",
-            "church-2": "2",
+            'name-de': 'Termin zum bearbeiten single wiederholend',
+            'name-en': '',
+            'description-de': 'My Description',
+            'description-en': '',
+            'image-before': 'https://upload.wikimedia.org/wikipedia/commons/3/36/Stadtpfarrkirche_Sankt_Peter.jpg',
+            'place-name-1': 'place 1',
+            'church-1': '1',
+            'church-2': '2',
         });
 
-        await editors.get(0).setValue(" Meine bearbeitete Beschreibung wiederholend");
-        await editors.get(1).setValue(" Meine english Beschreibung wiederholend");
+        await editors.get(0).setValue(' Meine bearbeitete Beschreibung wiederholend');
+        await editors.get(1).setValue(' Meine english Beschreibung wiederholend');
 
         await functions.setFormValues({
-            "name-de": "Bearbeiteter Termin wiederholend single",
-            "name-en": "Edited Event wiederholend",
-            "image": imagePath,
-            "place-name-1": "bearbeitet wiederholend",
-            "type": "konferenz"
+            'name-de': 'Bearbeiteter Termin wiederholend single',
+            'name-en': 'Edited Event wiederholend',
+            image: imagePath,
+            'place-name-1': 'bearbeitet wiederholend',
+            type: 'konferenz',
         });
 
-        await $("[name=church-5]").click();
-        await $("[name=church-9]").click();
-        await $("[name=church-7]").click();
+        await $('[name=church-5]').click();
+        await $('[name=church-9]').click();
+        await $('[name=church-7]').click();
 
-        await $("input[name=start]").scrollIntoView().click();
+        await $('input[name=start]').scrollIntoView().click();
         await functions.pause(200);
-        await $$(".flatpickr-day=19").get(0).click();
-        await $(".flatpickr-hour").setValue(11);
-        await $(".flatpickr-minute").setValue(10);
+        await $$('.flatpickr-day=19').get(0).click();
+        await $('.flatpickr-hour').setValue(11);
+        await $('.flatpickr-minute').setValue(10);
 
-        await $("input[name=end]").scrollIntoView().click();
+        await $('input[name=end]').scrollIntoView().click();
         await functions.pause(200);
-        await $$(".flatpickr-day=19").get(1).click();
-        await $$(".flatpickr-hour").get(1).setValue(13);
-        await $$(".flatpickr-minute").get(1).setValue(59);
+        await $$('.flatpickr-day=19').get(1).click();
+        await $$('.flatpickr-hour').get(1).setValue(13);
+        await $$('.flatpickr-minute').get(1).setValue(59);
 
-        await $("button.button=Speichern").scrollIntoView().click();
+        await $('button.button=Speichern').scrollIntoView().click();
 
         await functions.pause(250);
-        expect(await $("#name=Bearbeiteter Termin wiederholend single").isDisplayed()).toBeTruthy();
+        expect(await $('#name=Bearbeiteter Termin wiederholend single').isDisplayed()).toBeTruthy();
 
-        let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin wiederholend single%Edited Event wiederholend%' LIMIT 1");
+        let data = await functions.queryDatabase(
+            "SELECT * FROM event WHERE names LIKE '%Bearbeiteter Termin wiederholend single%Edited Event wiederholend%' LIMIT 1"
+        );
 
         data = data[0];
 
-        expect(data["names"]).toEqual("{\"de\":\"Bearbeiteter Termin wiederholend single\",\"en\":\"Edited Event wiederholend\"}");
-        expect(data["descriptions"].match(/^{"de":"<p> ?Meine bearbeitete Beschreibung wiederholendMy Description<\/p>","en":"<p> ?Meine english Beschreibung wiederholend<\/p>"}$/g)).toBeTruthy();
+        expect(data['names']).toEqual(
+            '{"de":"Bearbeiteter Termin wiederholend single","en":"Edited Event wiederholend"}'
+        );
+        expect(
+            data['descriptions'].match(
+                /^{"de":"<p> ?Meine bearbeitete Beschreibung wiederholendMy Description<\/p>","en":"<p> ?Meine english Beschreibung wiederholend<\/p>"}$/g
+            )
+        ).toBeTruthy();
         // expect(data["descriptions"]).toEqual("{\"de\":\"<p>Meine bearbeitete Beschreibung wiederholendMy Description</p>\",\"en\":\"<p>Meine english Beschreibung wiederholend</p>\"}");
-        expect(data["places"]).toEqual("{\"bearbeitet wiederholend\":\"bearbeitet wiederholend\"}");
-        expect(data["type"]).toEqual("konferenz");
-        expect(data["startTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime());
-        expect(data["endTime"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, 19, 13, 59).getTime());
-        expect(data["isTemplate"]).toEqual(0);
+        expect(data['places']).toEqual('{"bearbeitet wiederholend":"bearbeitet wiederholend"}');
+        expect(data['type']).toEqual('konferenz');
+        expect(data['startTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 19, 11, 10).getTime()
+        );
+        expect(data['endTime'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, 19, 13, 59).getTime()
+        );
+        expect(data['isTemplate']).toEqual(0);
 
-        let id = data["id"];
-        let repeatedEventId = data["repeatedEventId"];
+        let id = data['id'];
+        let repeatedEventId = data['repeatedEventId'];
 
-        data = await functions.queryDatabase("SELECT * FROM churchEvent WHERE eventId = " + id + " ORDER BY churchId");
+        data = await functions.queryDatabase('SELECT * FROM churchEvent WHERE eventId = ' + id + ' ORDER BY churchId');
         expect(data.length).toEqual(2);
-        expect(data[0]["churchId"]).toEqual(7);
-        expect(data[1]["churchId"]).toEqual(9);
+        expect(data[0]['churchId']).toEqual(7);
+        expect(data[1]['churchId']).toEqual(9);
 
-        data = await functions.queryDatabase("SELECT * FROM eventRegion WHERE eventId = " + id);
+        data = await functions.queryDatabase('SELECT * FROM eventRegion WHERE eventId = ' + id);
         data = data[0];
-        expect(data["regionId"]).toEqual(1);
+        expect(data['regionId']).toEqual(1);
 
-        data = await functions.queryDatabase("SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = " + id);
+        data = await functions.queryDatabase(
+            'SELECT * FROM eventImages INNER JOIN file_medium ON fileMediumId = file_medium.id WHERE eventId = ' + id
+        );
         expect(data.length).toEqual(1);
 
         data = data[0];
-        let savedImagePath = path.join(__dirname, "../../../src/server/uploads/img_" + data["src"]);
+        let savedImagePath = path.join(__dirname, '../../../src/server/uploads/img_' + data['src']);
         await functions.compareFiles(imagePath, savedImagePath);
 
-        data = await functions.queryDatabase("SELECT * FROM repeated_event WHERE id = " + repeatedEventId);
+        data = await functions.queryDatabase('SELECT * FROM repeated_event WHERE id = ' + repeatedEventId);
         expect(data.length).toEqual(1);
         data = data[0];
 
-        expect(data["repeatingStrategy"]).toEqual(0);
-        expect(data["repeatUntil"]).toEqual(null);
-        expect(data["repeatingArguments"]).toEqual("3");
+        expect(data['repeatingStrategy']).toEqual(0);
+        expect(data['repeatUntil']).toEqual(null);
+        expect(data['repeatingArguments']).toEqual('3');
 
-        await $(".footer .icon.home").click();
+        await $('.footer .icon.home').click();
     });
 
-    it("delete normal event", async function () {
-        await $(".footer .icon.calendar").click();
-        await $(".day-number=11").click();
-        await $("#event-overview-container .makeBig").click();
-        await $(".name=Termin zum löschen").click();
+    it('delete normal event', async function () {
+        await $('.footer .icon.calendar').click();
+        await $('.day-number=11').click();
+        await $('#event-overview-container .makeBig').click();
+        await $('.name=Termin zum löschen').click();
 
-        expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
+        expect(await $('.admin-panel').isDisplayed()).toBeTruthy();
 
-        await $("#delete-event").click();
-        await $(".button=OK").click();
+        await $('#delete-event').click();
+        await $('.button=OK').click();
 
         await functions.pause(1000);
 
         let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Termin zum löschen%' LIMIT 1");
         data = data[0];
-        expect(data["deleted"]).toEqual(1);
+        expect(data['deleted']).toEqual(1);
     });
 
-    it("delete repeated event", async function () {
+    it('delete repeated event', async function () {
         const day = new Date(browser.config.fullYear, browser.config.month, 20);
-        const dayNumber = 26-day.getDay()
+        const dayNumber = 26 - day.getDay();
 
-        await $(".footer .icon.calendar").click();
-        await $(".day-number="+dayNumber.toString()).click();
-        await $(".name=Termin zum löschen wiederholend").click();
+        await $('.footer .icon.calendar').click();
+        await $('.day-number=' + dayNumber.toString()).click();
+        await $('.name=Termin zum löschen wiederholend').click();
 
-        expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
+        expect(await $('.admin-panel').isDisplayed()).toBeTruthy();
 
-        await $("#delete-event").click();
-        await $(".button=Serie").click();
+        await $('#delete-event').click();
+        await $('.button=Serie').click();
 
         await functions.pause(1000);
 
-        let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Termin zum löschen wiederholend%' LIMIT 1");
+        let data = await functions.queryDatabase(
+            "SELECT * FROM event WHERE names LIKE '%Termin zum löschen wiederholend%' LIMIT 1"
+        );
         data = data[0];
-        expect(data["deleted"]).toEqual(1);
+        expect(data['deleted']).toEqual(1);
     });
 
-    it("delete repeated single event", async function () {
+    it('delete repeated single event', async function () {
         const day = new Date(browser.config.fullYear, browser.config.month, 13);
-        const dayNumber = 16-day.getDay()
+        const dayNumber = 16 - day.getDay();
 
-        await $(".footer .icon.calendar").click();
-        await $(".day-number="+dayNumber.toString()).click();
-        await $(".name=Termin zum bearbeiten single wiederholend").click();
+        await $('.footer .icon.calendar').click();
+        await $('.day-number=' + dayNumber.toString()).click();
+        await $('.name=Termin zum bearbeiten single wiederholend').click();
 
-        expect(await $(".admin-panel").isDisplayed()).toBeTruthy();
+        expect(await $('.admin-panel').isDisplayed()).toBeTruthy();
 
-        await $("#delete-event").click();
-        await $(".button=Veranstaltung").click();
+        await $('#delete-event').click();
+        await $('.button=Veranstaltung').click();
 
         await functions.pause(1000);
 
-        let data = await functions.queryDatabase("SELECT * FROM event WHERE names LIKE '%Termin zum bearbeiten single wiederholend%' LIMIT 1");
+        let data = await functions.queryDatabase(
+            "SELECT * FROM event WHERE names LIKE '%Termin zum bearbeiten single wiederholend%' LIMIT 1"
+        );
         data = data[0];
-        let repeatedEventId = data["repeatedEventId"];
+        let repeatedEventId = data['repeatedEventId'];
 
-        data = await functions.queryDatabase("SELECT * FROM blocked_day WHERE repeatedEventId = "+ repeatedEventId + " AND eventId IS NULL");
+        data = await functions.queryDatabase(
+            'SELECT * FROM blocked_day WHERE repeatedEventId = ' + repeatedEventId + ' AND eventId IS NULL'
+        );
         expect(data.length).toEqual(1);
         data = data[0];
-        expect(data["day"].getTime()).toEqual(new Date(browser.config.fullYear, browser.config.month, dayNumber, 12).getTime());
-        expect(data["eventId"]).toBeNull();
+        expect(data['day'].getTime()).toEqual(
+            new Date(browser.config.fullYear, browser.config.month, dayNumber, 12).getTime()
+        );
+        expect(data['eventId']).toBeNull();
     });
 });

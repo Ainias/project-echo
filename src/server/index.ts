@@ -108,9 +108,9 @@ app.use('/api', routes);
 app.use(express.static(path.resolve(path.dirname(process.argv[1]), 'public')));
 app.use('/uploads', express.static(path.resolve(path.dirname(process.argv[1]), 'uploads')));
 
-//Handle errors
-app.use(function (err, req, res) {
-    console.error(err);
+//Handle errors, do not delete next or otherwise it is not an error handler
+app.use(function (err, req, res, next) {
+    console.error('Error:', err);
     res.status(err.status || 500);
     if (err instanceof Error) {
         res.json({ error: err.message });
@@ -123,18 +123,20 @@ app.use(function (err, req, res) {
 // new DeleteOldEventsCron().start();
 // new GetICalEventsCron().start();
 
-EasySyncServerDb.getInstance()._connectionPromise.then(async () => {
-    Translator.init({
-        translations: {
-            de: translationGerman,
-            en: translationEnglish,
-        },
-        fallbackLanguage: 'de',
-        // markTranslations: true,
-        markUntranslatedTranslations: true,
-    });
+EasySyncServerDb.getInstance()
+    .getConnectionPromise()
+    .then(async () => {
+        Translator.init({
+            translations: {
+                de: translationGerman,
+                en: translationEnglish,
+            },
+            fallbackLanguage: 'de',
+            // markTranslations: true,
+            markUntranslatedTranslations: true,
+        });
 
-    app.listen(port, () => {
-        console.log('Server started on Port: ' + port);
+        app.listen(port, () => {
+            console.log('Server started on Port: ' + port);
+        });
     });
-});

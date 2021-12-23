@@ -1,5 +1,3 @@
-const view = require('../../html/Sites/showChurchSite.html');
-
 import { App, ConfirmDialog, Helper, Toast, Translator } from 'cordova-sites/dist/client';
 import { Church } from '../../../shared/model/Church';
 import { AbsoluteBarMenuSite } from './AbsoluteBarMenuSite';
@@ -8,8 +6,10 @@ import { UserManager } from 'cordova-sites-user-management/dist/client/js/UserMa
 import { ModifyChurchSite } from './ModifyChurchSite';
 import { CalendarSite } from './CalendarSite';
 
+const view = require('../../html/Sites/showChurchSite.html');
+
 export class ShowChurchSite extends AbsoluteBarMenuSite {
-    private _church: Church;
+    private church: Church;
 
     constructor(siteManager) {
         super(siteManager, view);
@@ -17,22 +17,22 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
     }
 
     async onConstruct(constructParameters) {
-        let res = super.onConstruct(constructParameters);
+        const res = super.onConstruct(constructParameters);
 
-        if (Helper.isNull(constructParameters) || Helper.isNull(constructParameters['id'])) {
+        if (Helper.isNull(constructParameters) || Helper.isNull(constructParameters.id)) {
             new Toast('no id given').show();
             this.finish();
         }
 
-        this._church = await Church.findById(parseInt(constructParameters['id']), Church.getRelations());
+        this.church = await Church.findById(Number(constructParameters.id), Church.getRelations());
 
-        if (Helper.isNull(this._church)) {
+        if (Helper.isNull(this.church)) {
             new Toast('no church found').show();
             this.finish();
         }
 
-        //Image
-        let images = this._church.getImages();
+        // Image
+        const images = this.church.getImages();
         if (images.length > 0) {
             this.getNavbarFragment().setBackgroundImage(images[0]);
         }
@@ -41,44 +41,44 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
         this._view.classList.add('church-site');
 
-        let translator = Translator.getInstance();
-        translator.addDynamicTranslations(this._church.getDynamicTranslations());
+        const translator = Translator.getInstance();
+        translator.addDynamicTranslations(this.church.getDynamicTranslations());
 
-        //name
-        this.findBy('#name').appendChild(translator.makePersistentTranslation(this._church.getNameTranslation(), true));
+        // name
+        this.findBy('#name').appendChild(translator.makePersistentTranslation(this.church.getNameTranslation(), true));
 
-        //description
+        // description
         this.findBy('#description').appendChild(
-            translator.makePersistentTranslation(this._church.getDescriptionTranslation())
+            translator.makePersistentTranslation(this.church.getDescriptionTranslation())
         );
 
-        //link
-        let link = this.findBy('#website');
+        // link
+        const link = this.findBy('#website');
 
-        let href = this._church.getWebsite();
+        let href = this.church.getWebsite();
         if (!href.startsWith('http') && !href.startsWith('//')) {
-            href = 'https://' + href;
+            href = `https://${href}`;
         }
         link.href = href;
-        link.appendChild(document.createTextNode(this._church.getWebsite()));
+        link.appendChild(document.createTextNode(this.church.getWebsite()));
 
-        let instagramLink = this._church.getInstagram();
+        let instagramLink = this.church.getInstagram();
         if (instagramLink) {
             if (!instagramLink.startsWith('http') && !instagramLink.startsWith('//')) {
-                instagramLink = 'https://' + instagramLink;
+                instagramLink = `https://${instagramLink}`;
             }
             const instagramElement = this.findBy('#instagram-link');
             instagramElement.href = instagramLink;
             instagramElement.classList.remove('hidden');
         }
 
-        //places
-        let placesContainer = this.findBy('#places-container');
+        // places
+        const placesContainer = this.findBy('#places-container');
 
-        let places = this._church.places;
+        let { places } = this.church;
         let placesAreObject = false;
 
         if (!Array.isArray(places)) {
@@ -88,10 +88,10 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
 
         await Helper.asyncForEach(places, async (place) => {
             placesContainer.appendChild(
-                await PlaceHelper.createPlace(place, placesAreObject ? this._church.places[place] : place)
+                await PlaceHelper.createPlace(place, placesAreObject ? this.church.places[place] : place)
             );
         });
-        placesContainer.dataset['numPlaces'] = '' + places.length;
+        placesContainer.dataset.numPlaces = `${places.length}`;
 
         UserManager.getInstance().addLoginChangeCallback((loggedIn, manager) => {
             if (loggedIn && manager.hasAccess(Church.ACCESS_MODIFY)) {
@@ -109,7 +109,7 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
                         'Kirche löschen?'
                     ).show()
                 ) {
-                    await this._church.delete();
+                    await this.church.delete();
                     new Toast('Kirche wurde erfolgreich gelöscht').show();
                     this.finish();
                 }
@@ -117,13 +117,13 @@ export class ShowChurchSite extends AbsoluteBarMenuSite {
         });
         this.findBy('#modify-church').addEventListener('click', async () => {
             if (UserManager.getInstance().hasAccess(Church.ACCESS_MODIFY)) {
-                this.finishAndStartSite(ModifyChurchSite, { id: this._church.id });
+                this.finishAndStartSite(ModifyChurchSite, { id: this.church.id });
             }
         });
 
         this.findBy('#view-calendar').addEventListener('click', () => {
             this.startSite(CalendarSite, {
-                filter: { churches: [this._church.id] },
+                filter: { churches: [this.church.id] },
             });
         });
 

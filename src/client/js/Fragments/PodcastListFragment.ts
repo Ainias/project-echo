@@ -1,10 +1,11 @@
 import { AlphabeticListFragment, Translator } from 'cordova-sites';
 import { Podcast } from '../../../shared/model/Podcast';
 import { PodcastDetailSite } from '../Sites/PodcastDetailSite';
+import { ListPodcastsSite } from '../Sites/ListPodcastsSite';
 
 const view = require('../../html/Fragments/podcastListFragment.html');
 
-export class PodcastListFragment extends AlphabeticListFragment {
+export class PodcastListFragment extends AlphabeticListFragment<ListPodcastsSite> {
     private podcastTemplate: HTMLElement;
 
     constructor(site) {

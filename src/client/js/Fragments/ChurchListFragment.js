@@ -2,20 +2,21 @@ import view from '../../html/Fragments/churchListFragment.html';
 import { ShowChurchSite } from '../Sites/ShowChurchSite';
 import { PlaceHelper } from '../Helper/PlaceHelper';
 import { FsjChurchBaseListFragment } from './FsjChurchBaseListFragment';
+import { ListChurchesSite } from '../Sites/ListChurchesSite';
 
 export class ChurchListFragment extends FsjChurchBaseListFragment {
     constructor(site) {
         super(site, view);
     }
 
-    /**4
+    /** 4
      *
      * @param {Church} church
      */
     renderElement(church) {
-        let churchElem = super.renderElement(church);
+        const churchElem = super.renderElement(church);
 
-        let places = church.places;
+        const { places } = church;
         const placesIsArray = Array.isArray(places);
         let placesIndexes = places;
         if (!placesIndexes) {
@@ -32,6 +33,6 @@ export class ChurchListFragment extends FsjChurchBaseListFragment {
     }
 
     infoElemClicked(id) {
-        this.getSite().startSite(ShowChurchSite, { id: id });
+        this.getSite().startSite(ShowChurchSite, { id });
     }
 }

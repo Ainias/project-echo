@@ -6,8 +6,8 @@ import { AccessEasySyncModel } from 'cordova-sites-user-management/dist/shared/v
 import { Helper } from 'js-helper/dist/shared/Helper';
 
 export class Event extends AccessEasySyncModel {
-    private names: {};
-    private descriptions: {};
+    private names: Record<string, string>;
+    private descriptions: Record<string, string>;
     private startTime: Date;
     private endTime: Date;
     private type: string;
@@ -43,15 +43,15 @@ export class Event extends AccessEasySyncModel {
     }
 
     getNameTranslation() {
-        return 'event-name-' + this.id;
+        return `event-name-${this.id}`;
     }
 
     getDescriptionTranslation() {
-        return 'event-description-' + this.id;
+        return `event-description-${this.id}`;
     }
 
     getDynamicTranslations() {
-        let translations = {};
+        const translations = {};
         Object.keys(this.getNames()).forEach((language) => {
             translations[language] = translations[language] || {};
             translations[language][this.getNameTranslation()] = this.getNames()[language];
@@ -65,15 +65,15 @@ export class Event extends AccessEasySyncModel {
     }
 
     static getColumnDefinitions() {
-        let columns = super.getColumnDefinitions();
-        columns['names'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
-        columns['descriptions'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
-        columns['places'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
-        columns['images'] = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
-        columns['startTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
-        columns['endTime'] = { type: BaseDatabase.TYPES.DATE, nullable: true };
-        columns['isTemplate'] = { type: BaseDatabase.TYPES.BOOLEAN, default: 0 };
-        columns['type'] = {
+        const columns = super.getColumnDefinitions();
+        columns.names = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns.descriptions = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns.places = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns.images = { type: BaseDatabase.TYPES.MY_JSON, nullable: true };
+        columns.startTime = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns.endTime = { type: BaseDatabase.TYPES.DATE, nullable: true };
+        columns.isTemplate = { type: BaseDatabase.TYPES.BOOLEAN, default: 0 };
+        columns.type = {
             type: BaseDatabase.TYPES.STRING,
             default: Event.TYPES.GOTTESDIENST,
             nullable: true,
@@ -85,54 +85,54 @@ export class Event extends AccessEasySyncModel {
         if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
-        return this._database.findEntities(this, where, order, limit, offset, relations);
+        return this.database.findEntities(this, where, order, limit, offset, relations);
     }
 
     static async findAndCount(where?, order?, limit?, offset?, relations?) {
         if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
-        return this._database.findAndCountEntities(this, where, order, limit, offset, relations);
+        return this.database.findAndCountEntities(this, where, order, limit, offset, relations);
     }
 
     static async findOne(where?, order?, offset?, relations?) {
         if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
-        return this._database.findOneEntity(this, where, order, offset, relations);
+        return this.database.findOneEntity(this, where, order, offset, relations);
     }
 
     static async findById(id, relations?) {
         if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
-        return this._database.findById(this, id, relations);
+        return this.database.findById(this, id, relations);
     }
 
     static async findByIds(ids, relations?) {
         if (typeof relations === 'undefined') {
             relations = Event.getRelations();
         }
-        return this._database.findByIds(this, ids, relations);
+        return this.database.findByIds(this, ids, relations);
     }
 
     static getRelationDefinitions() {
-        let relations = EasySyncBaseModel.getRelationDefinitions();
-        relations['repeatedEvent'] = {
+        const relations = EasySyncBaseModel.getRelationDefinitions();
+        relations.repeatedEvent = {
             target: 'RepeatedEvent',
             type: 'many-to-one',
             nullable: true,
             joinColumn: true,
             inverseSide: 'events',
         };
-        relations['organisers'] = {
+        relations.organisers = {
             target: Church.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
                 name: 'churchEvent',
             },
         };
-        relations['regions'] = {
+        relations.regions = {
             target: Region.getSchemaName(),
             type: 'many-to-many',
             joinTable: {
@@ -144,25 +144,25 @@ export class Event extends AccessEasySyncModel {
         return relations;
     }
 
-    getNames(): {} {
+    getNames() {
         if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getNames();
         }
         return this.names;
     }
 
-    setNames(value: {}) {
+    setNames(value: Record<string, string>) {
         this.names = value;
     }
 
-    getDescriptions(): {} {
+    getDescriptions() {
         if (Helper.isNull(this.names) && Helper.isNotNull(this.repeatedEvent)) {
             return this.repeatedEvent.getDescription();
         }
         return this.descriptions;
     }
 
-    setDescriptions(value: {}) {
+    setDescriptions(value: Record<string, string>) {
         this.descriptions = value;
     }
 

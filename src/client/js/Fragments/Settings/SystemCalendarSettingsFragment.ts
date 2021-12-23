@@ -2,12 +2,13 @@ import { AbstractFragment } from 'cordova-sites/dist/client/js/Context/AbstractF
 import { SystemCalendar } from '../../SystemCalendar';
 import { ChooseDialog } from 'cordova-sites/dist/client/js/Dialog/ChooseDialog';
 
-const view = require('../../../html/Fragments/Settings/systemCalendarSettingsFragment.html');
-
 import { NativeStoragePromise } from 'cordova-sites/dist/client/js/NativeStoragePromise';
 import { Helper } from 'js-helper/dist/shared';
+import { SettingsSite } from '../../Sites/SettingsSite';
 
-export class SystemCalendarSettingsFragment extends AbstractFragment {
+const view = require('../../../html/Fragments/Settings/systemCalendarSettingsFragment.html');
+
+export class SystemCalendarSettingsFragment extends AbstractFragment<SettingsSite> {
     private insertFavoritesCheckbox: HTMLInputElement;
 
     constructor(site) {
@@ -15,7 +16,7 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
     }
 
     async onViewLoaded() {
-        let res = super.onViewLoaded();
+        const res = super.onViewLoaded();
 
         let currentName = (await SystemCalendar.getSelectedCalendar())?.name;
         if (Helper.isNull(currentName)) {
@@ -28,7 +29,7 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
             currentName = await this.selectNewCalendar();
         });
 
-        let insertFavorites = await NativeStoragePromise.getItem('insert-favorites', '1');
+        const insertFavorites = await NativeStoragePromise.getItem('insert-favorites', '1');
 
         this.insertFavoritesCheckbox = this.findBy('#insert-favorites');
         this.insertFavoritesCheckbox.addEventListener('change', async () => {
@@ -62,13 +63,13 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
     async selectNewCalendar() {
         this.getSite().showLoadingSymbol();
 
-        let calendarOptions = await this.getCalendarOptions();
+        const calendarOptions = await SystemCalendarSettingsFragment.getCalendarOptions();
         if (!(await SystemCalendar.hasCalendarPermission())) {
             this.getSite().removeLoadingSymbol();
             return '';
         }
 
-        let selectedCalendar: number = (await new ChooseDialog(
+        const selectedCalendar: number = (await new ChooseDialog(
             calendarOptions,
             'select-calendar',
             false
@@ -83,9 +84,9 @@ export class SystemCalendarSettingsFragment extends AbstractFragment {
         return '';
     }
 
-    async getCalendarOptions() {
-        let calendars = await SystemCalendar.listCalendars();
-        let calendarOptions = {};
+    static async getCalendarOptions() {
+        const calendars = await SystemCalendar.listCalendars();
+        const calendarOptions = {};
 
         let addOwnCalendar = true;
         calendars.forEach((cal) => {
